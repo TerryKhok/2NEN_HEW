@@ -10,6 +10,9 @@
     <Filter Include="Inc">
       <UniqueIdentifier>{d14431b4-1140-4a67-ae0f-0aebd15a9533}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\未実装">
+      <UniqueIdentifier>{39f72e0c-d3b4-45f1-af1d-c74c7701ffd2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WICTextureLoader.cpp">
@@ -18,7 +21,7 @@
     <ClCompile Include="Vector.cpp">
       <Filter>Math</Filter>
     </ClCompile>
-    <ClCompile Include="Asset.cpp">
+    <ClCompile Include="TextureAsset.cpp">
       <Filter>Src</Filter>
     </ClCompile>
     <ClCompile Include="Component.cpp">
@@ -42,7 +45,13 @@
     <ClCompile Include="Window.cpp">
       <Filter>Src</Filter>
     </ClCompile>
+    <ClCompile Include="Animator.cpp">
+      <Filter>Src\未実装</Filter>
+    </ClCompile>
     <ClCompile Include="Collider2D.cpp">
+      <Filter>Src\未実装</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
       <Filter>Src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,7 +65,7 @@
     <ClInclude Include="Math.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="Asset.h">
+    <ClInclude Include="TextureAsset.h">
       <Filter>Src</Filter>
     </ClInclude>
     <ClInclude Include="Window.h">
@@ -83,7 +92,13 @@
     <ClInclude Include="Component.h">
       <Filter>Src</Filter>
     </ClInclude>
+    <ClInclude Include="Animator.h">
+      <Filter>Src\未実装</Filter>
+    </ClInclude>
     <ClInclude Include="Collider2D.h">
+      <Filter>Src\未実装</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
       <Filter>Src</Filter>
     </ClInclude>
   </ItemGroup>

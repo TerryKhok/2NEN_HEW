@@ -6,6 +6,9 @@
 /// </summary>
 class Vector2 {
 public:
+	//メモリ確保禁止
+	void* operator new(size_t) = delete;
+
 	static const Vector2 Zero;
 	/// <summary>
 	/// コンストラクタ。
@@ -162,6 +165,9 @@ public:
 /// </summary>
 class Vector3 {
 public:
+	//メモリ確保禁止
+	void* operator new(size_t) = delete;
+
 	union {
 		DirectX::XMFLOAT3 vec;
 		float v[3];
@@ -570,6 +576,9 @@ public:
 /// </summary>
 class Vector4 {
 public:
+	//メモリ確保禁止
+	void* operator new(size_t) = delete;
+
 	union {
 		DirectX::XMFLOAT4 vec;
 		struct { float x, y, z, w; };

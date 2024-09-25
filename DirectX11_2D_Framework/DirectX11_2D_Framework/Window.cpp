@@ -1,3 +1,4 @@
+#include "Window.h"
 const char* relativePath(const char* fullPath) {
 #ifdef _WIN32
 	const char separator = '\\'; // Windows uses backslashes
@@ -6,6 +7,14 @@ const char* relativePath(const char* fullPath) {
 #endif
 	const char* relative = strrchr(fullPath, separator);
 	return relative ? relative + 1 : fullPath; // Return the file name if found, else return the full path
+}
+
+void setConsoleTextColor(unsigned int color)
+{
+#ifdef DEBUG_TRUE
+	static const HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(hConsole, color);
+#endif
 }
 
 void CreateConsoleWindow() {
@@ -30,6 +39,15 @@ void CloseConsoleWindow() {
 HWND Window::hWnd;
 MSG Window::msg;
 RECT Window::windowRect;
+LARGE_INTEGER Window::liWork;
+long long Window::frequency;
+long long Window::oldCount;
+int Window::fpsCounter = 0;						//FPS計測変数
+long long Window::oldTick = GetTickCount64();	//前回計測時
+long long Window::nowTick = oldTick;				//今回計測時
+long long Window::nowCount = oldCount;
+
+std::atomic<bool> Window::terminateFlag(false);
 
 LRESULT Window::WindowCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -89,34 +107,32 @@ LRESULT Window::WindowCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR
 	// ウィンドウの状態を直ちに反映(ウィンドウのクライアント領域を更新)
 	UpdateWindow(hWnd);
 
+	//FPS固定用変数
+	QueryPerformanceFrequency(&liWork);
+	frequency = liWork.QuadPart;
+	QueryPerformanceCounter(&liWork);
+	oldCount = liWork.QuadPart;
+
 	//DirectX生成
 	DirectX11::D3D_Create(hWnd);
 
 	return LRESULT();
 }
 
-LRESULT Window::MainLoop(void(*p_initFunc)(void), void(*p_updateFunc)(void), void(*p_drawFunc)(void), int fps)
+LRESULT Window::WindowInit(void(*p_sceneInitFunc)(void))
 {
 	//初期化処理
 	//=================================================
 	RenderManager::Init();
-	p_initFunc();
+	p_sceneInitFunc();
+	SceneManager::Init();
 	//=================================================
 
-	int fpsCounter = 0;						//FPS計測変数
-	long long oldTick = GetTickCount64();	//前回計測時
-	long long nowTick = oldTick;			//今回計測時
+	return LRESULT();
+}
 
-	//FPS固定用変数
-	LARGE_INTEGER liWork; //workがつく変数は作業用変数
-	long long frequency;
-	QueryPerformanceFrequency(&liWork);
-	frequency = liWork.QuadPart;
-
-	QueryPerformanceCounter(&liWork);
-	long long oldCount = liWork.QuadPart;
-	long long nowCount = oldCount;
-
+LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
+{
 	// ゲームループ
 	while (1)
 	{
@@ -136,15 +152,15 @@ LRESULT Window::MainLoop(void(*p_initFunc)(void), void(*p_updateFunc)(void), voi
 			//現在時間を取得
 			QueryPerformanceCounter(&liWork);
 			nowCount = liWork.QuadPart;
-			if (nowCount >= oldCount + frequency / fps)
+			if (nowCount >= oldCount + frequency / FPS)
 			{
 				Input::Get().Update();
 
-				p_updateFunc();
+				SceneManager::m_currentScene->Update();
+
+				ObjectManager::UpdateObjectComponent();
 
 				DirectX11::D3D_StartRender();
-
-				p_drawFunc();
 
 				RenderManager::Draw();
 
@@ -156,8 +172,8 @@ LRESULT Window::MainLoop(void(*p_initFunc)(void), void(*p_updateFunc)(void), voi
 
 				if (nowTick >= oldTick + 1000)
 				{
-					/*char str[32];
-					wsprintfA(str, "x = %d", Input::Get().MousePoint().x);
+				/*	char str[32];
+					wsprintfA(str, "FPS = %d", fpsCounter);
 					SetWindowTextA(hWnd, str);*/
 
 					fpsCounter = 0;
@@ -170,8 +186,92 @@ LRESULT Window::MainLoop(void(*p_initFunc)(void), void(*p_updateFunc)(void), voi
 	return LRESULT();
 }
 
+LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
+{
+	// Start scene loading asynchronously
+	LOG_NL;
+	LOG("Starting scene loading...");
+
+	// Example main loop with a loading screen
+	bool loadingComplete = false;
+
+	// ゲームループ
+	while (!loadingComplete && !terminateFlag)
+	{
+		// 新たにメッセージがあれば
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			// ウィンドウプロシージャにメッセージを送る
+			DispatchMessage(&msg);
+
+			// 「WM_QUIT」メッセージを受け取ったらループを抜ける
+			if (msg.message == WM_QUIT) {
+				break;
+			}
+		}
+		else
+		{
+			//現在時間を取得
+			QueryPerformanceCounter(&liWork);
+			nowCount = liWork.QuadPart;
+			if (nowCount >= oldCount + frequency / FPS)
+			{
+				Input::Get().Update();
+
+				SceneManager::m_currentScene->Update();
+
+				ObjectManager::UpdateObjectComponent();
+
+				DirectX11::D3D_StartRender();
+
+				RenderManager::Draw();
+
+				DirectX11::D3D_FinishRender();
+
+				oldCount = nowCount;
+				fpsCounter++;
+				nowTick = GetTickCount64();
+
+				if (nowTick >= oldTick + 1000)
+				{
+					/*	char str[32];
+						wsprintfA(str, "FPS = %d", fpsCounter);
+						SetWindowTextA(hWnd, str);*/
+
+					fpsCounter = 0;
+					oldTick = nowTick;
+				}
+
+				// Check if the loading is complete
+				if (sceneFuture.wait_for(std::chrono::milliseconds(0)) == std::future_status::ready) {
+					loadingComplete = true;
+				}
+			}
+		}
+	}
+
+	// Wait for async task to finish
+	if (!loadingComplete) {
+		LOG("Scene loading stopped!");
+		sceneFuture.get();
+	}
+	else
+	{
+		LOG("Loading Complete!");
+		loading = false;
+	}
+
+	/*auto iter = std::find(threads.begin(), threads.end(), sceneFuture);
+	if (iter != threads.end())
+		threads.erase(iter);*/
+
+	return LRESULT();
+}
+
 int Window::WindowEnd(HINSTANCE hInstance)
 {
+	ObjectManager::Uninit();
+
 	//DirectXかたずけ
 	DirectX11::D3D_Release();
 
@@ -201,6 +301,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		int res = MessageBoxA(NULL, "終了しますか？", "確認", MB_OKCANCEL);
 		if (res == IDOK) {
+			terminateFlag = true;
 			DestroyWindow(hWnd);  // 「WM_DESTROY」メッセージを送る
 		}
 	}
@@ -254,3 +355,5 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	return 0;
 }
+
+

@@ -11,6 +11,9 @@ using Microsoft::WRL::ComPtr;
 // 頂点データを表す構造体
 struct Vertex
 {
+	//メモリ確保禁止
+	void* operator new(size_t) = delete;
+
 	// 頂点の位置座標
 	float x, y, z;
 
@@ -23,9 +26,14 @@ struct Vertex
 
 struct VSConstantBuffer
 {
+	//メモリ確保禁止
+	void* operator new(size_t) = delete;
+
 	DirectX::XMMATRIX world;
 	DirectX::XMMATRIX projection;
-	DirectX::XMMATRIX tex;
+	//DirectX::XMMATRIX tex;
+	DirectX::XMFLOAT2 uvScale = XMFLOAT2(1.0f, 1.0f);
+	DirectX::XMFLOAT2 uvOffset = XMFLOAT2(0.0f, 0.0f);
 	DirectX::XMFLOAT4 color;
 };
 
@@ -35,6 +43,7 @@ class DirectX11
 	friend class Window;
 	friend class TextureAssets;
 	friend class RenderNode;
+	friend class UVRenderNode;
 	friend class RenderManager;
 
 	DirectX11() = delete;

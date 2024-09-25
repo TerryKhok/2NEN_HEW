@@ -1,46 +1,23 @@
+#include "SampleScene.h"
 
-#define FPS 60
-
-GameObject* o1;
-Component* component;
-
-//ここに初期化更新処理を書き込む
+//シーンの登録(main.cppを変更しないとシーンの変更も反映されないので修正する)
+// 別のファイルに書くか？
 //============================================================
-void MainInit()
+void SceneInit()
 {
-	o1 = new GameObject();
-	o1->AddComponent<Renderer>(L"asset/pic/hart.png");
-
-	/*Vector2 pos = { 100.0f,0.0f };
-	o1->SetPosition(pos);
-	pos *= -1.0f;
-	o2->SetPosition(pos);*/
+	//一番上のシーンが初めにロードされる
+	SceneManager::RegisterScene<SampleScene01>();
+	SceneManager::RegisterScene<SampleScene02>();
+	SceneManager::RegisterScene<LoadScene>();
 }
 //============================================================
 
-//ここにメイン更新処理を書き込む
-//============================================================
-void MainUpdate()
-{
-	
-
-}
-//============================================================
-
-//ここにメイン描画処理を書き込む
-//============================================================
-void DrawUpdate()
-{
-
-}
-//============================================================
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
 	Window::WindowCreate(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
-	Window::MainLoop(MainInit, MainUpdate, DrawUpdate, FPS);
-
-	delete o1;
+	Window::WindowInit(SceneInit);
+	Window::WindowUpdate();
 
 	return Window::WindowEnd(hInstance);
 }

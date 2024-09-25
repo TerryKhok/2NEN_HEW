@@ -2,37 +2,15 @@
 
 VSConstantBuffer GameObject::m_cb = {};
 
-void Object::SetPosition(Vector2 _vec2)
+thread_local ObjectManager::ObjectList* ObjectManager::m_currentList = m_objectList.get();
+std::unique_ptr<ObjectManager::ObjectList> ObjectManager::m_objectList = std::unique_ptr<ObjectList>(new ObjectList());
+std::unique_ptr<ObjectManager::ObjectList> ObjectManager::m_nextObjectList = std::unique_ptr<ObjectList>(new ObjectList());
+
+GameObject::GameObject(std::string _name)
 {
-	m_position.x = _vec2.x;
-	m_position.y = _vec2.y;
+	name = _name;
+	transform.gameobject = this;
 }
-
-void Object::SetPosition(XMFLOAT3 _position)
-{
-	m_position = _position;
-}
-
-VSConstantBuffer& GameObject::GetContantBuffer()
-{
-	//ワールド変換行列の作成
-	//ー＞オブジェクトの位置・大きさ・向きを指定
-	m_cb.world = DirectX::XMMatrixScaling(m_scale.x, m_scale.y, m_scale.z);
-	m_cb.world *= DirectX::XMMatrixRotationZ(m_angle);
-	m_cb.world *= DirectX::XMMatrixTranslation(m_position.x, m_position.y, m_position.z);
-	m_cb.world = DirectX::XMMatrixTranspose(m_cb.world);
-	m_cb.projection = DirectX::XMMatrixOrthographicLH(
-		SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f, 3.0f);
-	m_cb.projection = DirectX::XMMatrixTranspose(m_cb.projection);
-
-	return m_cb;
-}
-
-//void GameObject::AddComponentList(const char* _typename, Component* _component)
-//{
-//	m_componentList[_typename] = std::unique_ptr<Component>(_component);
-//}
-
 
 GameObject::~GameObject()
 {
@@ -44,9 +22,60 @@ GameObject::~GameObject()
 	m_componentList.clear();
 }
 
-void GameObject::SetLayer(LAYER _layer)
+VSConstantBuffer& GameObject::GetContantBuffer()
 {
+	//ワールド変換行列の作成
+	//ー＞オブジェクトの位置・大きさ・向きを指定
+	m_cb.world = DirectX::XMMatrixScaling(transform.scale.x, transform.scale.y, 1.0f);
+	m_cb.world *= DirectX::XMMatrixRotationZ(transform.angle.z);
+	m_cb.world *= DirectX::XMMatrixTranslation(transform.position.x, transform.position.y, 0.5f);
+	m_cb.world = DirectX::XMMatrixTranspose(m_cb.world);
+	m_cb.projection = DirectX::XMMatrixOrthographicLH(
+		SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f, 3.0f);
+	m_cb.projection = DirectX::XMMatrixTranspose(m_cb.projection);
+
+	return m_cb;
+}
+
+void GameObject::UpdateComponent()
+{
+	for (auto& component : m_componentList)
+	{
+		component.second->Update();
+	}
+}
+
+
+void GameObject::SetActive(bool _active)
+{
+	for (auto& component : m_componentList)
+	{
+		component.second->SetActive(_active);
+	}
+}
+
+void GameObject::SetLayer(const LAYER _layer)
+{
+	for (auto& component : m_componentList)
+	{
+		component.second->SetLayer(_layer);
+	}
+	//最後に変更する
 	m_layer = _layer;
+	for (auto& component : m_componentList)
+	{
+		component.second->SetLayer(_layer);
+	}
+}
+
+void GameObject::SetName(const std::string _name)
+{
+
+}
+
+const std::string GameObject::GetName() const
+{
+	return name;
 }
 
 const LAYER GameObject::GetLayer() const
@@ -55,23 +84,27 @@ const LAYER GameObject::GetLayer() const
 }
 
 template<>
-Renderer* GameObject::AddComponent<Renderer>(void)
+Renderer* GameObject::AddComponent<Renderer>()
 {
 	if (ExistComponent<Renderer>()) return nullptr;
 
 	Component* component = nullptr;
 	component = new Renderer(this);
+	component->m_this = this;
 
-	m_componentList[typeid(Renderer).name()] = std::unique_ptr<Component>(component);
+	//リストに追加(デストラクタ登録)
+	m_componentList.insert(std::make_pair(typeid(Renderer).name(), 
+		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; })));
 
 	Renderer* render = dynamic_cast<Renderer*>(component);
 	if (render == nullptr)
 	{
-		LOG("%s component down_cast faild", typeid(Renderer).name());
+		LOG_WARNING("%s component down_cast faild", typeid(Renderer).name());
 	}
 
 	return render;
 }
+
 
 template<>
 Renderer* GameObject::AddComponent<Renderer>(const wchar_t* _texPath)
@@ -80,14 +113,89 @@ Renderer* GameObject::AddComponent<Renderer>(const wchar_t* _texPath)
 
 	Component* component = nullptr;
 	component = new Renderer(this, _texPath);
+	component->m_this = this;
 
-	m_componentList[typeid(Renderer).name()] = std::unique_ptr<Component>(component);
+	//リストに追加(デストラクタ登録)
+	m_componentList.insert(std::make_pair(typeid(Renderer).name(),
+		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; })));
 
 	Renderer* render = dynamic_cast<Renderer*>(component);
 	if (render == nullptr)
 	{
-		LOG("%s component down_cast faild", typeid(Renderer).name());
+		LOG_WARNING("%s component down_cast faild", typeid(Renderer).name());
 	}
 
 	return render;
+}
+
+template<>
+Transform* GameObject::GetComponent()
+{
+	return &transform;
+}
+
+void ObjectManager::Uninit()
+{
+	for (auto& object : m_objectList->second)
+	{
+		object.reset();
+	}
+}
+
+void ObjectManager::UpdateObjectComponent()
+{
+	for (auto& object : m_objectList->second)
+	{
+		object->UpdateComponent();
+	}
+}
+
+void ObjectManager::GenerateList()
+{
+	m_objectList.reset(new ObjectList());
+	m_currentList = m_objectList.get();
+}
+
+GameObject* ObjectManager::AddObject(GameObject* _gameObject)
+{
+	int count = 1;
+	auto& name = _gameObject->name;
+	auto& nameSet = m_currentList->first;
+	std::string uniqueName = name;
+
+	// Check if the name already exists in the set, and generate a new one if necessary
+	while (nameSet.find(uniqueName) != nameSet.end()) {
+		uniqueName = name + "_" + std::to_string(count++);
+	}
+
+	// Insert the object and update the set with the new unique name
+	nameSet.insert(uniqueName);
+
+#ifdef DEBUG_TRUE
+	if (name != uniqueName)
+	{
+		LOG("%s name existed, so we changed %s.", name.c_str(), uniqueName.c_str());
+	}
+#endif
+
+	name = uniqueName;
+
+	//デストラクタをスマートポインタに登録
+	m_currentList->second.push_back(std::unique_ptr<GameObject, void(*)(GameObject*)>
+		(_gameObject, [](GameObject* p){delete p;}));
+
+	auto it = m_currentList->second.end() - 1;
+	return it->get();
+}
+
+void ObjectManager::ChangeNextObjectList()
+{
+	m_currentList = m_nextObjectList.get();
+}
+
+void ObjectManager::LinkNextObjectList()
+{
+	m_objectList = std::move(m_nextObjectList);
+
+	m_nextObjectList.reset(new ObjectList());
 }

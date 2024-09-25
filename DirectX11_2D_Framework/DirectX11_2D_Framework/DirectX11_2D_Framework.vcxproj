@@ -19,7 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Asset.cpp" />
+    <ClCompile Include="Animator.cpp" />
+    <ClCompile Include="TextureAsset.cpp" />
     <ClCompile Include="Collider2D.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="directX3D.cpp" />
@@ -30,12 +31,14 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Renderer.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="WICTextureLoader.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Asset.h" />
+    <ClInclude Include="Animator.h" />
+    <ClInclude Include="TextureAsset.h" />
     <ClInclude Include="Collider2D.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="directX3D.h" />
@@ -45,6 +48,7 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="WICTextureLoader.h" />
     <ClInclude Include="Window.h" />

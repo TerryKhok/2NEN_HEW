@@ -21,7 +21,7 @@
 #include <unordered_map>
 #include <set>
 #include <unordered_set>
-#include<algorithm>
+#include <algorithm>
 #include <memory>
 #include <wrl/client.h>
 #include <time.h>
@@ -30,6 +30,11 @@
 #include <cstdio>
 #include <iostream>
 #include <cassert>
+#include <thread>
+#include <atomic>
+#include <future>
+#include <chrono>
+#include <mutex>
 
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
@@ -47,11 +52,12 @@
 #include "Window.h"
 #include "directX3D.h"
 #include "Input.h"
-#include "Asset.h"
+#include "TextureAsset.h"
 #include "Layer.h"
 #include "Component.h"
 #include "Object.h"
 #include "Renderer.h"
+#include "Scene.h"
 #include "Collider2D.h"
 
 

@@ -4,23 +4,34 @@
 
 class Renderer;
 
-class Object
+struct Transform
 {
-public:
-	//位置の更新
-	void SetPosition(Vector2 _vec2);
-	void SetPosition(XMFLOAT3 _position);
-protected:
-	XMFLOAT3 m_position = { 0.0f,0.0f,0.5f };
-	XMFLOAT3 m_scale = { 1.0f,1.0f,1.0f };
-	float m_angle = 0.0f;
+	//メモリ確保禁止
+	void* operator new(size_t) = delete;
+
+	GameObject* gameobject = nullptr;
+	Vector3 position = { 0.0f,0.0f,0.5f };
+	Vector3 scale =	{ 1.0f,1.0f ,1.0f };
+	Vector3 angle = { 0.0f,0.0f,0.0f };
 };
 
-class GameObject : public Object
+
+class GameObject
 {
 	friend class RenderNode;
+	friend class UVRenderNode;
+	friend class ObjectManager;
+	friend class Scene;
+	friend class Component;
 
 private:
+	//コンストラクタ
+	GameObject() { transform.gameobject = this; }
+	//名前決定
+	GameObject(std::string _name);
+	//デストラクタ(コンポーネント削除)
+	~GameObject();
+
 	//プロジェクション行列変換までして渡す（描画以外では基本使わない）
 	VSConstantBuffer& GetContantBuffer();
 	//すでにコンポーネントがついてるか確かめる
@@ -30,17 +41,29 @@ private:
 		auto iter = m_componentList.find(typeid(T).name());
 		if (iter != m_componentList.end())
 		{
-			LOG("%s component is exist", typeid(T).name());
+			LOG_WARNING("%s : %s component is exist", name.c_str(), typeid(T).name());
 			return true;
 		}
 
 		return false;
 	}
+	//コンポーネントの更新
+	void UpdateComponent();
+
 public:
-	//デストラクタ(コンポーネント削除)
-	~GameObject();
-	//レイヤーの設定（誰でも変えれるのでまた制限する）
-	void SetLayer(LAYER _layer);
+	//アクティブを変更する
+	void SetActive(bool _active);
+	//レイヤーの設定（頻繁に使用しない）
+	void SetLayer(const LAYER _layer);
+
+	//名前の変更
+	//=======================================================
+	//ObjectManagerのnameSetも変えるように修正する
+	//=======================================================
+	void SetName(const std::string _name);
+
+	//名前の取得
+	const std::string GetName() const;
 	//レイヤー取得
 	const LAYER GetLayer() const;
 	//コンポーネント追加
@@ -51,14 +74,16 @@ public:
 
 		Component* component = nullptr;
 		component = new T();
+		component->m_this = this;
 
 		//リストに追加
-		m_componentList[typeid(T).name()] = std::unique_ptr<Component>(component);
+		m_componentList[typeid(T).name()] = std::unique_ptr<Component, void(*)(Component*)>
+			(component, [](Component* p) {delete p; });
 
 		T* downcast = dynamic_cast<T*>(component);
 		if (downcast == nullptr)
 		{
-			LOG("%s component down_cast faild", typeid(T).name());
+			LOG_WARNING("%s : %s component down_cast faild",name.c_str(), typeid(T).name());
 		}
 
 		return downcast;
@@ -71,20 +96,22 @@ public:
 
 		Component* component = nullptr;
 		component = new T(arg);
+		component->m_this = this;
 
-		m_componentList[typeid(T).name()] = std::unique_ptr<Component>(component);
+		m_componentList[typeid(T).name()] = std::unique_ptr<Component, void(*)(Component*)>
+			(component, [](Component* p) {delete p; });
 
 		T* downcast = dynamic_cast<T*>(component);
 		if (downcast == nullptr)
 		{
-			LOG("%s component down_cast faild", typeid(T).name());
+			LOG_WARNING("%s : %s component down_cast faild", name.c_str(), typeid(T).name());
 		}
 
 		return downcast;
 	}
-	//RenderComponent用
+	//RenderComponent完全特殊化
 	template<>
-	Renderer* AddComponent<Renderer>(void);
+	Renderer* AddComponent<Renderer>();
 	//テクスチャ指定
 	template<>
 	Renderer* AddComponent<Renderer, const wchar_t*>(const wchar_t* _texPath);
@@ -96,13 +123,70 @@ public:
 		if (iter != m_componentList.end())
 		{
 			iter->second->Delete();
+			m_componentList.erase(iter);
+		}
+	}
+	template<typename T>
+	T* GetComponent()
+	{
+		auto iter = m_componentList.find(typeid(T).name());
+		if (iter != m_componentList.end())
+		{
+			T* downcast = dynamic_cast<T*>(iter->second.get());
+			if (downcast == nullptr)
+			{
+				LOG_WARNING("%s : %s component down_cast faild", name.c_str(), typeid(T).name());
+			}
+			return downcast;
 		}
 
-		m_componentList.erase(iter);
+		return nullptr;
 	}
+	//tarnsformComponent完全特殊化
+	template<>
+	Transform* GetComponent(void);
+public:
+	Transform transform;
 private:
+	std::string name = "GameObject";
 	static VSConstantBuffer m_cb;
 	LAYER m_layer = LAYER::LAYER_01;
-	std::unordered_map<const char*, std::unique_ptr<Component>> m_componentList;
+	std::unordered_map<const char*, std::unique_ptr<Component, void(*)(Component*)>> m_componentList;
+};
+
+//==================================================
+// 関数ポインタを使って初期化処理リストにいれるか
+// そのまま発動させるかをきりわける
+//==================================================
+//
+class ObjectManager
+{
+	friend class Window;
+	friend class Component;
+	friend class Scene;
+	friend class SceneManager;
+
+	using ObjectList = std::pair<std::unordered_set<std::string>, std::vector<std::unique_ptr<GameObject, void(*)(GameObject*)>>>;
+
+private:
+	//新しいリストにする
+	static void GenerateList();
+	//オブジェクトかたずけ
+	static void Uninit();
+	//オブジェクトについたコンポーネント更新
+	static void UpdateObjectComponent();
+	//オブジェクトの追加・名前の重複禁止
+	static GameObject* AddObject(GameObject* _gameObject);
+	//スレッドの現在のリストを次のリストに変更
+	static void ChangeNextObjectList();
+	//次のノードリストに繋ぐ
+	static void LinkNextObjectList();
+private:
+	// スレッドごとの現在のリスト
+	static thread_local ObjectList* m_currentList;
+	//オブジェクトを格納
+	static std::unique_ptr<ObjectList> m_objectList;
+	//次のオブジェクトを格納
+	static std::unique_ptr<ObjectList> m_nextObjectList;
 };
 

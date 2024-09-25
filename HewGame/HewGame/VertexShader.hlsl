@@ -8,8 +8,10 @@ cbuffer ConstBuffer : register(b0)
     matrix world;
     //プロジェクション変換行列
     matrix projection;
-    //UV座標移動行列
-    matrix tex;
+    // UV scaling to divide the texture
+    float2 uvScale; 
+    // UV offset to animate texture
+    float2 uvOffset; 
     //色情報
     float4 color;
 }
@@ -40,14 +42,7 @@ VS_OUT vs_main(VS_IN input)
     output.pos = mul(output.pos, projection);
     output.col = input.col * color;
     
-    //UV座標を移動する
-    float4 uv;
-    //行列掛け算のためfloat4型に移す
-    uv.xy = input.tex;
-    uv.z = 0.0f;
-    uv.w = 1.0f;
-    uv = mul(uv, tex);
-    output.tex = uv.xy;
-    
+    output.tex = input.tex * uvScale + uvOffset;
+      
     return output;
 }
