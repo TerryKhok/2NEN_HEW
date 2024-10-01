@@ -70,7 +70,8 @@ void GameObject::SetLayer(const LAYER _layer)
 
 void GameObject::SetName(const std::string _name)
 {
-
+	ObjectManager::ChangeObjectName(name, _name);
+	name = _name;
 }
 
 const std::string GameObject::GetName() const
@@ -132,6 +133,21 @@ template<>
 Transform* GameObject::GetComponent()
 {
 	return &transform;
+}
+
+GameObject* ObjectManager::Find(std::string _name)
+{
+	for (auto& node : m_currentList->second)
+	{
+		if (node->GetName() == _name)
+		{
+			return node.get();
+		}
+	}
+
+	return nullptr;
+
+	LOG("not found %s gameObject", _name.c_str());
 }
 
 void ObjectManager::Uninit()
@@ -198,4 +214,15 @@ void ObjectManager::LinkNextObjectList()
 	m_objectList = std::move(m_nextObjectList);
 
 	m_nextObjectList.reset(new ObjectList());
+}
+
+void ObjectManager::ChangeObjectName(std::string _before, std::string _after)
+{
+	auto& list = m_currentList->first;
+	auto iter = list.find(_before);
+	if (iter != list.end())
+	{
+		list.erase(iter);
+		list.insert(_after);
+	}
 }

@@ -9,7 +9,7 @@ using Microsoft::WRL::ComPtr;
 
 // 構造体の定義
 // 頂点データを表す構造体
-struct Vertex
+struct Vertex final
 {
 	//メモリ確保禁止
 	void* operator new(size_t) = delete;
@@ -24,7 +24,7 @@ struct Vertex
 	float u, v;
 };
 
-struct VSConstantBuffer
+struct VSConstantBuffer final
 {
 	//メモリ確保禁止
 	void* operator new(size_t) = delete;
@@ -38,7 +38,7 @@ struct VSConstantBuffer
 };
 
 
-class DirectX11
+class DirectX11 final
 {
 	friend class Window;
 	friend class TextureAssets;

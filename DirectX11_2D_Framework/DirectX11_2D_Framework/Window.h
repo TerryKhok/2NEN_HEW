@@ -31,7 +31,7 @@ void setConsoleTextColor(unsigned int color);
 #define LOG_NL
 #endif
 
-class Window
+class Window final
 {
 	Window() = delete;
 

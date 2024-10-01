@@ -57,7 +57,7 @@
 
 
 //シングルトンクラス
-class Input
+class Input final
 {
 	//ウィンドウで更新する・マウス情報受け取る
 	friend class Window;

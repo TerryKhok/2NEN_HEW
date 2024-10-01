@@ -1,6 +1,6 @@
 #pragma once
 
-class TextureAssets
+class TextureAssets final
 {
 	friend class RenderNode;
 	friend class RenderManager;

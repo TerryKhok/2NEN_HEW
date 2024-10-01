@@ -4,7 +4,7 @@
 
 class Renderer;
 
-struct Transform
+struct Transform final
 {
 	//メモリ確保禁止
 	void* operator new(size_t) = delete;
@@ -16,7 +16,7 @@ struct Transform
 };
 
 
-class GameObject
+class GameObject final
 {
 	friend class RenderNode;
 	friend class UVRenderNode;
@@ -55,13 +55,8 @@ public:
 	void SetActive(bool _active);
 	//レイヤーの設定（頻繁に使用しない）
 	void SetLayer(const LAYER _layer);
-
-	//名前の変更
-	//=======================================================
-	//ObjectManagerのnameSetも変えるように修正する
-	//=======================================================
+	//名前の変更（頻繁に使用しない）
 	void SetName(const std::string _name);
-
 	//名前の取得
 	const std::string GetName() const;
 	//レイヤー取得
@@ -159,15 +154,20 @@ private:
 // そのまま発動させるかをきりわける
 //==================================================
 //
-class ObjectManager
+class ObjectManager final
 {
 	friend class Window;
 	friend class Component;
 	friend class Scene;
 	friend class SceneManager;
+	friend void GameObject::SetName(const std::string);
 
 	using ObjectList = std::pair<std::unordered_set<std::string>, std::vector<std::unique_ptr<GameObject, void(*)(GameObject*)>>>;
+	//using ObjectList = std::unordered_set<std::string, std::unique_ptr<GameObject, void(*)(GameObject*)>>;
 
+public:
+	//オブジェクト一覧から見つける(頻繁に使用しない)
+	static GameObject* Find(std::string _name);
 private:
 	//新しいリストにする
 	static void GenerateList();
@@ -181,6 +181,8 @@ private:
 	static void ChangeNextObjectList();
 	//次のノードリストに繋ぐ
 	static void LinkNextObjectList();
+	//オブジェクトの名前を変更する
+	static void ChangeObjectName(std::string _before,std::string _after);
 private:
 	// スレッドごとの現在のリスト
 	static thread_local ObjectList* m_currentList;

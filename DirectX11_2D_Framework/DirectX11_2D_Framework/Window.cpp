@@ -188,10 +188,6 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 
 LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 {
-	// Start scene loading asynchronously
-	LOG_NL;
-	LOG("Starting scene loading...");
-
 	// Example main loop with a loading screen
 	bool loadingComplete = false;
 
@@ -260,10 +256,6 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 		LOG("Loading Complete!");
 		loading = false;
 	}
-
-	/*auto iter = std::find(threads.begin(), threads.end(), sceneFuture);
-	if (iter != threads.end())
-		threads.erase(iter);*/
 
 	return LRESULT();
 }

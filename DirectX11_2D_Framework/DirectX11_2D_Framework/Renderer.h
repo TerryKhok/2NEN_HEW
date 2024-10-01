@@ -99,7 +99,7 @@ private:
 	int m_frameY = 0;
 };
 
-class RenderManager
+class RenderManager final
 {
 	friend class Window;
 	friend class RenderNode;

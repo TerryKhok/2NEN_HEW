@@ -27,7 +27,7 @@ private:
 };
 
 
-class SceneManager
+class SceneManager final
 {
 	friend class Window;
 
@@ -48,8 +48,7 @@ public:
 
 		if (async)
 		{
-			std::string warning = "no loding" + sceneName + ",other scene loding now";
-			LOG(warning.c_str());
+			LOG("no loding %s,other scene loding now", sceneName.substr(6).c_str());
 		}
 
 		auto it = m_sceneList.find(sceneName);
@@ -58,11 +57,14 @@ public:
 			ObjectManager::GenerateList();
 			it->second();
 			NextScene();
-			LOG("scene loaded!");
+			
+			LOG("Now Switching to %s",sceneName.substr(6).c_str());
 			return;
 		}
 
-		LOG_WARNING("no matching scene is found");
+		LOG_WARNING("couldn't find the scene, so registered it.");
+		RegisterScene<T>();
+		LoadScene<T>();
 	}
 
 	//シーンの読み込み(非同期)
@@ -78,6 +80,10 @@ public:
 			async = true;
 			loading = true;
 
+			// Start scene loading asynchronously
+			LOG_NL;
+			LOG("Starting scene loading...%s", sceneName.substr(6).c_str());
+
 			std::future<void> sceneFuture = std::async(std::launch::async, [&]()
 				{
 					RenderManager::ChangeNextRenderList();
@@ -89,7 +95,9 @@ public:
 			return;
 		}
 
-		LOG_WARNING("no matching scene is found");
+		LOG_WARNING("couldn't find the scene, so registered it.");
+		RegisterScene<T>();
+		LoadingScene<T>();
 	}
 
 	//シーンの切り替え(ロードが終わってからじゃないと反映されない)
@@ -116,7 +124,7 @@ public:
 		auto it = m_sceneList.find(sceneName);
 		if (it != m_sceneList.end())
 		{
-			std::string error = sceneName + " scene is exist";
+			std::string error = sceneName.substr(6) + " is exist";
 			assert(false && error.c_str());
 		}
 			
