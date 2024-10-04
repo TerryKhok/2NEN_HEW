@@ -20,7 +20,7 @@ class SampleScene01 : public Scene
 	void Load() override
 	{
 		//オブジェクト生成(名前、テクスチャ指定)
-		Instantiate("HartR", L"asset/pic/hartR.png");
+		Instantiate("HartR"/*, L"asset/pic/hartR.png"*/)->AddComponent<Renderer>();
 	}
 
 	//更新処理(オーバライド)
@@ -67,7 +67,7 @@ class SampleScene02 : public Scene
 	void Load()
 	{
 		//オブジェクト生成,名前の変更(意味ない)
-		Instantiate("HartR", L"asset/pic/hartR.png")->SetName("HartG");
+		auto object = Instantiate("HartG", L"asset/pic/hartR.png");
 
 		//無駄に処理を重くする
 		ObjectManager::Find("HartG")->GetComponent<Transform>()->gameobject->GetComponent<Renderer>()->SetTexture(L"asset/pic/hartG.png");

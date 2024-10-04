@@ -35,6 +35,7 @@ class RenderNode
 {
 	friend class Renderer;
 	friend class RenderManager;
+	friend class Box2DBody;
 
 	//描画関連
 protected:
@@ -107,6 +108,7 @@ class RenderManager final
 	friend class Renderer;
 	friend class RenderManager;
 	friend class SceneManager;
+	friend class Box2DBody;
 
 	using RenderList = std::pair < std::shared_ptr<RenderNode>, std::shared_ptr<RenderNode>>;
 
@@ -138,6 +140,4 @@ private:
 	static ComPtr<ID3D11Buffer> m_vertexBuffer;
 	//共通のインデックスバッファー
 	static ComPtr<ID3D11Buffer> m_indexBuffer;
-	//指定なしのテクスチャビュー
-	static ComPtr<ID3D11ShaderResourceView> m_pTextureView;
 };

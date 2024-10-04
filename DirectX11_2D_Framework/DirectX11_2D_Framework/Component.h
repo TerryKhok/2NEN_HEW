@@ -1,5 +1,7 @@
 #pragma once
 
+
+
 //============================================
 // Updateしか実装できてない
 // Awakeとかも実装する
@@ -8,9 +10,10 @@
 class Component
 {
 	friend class GameObject;
+
 protected:
 	//生成禁止
-	Component() {}
+	Component(){}
 	//削除禁止
 	virtual ~Component() = default;
 	//コンポーネントをつけているオブジェクト

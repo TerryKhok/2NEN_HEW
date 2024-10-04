@@ -46,22 +46,30 @@ public:
 	{
 		std::string sceneName = typeid(T).name();
 
+		//非同期にシーンをロードしている場合
 		if (async)
 		{
 			LOG("no loding %s,other scene loding now", sceneName.substr(6).c_str());
 		}
 
+		//シーンが登録済みかどうか
 		auto it = m_sceneList.find(sceneName);
 		if (it != m_sceneList.end()) {
+
+			//新しいリストに変える
 			RenderManager::GenerateList();
 			ObjectManager::GenerateList();
+			//対応したシーンのロード処理
 			it->second();
+			//シーン切り替え
 			NextScene();
 			
+			LOG_NL;
 			LOG("Now Switching to %s",sceneName.substr(6).c_str());
 			return;
 		}
 
+		//シーンが見つからなかった場合
 		LOG_WARNING("couldn't find the scene, so registered it.");
 		RegisterScene<T>();
 		LoadScene<T>();
@@ -71,10 +79,12 @@ public:
 	template<typename T>
 	static void LoadingScene()
 	{
+		//ロード中
 		if (async) return;
 
 		std::string sceneName = typeid(T).name();
 
+		//シーンが登録されているか
 		auto it = m_sceneList.find(sceneName);
 		if (it != m_sceneList.end()) {
 			async = true;
@@ -84,17 +94,21 @@ public:
 			LOG_NL;
 			LOG("Starting scene loading...%s", sceneName.substr(6).c_str());
 
+			//スレッドを立てる
 			std::future<void> sceneFuture = std::async(std::launch::async, [&]()
 				{
+					Box2D::WorldManager::ChengeNextWorld();
 					RenderManager::ChangeNextRenderList();
 					ObjectManager::ChangeNextObjectList();
 					it->second();
 				});
+			//スレッドが終わるまでループさせる
 			Window::WindowUpdate(sceneFuture, loading);
 
 			return;
 		}
 
+		//シーンが登録されていなかった場合
 		LOG_WARNING("couldn't find the scene, so registered it.");
 		RegisterScene<T>();
 		LoadingScene<T>();
@@ -103,12 +117,16 @@ public:
 	//シーンの切り替え(ロードが終わってからじゃないと反映されない)
 	static void ChangeScene()
 	{
+		//非同期でロードが終わっている場合
 		if (async && !loading)
 		{
+			//シーンの切り替え
 			NextScene();
 
+			//ロードしておいたリストに切り替える
 			RenderManager::LinkNextRenderList();
 			ObjectManager::LinkNextObjectList();
+			Box2D::WorldManager::LinkNextWorld();
 
 			async = false;
 
@@ -121,19 +139,22 @@ public:
 	static void RegisterScene() {
 		std::string sceneName = typeid(T).name();
 
+		//シーンが既にある場合
 		auto it = m_sceneList.find(sceneName);
 		if (it != m_sceneList.end())
 		{
-			std::string error = sceneName.substr(6) + " is exist";
-			assert(false && error.c_str());
+			LOG("%s is already registered.", sceneName.substr(6).c_str());
+			return;
 		}
 			
+		//ロード関数を作成
 		std::function<void(void)> createFn = [&]()
 			{
 				m_nextScene.reset(new T());
 				m_nextScene->Load();
 			};
 
+		//登録
 		m_sceneList[sceneName] = createFn;
 	}
 

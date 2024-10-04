@@ -7,7 +7,6 @@ RenderManager::RenderList RenderManager::m_rendererList[LAYER::LATER_MAX];
 RenderManager::RenderList RenderManager::m_nextRendererList[LAYER::LATER_MAX];
 ComPtr<ID3D11Buffer> RenderManager::m_vertexBuffer = nullptr;
 ComPtr<ID3D11Buffer> RenderManager::m_indexBuffer = nullptr;
-ComPtr<ID3D11ShaderResourceView> RenderManager::m_pTextureView = nullptr;
 
 Renderer::Renderer(GameObject* _pObject)
 {
@@ -54,7 +53,7 @@ void Renderer::SetColor(XMFLOAT4 _color)
 
 RenderNode::RenderNode()
 {
-	m_pTextureView = RenderManager::m_pTextureView;
+	m_pTextureView = DirectX11::m_pTextureView;
 	NextEnd();
 	Active(true);
 }
@@ -215,8 +214,7 @@ HRESULT RenderManager::Init()
 	DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_vertexBuffer.GetAddressOf(), &strides, &offsets);
 	DirectX11::m_pDeviceContext->IASetIndexBuffer(RenderManager::m_indexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
 
-
-	TextureAssets::LoadTexture(m_pTextureView, DEFUALT_TEXTURE_FILEPATH);
+	//TextureAssets::LoadTexture(m_pTextureView, DEFUALT_TEXTURE_FILEPATH);
 
 	GenerateList();
 

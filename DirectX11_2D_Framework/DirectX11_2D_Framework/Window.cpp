@@ -1,4 +1,6 @@
 #include "Window.h"
+#include "HelloBox2d.h"
+
 const char* relativePath(const char* fullPath) {
 #ifdef _WIN32
 	const char separator = '\\'; // Windows uses backslashes
@@ -123,6 +125,9 @@ LRESULT Window::WindowInit(void(*p_sceneInitFunc)(void))
 {
 	//‰Šú‰»ˆ—
 	//=================================================
+	//Box2Dƒ[ƒ‹ƒhì¬
+	Box2D::WorldManager::CreateWorld();
+
 	RenderManager::Init();
 	p_sceneInitFunc();
 	SceneManager::Init();
@@ -154,11 +159,15 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 			nowCount = liWork.QuadPart;
 			if (nowCount >= oldCount + frequency / FPS)
 			{
+				Box2D::WorldManager::UpdateWorld();
+
 				Input::Get().Update();
 
 				SceneManager::m_currentScene->Update();
 
 				ObjectManager::UpdateObjectComponent();
+
+				Box2DBodyManager::ExcuteMoveFunction();
 
 				DirectX11::D3D_StartRender();
 
@@ -212,11 +221,15 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 			nowCount = liWork.QuadPart;
 			if (nowCount >= oldCount + frequency / FPS)
 			{
+				Box2D::WorldManager::UpdateWorld();
+
 				Input::Get().Update();
 
 				SceneManager::m_currentScene->Update();
 
 				ObjectManager::UpdateObjectComponent();
+
+				Box2DBodyManager::ExcuteMoveFunction();
 
 				DirectX11::D3D_StartRender();
 
@@ -263,6 +276,8 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 int Window::WindowEnd(HINSTANCE hInstance)
 {
 	ObjectManager::Uninit();
+
+	Box2D::WorldManager::DeleteWorld();
 
 	//DirectX‚©‚½‚¸‚¯
 	DirectX11::D3D_Release();

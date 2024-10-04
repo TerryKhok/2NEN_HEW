@@ -54,10 +54,13 @@
 #include "Input.h"
 #include "TextureAsset.h"
 #include "Layer.h"
+#include "Box2D.h"
 #include "Component.h"
 #include "Object.h"
 #include "Renderer.h"
 #include "Scene.h"
-#include "Collider2D.h"
+#include "Box2DBody.h"
+
+
 
 

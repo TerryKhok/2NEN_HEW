@@ -13,6 +13,9 @@
     <Filter Include="Src\未実装">
       <UniqueIdentifier>{39f72e0c-d3b4-45f1-af1d-c74c7701ffd2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="box2d">
+      <UniqueIdentifier>{57f57773-52b0-4742-ab0b-0554eef6a272}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WICTextureLoader.cpp">
@@ -53,6 +56,21 @@
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="HelloBox2d.cpp">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="Box2D.cpp">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="Physic2D.cpp">
+      <Filter>Src\未実装</Filter>
+    </ClCompile>
+    <ClCompile Include="Box2dDebug.cpp">
+      <Filter>box2d</Filter>
+    </ClCompile>
+    <ClCompile Include="Box2DBody.cpp">
+      <Filter>box2d</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -101,5 +119,27 @@
     <ClInclude Include="Scene.h">
       <Filter>Src</Filter>
     </ClInclude>
+    <ClInclude Include="HelloBox2d.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="Box2D.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="Physic2D.h">
+      <Filter>Src\未実装</Filter>
+    </ClInclude>
+    <ClInclude Include="Box2dDebug.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="shaders.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="Box2DBody.h">
+      <Filter>box2d</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shader\hlsl\PixelShader.hlsl" />
+    <FxCompile Include="shader\hlsl\VertexShader.hlsl" />
   </ItemGroup>
 </Project>

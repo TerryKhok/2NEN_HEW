@@ -1,3 +1,5 @@
+#include "directX3D.h"
+#include "shaders.h"
 
 // ※ID3D11で始まるポインタ型の変数は、解放する必要がある
 ComPtr<ID3D11Device> DirectX11::m_pDevice = nullptr; // デバイス＝DirectXの各種機能を作る
@@ -21,6 +23,10 @@ ComPtr<ID3D11SamplerState> DirectX11::m_pSampler = nullptr;
 ComPtr<ID3D11Buffer> DirectX11::m_pVSConstantBuffer = nullptr;
 //ブレンドステート変数
 ComPtr<ID3D11BlendState> DirectX11::m_pBlendState = nullptr;
+//ワイヤーフレームステート変数
+ComPtr<ID3D11RasterizerState> DirectX11::m_pWireframeRasterState;
+//whitePixelテクスチャビュー
+ComPtr<ID3D11ShaderResourceView> DirectX11::m_pTextureView;
 
 //--------------------------------------------------------------------------------------
 // シェーダーをファイル拡張子に合わせてコンパイル
@@ -94,6 +100,111 @@ HRESULT CompileShader(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShad
 	return S_OK;
 }
 
+
+HRESULT DirectX11::CreateVertexShader(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, D3D11_INPUT_ELEMENT_DESC* layout, unsigned int numElements, ID3D11VertexShader** ppVertexShader, ID3D11InputLayout** ppVertexLayout)
+{
+	HRESULT   hr;
+	ID3DBlob* pBlob = nullptr;
+	void* ShaderObject;
+	size_t	  ShaderObjectSize;
+
+	// ファイルの拡張子に合わせてコンパイル
+	hr = CompileShader(szFileName, szEntryPoint, szShaderModel, &ShaderObject, ShaderObjectSize, &pBlob);
+	if (FAILED(hr))
+	{
+		if (pBlob)pBlob->Release();
+		return E_FAIL;
+	}
+
+	// 頂点シェーダーを生成
+	hr = m_pDevice->CreateVertexShader(ShaderObject, ShaderObjectSize, NULL, ppVertexShader);
+	if (FAILED(hr))
+	{
+		if (pBlob)pBlob->Release();
+		return E_FAIL;
+	}
+
+	// 頂点データ定義生成
+	hr = m_pDevice->CreateInputLayout(
+		layout,
+		numElements,
+		ShaderObject,
+		ShaderObjectSize,
+		ppVertexLayout);
+	if (FAILED(hr)) {
+		MessageBoxA(NULL, "CreateInputLayout error", "error", MB_OK);
+		pBlob->Release();
+		return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+
+HRESULT DirectX11::CreateVertexShader(const BYTE* byteCode, SIZE_T size, D3D11_INPUT_ELEMENT_DESC* layout, unsigned int numElements, ID3D11VertexShader** ppVertexShader, ID3D11InputLayout** ppVertexLayout)
+{
+	HRESULT   hr;
+
+	// 頂点シェーダーを生成
+	hr = m_pDevice->CreateVertexShader(byteCode, size, NULL, ppVertexShader);
+	if (FAILED(hr))
+	{
+		return E_FAIL;
+	}
+
+	// 頂点データ定義生成
+	hr = m_pDevice->CreateInputLayout(
+		layout,
+		numElements,
+		byteCode,
+		size,
+		ppVertexLayout);
+	if (FAILED(hr)) {
+		MessageBoxA(NULL, "CreateInputLayout error", "error", MB_OK);
+		return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+HRESULT DirectX11::CreatePixelShader(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3D11PixelShader** ppPixelShader)
+{
+	HRESULT   hr;
+	ID3DBlob* pBlob = nullptr;
+	void* ShaderObject;
+	size_t	  ShaderObjectSize;
+
+	// ファイルの拡張子に合わせてコンパイル
+	hr = CompileShader(szFileName, szEntryPoint, szShaderModel, &ShaderObject, ShaderObjectSize, &pBlob);
+	if (FAILED(hr))
+	{
+		return E_FAIL;
+	}
+
+	// ピクセルシェーダーを生成
+	hr = m_pDevice->CreatePixelShader(ShaderObject, ShaderObjectSize, NULL, ppPixelShader);
+	if (FAILED(hr))
+	{
+		if (pBlob)pBlob->Release();
+		return E_FAIL;
+	}
+
+	return S_OK;
+}
+
+HRESULT DirectX11::CreatePixelShader(const BYTE* byteCode, SIZE_T size, ID3D11PixelShader** ppPixelShader)
+{
+	HRESULT   hr;
+
+	// ピクセルシェーダーを生成
+	hr = m_pDevice->CreatePixelShader(byteCode, size, NULL, ppPixelShader);
+	if (FAILED(hr))
+	{
+		return E_FAIL;
+	}
+
+	return S_OK;
+}
 
 HRESULT DirectX11::D3D_Create(HWND hwnd)
 {
@@ -194,15 +305,14 @@ HRESULT DirectX11::D3D_Create(HWND hwnd)
 	unsigned int numElements = ARRAYSIZE(layout);
 
 	// 頂点シェーダーオブジェクトを生成、同時に頂点レイアウトも生成
-	hr = CreateVertexShader("VertexShader.hlsl", "vs_main", "vs_5_0",
-		layout, numElements, m_pVertexShader.GetAddressOf(), m_pInputLayout.GetAddressOf());
+	hr = CreateVertexShader(UV_VS, sizeof(UV_VS), layout, numElements, m_pVertexShader.GetAddressOf(), m_pInputLayout.GetAddressOf());
 	if (FAILED(hr)) {
 		MessageBoxA(NULL, "CreateVertexShader error", "error", MB_OK);
 		return E_FAIL;
 	}
-
+	
 	// ピクセルシェーダーオブジェクトを生成
-	hr = CreatePixelShader("PixelShader.hlsl", "ps_main", "ps_5_0", m_pPixelShader.GetAddressOf());
+	hr = CreatePixelShader(UV_PS, sizeof(UV_PS), m_pPixelShader.GetAddressOf());
 	if (FAILED(hr)) {
 		MessageBoxA(NULL, "CreatePixelShader error", "error", MB_OK);
 		return E_FAIL;
@@ -256,6 +366,22 @@ HRESULT DirectX11::D3D_Create(HWND hwnd)
 	if (FAILED(hr)) return hr;
 	m_pDeviceContext->OMSetDepthStencilState(pDSState, 1);
 
+	//ワイヤーフレーム
+	D3D11_RASTERIZER_DESC rasterDesc;
+	ZeroMemory(&rasterDesc, sizeof(rasterDesc));
+
+	rasterDesc.FillMode = D3D11_FILL_WIREFRAME;    // Set to wireframe mode
+	rasterDesc.CullMode = D3D11_CULL_BACK;         // Optional: set culling mode
+	rasterDesc.FrontCounterClockwise = FALSE;
+	rasterDesc.DepthClipEnable = TRUE;
+
+	hr = m_pDevice->CreateRasterizerState(&rasterDesc, m_pWireframeRasterState.GetAddressOf());
+	if (FAILED(hr)) return hr;
+
+
+	//共通のpixelTexture読み込み
+	CreateOnePixelTexture(m_pTextureView.GetAddressOf());
+
 	return S_OK;
 }
 
@@ -301,66 +427,42 @@ void DirectX11::D3D_FinishRender()
 	m_pSwapChain->Present(0, 0);
 }
 
-HRESULT DirectX11::CreateVertexShader(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, D3D11_INPUT_ELEMENT_DESC* layout, unsigned int numElements, ID3D11VertexShader** ppVertexShader, ID3D11InputLayout** ppVertexLayout)
+void DirectX11::CreateOnePixelTexture(ID3D11ShaderResourceView** _resourceView)
 {
-	HRESULT   hr;
-	ID3DBlob* pBlob = nullptr;
-	void* ShaderObject;
-	size_t	  ShaderObjectSize;
+	// 白色の1ピクセルデータ
+	const UINT texWidth = 1;
+	const UINT texHeight = 1;
+	const UINT pixelSize = 4; // RGBA8
+	unsigned char whitePixel[pixelSize] = { 255, 255, 255, 255 }; // R, G, B, A
 
-	// ファイルの拡張子に合わせてコンパイル
-	hr = CompileShader(szFileName, szEntryPoint, szShaderModel, &ShaderObject, ShaderObjectSize, &pBlob);
-	if (FAILED(hr))
-	{
-		if (pBlob)pBlob->Release();
-		return E_FAIL;
+	D3D11_TEXTURE2D_DESC texDesc = {};
+	texDesc.Width = texWidth;
+	texDesc.Height = texHeight;
+	texDesc.MipLevels = 1;
+	texDesc.ArraySize = 1;
+	texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	texDesc.SampleDesc.Count = 1;
+	texDesc.Usage = D3D11_USAGE_DEFAULT;
+	texDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+
+	D3D11_SUBRESOURCE_DATA initData = {};
+	initData.pSysMem = whitePixel;
+	initData.SysMemPitch = texWidth * pixelSize;
+
+	ID3D11Texture2D* pTexture = nullptr;
+	HRESULT hr = m_pDevice->CreateTexture2D(&texDesc, &initData, &pTexture);
+	if (SUCCEEDED(hr)) {
+		// シェーダーリソースビューの作成
+		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+		srvDesc.Format = texDesc.Format;
+		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MipLevels = 1;
+
+		hr = m_pDevice->CreateShaderResourceView(pTexture, &srvDesc, _resourceView);
+		if (SUCCEEDED(hr)) {
+			// ここで pSRV をシェーダーに渡すなどして使用可能
+		}
+		pTexture->Release();
 	}
-
-	// 頂点シェーダーを生成
-	hr = m_pDevice->CreateVertexShader(ShaderObject, ShaderObjectSize, NULL, ppVertexShader);
-	if (FAILED(hr))
-	{
-		if (pBlob)pBlob->Release();
-		return E_FAIL;
-	}
-
-	// 頂点データ定義生成
-	hr = m_pDevice->CreateInputLayout(
-		layout,
-		numElements,
-		ShaderObject,
-		ShaderObjectSize,
-		ppVertexLayout);
-	if (FAILED(hr)) {
-		MessageBoxA(NULL, "CreateInputLayout error", "error", MB_OK);
-		pBlob->Release();
-		return E_FAIL;
-	}
-
-	return S_OK;
 }
 
-HRESULT DirectX11::CreatePixelShader(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3D11PixelShader** ppPixelShader)
-{
-	HRESULT   hr;
-	ID3DBlob* pBlob = nullptr;
-	void* ShaderObject;
-	size_t	  ShaderObjectSize;
-
-	// ファイルの拡張子に合わせてコンパイル
-	hr = CompileShader(szFileName, szEntryPoint, szShaderModel, &ShaderObject, ShaderObjectSize, &pBlob);
-	if (FAILED(hr))
-	{
-		return E_FAIL;
-	}
-
-	// ピクセルシェーダーを生成
-	hr = m_pDevice->CreatePixelShader(ShaderObject, ShaderObjectSize, NULL, ppPixelShader);
-	if (FAILED(hr))
-	{
-		if (pBlob)pBlob->Release();
-		return E_FAIL;
-	}
-
-	return S_OK;
-}

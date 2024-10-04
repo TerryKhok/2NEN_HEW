@@ -1,6 +1,7 @@
 #pragma once
 
-#define DEFULT_OBJECT_SIZE 100.0f
+//Scale = 1.0f のときの大きさ
+const float DEFULT_OBJECT_SIZE = 10.0f;
 
 class Renderer;
 
@@ -11,10 +12,11 @@ struct Transform final
 
 	GameObject* gameobject = nullptr;
 	Vector3 position = { 0.0f,0.0f,0.5f };
-	Vector3 scale =	{ 1.0f,1.0f ,1.0f };
+	Vector3 scale =	{ 10.0f,10.0f ,1.0f };
 	Vector3 angle = { 0.0f,0.0f,0.0f };
 };
 
+//class Collider2D : public Component;
 
 class GameObject final
 {
@@ -71,9 +73,9 @@ public:
 		component = new T();
 		component->m_this = this;
 
-		//リストに追加
-		m_componentList[typeid(T).name()] = std::unique_ptr<Component, void(*)(Component*)>
-			(component, [](Component* p) {delete p; });
+		//リストに追加(デストラクタ登録)
+		m_componentList.insert(std::make_pair(typeid(Component).name(),
+			std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; })));
 
 		T* downcast = dynamic_cast<T*>(component);
 		if (downcast == nullptr)
@@ -93,8 +95,9 @@ public:
 		component = new T(arg);
 		component->m_this = this;
 
-		m_componentList[typeid(T).name()] = std::unique_ptr<Component, void(*)(Component*)>
-			(component, [](Component* p) {delete p; });
+		//リストに追加(デストラクタ登録)
+		m_componentList.insert(std::make_pair(typeid(Component).name(),
+			std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; })));
 
 		T* downcast = dynamic_cast<T*>(component);
 		if (downcast == nullptr)
@@ -104,12 +107,19 @@ public:
 
 		return downcast;
 	}
+
 	//RenderComponent完全特殊化
 	template<>
 	Renderer* AddComponent<Renderer>();
 	//テクスチャ指定
 	template<>
 	Renderer* AddComponent<Renderer, const wchar_t*>(const wchar_t* _texPath);
+	//Box2DBodyComponent完全特殊化
+	template<>
+	Box2DBody* AddComponent<Box2DBody>();
+	//bodyDef指定
+	template<>
+	Box2DBody* AddComponent<Box2DBody,b2BodyDef*>(b2BodyDef* _bodyDef);
 	//コンポーネント削除
 	template<typename T>
 	void RemoveComponent()
@@ -169,6 +179,8 @@ public:
 	//オブジェクト一覧から見つける(頻繁に使用しない)
 	static GameObject* Find(std::string _name);
 private:
+	//生成禁止
+	ObjectManager();
 	//新しいリストにする
 	static void GenerateList();
 	//オブジェクトかたずけ

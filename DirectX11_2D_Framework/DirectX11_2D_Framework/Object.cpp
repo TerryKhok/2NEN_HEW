@@ -30,10 +30,7 @@ VSConstantBuffer& GameObject::GetContantBuffer()
 	m_cb.world *= DirectX::XMMatrixRotationZ(transform.angle.z);
 	m_cb.world *= DirectX::XMMatrixTranslation(transform.position.x, transform.position.y, 0.5f);
 	m_cb.world = DirectX::XMMatrixTranspose(m_cb.world);
-	m_cb.projection = DirectX::XMMatrixOrthographicLH(
-		SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f, 3.0f);
-	m_cb.projection = DirectX::XMMatrixTranspose(m_cb.projection);
-
+	
 	return m_cb;
 }
 
@@ -130,6 +127,50 @@ Renderer* GameObject::AddComponent<Renderer>(const wchar_t* _texPath)
 }
 
 template<>
+Box2DBody* GameObject::AddComponent(b2BodyDef* _bodyDef)
+{
+	if (ExistComponent<Box2DBody>()) return nullptr;
+
+	Component* component = nullptr;
+	component = new Box2DBody(this, _bodyDef);
+	component->m_this = this;
+
+	//リストに追加(デストラクタ登録)
+	m_componentList.insert(std::make_pair(typeid(Box2DBody).name(),
+		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; })));
+
+	Box2DBody* render = dynamic_cast<Box2DBody*>(component);
+	if (render == nullptr)
+	{
+		LOG_WARNING("%s component down_cast faild", typeid(Box2DBody).name());
+	}
+
+	return render;
+}
+
+template<>
+Box2DBody* GameObject::AddComponent<Box2DBody>()
+{
+	if (ExistComponent<Box2DBody>()) return nullptr;
+
+	Component* component = nullptr;
+	component = new Box2DBody(this);
+	component->m_this = this;
+
+	//リストに追加(デストラクタ登録)
+	m_componentList.insert(std::make_pair(typeid(Box2DBody).name(),
+		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; })));
+
+	Box2DBody* render = dynamic_cast<Box2DBody*>(component);
+	if (render == nullptr)
+	{
+		LOG_WARNING("%s component down_cast faild", typeid(Box2DBody).name());
+	}
+
+	return render;
+}
+
+template<>
 Transform* GameObject::GetComponent()
 {
 	return &transform;
@@ -145,9 +186,15 @@ GameObject* ObjectManager::Find(std::string _name)
 		}
 	}
 
-	return nullptr;
-
 	LOG("not found %s gameObject", _name.c_str());
+	return nullptr;
+}
+
+ObjectManager::ObjectManager()
+{
+	GameObject::m_cb.projection = DirectX::XMMatrixOrthographicLH(
+		SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f, 3.0f);
+	GameObject::m_cb.projection = DirectX::XMMatrixTranspose(GameObject::m_cb.projection);
 }
 
 void ObjectManager::Uninit()
