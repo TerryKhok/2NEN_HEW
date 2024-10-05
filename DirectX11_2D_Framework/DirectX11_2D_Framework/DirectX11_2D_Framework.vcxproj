@@ -23,6 +23,7 @@
     <ClCompile Include="Box2D.cpp" />
     <ClCompile Include="Box2DBody.cpp" />
     <ClCompile Include="Box2dDebug.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="HelloBox2d.cpp" />
     <ClCompile Include="Physic2D.cpp" />
     <ClCompile Include="TextureAsset.cpp" />
@@ -46,6 +47,7 @@
     <ClInclude Include="Box2D.h" />
     <ClInclude Include="Box2DBody.h" />
     <ClInclude Include="Box2dDebug.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="HelloBox2d.h" />
     <ClInclude Include="Physic2D.h" />
     <ClInclude Include="shaders.h" />

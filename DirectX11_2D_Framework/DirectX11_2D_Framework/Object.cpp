@@ -26,11 +26,16 @@ VSConstantBuffer& GameObject::GetContantBuffer()
 {
 	//ワールド変換行列の作成
 	//ー＞オブジェクトの位置・大きさ・向きを指定
-	m_cb.world = DirectX::XMMatrixScaling(transform.scale.x, transform.scale.y, 1.0f);
+	m_cb.world = DirectX::XMMatrixScaling(transform.scale.x, transform.scale.y, transform.scale.z);
 	m_cb.world *= DirectX::XMMatrixRotationZ(transform.angle.z);
-	m_cb.world *= DirectX::XMMatrixTranslation(transform.position.x, transform.position.y, 0.5f);
+	m_cb.world *= DirectX::XMMatrixTranslation(transform.position.x, transform.position.y, transform.position.z);
 	m_cb.world = DirectX::XMMatrixTranspose(m_cb.world);
-	
+
+	/*GameObject::m_cb.projection = DirectX::XMMatrixOrthographicLH(
+		SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f, 3.0f);
+	GameObject::m_cb.projection = DirectX::XMMatrixTranspose(GameObject::m_cb.projection);
+	*/
+
 	return m_cb;
 }
 
@@ -190,12 +195,6 @@ GameObject* ObjectManager::Find(std::string _name)
 	return nullptr;
 }
 
-ObjectManager::ObjectManager()
-{
-	GameObject::m_cb.projection = DirectX::XMMatrixOrthographicLH(
-		SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f, 3.0f);
-	GameObject::m_cb.projection = DirectX::XMMatrixTranspose(GameObject::m_cb.projection);
-}
 
 void ObjectManager::Uninit()
 {

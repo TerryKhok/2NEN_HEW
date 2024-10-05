@@ -1,6 +1,6 @@
 #include "Scene.h"
 
-std::unordered_map<std::string, std::function<void()>> SceneManager::m_sceneList;
+std::unordered_map<std::string, std::pair<int, std::function<void()>>> SceneManager::m_sceneList;
 std::unique_ptr<Scene> SceneManager::m_currentScene = nullptr;
 std::unique_ptr<Scene> SceneManager::m_nextScene = nullptr;
 bool SceneManager::async = false;
@@ -34,7 +34,7 @@ void SceneManager::Init()
     }
 
     auto it = m_sceneList.begin();
-    it->second();
+    it->second.second();
 
     m_currentScene = std::move(m_nextScene);
     //m_nextScene.reset(nullptr);

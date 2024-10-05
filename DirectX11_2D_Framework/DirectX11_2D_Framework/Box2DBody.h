@@ -7,9 +7,14 @@ class Box2DBody : public Component
 private:
 	Box2DBody(GameObject* _object);
 	Box2DBody(GameObject* _object, b2BodyDef* _bodyDef);
+	//Box2dWorldから位置と角度を受け取る
 	inline void Update() override;
 	void Delete() override;
 public:
+	//=================================
+	// Circle Cupsule Polygon もつくる
+	//=================================
+	//当たり判定の作成(Box)
 	void CreateBoxShape();
 private:
 	b2BodyId m_bodyId;
@@ -24,11 +29,13 @@ class Box2DBodyManager
 	friend class Box2DBody;
 
 private:
+	//対応したオブジェクトを動かす
 	static void ExcuteMoveFunction();
 private:
 	static std::vector<std::function<void()>> moveFunctions;
 };
 
+//当たり判定の描画用ノードクラス(Debug)
 class Box2DBoxRenderNode : public RenderNode
 {
 	friend class Box2DBody;

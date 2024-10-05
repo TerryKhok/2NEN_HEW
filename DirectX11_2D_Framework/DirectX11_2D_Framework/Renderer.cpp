@@ -157,7 +157,7 @@ HRESULT RenderManager::Init()
 {
 	HRESULT  hr;
 
-	Vector2 size = { DEFULT_OBJECT_SIZE / 2,DEFULT_OBJECT_SIZE / 2 };
+	Vector2 size = { DEFAULT_OBJECT_SIZE / 2,DEFAULT_OBJECT_SIZE / 2 };
 	Vertex vertexList[] =
 	{
 		{-size.x, size.y,0.5f,	1.0f,1.0f,1.0f,1.0f,	0.0f,0.0f},
@@ -242,10 +242,18 @@ void RenderManager::GenerateList()
 
 void RenderManager::Draw()
 {
+#ifndef DEBUG_TRUE
 	for (auto& node : m_rendererList)
 	{
 		node.first->NextFunc();
 	}
+#else
+	for (int i = 0; i < LAYER::LATER_MAX; i++)
+	{
+		auto& node = m_rendererList[i];
+		node.first->NextFunc();
+	}
+#endif
 }
 
 void RenderManager::AddRenderList(std::shared_ptr<RenderNode> _node, LAYER _layer)

@@ -1,7 +1,8 @@
 #pragma once
 
 //Scale = 1.0f のときの大きさ
-const float DEFULT_OBJECT_SIZE = 10.0f;
+const float DEFAULT_OBJECT_SIZE = 10.0f;
+const float HALF_OBJECT_SIZE = DEFAULT_OBJECT_SIZE / 2.0f;
 
 class Renderer;
 
@@ -11,8 +12,8 @@ struct Transform final
 	void* operator new(size_t) = delete;
 
 	GameObject* gameobject = nullptr;
-	Vector3 position = { 0.0f,0.0f,0.5f };
-	Vector3 scale =	{ 10.0f,10.0f ,1.0f };
+	Vector3 position = { 0.0f,0.0f,0.0f };
+	Vector3 scale =	{ 5.0f,5.0f,1.0f };
 	Vector3 angle = { 0.0f,0.0f,0.0f };
 };
 
@@ -22,9 +23,11 @@ class GameObject final
 {
 	friend class RenderNode;
 	friend class UVRenderNode;
+	friend class Box2DBoxRenderNode;
 	friend class ObjectManager;
 	friend class Scene;
 	friend class Component;
+	friend class CameraManager;
 
 private:
 	//コンストラクタ
@@ -180,7 +183,7 @@ public:
 	static GameObject* Find(std::string _name);
 private:
 	//生成禁止
-	ObjectManager();
+	ObjectManager() {}
 	//新しいリストにする
 	static void GenerateList();
 	//オブジェクトかたずけ

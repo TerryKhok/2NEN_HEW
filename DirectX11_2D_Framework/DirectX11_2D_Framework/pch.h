@@ -35,16 +35,12 @@
 #include <future>
 #include <chrono>
 #include <mutex>
+#include <windowsx.h>
+#include <condition_variable>
 
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
-
-//デバッグフラグ
-//================================================================
-#define DEBUG_TRUE
-//================================================================
-
 
 #include "WICTextureLoader.h"
 #include "Math.h"
@@ -60,6 +56,7 @@
 #include "Renderer.h"
 #include "Scene.h"
 #include "Box2DBody.h"
+#include "Camera.h"
 
 
 

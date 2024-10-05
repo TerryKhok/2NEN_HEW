@@ -6,12 +6,14 @@ cbuffer ConstBuffer : register(b0)
 {
     //ワールド変換行列
     matrix world;
+    //カメラ変換
+    matrix view;
     //プロジェクション変換行列
     matrix projection;
     // UV scaling to divide the texture
-    float2 uvScale; 
+    float2 uvScale;
     // UV offset to animate texture
-    float2 uvOffset; 
+    float2 uvOffset;
     //色情報
     float4 color;
 }
@@ -39,7 +41,9 @@ VS_OUT vs_main(VS_IN input)
     VS_OUT output;
  
     output.pos = mul(input.pos, world);
+    output.pos = mul(output.pos, view);
     output.pos = mul(output.pos, projection);
+
     output.col = input.col * color;
     
     output.tex = input.tex * uvScale + uvOffset;

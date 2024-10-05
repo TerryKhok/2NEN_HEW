@@ -30,11 +30,12 @@ struct VSConstantBuffer final
 	void* operator new(size_t) = delete;
 
 	DirectX::XMMATRIX world;
+	DirectX::XMMATRIX view;
 	DirectX::XMMATRIX projection;
 	//DirectX::XMMATRIX tex;
 	DirectX::XMFLOAT2 uvScale = XMFLOAT2(1.0f, 1.0f);
 	DirectX::XMFLOAT2 uvOffset = XMFLOAT2(0.0f, 0.0f);
-	DirectX::XMFLOAT4 color;
+	DirectX::XMFLOAT4 color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 };
 
 

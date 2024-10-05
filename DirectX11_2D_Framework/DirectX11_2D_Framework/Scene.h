@@ -33,7 +33,7 @@ class SceneManager final
 
 private:
 	//生成禁止
-	SceneManager();
+	SceneManager() {}
 
 	//最初のシーンの読み込み
 	static void Init();
@@ -60,7 +60,7 @@ public:
 			RenderManager::GenerateList();
 			ObjectManager::GenerateList();
 			//対応したシーンのロード処理
-			it->second();
+			it->second.second();
 			//シーン切り替え
 			NextScene();
 			
@@ -100,7 +100,7 @@ public:
 					Box2D::WorldManager::ChengeNextWorld();
 					RenderManager::ChangeNextRenderList();
 					ObjectManager::ChangeNextObjectList();
-					it->second();
+					it->second.second();
 				});
 			//スレッドが終わるまでループさせる
 			Window::WindowUpdate(sceneFuture, loading);
@@ -125,9 +125,16 @@ public:
 
 			//ロードしておいたリストに切り替える
 			RenderManager::LinkNextRenderList();
+
+#ifdef WORLD_UPDATE_MULTITHERD
+			Box2D::WorldManager::PauseWorldUpdate();
+#endif
 			ObjectManager::LinkNextObjectList();
 			Box2D::WorldManager::LinkNextWorld();
 
+#ifdef WORLD_UPDATE_MULTITHERD
+			Box2D::WorldManager::ResumeWorldUpdate();
+#endif
 			async = false;
 
 			LOG("Now Switching to the New Scene...");
@@ -136,12 +143,12 @@ public:
 
 	//シーンクラスをリストに登録する
 	template<typename T>
-	static void RegisterScene() {
+	static void RegisterScene(int version = 1) {
 		std::string sceneName = typeid(T).name();
 
 		//シーンが既にある場合
 		auto it = m_sceneList.find(sceneName);
-		if (it != m_sceneList.end())
+		if (it != m_sceneList.end() && it->second.first == version)
 		{
 			LOG("%s is already registered.", sceneName.substr(6).c_str());
 			return;
@@ -155,12 +162,12 @@ public:
 			};
 
 		//登録
-		m_sceneList[sceneName] = createFn;
+		m_sceneList[sceneName] = make_pair(version, createFn);
 	}
 
 private:
 	//シーンリスト
-	static std::unordered_map<std::string, std::function<void()>> m_sceneList;
+	static std::unordered_map<std::string, std::pair<int, std::function<void()>>> m_sceneList;
 	//今のシーン
 	static std::unique_ptr<Scene> m_currentScene;
 	//次のシーン

@@ -125,8 +125,13 @@ LRESULT Window::WindowInit(void(*p_sceneInitFunc)(void))
 {
 	//初期化処理
 	//=================================================
+	SceneManager::m_sceneList.clear();
 	//Box2Dワールド作成
 	Box2D::WorldManager::CreateWorld();
+#ifdef WORLD_UPDATE_MULTITHERD
+	//ワールドの更新スタート
+	Box2D::WorldManager::StartWorldUpdate();
+#endif
 
 	RenderManager::Init();
 	p_sceneInitFunc();
@@ -159,8 +164,9 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 			nowCount = liWork.QuadPart;
 			if (nowCount >= oldCount + frequency / FPS)
 			{
-				Box2D::WorldManager::UpdateWorld();
-
+#ifndef WORLD_UPDATE_MULTITHERD
+				Box2D::WorldManager::WorldUpdate();
+#endif
 				Input::Get().Update();
 
 				SceneManager::m_currentScene->Update();
@@ -168,6 +174,8 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 				ObjectManager::UpdateObjectComponent();
 
 				Box2DBodyManager::ExcuteMoveFunction();
+
+				CameraManager::CameraMatrixCalculation();
 
 				DirectX11::D3D_StartRender();
 
@@ -181,9 +189,11 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 
 				if (nowTick >= oldTick + 1000)
 				{
-				/*	char str[32];
+#ifdef SHOW_FPS
+					char str[32];
 					wsprintfA(str, "FPS = %d", fpsCounter);
-					SetWindowTextA(hWnd, str);*/
+					SetWindowTextA(hWnd, str);
+#endif
 
 					fpsCounter = 0;
 					oldTick = nowTick;
@@ -221,8 +231,9 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 			nowCount = liWork.QuadPart;
 			if (nowCount >= oldCount + frequency / FPS)
 			{
-				Box2D::WorldManager::UpdateWorld();
-
+#ifndef WORLD_UPDATE_MULTITHERD
+				Box2D::WorldManager::WorldUpdate();
+#endif
 				Input::Get().Update();
 
 				SceneManager::m_currentScene->Update();
@@ -230,6 +241,8 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 				ObjectManager::UpdateObjectComponent();
 
 				Box2DBodyManager::ExcuteMoveFunction();
+
+				CameraManager::CameraMatrixCalculation();
 
 				DirectX11::D3D_StartRender();
 
@@ -243,9 +256,11 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 
 				if (nowTick >= oldTick + 1000)
 				{
-					/*	char str[32];
-						wsprintfA(str, "FPS = %d", fpsCounter);
-						SetWindowTextA(hWnd, str);*/
+#ifdef SHOW_FPS
+					char str[32];
+					wsprintfA(str, "FPS = %d", fpsCounter);
+					SetWindowTextA(hWnd, str);
+#endif
 
 					fpsCounter = 0;
 					oldTick = nowTick;
@@ -275,6 +290,9 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 
 int Window::WindowEnd(HINSTANCE hInstance)
 {
+#ifdef WORLD_UPDATE_MULTITHERD
+	Box2D::WorldManager::StopWorldUpdate();
+#endif 
 	ObjectManager::Uninit();
 
 	Box2D::WorldManager::DeleteWorld();
@@ -324,13 +342,12 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		GetCursorPos(&Input::mousePoint);
 		ScreenToClient(hWnd, &Input::mousePoint);
-		static const LONG HALF_SCREEN_WIDTH  = SCREEN_WIDTH / 2;
+		static const LONG HALF_SCREEN_WIDTH = SCREEN_WIDTH / 2;
 		static const LONG HALF_SCREEN_HEIGHT = SCREEN_HEIGHT / 2;
 		Input::mousePoint.x = Input::mousePoint.x * SCREEN_WIDTH / windowRect.right - HALF_SCREEN_WIDTH;
 		Input::mousePoint.y = Input::mousePoint.y * SCREEN_WIDTH / windowRect.bottom - HALF_SCREEN_HEIGHT;
 		Input::mousePoint.y *= (LONG)-1.0;
 	}
-
 	break;
 
 	case WM_LBUTTONDOWN:
@@ -350,6 +367,11 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		Input::isMouseRight = false;
 		Input::isMouseUpRight = true;
 		break;
+
+	case WM_MOUSEWHEEL:
+		Input::mouseWheelDelta = GET_WHEEL_DELTA_WPARAM(wParam);
+		break;
+
 		//画面の大きさ取得
 	case WM_SIZE:
 		GetClientRect(hWnd, &windowRect);

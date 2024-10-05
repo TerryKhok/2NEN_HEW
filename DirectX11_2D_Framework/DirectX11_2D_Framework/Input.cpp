@@ -1,3 +1,4 @@
+#include "Input.h"
 
 POINT Input::mousePoint = {};
 bool Input::isMouseLeft = false;
@@ -6,6 +7,7 @@ bool Input::isMouseDownLeft = false;
 bool Input::isMouseDownRight = false;
 bool Input::isMouseUpLeft = false;
 bool Input::isMouseUpRight = false;
+int Input::mouseWheelDelta = 0;
 
 //コンストラクタ
 Input::Input()
@@ -64,6 +66,9 @@ void Input::Update()
 	isMouseDownRight = false;
 	isMouseUpLeft = false;
 	isMouseUpRight = false;
+
+	//ゼロに近づける
+	mouseWheelDelta -= (mouseWheelDelta > 0) * 8 - (mouseWheelDelta < 0) * 8;
 }
 
 //キー入力
@@ -80,9 +85,9 @@ bool Input::KeyRelease(int key) //リリース
 	return !(keyState[key] & 0x80) && (keyState_old[key] & 0x80);
 }
 
-POINT Input::MousePoint()
+Vector2 Input::MousePoint()
 {
-	return mousePoint;
+	return { static_cast<float>(mousePoint.x),static_cast<float>(mousePoint.y)};
 }
 
 bool Input::MouseLeftPress()
@@ -114,6 +119,12 @@ bool Input::MouseRightRelease()
 {
 	return mouseRightRelease;
 }
+
+int Input::MouseWheelDelta()
+{
+	return mouseWheelDelta;
+}
+
 
 //左アナログスティック
 DirectX::XMFLOAT2 Input::LeftAnalogStick(void)

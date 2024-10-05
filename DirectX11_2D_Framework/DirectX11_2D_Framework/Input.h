@@ -79,7 +79,7 @@ public:
 	bool KeyRelease(int key); //リリース(押し終わった時)
 
 	//マウス位置
-	POINT MousePoint();
+	Vector2 MousePoint();
 	//マウス左ボタンプレス
 	bool MouseLeftPress();
 	//マウス右ボタンプレス
@@ -92,6 +92,8 @@ public:
 	bool MouseLeftRelease();
 	//マウス右ボタンリリース
 	bool MouseRightRelease();
+	//マウスホイール移動距離
+	int MouseWheelDelta();
 
 	//アナログスティック(コントローラー)
 	DirectX::XMFLOAT2 LeftAnalogStick(void);
@@ -128,10 +130,12 @@ private:
 	static bool isMouseDownRight;
 	static bool isMouseUpLeft;
 	static bool isMouseUpRight;
+	static int mouseWheelDelta;
 	bool mouseLeftTrigger = false;
 	bool mouseRightTrigger = false;
 	bool mouseLeftRelease = false;
 	bool mouseRightRelease = false;
+	
 };
 
 #endif

@@ -1,16 +1,35 @@
 #pragma once
 
+// マクロ定義
+#define CLASS_NAME   "DX11"// ウインドウクラスの名前
+#define WINDOW_NAME  "DX2DFramework"// ウィンドウの名前
+
 //フレームレート
 //==============================================================
 #define FPS 60
 //==============================================================
 
-// マクロ定義
-#define CLASS_NAME   "DX11"// ウインドウクラスの名前
-#define WINDOW_NAME  "DX2DFramework"// ウィンドウの名前
+//デバッグフラグ
+//================================================================
+#define DEBUG_TRUE
+//================================================================
 
+//初期画面の大きさ
+//================================================================
 #define SCREEN_WIDTH (640)	// ウインドウの幅
 #define SCREEN_HEIGHT (480)	// ウインドウの高さ
+//================================================================
+
+//画面を映す大きさ（これが座標系の大きさになる）
+//================================================================
+#define PROJECTION_WIDTH (640)
+#define PROJECTION_HEIGHT (480)
+//================================================================
+
+//Fpsを表示するかどうか（たぶんあとで動的に変更できるようにする）
+//================================================================
+#define SHOW_FPS
+//================================================================
 
 const char* relativePath(const char* fullPath);
 void setConsoleTextColor(unsigned int color);
@@ -41,12 +60,12 @@ class Window final
 	static LARGE_INTEGER liWork; 
 	static long long frequency;
 	static long long oldCount;
-	static int fpsCounter;						//FPS計測変数
+	static int fpsCounter;		//FPS計測変数
 	static long long oldTick;	//前回計測時
-	static long long nowTick;				//今回計測時
+	static long long nowTick;	//今回計測時
 	static long long nowCount;
 
-	//flag to signal termination
+	//スレッドの終わりフラグ
 	static std::atomic<bool> terminateFlag;
 public:
 	//ウィンドウ生成

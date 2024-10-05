@@ -305,6 +305,7 @@ HRESULT DirectX11::D3D_Create(HWND hwnd)
 	unsigned int numElements = ARRAYSIZE(layout);
 
 	// 頂点シェーダーオブジェクトを生成、同時に頂点レイアウトも生成
+	//hr = CreateVertexShader(UV_VS, sizeof(UV_VS), layout, numElements, m_pVertexShader.GetAddressOf(), m_pInputLayout.GetAddressOf());
 	hr = CreateVertexShader(UV_VS, sizeof(UV_VS), layout, numElements, m_pVertexShader.GetAddressOf(), m_pInputLayout.GetAddressOf());
 	if (FAILED(hr)) {
 		MessageBoxA(NULL, "CreateVertexShader error", "error", MB_OK);

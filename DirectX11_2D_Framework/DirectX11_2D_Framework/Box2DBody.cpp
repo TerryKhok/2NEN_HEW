@@ -16,7 +16,7 @@ Box2DBody::Box2DBody(GameObject* _object)
 Box2DBody::Box2DBody(GameObject* _object, b2BodyDef* _bodyDef)
 {
 	auto& position = _object->transform.position;
-	_bodyDef->position = { position.x, position.y };
+	_bodyDef->position = { position.x / DEFAULT_OBJECT_SIZE, position.y / DEFAULT_OBJECT_SIZE };
 
 	Box2D::WorldManager::GenerataeBody(m_bodyId, _bodyDef);
 }
@@ -27,6 +27,7 @@ inline void Box2DBody::Update()
 	auto func = [&]() 
 		{
 			auto pos = b2Body_GetPosition(m_bodyId);
+			pos *= DEFAULT_OBJECT_SIZE;
 			m_this->transform.position = Vector3(pos.x, pos.y, 0.5f);
 			auto rot = b2Rot_GetAngle(b2Body_GetRotation(m_bodyId));
 			m_this->transform.angle.z = rot;
@@ -46,20 +47,20 @@ void Box2DBody::Delete()
 
 void Box2DBody::CreateBoxShape()
 {
-	static const float halfObjectSize = DEFULT_OBJECT_SIZE / 2.0f;
-
-	auto& scale = m_this->transform.scale;
+	auto scale = m_this->transform.scale;
 	//地面ポリゴンを作る。 b2MakeBox()ヘルパー関数を使い、地面ポリゴンを箱型にする。箱の中心は親ボディの原点である。
-	b2Polygon polygonBox = b2MakeBox(scale.x * halfObjectSize, scale.y * halfObjectSize);
+	b2Polygon polygonBox = b2MakeBox(scale.x / 2, scale.y / 2);
 
 	//シェイプを作成して地面のボディを仕上げる
 	b2ShapeDef shapeDef = b2DefaultShapeDef();
 	b2CreatePolygonShape(m_bodyId, &shapeDef, &polygonBox);
 
+#ifdef DEBUG_TRUE
 	auto node = std::shared_ptr<RenderNode>(new Box2DBoxRenderNode({ scale.x,scale.y }, m_bodyId));
 	node->m_object = m_this;
 	m_nodeList.push_back((node));
 	RenderManager::AddRenderList(node, LAYER::LAYER_BOX2D_DEBUG);
+#endif
 }
 
 
@@ -76,17 +77,17 @@ void Box2DBoxRenderNode::Draw()
 {
 	VSConstantBuffer cb;
 
-	auto transform = m_object->transform;
+	const auto& transform = m_object->transform;
+	const auto& objectCb = m_object->GetContantBuffer();
 
 	//ワールド変換行列の作成
 	//ー＞オブジェクトの位置・大きさ・向きを指定
-	cb.world = DirectX::XMMatrixScaling(m_size.x, m_size.y, 1.0f);
+	cb.world = DirectX::XMMatrixScaling(m_size.x, m_size.y, transform.scale.z);
 	cb.world *= DirectX::XMMatrixRotationZ(transform.angle.z);
-	cb.world *= DirectX::XMMatrixTranslation(transform.position.x, transform.position.y, 0.5f);
+	cb.world *= DirectX::XMMatrixTranslation(transform.position.x, transform.position.y, transform.position.z);
 	cb.world = DirectX::XMMatrixTranspose(cb.world);
-	cb.projection = DirectX::XMMatrixOrthographicLH(
-		SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f, 3.0f);
-	cb.projection = DirectX::XMMatrixTranspose(cb.projection);
+	cb.view = objectCb.view;
+	cb.projection = objectCb.projection;
 
 	b2BodyType bodyType = b2Body_GetType(m_bodyId);
 	b2Vec2 vec = b2Body_GetLinearVelocity(m_bodyId);

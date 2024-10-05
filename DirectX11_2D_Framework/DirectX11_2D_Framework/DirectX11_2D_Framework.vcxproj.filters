@@ -72,6 +72,9 @@
     <ClCompile Include="Box2DBody.cpp">
       <Filter>box2d</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WICTextureLoader.h">
@@ -136,6 +139,9 @@
     </ClInclude>
     <ClInclude Include="Box2DBody.h">
       <Filter>box2d</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

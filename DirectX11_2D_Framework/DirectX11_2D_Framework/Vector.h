@@ -202,6 +202,16 @@ public:
 		return { this->x,this->y,this->z };
 	}
 	/// <summary>
+	/// Vector3‚Ö‚Ì•ÏŠ·B
+	/// </summary>
+	/// <returns></returns>
+	Vector3& operator=(const Vector2& vec)
+	{
+		this->x = vec.x;
+		this->y = vec.y;
+		return *this;
+	}
+	/// <summary>
 	/// ‘ã“ü‰‰ZqB
 	/// </summary>
 	/// <param name="_v"></param>
