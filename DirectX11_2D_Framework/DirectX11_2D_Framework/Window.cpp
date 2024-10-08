@@ -1,23 +1,6 @@
 #include "Window.h"
 #include "HelloBox2d.h"
 
-const char* relativePath(const char* fullPath) {
-#ifdef _WIN32
-	const char separator = '\\'; // Windows uses backslashes
-#else
-	const char separator = '/';  // Unix-like systems use slashes
-#endif
-	const char* relative = strrchr(fullPath, separator);
-	return relative ? relative + 1 : fullPath; // Return the file name if found, else return the full path
-}
-
-void setConsoleTextColor(unsigned int color)
-{
-#ifdef DEBUG_TRUE
-	static const HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, color);
-#endif
-}
 
 void CreateConsoleWindow() {
 	// Allocates a new console for the calling process
@@ -57,9 +40,10 @@ LRESULT Window::WindowCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR
 #ifdef DEBUG_TRUE
 	//コンソール画面起動
 	CreateConsoleWindow();
-#endif
 
+	//メモリリーク検知
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+#endif
 
 	// ウィンドウクラス情報をまとめる
 	WNDCLASSEX wc;
@@ -276,7 +260,10 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 
 	// Wait for async task to finish
 	if (!loadingComplete) {
-		LOG("Scene loading stopped!");
+		//テクスチャ読み込みなしに設定する
+		TextureAssets::LoadEnd();
+
+		LOG("Scene loading stopped!,Please wait for end process");
 		sceneFuture.get();
 	}
 	else
@@ -293,9 +280,18 @@ int Window::WindowEnd(HINSTANCE hInstance)
 #ifdef WORLD_UPDATE_MULTITHERD
 	Box2D::WorldManager::StopWorldUpdate();
 #endif 
+	//RenderManager::CleanAllRenderList();
+
+	//オブジェクトの破棄
 	ObjectManager::Uninit();
 
-	Box2D::WorldManager::DeleteWorld();
+	//オブジェクトを削除する(念入りに)
+	ObjectManager::CleanAllObjectList();
+	//すべてのワールドを削除する
+	Box2D::WorldManager::DeleteAllWorld();
+
+	//シーンの破棄
+	SceneManager::Uninit();
 
 	//DirectXかたずけ
 	DirectX11::D3D_Release();
@@ -309,6 +305,7 @@ int Window::WindowEnd(HINSTANCE hInstance)
 	UnregisterClass(CLASS_NAME, hInstance);
 
 	//メモリリーク詳細検知
+	//(unique_ptr系はこのあと解放されるので検知されてしまう)
 	//_CrtDumpMemoryLeaks();
 
 	return (int)msg.wParam;

@@ -8,6 +8,8 @@ class Scene
 protected:
 	//継承以外生成禁止
 	Scene() {}
+	//継承以外削除禁止
+	virtual ~Scene() = default;
 
 	//オブジェクト生成
 	GameObject* Instantiate();
@@ -15,6 +17,10 @@ protected:
 	GameObject* Instantiate(std::string _name);
 	//オブジェクト生成(名前,テクスチャ指定)
 	GameObject* Instantiate(std::string _name, const wchar_t* _texPath);
+	//オブジェクトの削除(ポインタ指定)
+	void DeleteObject(GameObject* _object);
+	//オブジェクトの削除(名前指定)
+	inline void DeleteObject(std::string _name);
 private:
 	//シーンのロード処理（オブジェクトの生成）
 	virtual void Load() {}
@@ -33,10 +39,12 @@ class SceneManager final
 
 private:
 	//生成禁止
-	SceneManager() {}
+	SceneManager() = delete;
 
 	//最初のシーンの読み込み
 	static void Init();
+	//シーンの破棄
+	static void Uninit();
 	//次へのシーンの切り替え
 	static void NextScene();
 public:
@@ -60,7 +68,7 @@ public:
 			RenderManager::GenerateList();
 			ObjectManager::GenerateList();
 			//対応したシーンのロード処理
-			it->second.second();
+			it->second();
 			//シーン切り替え
 			NextScene();
 			
@@ -97,10 +105,14 @@ public:
 			//スレッドを立てる
 			std::future<void> sceneFuture = std::async(std::launch::async, [&]()
 				{
+					//追加先を新しく変更する
 					Box2D::WorldManager::ChengeNextWorld();
 					RenderManager::ChangeNextRenderList();
 					ObjectManager::ChangeNextObjectList();
-					it->second.second();
+					//シーンのロード処理
+					it->second();
+					//古いワールドを削除する
+					Box2D::WorldManager::DeleteOldWorld();
 				});
 			//スレッドが終わるまでループさせる
 			Window::WindowUpdate(sceneFuture, loading);
@@ -127,12 +139,14 @@ public:
 			RenderManager::LinkNextRenderList();
 
 #ifdef WORLD_UPDATE_MULTITHERD
+			//ワールドの更新を一時停止
 			Box2D::WorldManager::PauseWorldUpdate();
 #endif
 			ObjectManager::LinkNextObjectList();
 			Box2D::WorldManager::LinkNextWorld();
 
 #ifdef WORLD_UPDATE_MULTITHERD
+			//ワールドの更新を再開
 			Box2D::WorldManager::ResumeWorldUpdate();
 #endif
 			async = false;
@@ -143,12 +157,12 @@ public:
 
 	//シーンクラスをリストに登録する
 	template<typename T>
-	static void RegisterScene(int version = 1) {
+	static void RegisterScene() {
 		std::string sceneName = typeid(T).name();
 
 		//シーンが既にある場合
 		auto it = m_sceneList.find(sceneName);
-		if (it != m_sceneList.end() && it->second.first == version)
+		if (it != m_sceneList.end())
 		{
 			LOG("%s is already registered.", sceneName.substr(6).c_str());
 			return;
@@ -157,21 +171,34 @@ public:
 		//ロード関数を作成
 		std::function<void(void)> createFn = [&]()
 			{
-				m_nextScene.reset(new T());
+				//デストラクタ登録
+				std::unique_ptr<Scene, void(*)(Scene*)> scene(new T, [](Scene* p) {delete p; });
+				m_nextScene = std::move(scene);
+#ifdef DEBUG_TRUE
+				try
+				{
+					m_nextScene->Load();
+				}
+				//例外キャッチ(nullptr参照とか)
+				catch (const std::exception& e) {
+					LOG_ERROR(e.what());
+				}
+#else
 				m_nextScene->Load();
+#endif
 			};
 
 		//登録
-		m_sceneList[sceneName] = make_pair(version, createFn);
+		m_sceneList[sceneName] =createFn;
 	}
 
 private:
 	//シーンリスト
-	static std::unordered_map<std::string, std::pair<int, std::function<void()>>> m_sceneList;
+	static std::unordered_map<std::string,std::function<void()>> m_sceneList;
 	//今のシーン
-	static std::unique_ptr<Scene> m_currentScene;
+	static std::unique_ptr<Scene, void(*)(Scene*)> m_currentScene;
 	//次のシーン
-	static std::unique_ptr<Scene> m_nextScene;
+	static std::unique_ptr<Scene, void(*)(Scene*)> m_nextScene;
 	//非同期用変数
 	static bool async;
 	static bool loading;

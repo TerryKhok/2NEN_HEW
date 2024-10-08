@@ -1,7 +1,9 @@
 
 std::unordered_map<const wchar_t*, ComPtr<ID3D11ShaderResourceView>> TextureAssets::m_textureLib;
+HRESULT(*TextureAssets::pLoadTexture)(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName) = Load;
 
-HRESULT TextureAssets::LoadTexture(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName)
+
+HRESULT TextureAssets::Load(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName)
 {
 	auto iter = m_textureLib.find(_texName);
 	if (iter != m_textureLib.end())
@@ -11,7 +13,6 @@ HRESULT TextureAssets::LoadTexture(ComPtr<ID3D11ShaderResourceView>& _textureVie
 	}
 
 	//textureí«â¡ÇÃèàóùÇÇ∑ÇÈ
-
 	HRESULT  hr;
 	hr = DirectX::CreateWICTextureFromFile(
 		DirectX11::m_pDevice.Get(), _texName, NULL, _textureView.GetAddressOf());
@@ -24,4 +25,14 @@ HRESULT TextureAssets::LoadTexture(ComPtr<ID3D11ShaderResourceView>& _textureVie
 	m_textureLib[_texName] = _textureView;
 
 	return hr;
+}
+
+HRESULT TextureAssets::Void(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName)
+{
+	return S_FALSE;
+}
+
+void TextureAssets::LoadEnd()
+{
+	pLoadTexture = TextureAssets::Void;
 }

@@ -9,11 +9,6 @@
 #define FPS 60
 //==============================================================
 
-//デバッグフラグ
-//================================================================
-#define DEBUG_TRUE
-//================================================================
-
 //初期画面の大きさ
 //================================================================
 #define SCREEN_WIDTH (640)	// ウインドウの幅
@@ -31,24 +26,6 @@
 #define SHOW_FPS
 //================================================================
 
-const char* relativePath(const char* fullPath);
-void setConsoleTextColor(unsigned int color);
-
-#ifdef DEBUG_TRUE
-
-#define LOG(format, ...) printf_s("\n<file:%s,line:%d>",relativePath(__FILE__),__LINE__);printf_s(format,__VA_ARGS__)
-#define LOG_ERROR(format, ...) setConsoleTextColor(4);printf_s("\n-ERROR!!-\n<file:%s,line:%d>",relativePath(__FILE__),__LINE__);printf_s(format,__VA_ARGS__);setConsoleTextColor(7)
-#define LOG_WARNING(format, ...) setConsoleTextColor(6);printf_s("\n-WARNING!-\n<file:%s,line:%d>",relativePath(__FILE__),__LINE__);printf_s(format,__VA_ARGS__);setConsoleTextColor(7)
-
-#define LOG_NL printf_s("\n")
-
-#else
-#define LOG(format, ...)  
-#define LOG_ERROR(format, ...)  
-#define LOG_WARNING(format, ...)  
-
-#define LOG_NL
-#endif
 
 class Window final
 {

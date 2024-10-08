@@ -35,6 +35,7 @@
 #include <future>
 #include <chrono>
 #include <mutex>
+#include <variant>
 #include <windowsx.h>
 #include <condition_variable>
 
@@ -45,6 +46,7 @@
 #include "WICTextureLoader.h"
 #include "Math.h"
 #include "Vector.h"
+#include "Debug.h"
 #include "Window.h"
 #include "directX3D.h"
 #include "Input.h"

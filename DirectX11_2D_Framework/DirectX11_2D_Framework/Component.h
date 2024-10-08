@@ -25,6 +25,10 @@ protected:
 	GameObject* Instantiate(std::string _name);
 	//オブジェクト生成(名前,テクスチャ指定)
 	GameObject* Instantiate(std::string _name, const wchar_t* _texPath);
+	//オブジェクトの削除(ポインタ指定)
+	void DeleteObject(GameObject* _object);
+	//オブジェクトの削除(名前指定)
+	inline void DeleteObject(std::string _name);
 private:
 	//アクティブを変更
 	virtual void SetActive(bool _active) {}

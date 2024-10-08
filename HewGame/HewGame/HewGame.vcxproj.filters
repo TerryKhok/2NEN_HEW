@@ -14,8 +14,19 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
     <Filter Include="Scene">
-      <UniqueIdentifier>{46398f5e-575a-4de3-941f-7c067ab8643c}</UniqueIdentifier>
+      <UniqueIdentifier>{fd3f16b7-c2fd-4753-a3da-72277ed37410}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Sample_Box2D.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Sample_SceneLoad.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -24,16 +35,8 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Sample_SceneLoad.h">
-      <Filter>Scene</Filter>
+    <ClCompile Include="Sample_SceneLoad.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Sample_Box2D.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

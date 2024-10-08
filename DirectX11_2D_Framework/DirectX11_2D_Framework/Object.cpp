@@ -5,6 +5,7 @@ VSConstantBuffer GameObject::m_cb = {};
 thread_local ObjectManager::ObjectList* ObjectManager::m_currentList = m_objectList.get();
 std::unique_ptr<ObjectManager::ObjectList> ObjectManager::m_objectList = std::unique_ptr<ObjectList>(new ObjectList());
 std::unique_ptr<ObjectManager::ObjectList> ObjectManager::m_nextObjectList = std::unique_ptr<ObjectList>(new ObjectList());
+std::unique_ptr<ObjectManager::ObjectList> ObjectManager::m_eraseObjectList = std::unique_ptr<ObjectList>(new ObjectList());
 
 GameObject::GameObject(std::string _name)
 {
@@ -183,12 +184,10 @@ Transform* GameObject::GetComponent()
 
 GameObject* ObjectManager::Find(std::string _name)
 {
-	for (auto& node : m_currentList->second)
+	auto iter = m_currentList->find(_name);
+	if (iter != m_currentList->end())
 	{
-		if (node->GetName() == _name)
-		{
-			return node.get();
-		}
+		return iter->second.get();
 	}
 
 	LOG("not found %s gameObject", _name.c_str());
@@ -198,17 +197,17 @@ GameObject* ObjectManager::Find(std::string _name)
 
 void ObjectManager::Uninit()
 {
-	for (auto& object : m_objectList->second)
+	for (auto& [key, value] : *m_objectList)
 	{
-		object.reset();
+		value.reset();
 	}
 }
 
 void ObjectManager::UpdateObjectComponent()
 {
-	for (auto& object : m_objectList->second)
+	for (auto& [key, value] : *m_objectList)
 	{
-		object->UpdateComponent();
+		value->UpdateComponent();
 	}
 }
 
@@ -222,16 +221,11 @@ GameObject* ObjectManager::AddObject(GameObject* _gameObject)
 {
 	int count = 1;
 	auto& name = _gameObject->name;
-	auto& nameSet = m_currentList->first;
 	std::string uniqueName = name;
 
-	// Check if the name already exists in the set, and generate a new one if necessary
-	while (nameSet.find(uniqueName) != nameSet.end()) {
+	while (m_currentList->find(uniqueName) != m_currentList->end()){
 		uniqueName = name + "_" + std::to_string(count++);
 	}
-
-	// Insert the object and update the set with the new unique name
-	nameSet.insert(uniqueName);
 
 #ifdef DEBUG_TRUE
 	if (name != uniqueName)
@@ -242,21 +236,23 @@ GameObject* ObjectManager::AddObject(GameObject* _gameObject)
 
 	name = uniqueName;
 
-	//デストラクタをスマートポインタに登録
-	m_currentList->second.push_back(std::unique_ptr<GameObject, void(*)(GameObject*)>
-		(_gameObject, [](GameObject* p){delete p;}));
-
-	auto it = m_currentList->second.end() - 1;
-	return it->get();
+	//デストラクタと一緒にスマートポインタに登録
+	m_currentList->emplace(name, std::unique_ptr<GameObject, void(*)(GameObject*)>
+		(_gameObject, [](GameObject* p) {delete p; }));
+	
+	return m_currentList->find(name)->second.get();
 }
 
 void ObjectManager::ChangeNextObjectList()
 {
+	m_eraseObjectList.reset();
 	m_currentList = m_nextObjectList.get();
 }
 
 void ObjectManager::LinkNextObjectList()
 {
+	m_eraseObjectList = std::move(m_objectList);
+
 	m_objectList = std::move(m_nextObjectList);
 
 	m_nextObjectList.reset(new ObjectList());
@@ -264,11 +260,20 @@ void ObjectManager::LinkNextObjectList()
 
 void ObjectManager::ChangeObjectName(std::string _before, std::string _after)
 {
-	auto& list = m_currentList->first;
-	auto iter = list.find(_before);
-	if (iter != list.end())
+	std::unique_ptr<GameObject, void(*)(GameObject*)> object(nullptr, [](GameObject* p) {delete p; });
+	auto iter = m_currentList->find(_before);
+	if (iter != m_currentList->end())
 	{
-		list.erase(iter);
-		list.insert(_after);
+		object = std::move(iter->second);
+		m_currentList->erase(iter);
 	}
+
+	m_currentList->emplace(_after, std::move(object));
+}
+
+void ObjectManager::CleanAllObjectList()
+{
+	m_objectList.reset();
+	m_nextObjectList.reset();
+	m_eraseObjectList.reset();
 }

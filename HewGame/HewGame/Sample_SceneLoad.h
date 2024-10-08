@@ -14,13 +14,14 @@ class SampleScene02;
 // main.cppを変更するかビルドをクリーンしないと変更が適応されないので修正する
 //=============================================================================
 
+
 class SampleScene01 : public Scene
 {
 	//ロード中にすることをかく(オーバライド)
 	void Load() override
 	{
 		//オブジェクト生成(名前、テクスチャ指定)
-		Instantiate("HartR"/*, L"asset/pic/hartR.png"*/)->AddComponent<Renderer>();
+		Instantiate("HartR", L"asset/pic/hartR.png");
 	}
 
 	//更新処理(オーバライド)
@@ -33,7 +34,7 @@ class SampleScene01 : public Scene
 			SceneManager::LoadScene<LoadScene>();
 
 			//シーンのローディング(非同期)
-			SceneManager::LoadingScene<Box2D_SampleScene>();
+			SceneManager::LoadingScene<SampleScene02>();
 			//ロードしたシーンに遷移
 			SceneManager::ChangeScene();
 		}
@@ -66,8 +67,11 @@ class SampleScene02 : public Scene
 {
 	void Load()
 	{
-		//オブジェクト生成,名前の変更(意味ない)
-		auto object = Instantiate("HartG", L"asset/pic/hartR.png");
+		//オブジェクト生成
+		auto object = Instantiate("HartR", L"asset/pic/hartR.png");
+
+		//名前の変更
+		object->SetName("HartG");
 
 		//無駄に処理を重くする
 		ObjectManager::Find("HartG")->GetComponent<Transform>()->gameobject->GetComponent<Renderer>()->SetTexture(L"asset/pic/hartG.png");

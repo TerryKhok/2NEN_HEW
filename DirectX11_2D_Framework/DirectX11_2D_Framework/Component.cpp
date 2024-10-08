@@ -19,3 +19,21 @@ GameObject* Component::Instantiate(std::string _name, const wchar_t* _texPath)
     object->AddComponent<Renderer>(_texPath);
     return ObjectManager::AddObject(object);
 }
+
+void Component::DeleteObject(GameObject* _object)
+{
+    DeleteObject(_object->name);
+}
+
+void Component::DeleteObject(std::string _name)
+{
+    auto& list = ObjectManager::m_currentList;
+    auto iter = list->find(_name);
+    if (iter != list->end())
+    {
+#ifdef DEBUG_TRUE
+        PointerRegistryManager::deletePointer(iter->second.get());
+#endif
+        list->erase(iter);
+    }
+}

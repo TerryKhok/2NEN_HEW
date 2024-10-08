@@ -60,7 +60,7 @@ RenderNode::RenderNode()
 
 RenderNode::RenderNode(const wchar_t* texpath)
 {
-	TextureAssets::LoadTexture(m_pTextureView, texpath);
+	TextureAssets::pLoadTexture(m_pTextureView, texpath);
 	NextEnd();
 	Active(true);
 }
@@ -90,7 +90,7 @@ inline void RenderNode::Draw()
 
 void RenderNode::SetTexture(const wchar_t* _texPath)
 {
-	TextureAssets::LoadTexture(m_pTextureView, _texPath);
+	TextureAssets::pLoadTexture(m_pTextureView, _texPath);
 }
 
 void RenderNode::Delete()

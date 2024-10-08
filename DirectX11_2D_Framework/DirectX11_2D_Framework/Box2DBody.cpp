@@ -36,6 +36,7 @@ inline void Box2DBody::Update()
 	Box2DBodyManager::moveFunctions.emplace_back(func);
 }
 
+#ifdef DEBUG_TRUE
 void Box2DBody::Delete()
 {
 	for (auto& node : m_nodeList)
@@ -44,6 +45,7 @@ void Box2DBody::Delete()
 	}
 	b2DestroyBody(m_bodyId);
 }
+#endif
 
 void Box2DBody::CreateBoxShape()
 {

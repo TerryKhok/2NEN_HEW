@@ -50,6 +50,8 @@ namespace Box2D
 		friend class SceneManager;
 
 	private:
+		//生成禁止
+		WorldManager() = delete;
 		//シュミレーションワールドの作成
 		static void CreateWorld();
 		//bodyの作成
@@ -70,24 +72,29 @@ namespace Box2D
 		static void WorldUpdate();
 #endif
 		//ワールドのかたずけ
-		static void DeleteWorld();
+		static void DeleteAllWorld();
 		//次のワールドにする
 		static void ChengeNextWorld();
 		//次のワールドに繋げる
 		static void LinkNextWorld();
+		//古いワールドを削除する
+		static void DeleteOldWorld();
 	private:
 		static thread_local b2WorldId currentWorldId;
 		static std::atomic<b2WorldId> worldId;
 		static b2WorldId nextWorldId;
+		static b2WorldId eraseWorldId;
 		static b2BodyDef bodyDef;
 
 #ifdef WORLD_UPDATE_MULTITHERD
 		//マルチスレッド用変数
 		static std::atomic<bool> running;
 		static std::atomic<bool> paused;
+		static std::atomic<bool> actuallyPaused;
 		static std::thread worldUpdateThread;
 		static std::mutex threadMutex;
 		static std::condition_variable cv;
+		static std::condition_variable pauseCv;
 #endif
 	};
 

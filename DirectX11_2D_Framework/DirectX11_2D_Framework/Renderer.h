@@ -122,7 +122,6 @@ private:
 	static void Draw();
 	//リストにノードを追加する
 	static void AddRenderList(std::shared_ptr<RenderNode> _node, LAYER _layer);
-private:
 	//スレッドの現在のリストを次のリストに変更
 	static void ChangeNextRenderList();
 	//次のノードリストに繋ぐ

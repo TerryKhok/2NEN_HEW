@@ -1,8 +1,10 @@
 #pragma once
 
 //Scale = 1.0f のときの大きさ
+//===========================================================
 const float DEFAULT_OBJECT_SIZE = 10.0f;
 const float HALF_OBJECT_SIZE = DEFAULT_OBJECT_SIZE / 2.0f;
+//===========================================================
 
 class Renderer;
 
@@ -17,7 +19,6 @@ struct Transform final
 	Vector3 angle = { 0.0f,0.0f,0.0f };
 };
 
-//class Collider2D : public Component;
 
 class GameObject final
 {
@@ -60,7 +61,7 @@ public:
 	void SetActive(bool _active);
 	//レイヤーの設定（頻繁に使用しない）
 	void SetLayer(const LAYER _layer);
-	//名前の変更（頻繁に使用しない）
+	//名前の変更
 	void SetName(const std::string _name);
 	//名前の取得
 	const std::string GetName() const;
@@ -175,15 +176,14 @@ class ObjectManager final
 	friend class SceneManager;
 	friend void GameObject::SetName(const std::string);
 
-	using ObjectList = std::pair<std::unordered_set<std::string>, std::vector<std::unique_ptr<GameObject, void(*)(GameObject*)>>>;
-	//using ObjectList = std::unordered_set<std::string, std::unique_ptr<GameObject, void(*)(GameObject*)>>;
+	using ObjectList = std::unordered_map<std::string, std::unique_ptr<GameObject, void(*)(GameObject*)>>;
 
 public:
-	//オブジェクト一覧から見つける(頻繁に使用しない)
+	//オブジェクト一覧から見つける アクセス速度n(1)
 	static GameObject* Find(std::string _name);
 private:
 	//生成禁止
-	ObjectManager() {}
+	ObjectManager() = delete;
 	//新しいリストにする
 	static void GenerateList();
 	//オブジェクトかたずけ
@@ -198,6 +198,8 @@ private:
 	static void LinkNextObjectList();
 	//オブジェクトの名前を変更する
 	static void ChangeObjectName(std::string _before,std::string _after);
+	//全てのリストを明示的に綺麗にする
+	static void CleanAllObjectList();
 private:
 	// スレッドごとの現在のリスト
 	static thread_local ObjectList* m_currentList;
@@ -205,5 +207,7 @@ private:
 	static std::unique_ptr<ObjectList> m_objectList;
 	//次のオブジェクトを格納
 	static std::unique_ptr<ObjectList> m_nextObjectList;
+	//削除するオブジェクトを格納
+	static std::unique_ptr<ObjectList> m_eraseObjectList;
 };
 

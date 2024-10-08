@@ -8,7 +8,7 @@ class CameraManager
 {
 	friend class Window;
 private:
-	CameraManager();
+	CameraManager() = delete;
 	//ƒJƒƒ‰‚Ìs—ñŒvZ‚ğ‚·‚é
 	static void CameraMatrixCalculation();
 public:

@@ -9,7 +9,9 @@ private:
 	Box2DBody(GameObject* _object, b2BodyDef* _bodyDef);
 	//Box2dWorldから位置と角度を受け取る
 	inline void Update() override;
+#ifdef DEBUG_TRUE
 	void Delete() override;
+#endif
 public:
 	//=================================
 	// Circle Cupsule Polygon もつくる
@@ -27,6 +29,7 @@ class Box2DBodyManager
 {
 	friend class Window;
 	friend class Box2DBody;
+	friend class SceneManager;
 
 private:
 	//対応したオブジェクトを動かす
