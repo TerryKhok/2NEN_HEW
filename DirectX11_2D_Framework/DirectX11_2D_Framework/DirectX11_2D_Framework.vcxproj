@@ -171,6 +171,7 @@
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Angle.h" />
     <ClInclude Include="Animator.h" />
     <ClInclude Include="Box2D.h" />
     <ClInclude Include="Box2DBody.h" />

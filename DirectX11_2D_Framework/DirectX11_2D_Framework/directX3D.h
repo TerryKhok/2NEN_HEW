@@ -46,7 +46,10 @@ class DirectX11 final
 	friend class RenderNode;
 	friend class UVRenderNode;
 	friend class RenderManager;
+	friend class Box2DBodyManager;
 	friend class Box2DBoxRenderNode;
+	friend class Box2DCircleRenderNode;
+	friend class Box2DCapsuleRenderNode;
 
 	DirectX11() = delete;
 
@@ -68,8 +71,6 @@ class DirectX11 final
 	static void D3D_FinishRender();
 
 	static void CreateOnePixelTexture(ID3D11ShaderResourceView** _resourceView);
-public:
-	inline const ID3D11Device* GetDevice() { return m_pDevice.Get(); }
 private:
 	// ※ID3D11で始まるポインタ型の変数は、解放する必要がある
 	static ComPtr<ID3D11Device> m_pDevice; // デバイス＝DirectXの各種機能を作る

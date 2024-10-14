@@ -10,7 +10,7 @@ void SceneInit()
 	SceneManager::RegisterScene<SampleScene01>();
 	SceneManager::RegisterScene<SampleScene02>();
 	SceneManager::RegisterScene<LoadScene>();
-
+	
 	SceneManager::RegisterScene<Box2D_SampleScene>();
 }
 //============================================================

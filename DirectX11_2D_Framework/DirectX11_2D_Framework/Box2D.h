@@ -20,7 +20,7 @@
 
 //ワールド更新をマルチスレッドにする
 //=============================================
-#define WORLD_UPDATE_MULTITHERD
+#define BOX2D_UPDATE_MULTITHREAD
 //=============================================
 
 class Box2DBody;
@@ -56,7 +56,7 @@ namespace Box2D
 		static void CreateWorld();
 		//bodyの作成
 		static void GenerataeBody(b2BodyId& _bodyId, const b2BodyDef* _bodyDef = &bodyDef);
-#ifdef WORLD_UPDATE_MULTITHERD
+#ifdef BOX2D_UPDATE_MULTITHREAD
 		//ワールドの更新
 		static void WorldUpdate();
 		//ワールドの更新を始める
@@ -80,13 +80,17 @@ namespace Box2D
 		//古いワールドを削除する
 		static void DeleteOldWorld();
 	private:
-		static thread_local b2WorldId currentWorldId;
-		static std::atomic<b2WorldId> worldId;
+		static thread_local b2WorldId* currentWorldId;
+		static b2WorldId worldId;
 		static b2WorldId nextWorldId;
 		static b2WorldId eraseWorldId;
 		static b2BodyDef bodyDef;
 
-#ifdef WORLD_UPDATE_MULTITHERD
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	private:
+		//非同期ロードの時にワールド更新を止めない
+		static thread_local void(*pPauseWorldUpdate)();
+		static thread_local void(*pResumeWorldUpdate)();
 		//マルチスレッド用変数
 		static std::atomic<bool> running;
 		static std::atomic<bool> paused;
@@ -95,12 +99,15 @@ namespace Box2D
 		static std::mutex threadMutex;
 		static std::condition_variable cv;
 		static std::condition_variable pauseCv;
+
+		/*static std::vector<std::function<void()>> worldFunc;
+		static std::mutex worldFuncMutex;*/
 #endif
 	};
 
 	//デバッグ表示のα値
 	//========================================================
-	const float b2_colorAlpha = 0.2f;
+	const float b2_colorAlpha = 1.0f;
 	//========================================================
 
 	const XMFLOAT4 b2_colorRed =	{ 1.0f,0.0f,0.0f,b2_colorAlpha };

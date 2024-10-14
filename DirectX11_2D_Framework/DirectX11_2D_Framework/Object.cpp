@@ -28,7 +28,7 @@ VSConstantBuffer& GameObject::GetContantBuffer()
 	//ワールド変換行列の作成
 	//ー＞オブジェクトの位置・大きさ・向きを指定
 	m_cb.world = DirectX::XMMatrixScaling(transform.scale.x, transform.scale.y, transform.scale.z);
-	m_cb.world *= DirectX::XMMatrixRotationZ(transform.angle.z);
+	m_cb.world *= DirectX::XMMatrixRotationZ(static_cast<float>(transform.angle.z.Get()));
 	m_cb.world *= DirectX::XMMatrixTranslation(transform.position.x, transform.position.y, transform.position.z);
 	m_cb.world = DirectX::XMMatrixTranspose(m_cb.world);
 
@@ -246,6 +246,7 @@ GameObject* ObjectManager::AddObject(GameObject* _gameObject)
 void ObjectManager::ChangeNextObjectList()
 {
 	m_eraseObjectList.reset();
+	m_nextObjectList.reset(new ObjectList());
 	m_currentList = m_nextObjectList.get();
 }
 
@@ -255,7 +256,7 @@ void ObjectManager::LinkNextObjectList()
 
 	m_objectList = std::move(m_nextObjectList);
 
-	m_nextObjectList.reset(new ObjectList());
+	m_currentList = m_objectList.get();
 }
 
 void ObjectManager::ChangeObjectName(std::string _before, std::string _after)

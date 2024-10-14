@@ -16,7 +16,7 @@ struct Transform final
 	GameObject* gameobject = nullptr;
 	Vector3 position = { 0.0f,0.0f,0.0f };
 	Vector3 scale =	{ 5.0f,5.0f,1.0f };
-	Vector3 angle = { 0.0f,0.0f,0.0f };
+	Angle3D angle = { 0.0f,0.0f,0.0f };
 };
 
 
@@ -25,6 +25,8 @@ class GameObject final
 	friend class RenderNode;
 	friend class UVRenderNode;
 	friend class Box2DBoxRenderNode;
+	friend class Box2DCircleRenderNode;
+	friend class Box2DCapsuleRenderNode;
 	friend class ObjectManager;
 	friend class Scene;
 	friend class Component;

@@ -30,6 +30,7 @@
 #include <cstdio>
 #include <iostream>
 #include <cassert>
+#include <concurrent_queue.h>
 #include <thread>
 #include <atomic>
 #include <future>
@@ -46,6 +47,7 @@
 #include "WICTextureLoader.h"
 #include "Math.h"
 #include "Vector.h"
+#include "Angle.h"
 #include "Debug.h"
 #include "Window.h"
 #include "directX3D.h"

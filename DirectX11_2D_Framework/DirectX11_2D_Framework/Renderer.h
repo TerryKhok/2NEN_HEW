@@ -109,6 +109,8 @@ class RenderManager final
 	friend class RenderManager;
 	friend class SceneManager;
 	friend class Box2DBody;
+	friend class Box2DBoxRenderNode;
+	friend class Box2DCapsuleRenderNode;
 
 	using RenderList = std::pair < std::shared_ptr<RenderNode>, std::shared_ptr<RenderNode>>;
 

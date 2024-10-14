@@ -109,6 +109,7 @@ public:
 					Box2D::WorldManager::ChengeNextWorld();
 					RenderManager::ChangeNextRenderList();
 					ObjectManager::ChangeNextObjectList();
+					
 					//シーンのロード処理
 					it->second();
 					//古いワールドを削除する
@@ -138,14 +139,14 @@ public:
 			//ロードしておいたリストに切り替える
 			RenderManager::LinkNextRenderList();
 
-#ifdef WORLD_UPDATE_MULTITHERD
+#ifdef BOX2D_UPDATE_MULTITHREAD
 			//ワールドの更新を一時停止
 			Box2D::WorldManager::PauseWorldUpdate();
 #endif
 			ObjectManager::LinkNextObjectList();
 			Box2D::WorldManager::LinkNextWorld();
 
-#ifdef WORLD_UPDATE_MULTITHERD
+#ifdef BOX2D_UPDATE_MULTITHREAD
 			//ワールドの更新を再開
 			Box2D::WorldManager::ResumeWorldUpdate();
 #endif

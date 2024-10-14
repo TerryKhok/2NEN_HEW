@@ -112,14 +112,20 @@ LRESULT Window::WindowInit(void(*p_sceneInitFunc)(void))
 	SceneManager::m_sceneList.clear();
 	//Box2Dワールド作成
 	Box2D::WorldManager::CreateWorld();
-#ifdef WORLD_UPDATE_MULTITHERD
-	//ワールドの更新スタート
-	Box2D::WorldManager::StartWorldUpdate();
-#endif
 
 	RenderManager::Init();
 	p_sceneInitFunc();
+
 	SceneManager::Init();
+
+#ifdef DEBUG_TRUE
+	Box2DBodyManager::Init();
+#endif 
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	//ワールドの更新スタート
+	Box2D::WorldManager::StartWorldUpdate();
+#endif
 	//=================================================
 
 	return LRESULT();
@@ -148,7 +154,7 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 			nowCount = liWork.QuadPart;
 			if (nowCount >= oldCount + frequency / FPS)
 			{
-#ifndef WORLD_UPDATE_MULTITHERD
+#ifndef BOX2D_UPDATE_MULTITHREAD
 				Box2D::WorldManager::WorldUpdate();
 #endif
 				Input::Get().Update();
@@ -215,7 +221,7 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 			nowCount = liWork.QuadPart;
 			if (nowCount >= oldCount + frequency / FPS)
 			{
-#ifndef WORLD_UPDATE_MULTITHERD
+#ifndef BOX2D_UPDATE_MULTITHREAD
 				Box2D::WorldManager::WorldUpdate();
 #endif
 				Input::Get().Update();
@@ -277,7 +283,7 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 
 int Window::WindowEnd(HINSTANCE hInstance)
 {
-#ifdef WORLD_UPDATE_MULTITHERD
+#ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::StopWorldUpdate();
 #endif 
 	//RenderManager::CleanAllRenderList();

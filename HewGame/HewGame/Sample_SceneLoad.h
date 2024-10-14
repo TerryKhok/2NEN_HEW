@@ -34,7 +34,7 @@ class SampleScene01 : public Scene
 			SceneManager::LoadScene<LoadScene>();
 
 			//シーンのローディング(非同期)
-			SceneManager::LoadingScene<SampleScene02>();
+			SceneManager::LoadingScene<Box2D_SampleScene>();
 			//ロードしたシーンに遷移
 			SceneManager::ChangeScene();
 		}

@@ -157,7 +157,7 @@ HRESULT RenderManager::Init()
 {
 	HRESULT  hr;
 
-	Vector2 size = { DEFAULT_OBJECT_SIZE / 2,DEFAULT_OBJECT_SIZE / 2 };
+	Vector2 size = { HALF_OBJECT_SIZE,HALF_OBJECT_SIZE };
 	Vertex vertexList[] =
 	{
 		{-size.x, size.y,0.5f,	1.0f,1.0f,1.0f,1.0f,	0.0f,0.0f},
@@ -248,11 +248,26 @@ void RenderManager::Draw()
 		node.first->NextFunc();
 	}
 #else
-	for (int i = 0; i < LAYER::LATER_MAX; i++)
+
+	UINT strides = sizeof(Vertex);
+	UINT offsets = 0;
+
+	DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_vertexBuffer.GetAddressOf(), &strides, &offsets);
+	DirectX11::m_pDeviceContext->IASetIndexBuffer(RenderManager::m_indexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+
+	for (int i = 0; i < LAYER::LAYER_BOX2D_DEBUG; i++)
 	{
 		auto& node = m_rendererList[i];
 		node.first->NextFunc();
 	}
+
+	DirectX11::m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+
+	//DirectX11::m_pDeviceContext->RSSetState(DirectX11::m_pWireframeRasterState.Get());
+
+	m_rendererList[LAYER::LAYER_BOX2D_DEBUG].first->NextFunc();
+
+	//DirectX11::m_pDeviceContext->RSSetState(0);
 #endif
 }
 

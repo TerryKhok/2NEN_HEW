@@ -1,12 +1,17 @@
 #include "Box2D.h"
 
-thread_local b2WorldId Box2D::WorldManager::currentWorldId;
-std::atomic<b2WorldId> Box2D::WorldManager::worldId;
+#ifdef BOX2D_UPDATE_MULTITHREAD
+thread_local void(*Box2D::WorldManager::pPauseWorldUpdate)() = PauseWorldUpdate;
+thread_local void(*Box2D::WorldManager::pResumeWorldUpdate)() = ResumeWorldUpdate;
+#endif
+
+thread_local b2WorldId* Box2D::WorldManager::currentWorldId;
+b2WorldId Box2D::WorldManager::worldId;
 b2WorldId Box2D::WorldManager::nextWorldId;
 b2WorldId Box2D::WorldManager::eraseWorldId;
 b2BodyDef Box2D::WorldManager::bodyDef;
 
-#ifdef WORLD_UPDATE_MULTITHERD
+#ifdef BOX2D_UPDATE_MULTITHREAD
 std::atomic<bool> Box2D::WorldManager::running(false);
 std::atomic<bool> Box2D::WorldManager::paused(false);
 std::atomic<bool> Box2D::WorldManager::actuallyPaused(false);
@@ -14,6 +19,9 @@ std::thread Box2D::WorldManager::worldUpdateThread;
 std::mutex Box2D::WorldManager::threadMutex;
 std::condition_variable Box2D::WorldManager::cv;
 std::condition_variable Box2D::WorldManager::pauseCv;
+
+//std::vector<std::function<void()>> Box2D::WorldManager::worldFunc;
+//std::mutex Box2D::WorldManager::worldFuncMutex;
 #endif
 
 void Box2D::WorldManager::CreateWorld()
@@ -27,16 +35,17 @@ void Box2D::WorldManager::CreateWorld()
 	//次のワールドも作っておく（更新はしないよ）
 	eraseWorldId = b2CreateWorld(&worldDef);
 
-	currentWorldId = worldId;
+	currentWorldId = &worldId;
 }
 
 void Box2D::WorldManager::GenerataeBody(b2BodyId& _bodyId,const b2BodyDef* _bodyDef)
 {
 	//グランドボディの作成
-	_bodyId = b2CreateBody(currentWorldId, _bodyDef);
+	_bodyId = b2CreateBody(*currentWorldId, _bodyDef);
 }
 
-#ifdef WORLD_UPDATE_MULTITHERD
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
 void Box2D::WorldManager::WorldUpdate()
 {
 	LOG("box2d world thred Start");
@@ -82,6 +91,16 @@ void Box2D::WorldManager::WorldUpdate()
 		nowCount = liWork.QuadPart;
 		if (nowCount >= oldCount + frequency / FPS)
 		{
+			/*{
+				std::lock_guard<std::mutex> lock(worldFuncMutex);
+				for (auto& func : worldFunc)
+				{
+					func();
+				}
+
+				worldFunc.clear();
+			}*/
+
 			//ワールドの更新
 			b2World_Step(worldId, timeStep, subStepCount);
 
@@ -199,7 +218,14 @@ void Box2D::WorldManager::ChengeNextWorld()
 	//ワールドオブジェクト作成
 	nextWorldId = b2CreateWorld(&worldDef);
 
-	currentWorldId = nextWorldId;
+	//ワールドを次のワールドにする
+	currentWorldId = &nextWorldId;
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	//ワールド更新を止めないように設定
+	pPauseWorldUpdate = []() {};
+	pResumeWorldUpdate = []() {};
+#endif
 }
 
 void Box2D::WorldManager::LinkNextWorld()
