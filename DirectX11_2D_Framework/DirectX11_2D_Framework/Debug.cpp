@@ -1,6 +1,7 @@
 #include "Debug.h"
 
 PointerRegistryManager PointerRegistryManager::manager;//std::unordered_map<GameObject*, std::vector<LoggingPointer<GameObject>*>> LoggingPointerManager::m_pointerList;
+//std::unordered_map<void*, std::vector<SafePointer<void>*>> PointerRegistryManager::registry;;
 
 const char* relativePath(const char* fullPath) {
 #ifdef _WIN32

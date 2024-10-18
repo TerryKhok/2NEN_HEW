@@ -67,11 +67,33 @@ void SceneManager::Uninit()
 
 void SceneManager::NextScene()
 {
+#ifdef DEBUG_TRUE
+    try
+    {
+        m_currentScene->Uninit();
+    }
+    //例外キャッチ(nullptr参照とか)
+    catch (const std::exception& e) {
+        LOG_ERROR(e.what());
+    }
+#else
     m_currentScene->Uninit();
-
+#endif
+    
     m_currentScene = std::move(m_nextScene);
     //m_nextScene.reset(nullptr);
 
+#ifdef DEBUG_TRUE
+    try
+    {
+        m_currentScene->Init();
+    }
+    //例外キャッチ(nullptr参照とか)
+    catch (const std::exception& e) {
+        LOG_ERROR(e.what());
+    }
+#else
     m_currentScene->Init();
+#endif
 }
 

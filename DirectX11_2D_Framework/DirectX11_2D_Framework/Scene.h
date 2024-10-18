@@ -1,5 +1,6 @@
 #pragma once
 
+
 class Scene
 {
 	friend class Window;

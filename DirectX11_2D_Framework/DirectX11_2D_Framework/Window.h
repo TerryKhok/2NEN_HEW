@@ -48,7 +48,7 @@ public:
 	//ウィンドウ生成
 	static LRESULT WindowCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
 	//ウィンドウ初期化(シーンの初期化を渡す)
-	static LRESULT WindowInit(void(*p_sceneInitFunc)(void));
+	static LRESULT WindowInit(void(*p_mainInitFunc)(void));
 	//ウィンドウ更新
 	static LRESULT WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/);
 	//非同期更新

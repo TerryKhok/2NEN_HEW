@@ -2,12 +2,25 @@
 
 class Box2D_SampleScene :public Scene
 {
+	SAFE_POINTER(Box2DBody, box2dbody)
+	SAFE_POINTER(GameObject, gameObject)
+
 	void Load()
 	{
-		auto object = Instantiate("DynamicBox");
-		object->AddComponent<Renderer>(L"asset/pic/hartR.png");
-		auto box2d = object->AddComponent<Box2DBody>();
-		box2d->CreateCapsuleShape();
+		std::vector<b2Vec2> mesh =
+		{
+			{-25,25},{-30,10} ,{-25,-25},{ 0,-50 },{25,-25},{30,10} ,{25,25},{0,50}
+		};
+
+		gameObject = Instantiate("DynamicBox");
+		gameObject->AddComponent<Renderer>(L"asset/pic/hartR.png");
+		b2BodyDef bodyDef = b2DefaultBodyDef();
+		bodyDef.fixedRotation = true;
+		bodyDef.type = b2_dynamicBody;
+		//bodyDef.gravityScale = 0.0f;
+		box2dbody = gameObject->AddComponent<Box2DBody>(&bodyDef);
+		//box2dbody->CreateCapsuleShape();
+		box2dbody->CreatePolygonShape(mesh);
 		//box2d->CreateCircleShape();
 		//box2d->CreateCircleShape(7.0f, { 20.0f,0.0f });
 
@@ -23,14 +36,21 @@ class Box2D_SampleScene :public Scene
 				object->AddComponent<Box2DBody>()->CreateBoxShape();
 			}
 		}*/
+
+		std::vector<b2Vec2> points =
+		{
+			{-200,200},{200, 200} ,{ 200,-150} /*,{ 0,-150}*/ ,{-200,-150}
+		};
 	
-		object = Instantiate("StaticBox");
-		object->transform.position = { 0.0f,-200.0f };
-		object->transform.scale = { 100.0f,10.0f };
-		object->AddComponent<Renderer>(L"asset/pic/hartG.png");
+		auto object = Instantiate("StaticBox");
+		object->transform.position = { 0.0f,-100.0f };
+		object->SetLayer(LAYER_04);
+		//object->transform.scale = { 100.0f,10.0f };
+		//object->AddComponent<Renderer>(L"asset/pic/hartG.png");
 		b2BodyDef bodyDef2 = b2DefaultBodyDef();
 		//bodyDef2.type = b2_kinematicBody;
-		object->AddComponent<Box2DBody>(&bodyDef2)->CreateBoxShape();
+		object->AddComponent<Box2DBody>(&bodyDef2)->CreateSegment(points);
+		//object->AddComponent<Box2DBody>()->CreateBoxShape();
 	}
 
 	Vector2 mousePos;
@@ -40,11 +60,42 @@ class Box2D_SampleScene :public Scene
 
 	void Update()
 	{
+		if (Input::Get().KeyTrigger(VK_E))
+		{
+			DeleteObject(gameObject);
+		}
+
+		if (Input::Get().KeyTrigger(VK_L))
+		{
+			if (gameObject->GetLayer() == LAYER_01)
+				gameObject->SetLayer(LAYER_03);
+			else
+				gameObject->SetLayer(LAYER_01);
+		}
+
+		if (Input::Get().KeyPress(VK_D))
+		{
+			box2dbody->SetVelocityX(10.0f);
+		}
+		if (Input::Get().KeyPress(VK_A))
+		{
+			box2dbody->SetVelocityX(-10.0f);
+		}
+		if (Input::Get().KeyPress(VK_W))
+		{
+			box2dbody->SetVelocityY(10.0f);
+		}
+		if (Input::Get().KeyPress(VK_S))
+		{
+			box2dbody->SetVelocityY(-10.0f);
+		}
+
 		if (Input::Get().KeyPress(VK_G))
 		{
 			auto object = Instantiate("DynamicBox");
 			object->transform.scale = { static_cast<float>(rand() % 3) + 1,static_cast<float>(rand() % 3) + 1 };
 			object->transform.position = { static_cast<float>(rand() % 15) ,100 };
+			object->SetLayer(LAYER_02);
 			object->AddComponent<Box2DBody>()->CreateBoxShape();
 		}
 		if (Input::Get().KeyPress(VK_H))

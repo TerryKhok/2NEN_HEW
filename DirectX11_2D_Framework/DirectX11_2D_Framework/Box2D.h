@@ -20,9 +20,10 @@
 
 //ワールド更新をマルチスレッドにする
 //=============================================
-#define BOX2D_UPDATE_MULTITHREAD
+//#define BOX2D_UPDATE_MULTITHREAD
 //=============================================
 
+class GameObject;
 class Box2DBody;
 class SceneManager;
 
@@ -46,6 +47,7 @@ namespace Box2D
 	class WorldManager
 	{
 		friend class Window;
+		friend class GameObject;
 		friend class Box2DBody;
 		friend class SceneManager;
 

@@ -17,6 +17,10 @@ GameObject::~GameObject()
 {
 	for (auto& component : m_componentList)
 	{
+#ifdef DEBUG_TRUE
+		//コンポーネントのSafePointerをnullptrにする
+		PointerRegistryManager::deletePointer(component.second.get());
+#endif 
 		component.second->Delete();
 	}
 
@@ -63,12 +67,12 @@ void GameObject::SetLayer(const LAYER _layer)
 	{
 		component.second->SetLayer(_layer);
 	}
-	//最後に変更する
+	//最後に変更する(Renderで古いLayerを参照しているため)
 	m_layer = _layer;
-	for (auto& component : m_componentList)
+	/*for (auto& component : m_componentList)
 	{
 		component.second->SetLayer(_layer);
-	}
+	}*/
 }
 
 void GameObject::SetName(const std::string _name)

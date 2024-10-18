@@ -105,7 +105,7 @@ LRESULT Window::WindowCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR
 	return LRESULT();
 }
 
-LRESULT Window::WindowInit(void(*p_sceneInitFunc)(void))
+LRESULT Window::WindowInit(void(*p_mainInitFunc)(void))
 {
 	//初期化処理
 	//=================================================
@@ -114,7 +114,7 @@ LRESULT Window::WindowInit(void(*p_sceneInitFunc)(void))
 	Box2D::WorldManager::CreateWorld();
 
 	RenderManager::Init();
-	p_sceneInitFunc();
+	p_mainInitFunc();
 
 	SceneManager::Init();
 
@@ -159,8 +159,18 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 #endif
 				Input::Get().Update();
 
+#ifdef DEBUG_TRUE
+				try
+				{
+					SceneManager::m_currentScene->Update();
+				}
+				//例外キャッチ(nullptr参照とか)
+				catch (const std::exception& e) {
+					LOG_ERROR(e.what());
+				}
+#else
 				SceneManager::m_currentScene->Update();
-
+#endif
 				ObjectManager::UpdateObjectComponent();
 
 				Box2DBodyManager::ExcuteMoveFunction();
@@ -226,7 +236,18 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 #endif
 				Input::Get().Update();
 
+#ifdef DEBUG_TRUE
+				try
+				{
+					SceneManager::m_currentScene->Update();
+				}
+				//例外キャッチ(nullptr参照とか)
+				catch (const std::exception& e) {
+					LOG_ERROR(e.what());
+				}
+#else
 				SceneManager::m_currentScene->Update();
+#endif
 
 				ObjectManager::UpdateObjectComponent();
 
@@ -283,16 +304,16 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 
 int Window::WindowEnd(HINSTANCE hInstance)
 {
+
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::StopWorldUpdate();
 #endif 
-	//RenderManager::CleanAllRenderList();
-
 	//オブジェクトの破棄
 	ObjectManager::Uninit();
 
 	//オブジェクトを削除する(念入りに)
 	ObjectManager::CleanAllObjectList();
+	
 	//すべてのワールドを削除する
 	Box2D::WorldManager::DeleteAllWorld();
 
@@ -301,7 +322,6 @@ int Window::WindowEnd(HINSTANCE hInstance)
 
 	//DirectXかたずけ
 	DirectX11::D3D_Release();
-
 
 #ifdef DEBUG_TRUE
 	//コンソール画面閉じる

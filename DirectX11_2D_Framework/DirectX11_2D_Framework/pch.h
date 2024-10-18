@@ -39,6 +39,7 @@
 #include <variant>
 #include <windowsx.h>
 #include <condition_variable>
+#include <type_traits>
 
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>

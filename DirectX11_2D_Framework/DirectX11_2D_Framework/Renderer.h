@@ -22,6 +22,10 @@ private:
 	void Delete();
 	//レイヤーの変更
 	void SetLayer(const LAYER _layer);
+	//Debug用のポインター取得
+	Renderer* GetDevide(){
+		return this;
+	}
 public:
 	void SetTexture(const wchar_t* _texPath);
 	void SetColor(XMFLOAT4 _color);

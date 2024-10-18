@@ -154,6 +154,12 @@ void Box2D::WorldManager::StopWorldUpdate()
 	if (worldUpdateThread.joinable()) {
 		worldUpdateThread.join();
 	}
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	//ワールド更新を止めないように設定
+	pPauseWorldUpdate = []() {};
+	pResumeWorldUpdate = []() {};
+#endif
 }
 
 void Box2D::WorldManager::PauseWorldUpdate()

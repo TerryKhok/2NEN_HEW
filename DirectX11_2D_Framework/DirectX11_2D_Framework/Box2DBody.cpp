@@ -2,6 +2,8 @@
 
 std::vector<std::function<void()>> Box2DBodyManager::moveFunctions;
 
+std::unordered_map<LAYER, unsigned int> Box2DBodyManager::m_layerFilterBit;
+
 #ifdef DEBUG_TRUE
 const int Box2DBodyManager::numSegments = 36;
 //box用インデックス
@@ -69,9 +71,40 @@ void Box2DBody::Delete()
 	{
 		node->Delete();
 	}
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pPauseWorldUpdate();
+#endif
+	b2DestroyBody(m_bodyId);
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+}
+#else
+void Box2DBody::Delete()
+{
 	b2DestroyBody(m_bodyId);
 }
 #endif
+
+
+void Box2DBody::SetLayer(const LAYER _layer)
+{
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pPauseWorldUpdate();
+#endif 
+	for (auto shape : m_shapeList)
+	{
+		auto filter = b2Shape_GetFilter(shape);
+		filter.categoryBits = _layer;
+		filter.maskBits = Box2DBodyManager::GetMaskLayerBit(_layer);
+		b2Shape_SetFilter(shape, filter);
+	}
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pResumeWorldUpdate();
+#endif 
+}
 
 void Box2DBody::CreateBoxShape()
 {
@@ -96,10 +129,14 @@ void Box2DBody::CreateBoxShape(Vector2 _size, Vector2 _offset, float _angle)
 	//シェイプを作成して地面のボディを仕上げる
 	b2ShapeDef shapeDef = b2DefaultShapeDef();
 
+	auto layer = m_this->GetLayer();
+	shapeDef.filter.categoryBits = layer;
+	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(layer);
+
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pPauseWorldUpdate();
 #endif 
-	b2CreatePolygonShape(m_bodyId, &shapeDef, &polygonBox);
+	auto shape = b2CreatePolygonShape(m_bodyId, &shapeDef, &polygonBox);
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pResumeWorldUpdate();
@@ -117,6 +154,8 @@ void Box2DBody::CreateBoxShape(Vector2 _size, Vector2 _offset, float _angle)
 	m_nodeList.push_back((node));
 	RenderManager::AddRenderList(node, LAYER::LAYER_BOX2D_DEBUG);
 #endif
+
+	m_shapeList.push_back(shape);
 }
 
 void Box2DBody::CreateCircleShape()
@@ -140,11 +179,14 @@ void Box2DBody::CreateCircleShape(float _diameter, Vector2 _offset)
 
 	//シェイプを作成して地面のボディを仕上げる
 	b2ShapeDef shapeDef = b2DefaultShapeDef();
+	auto layer = m_this->GetLayer();
+	shapeDef.filter.categoryBits = layer;
+	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(layer);
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pPauseWorldUpdate();
 #endif 
-	b2CreateCircleShape(m_bodyId, &shapeDef, &circle);
+	auto shape = b2CreateCircleShape(m_bodyId, &shapeDef, &circle);
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pResumeWorldUpdate();
@@ -157,6 +199,8 @@ void Box2DBody::CreateCircleShape(float _diameter, Vector2 _offset)
 	m_nodeList.push_back((node));
 	RenderManager::AddRenderList(node, LAYER::LAYER_BOX2D_DEBUG);
 #endif
+
+	m_shapeList.push_back(shape);
 }
 
 void Box2DBody::CreateCapsuleShape()
@@ -190,11 +234,14 @@ void Box2DBody::CreateCapsuleShape(float _diameter, float _height, float _angle,
 
 	//シェイプを作成して地面のボディを仕上げる
 	b2ShapeDef shapeDef = b2DefaultShapeDef();
+	auto layer = m_this->GetLayer();
+	shapeDef.filter.categoryBits = layer;
+	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(layer);
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pPauseWorldUpdate();
 #endif 
-	b2CreateCapsuleShape(m_bodyId, &shapeDef, &capsule);
+	auto shape = b2CreateCapsuleShape(m_bodyId, &shapeDef, &capsule);
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pResumeWorldUpdate();
@@ -210,6 +257,191 @@ void Box2DBody::CreateCapsuleShape(float _diameter, float _height, float _angle,
 	m_nodeList.push_back((node));
 	RenderManager::AddRenderList(node, LAYER::LAYER_BOX2D_DEBUG);
 #endif
+
+	m_shapeList.push_back(shape);
+}
+
+void Box2DBody::CreatePolygonShape(std::vector<b2Vec2> _pointList)
+{
+	int count = static_cast<int>(_pointList.size());
+	if (_pointList.size() < 4)
+	{
+		LOG_ERROR("Not enough vertices in Polygon");
+		return;
+	}
+
+#ifdef DEBUG_TRUE
+	auto node = std::shared_ptr<RenderNode>(
+		new Box2DConvexMeshRenderNode(_pointList, m_bodyId));
+	node->m_object = m_this;
+	m_nodeList.push_back((node));
+	RenderManager::AddRenderList(node, LAYER::LAYER_BOX2D_DEBUG);
+#endif
+
+	for (auto& point : _pointList)
+	{
+		point.x /= DEFAULT_OBJECT_SIZE;
+		point.y /= DEFAULT_OBJECT_SIZE;
+	}
+
+	b2ShapeDef shapeDef = b2DefaultShapeDef();
+	auto layer = m_this->GetLayer();
+	shapeDef.filter.categoryBits = layer;
+	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(layer);
+
+	b2Hull hull = b2ComputeHull(_pointList.data(), count);
+	b2Polygon polygon = b2MakePolygon(&hull, 0.0f);
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pPauseWorldUpdate();
+#endif 
+	auto shape = b2CreatePolygonShape(m_bodyId, &shapeDef, &polygon);
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+
+	m_shapeList.push_back(shape);
+}
+
+void Box2DBody::CreateSegment(std::vector<b2Vec2> _pointList)
+{
+	int count = static_cast<int>(_pointList.size());
+
+	if (count < 2)
+	{
+		LOG_ERROR("Not enough vertices in Segment");
+		return;
+	}
+
+
+#ifdef DEBUG_TRUE
+	auto node = std::shared_ptr<RenderNode>(
+		new Box2DMeshRenderNode(_pointList, m_bodyId, false));
+	node->m_object = m_this;
+	m_nodeList.push_back((node));
+	RenderManager::AddRenderList(node, LAYER::LAYER_BOX2D_DEBUG);
+#endif
+
+	for (auto& point : _pointList)
+	{
+		point.x /= DEFAULT_OBJECT_SIZE;
+		point.y /= DEFAULT_OBJECT_SIZE;
+	}
+	
+
+	b2ShapeDef shapeDef = b2DefaultShapeDef();
+	auto layer = m_this->GetLayer();
+	shapeDef.filter.categoryBits = layer;
+	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(layer);
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pPauseWorldUpdate();
+#endif 
+	for (int i = 0; i < count - 1; i++)
+	{
+		b2Segment segment1 = { _pointList[i], _pointList[i + 1] };
+		auto shape = b2CreateSegmentShape(m_bodyId, &shapeDef, &segment1);
+		m_shapeList.push_back(shape);
+	}
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+}
+
+void Box2DBody::CreateChain(std::vector<b2Vec2>& _pointList)
+{
+	if (_pointList.size() < 4)
+	{
+		LOG_ERROR("Not enough vertices in Chain");
+		return;
+	}
+
+#ifdef DEBUG_TRUE
+	auto node = std::shared_ptr<RenderNode>(
+		new Box2DMeshRenderNode(_pointList, m_bodyId, true));
+	node->m_object = m_this;
+	m_nodeList.push_back((node));
+	RenderManager::AddRenderList(node, LAYER::LAYER_BOX2D_DEBUG);
+#endif
+
+	for (auto& point : _pointList)
+	{
+		point.x /= DEFAULT_OBJECT_SIZE;
+		point.y /= DEFAULT_OBJECT_SIZE;
+	}
+
+	b2ChainDef chainDef = b2DefaultChainDef();
+	auto layer = m_this->GetLayer();
+	chainDef.filter.categoryBits = layer;
+	chainDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(layer);
+
+	chainDef.points = _pointList.data();
+	chainDef.count = static_cast<int32_t>(_pointList.size());
+	chainDef.isLoop = true;
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pPauseWorldUpdate();
+#endif 
+	b2CreateChain(m_bodyId, &chainDef);
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+}
+
+void Box2DBody::SetVelocity(b2Vec2 _velocity)
+{
+	/*_velocity.x /= DEFAULT_OBJECT_SIZE;
+	_velocity.y /= DEFAULT_OBJECT_SIZE;*/
+	b2Body_SetLinearVelocity(m_bodyId, _velocity);
+}
+
+void Box2DBody::SetVelocityX(float _velocityX)
+{
+	b2Vec2 vec = b2Body_GetLinearVelocity(m_bodyId);
+	vec.x = _velocityX;
+	b2Body_SetLinearVelocity(m_bodyId, vec);
+}
+
+void Box2DBody::SetVelocityY(float _velocityY)
+{
+	b2Vec2 vec = b2Body_GetLinearVelocity(m_bodyId);
+	vec.y = _velocityY;
+	b2Body_SetLinearVelocity(m_bodyId, vec);
+}
+
+void Box2DBody::AddForce(b2Vec2 _force)
+{
+	_force.x *= DEFAULT_OBJECT_SIZE;
+	_force.y *= DEFAULT_OBJECT_SIZE;
+	b2Body_ApplyForceToCenter(m_bodyId, _force, true);
+}
+
+void Box2DBody::AddForceImpule(b2Vec2 _force)
+{
+	_force.x *= DEFAULT_OBJECT_SIZE;
+	_force.y *= DEFAULT_OBJECT_SIZE;
+	b2Body_ApplyLinearImpulseToCenter(m_bodyId, _force, true);
+}
+
+void Box2DBodyManager::DisableLayerCollision(LAYER _layer01, LAYER _layer02)
+{
+	LAYER layer = _layer01;
+	LAYER target = _layer02;
+	for (int i = 0; i < 2; i++)
+	{
+		auto iter = m_layerFilterBit.find(layer);
+		if (iter == m_layerFilterBit.end())
+		{
+			m_layerFilterBit.insert(std::make_pair(layer, ALL_BITS));
+			iter = m_layerFilterBit.find(layer);
+		}
+		iter->second &= ~target;
+
+		layer = _layer02;
+		target = _layer01;
+	}
 }
 
 #ifdef DEBUG_TRUE
@@ -278,8 +510,6 @@ void Box2DBodyManager::Init()
 	indexData.pSysMem = indices.data();
 
 	DirectX11::m_pDevice->CreateBuffer(&indexBufferDesc, &indexData, m_circleIndexBuffer.GetAddressOf());
-
-	auto size = indices.size();
 }
 #endif
 
@@ -291,6 +521,18 @@ void Box2DBodyManager::ExcuteMoveFunction()
 	}
 
 	moveFunctions.clear();
+}
+
+unsigned int Box2DBodyManager::GetMaskLayerBit(LAYER _layer)
+{
+	auto iter = m_layerFilterBit.find(_layer);
+	if (iter != m_layerFilterBit.end())
+	{
+		return iter->second;
+	}
+
+	m_layerFilterBit.insert(std::make_pair(_layer, ALL_BITS));
+	return m_layerFilterBit.find(_layer)->second;
 }
 
 #ifdef DEBUG_TRUE
@@ -464,6 +706,146 @@ inline void Box2DCapsuleRenderNode::Draw()
 	NextFunc();
 }
 
+Box2DMeshRenderNode::Box2DMeshRenderNode(std::vector<b2Vec2>& _pointList, b2BodyId _bodyId, bool _loop) :m_bodyId(_bodyId)
+{
+	std::vector<Vertex> vertices;
+
+	int count = static_cast<int>(_pointList.size());
+
+	for (int i = 0; i < count; i++) {
+		vertices.push_back({ _pointList[i].x, _pointList[i].y, 0.5f, 1.0f, 1.0f, 1.0f, 1.0f ,1.0f,1.0f });
+	}
+
+	std::vector<WORD> indices;
+
+	for (int i = 0; i < count - 1; i++) {
+		indices.push_back(i);
+		indices.push_back(i + 1);
+	}
+
+	if (_loop)
+	{
+		indices.push_back(count - 1);
+		indices.push_back(0);
+	}
+
+	indexCount = static_cast<int>(indices.size());
+
+	D3D11_BUFFER_DESC vertexBufferDesc = {};
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.ByteWidth = sizeof(Vertex) * static_cast<WORD>(vertices.size());
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA vertexData = {};
+	vertexData.pSysMem = vertices.data();
+
+	DirectX11::m_pDevice->CreateBuffer(&vertexBufferDesc, &vertexData, m_chainVertexBuffer.GetAddressOf());
+
+	D3D11_BUFFER_DESC indexBufferDesc = {};
+	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	indexBufferDesc.ByteWidth = sizeof(WORD) * static_cast<WORD>(indices.size());
+	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indexBufferDesc.CPUAccessFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA indexData = {};
+	indexData.pSysMem = indices.data();
+
+	DirectX11::m_pDevice->CreateBuffer(&indexBufferDesc, &indexData, m_chainIndexBuffer.GetAddressOf());
+}
+
+inline void Box2DMeshRenderNode::Draw()
+{
+	UINT strides = sizeof(Vertex);
+	UINT offsets = 0;
+
+	DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, m_chainVertexBuffer.GetAddressOf(), &strides, &offsets);
+	DirectX11::m_pDeviceContext->IASetIndexBuffer(m_chainIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+
+	static VSConstantBuffer cb;
+
+	const auto& transform = m_object->transform;
+	const auto& objectCb = m_object->GetContantBuffer();
+
+	auto rad = static_cast<float>(transform.angle.z.Get());
+
+	//ワールド変換行列の作成
+	//ー＞オブジェクトの位置・大きさ・向きを指定
+	cb.world = DirectX::XMMatrixScaling(1.0f, 1.0f, transform.scale.z);
+	cb.world *= DirectX::XMMatrixRotationZ(rad);
+	cb.world *= DirectX::XMMatrixTranslation(transform.position.x, transform.position.y, transform.position.z);
+	cb.world = DirectX::XMMatrixTranspose(cb.world);
+	cb.view = objectCb.view;
+	cb.projection = objectCb.projection;
+
+	SetDebugBodyColor(m_bodyId, cb.color);
+
+	//テクスチャをピクセルシェーダーに渡す
+	DirectX11::m_pDeviceContext->PSSetShaderResources(0, 1, DirectX11::m_pTextureView.GetAddressOf());
+
+	//行列をシェーダーに渡す
+	DirectX11::m_pDeviceContext->UpdateSubresource(
+		DirectX11::m_pVSConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
+
+	DirectX11::m_pDeviceContext->DrawIndexed(indexCount, 0, 0);
+
+
+	//次のポインタにつなぐ
+	NextFunc();
+}
+
+Box2DConvexMeshRenderNode::Box2DConvexMeshRenderNode(std::vector<b2Vec2>& _pointList, b2BodyId _bodyId/*, bool _loop*/) :
+	Box2DMeshRenderNode(_bodyId)
+{
+	std::vector<Vertex> vertices;
+
+	int count = static_cast<int>(_pointList.size());
+
+	for (int i = 0; i < count; i++) {
+		vertices.push_back({ _pointList[i].x, _pointList[i].y, 0.5f, 1.0f, 1.0f, 1.0f, 1.0f ,1.0f,1.0f });
+	}
+
+	std::vector<WORD> indices;
+
+	for (int i = 0; i < count - 1; i++) {
+		for (int j = i + 1; j < count;j++)
+		{
+			indices.push_back(i);
+			indices.push_back(j);
+		}
+	}
+
+	/*if (_loop)
+	{
+		indices.push_back(count - 1);
+		indices.push_back(0);
+	}*/
+
+	indexCount = static_cast<int>(indices.size());
+
+	D3D11_BUFFER_DESC vertexBufferDesc = {};
+	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	vertexBufferDesc.ByteWidth = sizeof(Vertex) * static_cast<WORD>(vertices.size());
+	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	vertexBufferDesc.CPUAccessFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA vertexData = {};
+	vertexData.pSysMem = vertices.data();
+
+	DirectX11::m_pDevice->CreateBuffer(&vertexBufferDesc, &vertexData, m_chainVertexBuffer.GetAddressOf());
+
+	D3D11_BUFFER_DESC indexBufferDesc = {};
+	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	indexBufferDesc.ByteWidth = sizeof(WORD) * static_cast<WORD>(indices.size());
+	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	indexBufferDesc.CPUAccessFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA indexData = {};
+	indexData.pSysMem = indices.data();
+
+	DirectX11::m_pDevice->CreateBuffer(&indexBufferDesc, &indexData, m_chainIndexBuffer.GetAddressOf());
+}
+
 void SetDebugBodyColor(b2BodyId _bodyId, DirectX::XMFLOAT4& _color)
 {
 	b2BodyType bodyType = b2Body_GetType(_bodyId);
@@ -491,3 +873,4 @@ void SetDebugBodyColor(b2BodyId _bodyId, DirectX::XMFLOAT4& _color)
 }
 
 #endif
+

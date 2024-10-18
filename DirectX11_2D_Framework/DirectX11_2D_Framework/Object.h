@@ -27,6 +27,7 @@ class GameObject final
 	friend class Box2DBoxRenderNode;
 	friend class Box2DCircleRenderNode;
 	friend class Box2DCapsuleRenderNode;
+	friend class Box2DMeshRenderNode;
 	friend class ObjectManager;
 	friend class Scene;
 	friend class Component;
@@ -61,7 +62,7 @@ private:
 public:
 	//アクティブを変更する
 	void SetActive(bool _active);
-	//レイヤーの設定（頻繁に使用しない）
+	//レイヤーの設定（※処理が多いため頻繁に使用しない）
 	void SetLayer(const LAYER _layer);
 	//名前の変更
 	void SetName(const std::string _name);
@@ -151,6 +152,7 @@ public:
 			return downcast;
 		}
 
+		LOG_ERROR("%s : %s component not exist",name.c_str(),typeid(T).name());
 		return nullptr;
 	}
 	//tarnsformComponent完全特殊化

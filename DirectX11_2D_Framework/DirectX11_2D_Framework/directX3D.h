@@ -29,9 +29,9 @@ struct VSConstantBuffer final
 	//ÉÅÉÇÉäämï€ã÷é~
 	void* operator new(size_t) = delete;
 
-	DirectX::XMMATRIX world;
-	DirectX::XMMATRIX view;
-	DirectX::XMMATRIX projection;
+	DirectX::XMMATRIX world = {};
+	DirectX::XMMATRIX view = {};
+	DirectX::XMMATRIX projection = {};
 	//DirectX::XMMATRIX tex;
 	DirectX::XMFLOAT2 uvScale = XMFLOAT2(1.0f, 1.0f);
 	DirectX::XMFLOAT2 uvOffset = XMFLOAT2(0.0f, 0.0f);
@@ -50,6 +50,8 @@ class DirectX11 final
 	friend class Box2DBoxRenderNode;
 	friend class Box2DCircleRenderNode;
 	friend class Box2DCapsuleRenderNode;
+	friend class Box2DMeshRenderNode;
+	friend class Box2DConvexMeshRenderNode;
 
 	DirectX11() = delete;
 

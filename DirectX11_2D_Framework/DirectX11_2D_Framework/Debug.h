@@ -26,53 +26,47 @@ void setConsoleTextColor(unsigned int color);
 #endif
 
 // Forward declarations
+class PointerRegistry;
 template <typename T> class SafePointer;
-template <typename T> class PointerRegistry;
+
 
 #ifdef DEBUG_TRUE
+
 //セーフポインタの作成
-#define SAFE_POINTER(type,var) SafePointer<type> var = SafePointer<type>(nullptr, #var)
+#define SAFE_POINTER(type,var) SafePointer<type> var = SafePointer<type>(nullptr, #var);
+
 #else
 #define SAFE_POINTER(type,var) type* var;
 #endif
 
-// The PointerRegistryManager can manage multiple types of registries
-class PointerRegistryManager {
-    template <typename T>
-    friend class SafePointer;
 
-    friend class Scene;
-    friend class Component;
-private:
-    //生成禁止
-    PointerRegistryManager() {}
+class SafePointerBase {
+public:
+    virtual ~SafePointerBase() = default;
 
-    //SafePointerを作成(使ってない)
-    template <typename T>
-    SafePointer<T> createLoggingPointer(T* rawPtr, const std::string& name) {
-        return SafePointer<T>(rawPtr, name, getRegistry<T>());
-    }
+    //ポインタの無効化（SafePointer<T>で実装予定）
+    virtual void invalidate() = 0;
 
-    //引数のポインタを参照しているポインターの削除
-    template <typename T>
-    static void deletePointer(T* ptr) {
-        getRegistry<T>().notifyDeletion(ptr);
-    }
-private:
-    // 異なった型のリストを保存して取得する
-    template <typename T>
-    static PointerRegistry<T>& getRegistry() {
-        static PointerRegistry<T> registry;
-        return registry;
-    }
-private:
-    static PointerRegistryManager manager;
+    //レジスタで比較するためにvoid*の生ポインタを取得
+    virtual void* getRawPointer() const = 0;
 };
 
+// SafePointerBase* 用のカスタムコンパレータ
+struct SafePointerHash {
+    std::size_t operator()(const SafePointerBase* p) const {
+        return std::hash<void*>()(p->getRawPointer());
+    }
+};
 
-template <typename T>
+//SafePointerBase* 用のハッシュ関数
+struct SafePointerEqual {
+    bool operator()(const SafePointerBase* p1, const void* ptr) const {
+        return p1->getRawPointer() == ptr;
+    }
+};
+
 class PointerRegistry {
-    
+
     friend class PointerRegistryManager;
     template <typename T>
     friend class SafePointer;
@@ -80,33 +74,65 @@ class PointerRegistry {
 private:
     PointerRegistry() {}
 
-    //ポインタを登録
-    void registerPointer(SafePointer<T>* p) {
-        pointers.push_back(p);
+private:
+    // ポインターを登録する
+    void registerPointer(SafePointerBase* p) {
+        pointers.insert(p);
     }
 
-    //ポインタの登録解除
-    void unregisterPointer(SafePointer<T>* p) {
-        pointers.remove(p);
+    // ポインタの登録を解除する
+    void unregisterPointer(SafePointerBase* p) {
+        pointers.erase(p);
     }
 
-    //対応したポインタの参照をなくす
-    void notifyDeletion(T* ptr) {
-        for (auto& p : pointers) {
-            if (p->get() == ptr) {
-                p->invalidate();
-            }
+    // std::unordered_setとカスタム比較を使用した削除の通知
+    void notifyDeletion(void* ptr) {
+        auto it = std::find_if(pointers.begin(), pointers.end(),
+            [ptr](SafePointerBase* p) { return p->getRawPointer() == ptr; });
+
+        while (it != pointers.end()) {
+            (*it)->invalidate();  // Invalidate the matching pointer
+            it = std::find_if(pointers.begin(), pointers.end(),
+                [ptr](SafePointerBase* p) { return p->getRawPointer() == ptr; });
         }
     }
+
 private:
-    std::list<SafePointer<T>*> pointers;
+    //SafePointerを基底クラスで格納する
+    std::unordered_set<SafePointerBase*, SafePointerHash, SafePointerEqual> pointers;
+};
+
+class PointerRegistryManager {
+    template <typename T>
+    friend class SafePointer;
+
+    friend class Scene;
+    friend class GameObject;
+    friend class Component;
+private:
+    //生成禁止
+    PointerRegistryManager() {}
+
+    //レジスタ取得
+    static PointerRegistry& getRegistry() {
+        static PointerRegistry registry;  // Single registry for all types
+        return registry;
+    }
+
+    //レジスタに受け取ったポインタをvoid*に変換して通知を送る
+    template <typename T>
+    static void deletePointer(T* ptr) {
+        getRegistry().notifyDeletion(static_cast<void*>(ptr));
+    }
+private:
+    static PointerRegistryManager manager;
 };
 
 template <typename T>
-class SafePointer {
+class SafePointer : public SafePointerBase{
  
 public:   
-    SafePointer(T* p = nullptr, const std::string& name = typeid(T).name(), PointerRegistry<T>& reg = PointerRegistryManager::manager.getRegistry<T>())
+    SafePointer(T* p = nullptr, const std::string& name = typeid(T).name(), PointerRegistry& reg = PointerRegistryManager::getRegistry())
         : ptr(p), ptrName(name), registry(reg) {
         registry.registerPointer(this);
     }
@@ -130,8 +156,14 @@ public:
     //T型への変換
     operator T* ()const
     {
+        if (ptr == nullptr) {
+            std::string log = "Dereferencing a deleted pointer : " + ptrName;
+            throw std::runtime_error(log.c_str());
+        }
+
         return ptr;
     }
+
     //ポインタ剥がし
     T& operator*() {
         if (ptr == nullptr) {
@@ -149,14 +181,20 @@ public:
         return ptr;
     }
 
+    //保持しているアドレスの無効化
+    void invalidate() override {
+        ptr = nullptr;
+    }
+    //比較用のvoid*の生ポインタ取得
+    void* getRawPointer() const override {
+        return static_cast<void*>(ptr);
+    }
+
     //保持しているアドレスの取得
     T* get() const { return ptr; }
 
     //共有しているアドレスすべて無効にする
     void reset() { registry.notifyDeletion(ptr); }
-
-    //保持しているアドレスの無効化
-    void invalidate() { ptr = nullptr; }
 
     //保持しているポインタを使っていいか
     bool isValid() const { return ptr != nullptr; }
@@ -170,6 +208,5 @@ public:
 private:
     T* ptr;
     std::string ptrName;
-    PointerRegistry<T>& registry;
+    PointerRegistry& registry;
 };
-
