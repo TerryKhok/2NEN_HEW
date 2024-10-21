@@ -1,6 +1,6 @@
 #include "Object.h"
 
-VSConstantBuffer GameObject::m_cb = {};
+VSObjectConstantBuffer GameObject::m_cb = {};
 
 thread_local ObjectManager::ObjectList* ObjectManager::m_currentList = m_objectList.get();
 std::unique_ptr<ObjectManager::ObjectList> ObjectManager::m_objectList = std::unique_ptr<ObjectList>(new ObjectList());
@@ -27,7 +27,7 @@ GameObject::~GameObject()
 	m_componentList.clear();
 }
 
-VSConstantBuffer& GameObject::GetContantBuffer()
+VSObjectConstantBuffer& GameObject::GetContantBuffer()
 {
 	//ワールド変換行列の作成
 	//ー＞オブジェクトの位置・大きさ・向きを指定
@@ -69,10 +69,6 @@ void GameObject::SetLayer(const LAYER _layer)
 	}
 	//最後に変更する(Renderで古いLayerを参照しているため)
 	m_layer = _layer;
-	/*for (auto& component : m_componentList)
-	{
-		component.second->SetLayer(_layer);
-	}*/
 }
 
 void GameObject::SetName(const std::string _name)
@@ -94,7 +90,7 @@ const LAYER GameObject::GetLayer() const
 template<>
 Renderer* GameObject::AddComponent<Renderer>()
 {
-	if (ExistComponent<Renderer>()) return nullptr;
+	if (ExistComponent<Renderer>()) return GetComponent<Renderer>();
 
 	Component* component = nullptr;
 	component = new Renderer(this);
@@ -117,7 +113,7 @@ Renderer* GameObject::AddComponent<Renderer>()
 template<>
 Renderer* GameObject::AddComponent<Renderer>(const wchar_t* _texPath)
 {
-	if (ExistComponent<Renderer>()) return nullptr;
+	if (ExistComponent<Renderer>()) return GetComponent<Renderer>();
 
 	Component* component = nullptr;
 	component = new Renderer(this, _texPath);
@@ -137,9 +133,53 @@ Renderer* GameObject::AddComponent<Renderer>(const wchar_t* _texPath)
 }
 
 template<>
+Renderer* GameObject::AddComponent(Animator* _animator)
+{
+	if (ExistComponent<Renderer>()) return GetComponent<Renderer>();
+
+	Component* component = nullptr;
+	component = new Renderer(this, _animator);
+	component->m_this = this;
+
+	//リストに追加(デストラクタ登録)
+	m_componentList.insert(std::make_pair(typeid(Renderer).name(),
+		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; })));
+
+	Renderer* render = dynamic_cast<Renderer*>(component);
+	if (render == nullptr)
+	{
+		LOG_WARNING("%s component down_cast faild", typeid(Renderer).name());
+	}
+
+	return render;
+}
+
+template<>
+Animator* GameObject::AddComponent<Animator>()
+{
+	if (ExistComponent<Animator>()) return GetComponent<Animator>();
+
+	Component* component = nullptr;
+	component = new Animator(this);
+	component->m_this = this;
+
+	//リストに追加(デストラクタ登録)
+	m_componentList.insert(std::make_pair(typeid(Animator).name(),
+		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; })));
+
+	Animator* animator = dynamic_cast<Animator*>(component);
+	if (animator == nullptr)
+	{
+		LOG_WARNING("%s component down_cast faild", typeid(Animator).name());
+	}
+
+	return animator;
+}
+
+template<>
 Box2DBody* GameObject::AddComponent(b2BodyDef* _bodyDef)
 {
-	if (ExistComponent<Box2DBody>()) return nullptr;
+	if (ExistComponent<Box2DBody>()) return GetComponent<Box2DBody>();
 
 	Component* component = nullptr;
 	component = new Box2DBody(this, _bodyDef);
@@ -161,7 +201,7 @@ Box2DBody* GameObject::AddComponent(b2BodyDef* _bodyDef)
 template<>
 Box2DBody* GameObject::AddComponent<Box2DBody>()
 {
-	if (ExistComponent<Box2DBody>()) return nullptr;
+	if (ExistComponent<Box2DBody>()) return GetComponent<Box2DBody>();
 
 	Component* component = nullptr;
 	component = new Box2DBody(this);
@@ -181,12 +221,29 @@ Box2DBody* GameObject::AddComponent<Box2DBody>()
 }
 
 template<>
+void GameObject::RemoveComponent<Renderer>()
+{
+	RemoveComponent<Animator>();
+
+	auto iter = m_componentList.find(typeid(Renderer).name());
+	if (iter != m_componentList.end())
+	{
+#ifdef DEBUG_TRUE
+		//コンポーネントのSafePointerをnullptrにする
+		PointerRegistryManager::deletePointer(iter->second.get());
+#endif 
+		iter->second->Delete();
+		m_componentList.erase(iter);
+	}
+}
+
+template<>
 Transform* GameObject::GetComponent()
 {
 	return &transform;
 }
 
-GameObject* ObjectManager::Find(std::string _name)
+GameObject* ObjectManager::Find(const std::string& _name)
 {
 	auto iter = m_currentList->find(_name);
 	if (iter != m_currentList->end())
@@ -263,7 +320,7 @@ void ObjectManager::LinkNextObjectList()
 	m_currentList = m_objectList.get();
 }
 
-void ObjectManager::ChangeObjectName(std::string _before, std::string _after)
+void ObjectManager::ChangeObjectName(const std::string& _before, const std::string& _after)
 {
 	std::unique_ptr<GameObject, void(*)(GameObject*)> object(nullptr, [](GameObject* p) {delete p; });
 	auto iter = m_currentList->find(_before);

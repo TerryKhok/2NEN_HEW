@@ -109,6 +109,7 @@ LRESULT Window::WindowInit(void(*p_mainInitFunc)(void))
 {
 	//初期化処理
 	//=================================================
+
 	SceneManager::m_sceneList.clear();
 	//Box2Dワールド作成
 	Box2D::WorldManager::CreateWorld();
@@ -154,6 +155,9 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 			nowCount = liWork.QuadPart;
 			if (nowCount >= oldCount + frequency / FPS)
 			{
+				//Animator用のカウント更新
+				AnimatorManager::deltaCount = nowCount - oldCount;
+
 #ifndef BOX2D_UPDATE_MULTITHREAD
 				Box2D::WorldManager::WorldUpdate();
 #endif
@@ -231,6 +235,9 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 			nowCount = liWork.QuadPart;
 			if (nowCount >= oldCount + frequency / FPS)
 			{
+				//Animator用のカウント更新
+				AnimatorManager::deltaCount = nowCount - oldCount;
+
 #ifndef BOX2D_UPDATE_MULTITHREAD
 				Box2D::WorldManager::WorldUpdate();
 #endif

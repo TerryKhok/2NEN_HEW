@@ -6,14 +6,15 @@
 #define DEFUALT_TEXTURE_FILEPATH L"asset/pic/noTextureImg.png"
 //============================================================================
 
-
 class Renderer : public Component
 {
 	friend class GameObject;
+	friend class Animator;
 private:
 	//生成禁止
 	Renderer(GameObject* _pObject);
-	Renderer(GameObject* _pObject,const wchar_t* texpath);
+	Renderer(GameObject* _pObject,const wchar_t* _texpath);
+	Renderer(GameObject* _pObject,Animator* _animator);
 	//削除禁止
 	~Renderer() = default;
 	//アクティブ変更
@@ -26,9 +27,12 @@ private:
 	Renderer* GetDevide(){
 		return this;
 	}
+	//UVRenderNodeへ切り替える
+	void SetUVRenderNode(Animator* _animator);
 public:
 	void SetTexture(const wchar_t* _texPath);
 	void SetColor(XMFLOAT4 _color);
+	void SetTexcode(int _splitX, int _splitY, int _frameX, int _frameY);
 private:
 	//対応したノード
 	std::shared_ptr<RenderNode> m_node;
@@ -44,7 +48,7 @@ class RenderNode
 	//描画関連
 protected:
 	RenderNode();
-	RenderNode(const wchar_t* texpath);
+	RenderNode(const wchar_t* _texpath);
 	//アクティブを切り替える
 	virtual void Active(bool _active);
 	//描画関数の実行
@@ -54,8 +58,7 @@ protected:
 	//なにもせずに次につなぐ
 	void VoidNext() { NextFunc(); }
 	//テクスチャーの設定
-	void SetTexture(const wchar_t* texpath);
-	//const GameObject* GetTargetObject();
+	void SetTexture(const wchar_t* _texpath);
 private:
 	//描画関数ポインター
 	void(RenderNode::* pDrawFunc)(void) = nullptr;
@@ -91,6 +94,9 @@ private:
 class UVRenderNode : public RenderNode
 {
 	friend class Renderer;
+	friend class AnimationClip;
+	friend class AnimationClipLoop;
+
 private:
 	UVRenderNode() {}
 	UVRenderNode(const wchar_t* _texPath) :RenderNode(_texPath) {}

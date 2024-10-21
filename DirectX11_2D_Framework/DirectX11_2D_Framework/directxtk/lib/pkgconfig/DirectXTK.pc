@@ -1,0 +1,11 @@
+prefix=C:/work/GitHub/HewGame/2NEN_HEW/DirectX11_2D_Framework/DirectX11_2D_Framework/directxtk
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: DirectXTK
+Description: DirectX Tool Kit for DirectX 11
+URL: https://go.microsoft.com/fwlink/?LinkId=248929
+Version: 1.8.9
+Requires:
+Cflags: -I${includedir}
+Libs: -lDirectXTK

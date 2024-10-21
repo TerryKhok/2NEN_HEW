@@ -2,7 +2,7 @@
 
 std::vector<std::function<void()>> Box2DBodyManager::moveFunctions;
 
-std::unordered_map<LAYER, unsigned int> Box2DBodyManager::m_layerFilterBit;
+std::unordered_map<FILTER, unsigned int> Box2DBodyManager::m_layerFilterBit;
 
 #ifdef DEBUG_TRUE
 const int Box2DBodyManager::numSegments = 36;
@@ -88,19 +88,21 @@ void Box2DBody::Delete()
 #endif
 
 
-void Box2DBody::SetLayer(const LAYER _layer)
+void Box2DBody::SetFilter(const FILTER _filter)
 {
+	m_filter = _filter;
+
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pPauseWorldUpdate();
 #endif 
 	for (auto shape : m_shapeList)
 	{
 		auto filter = b2Shape_GetFilter(shape);
-		filter.categoryBits = _layer;
-		filter.maskBits = Box2DBodyManager::GetMaskLayerBit(_layer);
+		filter.categoryBits = m_filter;
+		filter.maskBits = Box2DBodyManager::GetMaskLayerBit(m_filter);
 		b2Shape_SetFilter(shape, filter);
 	}
-
+	
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pResumeWorldUpdate();
 #endif 
@@ -129,9 +131,8 @@ void Box2DBody::CreateBoxShape(Vector2 _size, Vector2 _offset, float _angle)
 	//シェイプを作成して地面のボディを仕上げる
 	b2ShapeDef shapeDef = b2DefaultShapeDef();
 
-	auto layer = m_this->GetLayer();
-	shapeDef.filter.categoryBits = layer;
-	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(layer);
+	shapeDef.filter.categoryBits = m_filter;
+	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(m_filter);
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pPauseWorldUpdate();
@@ -179,9 +180,8 @@ void Box2DBody::CreateCircleShape(float _diameter, Vector2 _offset)
 
 	//シェイプを作成して地面のボディを仕上げる
 	b2ShapeDef shapeDef = b2DefaultShapeDef();
-	auto layer = m_this->GetLayer();
-	shapeDef.filter.categoryBits = layer;
-	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(layer);
+	shapeDef.filter.categoryBits = m_filter;
+	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(m_filter);
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pPauseWorldUpdate();
@@ -234,9 +234,8 @@ void Box2DBody::CreateCapsuleShape(float _diameter, float _height, float _angle,
 
 	//シェイプを作成して地面のボディを仕上げる
 	b2ShapeDef shapeDef = b2DefaultShapeDef();
-	auto layer = m_this->GetLayer();
-	shapeDef.filter.categoryBits = layer;
-	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(layer);
+	shapeDef.filter.categoryBits = m_filter;
+	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(m_filter);
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pPauseWorldUpdate();
@@ -285,9 +284,8 @@ void Box2DBody::CreatePolygonShape(std::vector<b2Vec2> _pointList)
 	}
 
 	b2ShapeDef shapeDef = b2DefaultShapeDef();
-	auto layer = m_this->GetLayer();
-	shapeDef.filter.categoryBits = layer;
-	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(layer);
+	shapeDef.filter.categoryBits = m_filter;
+	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(m_filter);
 
 	b2Hull hull = b2ComputeHull(_pointList.data(), count);
 	b2Polygon polygon = b2MakePolygon(&hull, 0.0f);
@@ -330,9 +328,8 @@ void Box2DBody::CreateSegment(std::vector<b2Vec2> _pointList)
 	
 
 	b2ShapeDef shapeDef = b2DefaultShapeDef();
-	auto layer = m_this->GetLayer();
-	shapeDef.filter.categoryBits = layer;
-	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(layer);
+	shapeDef.filter.categoryBits = m_filter;
+	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(m_filter);
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pPauseWorldUpdate();
@@ -372,9 +369,8 @@ void Box2DBody::CreateChain(std::vector<b2Vec2>& _pointList)
 	}
 
 	b2ChainDef chainDef = b2DefaultChainDef();
-	auto layer = m_this->GetLayer();
-	chainDef.filter.categoryBits = layer;
-	chainDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(layer);
+	chainDef.filter.categoryBits = m_filter;
+	chainDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(m_filter);
 
 	chainDef.points = _pointList.data();
 	chainDef.count = static_cast<int32_t>(_pointList.size());
@@ -425,22 +421,22 @@ void Box2DBody::AddForceImpule(b2Vec2 _force)
 	b2Body_ApplyLinearImpulseToCenter(m_bodyId, _force, true);
 }
 
-void Box2DBodyManager::DisableLayerCollision(LAYER _layer01, LAYER _layer02)
+void Box2DBodyManager::DisableLayerCollision(FILTER _filter01, FILTER _filter02)
 {
-	LAYER layer = _layer01;
-	LAYER target = _layer02;
+	FILTER filter = _filter01;
+	FILTER target = _filter02;
 	for (int i = 0; i < 2; i++)
 	{
-		auto iter = m_layerFilterBit.find(layer);
+		auto iter = m_layerFilterBit.find(filter);
 		if (iter == m_layerFilterBit.end())
 		{
-			m_layerFilterBit.insert(std::make_pair(layer, ALL_BITS));
-			iter = m_layerFilterBit.find(layer);
+			m_layerFilterBit.insert(std::make_pair(filter, ALL_BITS));
+			iter = m_layerFilterBit.find(filter);
 		}
 		iter->second &= ~target;
 
-		layer = _layer02;
-		target = _layer01;
+		filter = _filter02;
+		target = _filter01;
 	}
 }
 
@@ -523,7 +519,7 @@ void Box2DBodyManager::ExcuteMoveFunction()
 	moveFunctions.clear();
 }
 
-unsigned int Box2DBodyManager::GetMaskLayerBit(LAYER _layer)
+unsigned int Box2DBodyManager::GetMaskLayerBit(FILTER _layer)
 {
 	auto iter = m_layerFilterBit.find(_layer);
 	if (iter != m_layerFilterBit.end())
@@ -545,7 +541,7 @@ void Box2DBoxRenderNode::Draw()
 	DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_vertexBuffer.GetAddressOf(), &strides, &offsets);
 	DirectX11::m_pDeviceContext->IASetIndexBuffer(Box2DBodyManager::m_boxIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
 
-	static VSConstantBuffer cb;
+	static VSObjectConstantBuffer cb;
 
 	const auto& transform = m_object->transform;
 	const auto& objectCb = m_object->GetContantBuffer();
@@ -561,20 +557,16 @@ void Box2DBoxRenderNode::Draw()
 	cb.world *= DirectX::XMMatrixRotationZ(rad + m_angle);
 	cb.world *= DirectX::XMMatrixTranslation(transform.position.x + offset.x, transform.position.y + offset.y, transform.position.z);
 	cb.world = DirectX::XMMatrixTranspose(cb.world);
-	cb.view = objectCb.view;
-	cb.projection = objectCb.projection;
+	/*cb.view = objectCb.view;
+	cb.projection = objectCb.projection;*/
 
 	SetDebugBodyColor(m_bodyId, cb.color);
 
-	//テクスチャをピクセルシェーダーに渡す
-	DirectX11::m_pDeviceContext->PSSetShaderResources(0, 1, DirectX11::m_pTextureView.GetAddressOf());
-
 	//行列をシェーダーに渡す
 	DirectX11::m_pDeviceContext->UpdateSubresource(
-		DirectX11::m_pVSConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
+		DirectX11::m_pVSObjectConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
 
 	DirectX11::m_pDeviceContext->DrawIndexed(8, 0, 0);
-
 
 	//次のポインタにつなぐ
 	NextFunc();
@@ -588,7 +580,7 @@ inline void Box2DCircleRenderNode::Draw()
 	DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, Box2DBodyManager::m_circleVertexBuffer.GetAddressOf(), &strides, &offsets);
 	DirectX11::m_pDeviceContext->IASetIndexBuffer(Box2DBodyManager::m_circleIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
 
-	static VSConstantBuffer cb;
+	static VSObjectConstantBuffer cb;
 
 	const auto& transform = m_object->transform;
 	const auto& objectCb = m_object->GetContantBuffer();
@@ -605,17 +597,14 @@ inline void Box2DCircleRenderNode::Draw()
 	cb.world *= DirectX::XMMatrixRotationZ(rad);
 	cb.world *= DirectX::XMMatrixTranslation(transform.position.x + offset.x, transform.position.y + offset.y, transform.position.z);
 	cb.world = DirectX::XMMatrixTranspose(cb.world);
-	cb.view = objectCb.view;
-	cb.projection = objectCb.projection;
+	//cb.view = objectCb.view;
+	//cb.projection = objectCb.projection;
 
 	SetDebugBodyColor(m_bodyId, cb.color);
 
-	//テクスチャをピクセルシェーダーに渡す
-	DirectX11::m_pDeviceContext->PSSetShaderResources(0, 1, DirectX11::m_pTextureView.GetAddressOf());
-
 	//行列をシェーダーに渡す
 	DirectX11::m_pDeviceContext->UpdateSubresource(
-		DirectX11::m_pVSConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
+		DirectX11::m_pVSObjectConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
 
 	DirectX11::m_pDeviceContext->DrawIndexed(Box2DBodyManager::numSegments * 2 + 2, 0, 0);
 
@@ -631,7 +620,7 @@ inline void Box2DCapsuleRenderNode::Draw()
 	DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, Box2DBodyManager::m_circleVertexBuffer.GetAddressOf(), &strides, &offsets);
 	DirectX11::m_pDeviceContext->IASetIndexBuffer(Box2DBodyManager::m_circleIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
 
-	static VSConstantBuffer cb;
+	static VSObjectConstantBuffer cb;
 
 	const auto& transform = m_object->transform;
 	const auto& objectCb = m_object->GetContantBuffer();
@@ -655,17 +644,14 @@ inline void Box2DCapsuleRenderNode::Draw()
 	cb.world *= DirectX::XMMatrixRotationZ(rad);
 	cb.world *= DirectX::XMMatrixTranslation(offset.x - heightOffset.x, offset.y + heightOffset.y, transform.position.z);
 	cb.world = DirectX::XMMatrixTranspose(cb.world);
-	cb.view = objectCb.view;
-	cb.projection = objectCb.projection;
+	/*cb.view = objectCb.view;
+	cb.projection = objectCb.projection;*/
 
 	SetDebugBodyColor(m_bodyId, cb.color);
 
-	//テクスチャをピクセルシェーダーに渡す
-	DirectX11::m_pDeviceContext->PSSetShaderResources(0, 1, DirectX11::m_pTextureView.GetAddressOf());
-
 	//行列をシェーダーに渡す
 	DirectX11::m_pDeviceContext->UpdateSubresource(
-		DirectX11::m_pVSConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
+		DirectX11::m_pVSObjectConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
 
 	DirectX11::m_pDeviceContext->DrawIndexed(Box2DBodyManager::numSegments, 0, 0);
 
@@ -680,7 +666,7 @@ inline void Box2DCapsuleRenderNode::Draw()
 
 	//行列をシェーダーに渡す
 	DirectX11::m_pDeviceContext->UpdateSubresource(
-		DirectX11::m_pVSConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
+		DirectX11::m_pVSObjectConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
 
 	DirectX11::m_pDeviceContext->DrawIndexed(Box2DBodyManager::numSegments, 0, 0);
 
@@ -698,7 +684,7 @@ inline void Box2DCapsuleRenderNode::Draw()
 
 	//行列をシェーダーに渡す
 	DirectX11::m_pDeviceContext->UpdateSubresource(
-		DirectX11::m_pVSConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
+		DirectX11::m_pVSObjectConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
 
 	DirectX11::m_pDeviceContext->DrawIndexed(4, 0, 0);
 
@@ -762,7 +748,7 @@ inline void Box2DMeshRenderNode::Draw()
 	DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, m_chainVertexBuffer.GetAddressOf(), &strides, &offsets);
 	DirectX11::m_pDeviceContext->IASetIndexBuffer(m_chainIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
 
-	static VSConstantBuffer cb;
+	static VSObjectConstantBuffer cb;
 
 	const auto& transform = m_object->transform;
 	const auto& objectCb = m_object->GetContantBuffer();
@@ -775,17 +761,14 @@ inline void Box2DMeshRenderNode::Draw()
 	cb.world *= DirectX::XMMatrixRotationZ(rad);
 	cb.world *= DirectX::XMMatrixTranslation(transform.position.x, transform.position.y, transform.position.z);
 	cb.world = DirectX::XMMatrixTranspose(cb.world);
-	cb.view = objectCb.view;
-	cb.projection = objectCb.projection;
+	/*cb.view = objectCb.view;
+	cb.projection = objectCb.projection;*/
 
 	SetDebugBodyColor(m_bodyId, cb.color);
 
-	//テクスチャをピクセルシェーダーに渡す
-	DirectX11::m_pDeviceContext->PSSetShaderResources(0, 1, DirectX11::m_pTextureView.GetAddressOf());
-
 	//行列をシェーダーに渡す
 	DirectX11::m_pDeviceContext->UpdateSubresource(
-		DirectX11::m_pVSConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
+		DirectX11::m_pVSObjectConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
 
 	DirectX11::m_pDeviceContext->DrawIndexed(indexCount, 0, 0);
 

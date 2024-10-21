@@ -20,7 +20,9 @@ ComPtr<ID3D11PixelShader> DirectX11::m_pPixelShader = nullptr;
 //サンプラー用変数
 ComPtr<ID3D11SamplerState> DirectX11::m_pSampler = nullptr;
 //定数バッファ変数
-ComPtr<ID3D11Buffer> DirectX11::m_pVSConstantBuffer = nullptr;
+ComPtr<ID3D11Buffer> DirectX11::m_pVSObjectConstantBuffer = nullptr;
+//定数バッファ変数
+ComPtr<ID3D11Buffer> DirectX11::m_pVSCameraConstantBuffer = nullptr;
 //ブレンドステート変数
 ComPtr<ID3D11BlendState> DirectX11::m_pBlendState = nullptr;
 //ワイヤーフレームステート変数
@@ -232,10 +234,11 @@ HRESULT DirectX11::D3D_Create(HWND hwnd)
 
 
 	// デバイスとスワップチェインを同時に作成する関数の呼び出し
-	hr = D3D11CreateDeviceAndSwapChain(NULL,
+	hr = D3D11CreateDeviceAndSwapChain(
+		NULL,
 		D3D_DRIVER_TYPE_HARDWARE,
 		NULL,
-		0,
+		D3D11_CREATE_DEVICE_BGRA_SUPPORT,
 		pLevels,
 		1,
 		D3D11_SDK_VERSION,
@@ -306,14 +309,14 @@ HRESULT DirectX11::D3D_Create(HWND hwnd)
 
 	// 頂点シェーダーオブジェクトを生成、同時に頂点レイアウトも生成
 	//hr = CreateVertexShader(UV_VS, sizeof(UV_VS), layout, numElements, m_pVertexShader.GetAddressOf(), m_pInputLayout.GetAddressOf());
-	hr = CreateVertexShader(UV_VS, sizeof(UV_VS), layout, numElements, m_pVertexShader.GetAddressOf(), m_pInputLayout.GetAddressOf());
+	hr = CreateVertexShader(UNLIT_TEXTURE_VS, sizeof(UNLIT_TEXTURE_VS), layout, numElements, m_pVertexShader.GetAddressOf(), m_pInputLayout.GetAddressOf());
 	if (FAILED(hr)) {
 		MessageBoxA(NULL, "CreateVertexShader error", "error", MB_OK);
 		return E_FAIL;
 	}
 	
 	// ピクセルシェーダーオブジェクトを生成
-	hr = CreatePixelShader(UV_PS, sizeof(UV_PS), m_pPixelShader.GetAddressOf());
+	hr = CreatePixelShader(UNLIT_TEXTURE_PS, sizeof(UNLIT_TEXTURE_PS), m_pPixelShader.GetAddressOf());
 	if (FAILED(hr)) {
 		MessageBoxA(NULL, "CreatePixelShader error", "error", MB_OK);
 		return E_FAIL;
@@ -330,14 +333,26 @@ HRESULT DirectX11::D3D_Create(HWND hwnd)
 	hr = m_pDevice->CreateSamplerState(&smpDesc, m_pSampler.GetAddressOf());
 	if (FAILED(hr)) return hr;
 
+	//定数バッファ作成
 	D3D11_BUFFER_DESC cbDesc;
-	cbDesc.ByteWidth = sizeof(VSConstantBuffer);
+	cbDesc.ByteWidth = sizeof(VSObjectConstantBuffer);
 	cbDesc.Usage = D3D11_USAGE_DEFAULT;
 	cbDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	cbDesc.CPUAccessFlags = 0;
 	cbDesc.MiscFlags = 0;
 	cbDesc.StructureByteStride = 0;
-	hr = m_pDevice->CreateBuffer(&cbDesc, NULL, m_pVSConstantBuffer.GetAddressOf());
+	hr = m_pDevice->CreateBuffer(&cbDesc, NULL, m_pVSObjectConstantBuffer.GetAddressOf());
+	if (FAILED(hr)) return hr;
+
+	//定数バッファ作成
+	D3D11_BUFFER_DESC cbDesc2;
+	cbDesc2.ByteWidth = sizeof(VSCameraConstantBuffer);
+	cbDesc2.Usage = D3D11_USAGE_DEFAULT;
+	cbDesc2.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cbDesc2.CPUAccessFlags = 0;
+	cbDesc2.MiscFlags = 0;
+	cbDesc2.StructureByteStride = 0;
+	hr = m_pDevice->CreateBuffer(&cbDesc2, NULL, m_pVSCameraConstantBuffer.GetAddressOf());
 	if (FAILED(hr)) return hr;
 
 	//ブレンディングステート生成
@@ -379,9 +394,27 @@ HRESULT DirectX11::D3D_Create(HWND hwnd)
 	hr = m_pDevice->CreateRasterizerState(&rasterDesc, m_pWireframeRasterState.GetAddressOf());
 	if (FAILED(hr)) return hr;
 
-
 	//共通のpixelTexture読み込み
 	CreateOnePixelTexture(m_pTextureView.GetAddressOf());
+
+	// 描画先のキャンバスと使用する深度バッファを指定する
+	m_pDeviceContext->OMSetRenderTargets(1, m_pRenderTargetView.GetAddressOf(), m_pDepthStencilView.Get());
+
+	//そのブレンディングをコンテキストに設定
+	//float blendFactor[4] = { D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO };
+	m_pDeviceContext->OMSetBlendState(m_pBlendState.Get(), NULL, 0xffffffff);
+
+	//インプットレイアウト設定
+	m_pDeviceContext->IASetInputLayout(m_pInputLayout.Get());
+
+	//サンプラーをピクセルシェーダーに渡す
+	m_pDeviceContext->PSSetSamplers(0, 1, m_pSampler.GetAddressOf());
+
+	//定数バッファを頂点シェーダーにセットする
+	m_pDeviceContext->VSSetConstantBuffers(0, 1, m_pVSObjectConstantBuffer.GetAddressOf());
+
+	//定数バッファを頂点シェーダーにセットする
+	m_pDeviceContext->VSSetConstantBuffers(1, 1, m_pVSCameraConstantBuffer.GetAddressOf());
 
 	return S_OK;
 }
@@ -394,32 +427,21 @@ void DirectX11::D3D_Release()
 void DirectX11::D3D_StartRender()
 {
 	// 画面塗りつぶし色
-	float clearColor[4] = { 0.0f, 0.0f, 0.0f, 1.0f }; //red,green,blue,alpha
-
-	// 描画先のキャンバスと使用する深度バッファを指定する
-	m_pDeviceContext->OMSetRenderTargets(1, m_pRenderTargetView.GetAddressOf(), m_pDepthStencilView.Get());
-
-	//そのブレンディングをコンテキストに設定
-	float blendFactor[4] = { D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO };
-	m_pDeviceContext->OMSetBlendState(m_pBlendState.Get(), NULL, 0xffffffff);
+	float clearColor[4] = { 0.0f, 0.5f, 0.5f, 1.0f }; //red,green,blue,alpha
 
 	// 描画先キャンバスを塗りつぶす
 	m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetView.Get(), clearColor);
 	// 深度バッファをリセットする
 	m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-	m_pDeviceContext->IASetInputLayout(m_pInputLayout.Get());
-	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+	//今は一つしかシェーダーを使っていない
+	//=======================================================================
+	//頂点シェーダ設定
 	m_pDeviceContext->VSSetShader(m_pVertexShader.Get(), NULL, 0);
-	
+	//ピクセルシェーダ設定
 	m_pDeviceContext->PSSetShader(m_pPixelShader.Get(), NULL, 0);
-
-	//サンプラーをピクセルシェーダーに渡す
-	m_pDeviceContext->PSSetSamplers(0, 1,m_pSampler.GetAddressOf());
-
-	//定数バッファを頂点シェーダーにセットする
-	m_pDeviceContext->VSSetConstantBuffers(0, 1, m_pVSConstantBuffer.GetAddressOf());
+	//=======================================================================
 }
 
 void DirectX11::D3D_FinishRender()

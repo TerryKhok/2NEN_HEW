@@ -1,5 +1,8 @@
 #pragma once
 
+#include "directxtk/include/directxtk/WICTextureLoader.h"
+#include "directxtk/include/directxtk/SpriteFont.h"
+
 // Direct3D解放の簡略化マクロ
 #define SAFE_RELEASE(p) { if( nullptr != p ) { p->Release(); p = nullptr; } }
 
@@ -24,28 +27,37 @@ struct Vertex final
 	float u, v;
 };
 
-struct VSConstantBuffer final
+struct VSObjectConstantBuffer final
 {
 	//メモリ確保禁止
 	void* operator new(size_t) = delete;
 
 	DirectX::XMMATRIX world = {};
-	DirectX::XMMATRIX view = {};
-	DirectX::XMMATRIX projection = {};
 	//DirectX::XMMATRIX tex;
 	DirectX::XMFLOAT2 uvScale = XMFLOAT2(1.0f, 1.0f);
 	DirectX::XMFLOAT2 uvOffset = XMFLOAT2(0.0f, 0.0f);
 	DirectX::XMFLOAT4 color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 };
 
+struct VSCameraConstantBuffer final
+{
+	//メモリ確保禁止
+	void* operator new(size_t) = delete;
+
+	DirectX::XMMATRIX view = {};
+	DirectX::XMMATRIX projection = {};
+};
+
 
 class DirectX11 final
 {
 	friend class Window;
+	friend class DWTextManager;
 	friend class TextureAssets;
 	friend class RenderNode;
 	friend class UVRenderNode;
 	friend class RenderManager;
+	friend class CameraManager;
 	friend class Box2DBodyManager;
 	friend class Box2DBoxRenderNode;
 	friend class Box2DCircleRenderNode;
@@ -93,7 +105,9 @@ private:
 	//サンプラー用変数
 	static ComPtr<ID3D11SamplerState> m_pSampler;
 	//定数バッファ変数
-	static ComPtr<ID3D11Buffer> m_pVSConstantBuffer;
+	static ComPtr<ID3D11Buffer> m_pVSObjectConstantBuffer;
+	//定数バッファ変数
+	static ComPtr<ID3D11Buffer> m_pVSCameraConstantBuffer;
 	//ブレンドステート変数
 	static ComPtr<ID3D11BlendState> m_pBlendState;
 	//ワイヤーフレームステート変数

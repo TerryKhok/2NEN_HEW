@@ -1,19 +1,18 @@
 #include "Sample_SceneLoad.h"
 
-//#include "../../DirectX11_2D_Framework/DirectX11_2D_Framework/HelloBox2d.h"
 
 //シーンの登録、レイヤーの設定
 //============================================================
 void MainInit()
 {	
 	//一番上のシーンが初めにロードされる
-	SceneManager::RegisterScene<SampleScene01>();
-	SceneManager::RegisterScene<SampleScene02>();
-	SceneManager::RegisterScene<LoadScene>();
-	SceneManager::RegisterScene<Box2D_SampleScene>();
+	SceneManager::RegisterScene<SampleScene_Title>();
+	SceneManager::RegisterScene<SampleScene_Loading>();
+	SceneManager::RegisterScene<SampleScene_Box2D>();
+	SceneManager::RegisterScene<SampleScene_Animation>();
 
 	//LAYER_01とLAYER_02が衝突しないようにする
-	Box2DBodyManager::DisableLayerCollision(LAYER_01, LAYER_02);
+	Box2DBodyManager::DisableLayerCollision(FILTER_01, FILTER_02);
 }
 //============================================================
 

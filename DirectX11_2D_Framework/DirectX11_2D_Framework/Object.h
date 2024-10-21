@@ -42,7 +42,7 @@ private:
 	~GameObject();
 
 	//プロジェクション行列変換までして渡す（描画以外では基本使わない）
-	VSConstantBuffer& GetContantBuffer();
+	VSObjectConstantBuffer& GetContantBuffer();
 	//すでにコンポーネントがついてるか確かめる
 	template<typename T>
 	bool ExistComponent()
@@ -74,7 +74,7 @@ public:
 	template<typename T>
 	T* AddComponent(void)
 	{
-		if (ExistComponent<T>()) return nullptr;
+		if (ExistComponent<T>()) return GetComponent<T>();
 
 		Component* component = nullptr;
 		component = new T();
@@ -94,12 +94,12 @@ public:
 	}
 	//コンポーネント追加(引数あり)
 	template<typename T,typename Arg>
-	T* AddComponent(Arg arg)
+	T* AddComponent(Arg _arg)
 	{
-		if (ExistComponent<T>()) return nullptr;
+		if (ExistComponent<T>()) return GetComponent<T>();
 
 		Component* component = nullptr;
-		component = new T(arg);
+		component = new T(_arg);
 		component->m_this = this;
 
 		//リストに追加(デストラクタ登録)
@@ -121,6 +121,12 @@ public:
 	//テクスチャ指定
 	template<>
 	Renderer* AddComponent<Renderer, const wchar_t*>(const wchar_t* _texPath);
+	//アニメーター指定
+	template<>
+	Renderer* AddComponent<Renderer,Animator*>(Animator* _animator);
+	//Animator完全特殊化
+	template<>
+	Animator* AddComponent<Animator>();
 	//Box2DBodyComponent完全特殊化
 	template<>
 	Box2DBody* AddComponent<Box2DBody>();
@@ -134,10 +140,17 @@ public:
 		auto iter = m_componentList.find(typeid(T).name());
 		if (iter != m_componentList.end())
 		{
+#ifdef DEBUG_TRUE
+			//コンポーネントのSafePointerをnullptrにする
+			PointerRegistryManager::deletePointer(iter->second.get());
+#endif 
 			iter->second->Delete();
 			m_componentList.erase(iter);
 		}
 	}
+	template<>
+	void RemoveComponent<Renderer>();
+
 	template<typename T>
 	T* GetComponent()
 	{
@@ -147,12 +160,12 @@ public:
 			T* downcast = dynamic_cast<T*>(iter->second.get());
 			if (downcast == nullptr)
 			{
-				LOG_WARNING("%s : %s component down_cast faild", name.c_str(), typeid(T).name());
+				LOG_ERROR("%s : %s component down_cast faild", name.c_str(), typeid(T).name());
 			}
 			return downcast;
 		}
 
-		LOG_ERROR("%s : %s component not exist",name.c_str(),typeid(T).name());
+		LOG_WARNING("%s : %s component not exist",name.c_str(),typeid(T).name());
 		return nullptr;
 	}
 	//tarnsformComponent完全特殊化
@@ -162,7 +175,7 @@ public:
 	Transform transform;
 private:
 	std::string name = "GameObject";
-	static VSConstantBuffer m_cb;
+	static VSObjectConstantBuffer m_cb;
 	LAYER m_layer = LAYER::LAYER_01;
 	std::unordered_map<const char*, std::unique_ptr<Component, void(*)(Component*)>> m_componentList;
 };
@@ -184,7 +197,7 @@ class ObjectManager final
 
 public:
 	//オブジェクト一覧から見つける アクセス速度n(1)
-	static GameObject* Find(std::string _name);
+	static GameObject* Find(const std::string& _name);
 private:
 	//生成禁止
 	ObjectManager() = delete;
@@ -201,7 +214,7 @@ private:
 	//次のノードリストに繋ぐ
 	static void LinkNextObjectList();
 	//オブジェクトの名前を変更する
-	static void ChangeObjectName(std::string _before,std::string _after);
+	static void ChangeObjectName(const std::string& _before,const std::string& _after);
 	//全てのリストを明示的に綺麗にする
 	static void CleanAllObjectList();
 private:

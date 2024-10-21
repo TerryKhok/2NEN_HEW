@@ -3,12 +3,12 @@
 #ifndef BOX2D_H
 #define BOX2D_H
 
-#include"box2d/include/box2d.h"
-#include"box2d/include/box2d.h"
-#include"box2d/include/collision.h"
-#include"box2d/include/id.h"
-#include"box2d/include/math_functions.h"
-#include"box2d/include/types.h"
+#include"box2d/include/box2d/box2d.h"
+#include"box2d/include/box2d/box2d.h"
+#include"box2d/include/box2d/collision.h"
+#include"box2d/include/box2d/id.h"
+#include"box2d/include/box2d/math_functions.h"
+#include"box2d/include/box2d/types.h"
 
 //box2dÉTÉCÉg
 //=============================================

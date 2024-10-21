@@ -6,7 +6,8 @@ float CameraManager::cameraZoom = 2.0f;
 
 void CameraManager::CameraMatrixCalculation()
 {
-    auto& cb = GameObject::m_cb;
+    //auto& cb = GameObject::m_cb;
+    static VSCameraConstantBuffer cb;
 
     //View変換
     static XMVECTOR cameraPos = XMVectorSet(0.0f, 0.0f, -1.0f, 0.0f);
@@ -32,5 +33,8 @@ void CameraManager::CameraMatrixCalculation()
     height /= cameraZoom;
 
     cb.projection = DirectX::XMMatrixOrthographicLH(width, height, 0.0f, 5.0f);
-    //cb.projection = DirectX::XMMatrixTranspose(cb.projection);
+
+    //行列をシェーダーに渡す
+    DirectX11::m_pDeviceContext->UpdateSubresource(
+        DirectX11::m_pVSCameraConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
 }

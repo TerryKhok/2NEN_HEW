@@ -6,8 +6,8 @@
 //================================================================
 
 
-const char* relativePath(const char* fullPath);
-void setConsoleTextColor(unsigned int color);
+const char* relativePath(const char* _fullPath);
+void setConsoleTextColor(unsigned int _color);
 
 #ifdef DEBUG_TRUE
 
@@ -52,18 +52,18 @@ public:
 };
 
 // SafePointerBase* 用のカスタムコンパレータ
-struct SafePointerHash {
-    std::size_t operator()(const SafePointerBase* p) const {
-        return std::hash<void*>()(p->getRawPointer());
-    }
-};
-
-//SafePointerBase* 用のハッシュ関数
-struct SafePointerEqual {
-    bool operator()(const SafePointerBase* p1, const void* ptr) const {
-        return p1->getRawPointer() == ptr;
-    }
-};
+//struct SafePointerHash {
+//    std::size_t operator()(const SafePointerBase* p) const {
+//        return std::hash<void*>()(p->getRawPointer());
+//    }
+//};
+//
+////SafePointerBase* 用のハッシュ関数
+//struct SafePointerEqual {
+//    bool operator()(const SafePointerBase* p1, const void* ptr) const {
+//        return p1->getRawPointer() == ptr;
+//    }
+//};
 
 class PointerRegistry {
 
@@ -77,29 +77,40 @@ private:
 private:
     // ポインターを登録する
     void registerPointer(SafePointerBase* p) {
-        pointers.insert(p);
+        pointers.push_back(p);
     }
 
     // ポインタの登録を解除する
     void unregisterPointer(SafePointerBase* p) {
-        pointers.erase(p);
+        pointers.remove(p);
     }
 
     // std::unordered_setとカスタム比較を使用した削除の通知
-    void notifyDeletion(void* ptr) {
-        auto it = std::find_if(pointers.begin(), pointers.end(),
-            [ptr](SafePointerBase* p) { return p->getRawPointer() == ptr; });
+    //void notifyDeletion(void* _ptr) {
+    //    auto it = std::find_if(pointers.begin(), pointers.end(),
+    //        [_ptr](SafePointerBase* p) { 
+    //            return p->getRawPointer() == _ptr;
+    //        });
 
-        while (it != pointers.end()) {
-            (*it)->invalidate();  // Invalidate the matching pointer
-            it = std::find_if(pointers.begin(), pointers.end(),
-                [ptr](SafePointerBase* p) { return p->getRawPointer() == ptr; });
+    //    while (it != pointers.end()) {
+    //        (*it)->invalidate();  // Invalidate the matching pointer
+    //        it = std::find_if(pointers.begin(), pointers.end(),
+    //            [_ptr](SafePointerBase* p) { return p->getRawPointer() == _ptr; });
+    //    }
+    //}
+
+    void notifyDeletion(void* ptr) {
+        for (auto& p : pointers) {
+            if (p->getRawPointer() == ptr) {
+                p->invalidate();
+            }
         }
     }
 
 private:
     //SafePointerを基底クラスで格納する
-    std::unordered_set<SafePointerBase*, SafePointerHash, SafePointerEqual> pointers;
+    //std::unordered_set<SafePointerBase*, SafePointerHash, SafePointerEqual> pointers;
+    std::list<SafePointerBase*> pointers;
 };
 
 class PointerRegistryManager {
@@ -121,8 +132,8 @@ private:
 
     //レジスタに受け取ったポインタをvoid*に変換して通知を送る
     template <typename T>
-    static void deletePointer(T* ptr) {
-        getRegistry().notifyDeletion(static_cast<void*>(ptr));
+    static void deletePointer(T* _ptr) {
+        getRegistry().notifyDeletion(static_cast<void*>(_ptr));
     }
 private:
     static PointerRegistryManager manager;
@@ -132,8 +143,8 @@ template <typename T>
 class SafePointer : public SafePointerBase{
  
 public:   
-    SafePointer(T* p = nullptr, const std::string& name = typeid(T).name(), PointerRegistry& reg = PointerRegistryManager::getRegistry())
-        : ptr(p), ptrName(name), registry(reg) {
+    SafePointer(T* _p = nullptr, const std::string& _name = typeid(T).name(), PointerRegistry& _reg = PointerRegistryManager::getRegistry())
+        : ptr(_p), ptrName(_name), registry(_reg) {
         registry.registerPointer(this);
     }
 

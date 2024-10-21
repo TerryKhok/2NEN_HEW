@@ -1,6 +1,6 @@
 #pragma once
 
-class Box2D_SampleScene :public Scene
+class SampleScene_Box2D :public Scene
 {
 	SAFE_POINTER(Box2DBody, box2dbody)
 	SAFE_POINTER(GameObject, gameObject)
@@ -14,6 +14,10 @@ class Box2D_SampleScene :public Scene
 
 		gameObject = Instantiate("DynamicBox");
 		gameObject->AddComponent<Renderer>(L"asset/pic/hartR.png");
+
+		/*auto text = gameObject->AddComponent<DWText>();
+		text->SetText("aaaa");*/
+
 		b2BodyDef bodyDef = b2DefaultBodyDef();
 		bodyDef.fixedRotation = true;
 		bodyDef.type = b2_dynamicBody;
@@ -44,12 +48,13 @@ class Box2D_SampleScene :public Scene
 	
 		auto object = Instantiate("StaticBox");
 		object->transform.position = { 0.0f,-100.0f };
-		object->SetLayer(LAYER_04);
 		//object->transform.scale = { 100.0f,10.0f };
 		//object->AddComponent<Renderer>(L"asset/pic/hartG.png");
 		b2BodyDef bodyDef2 = b2DefaultBodyDef();
 		//bodyDef2.type = b2_kinematicBody;
-		object->AddComponent<Box2DBody>(&bodyDef2)->CreateSegment(points);
+		auto box2d = object->AddComponent<Box2DBody>(&bodyDef2);
+		box2d->SetFilter(FILTER_03);
+		box2d->CreateSegment(points);
 		//object->AddComponent<Box2DBody>()->CreateBoxShape();
 	}
 
@@ -67,10 +72,10 @@ class Box2D_SampleScene :public Scene
 
 		if (Input::Get().KeyTrigger(VK_L))
 		{
-			if (gameObject->GetLayer() == LAYER_01)
-				gameObject->SetLayer(LAYER_03);
+			if (box2dbody->GetFilter() == FILTER_01)
+				box2dbody->SetFilter(FILTER_03);
 			else
-				gameObject->SetLayer(LAYER_01);
+				box2dbody->SetFilter(FILTER_01);
 		}
 
 		if (Input::Get().KeyPress(VK_D))
@@ -95,8 +100,9 @@ class Box2D_SampleScene :public Scene
 			auto object = Instantiate("DynamicBox");
 			object->transform.scale = { static_cast<float>(rand() % 3) + 1,static_cast<float>(rand() % 3) + 1 };
 			object->transform.position = { static_cast<float>(rand() % 15) ,100 };
-			object->SetLayer(LAYER_02);
-			object->AddComponent<Box2DBody>()->CreateBoxShape();
+			auto box2d = object->AddComponent<Box2DBody>();
+			box2d->SetFilter(FILTER_02);
+			box2d->CreateBoxShape();
 		}
 		if (Input::Get().KeyPress(VK_H))
 		{
@@ -115,7 +121,7 @@ class Box2D_SampleScene :public Scene
 
 		if (Input::Get().KeyTrigger(VK_SPACE))
 		{
-			SceneManager::LoadingScene<Box2D_SampleScene>();
+			SceneManager::LoadingScene<SampleScene_Box2D>();
 			SceneManager::ChangeScene();
 		}
 

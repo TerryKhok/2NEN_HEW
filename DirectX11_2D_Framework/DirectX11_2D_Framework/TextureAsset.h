@@ -1,5 +1,7 @@
 #pragma once
 
+const char* ConvertWCharToChar(const wchar_t* wstr);
+
 class TextureAssets final
 {
 	friend class Window;

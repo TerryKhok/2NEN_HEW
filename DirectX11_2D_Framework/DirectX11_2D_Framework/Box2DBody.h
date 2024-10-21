@@ -11,11 +11,16 @@ private:
 	inline void Update() override;
 	//後かたずけ
 	void Delete() override;
-	//レイヤーの変更
-	void SetLayer(const LAYER _layer);
 public:
 	//bodyIdの取得
 	const b2BodyId GetBodyId() { return m_bodyId; }
+	//フィルターの変更
+	void SetFilter(const FILTER _layer);
+	//フィルターの取得
+	const FILTER GetFilter() const
+	{
+		return m_filter;
+	}
 
 	//=================================
 	// ヒットボックス生成
@@ -62,6 +67,8 @@ private:
 	b2BodyId m_bodyId;
 	//Shapeを格納する
 	std::vector<b2ShapeId> m_shapeList;
+	//当たり判定をわける
+	FILTER m_filter = FILTER::FILTER_01;
 #ifdef DEBUG_TRUE
 	std::vector<std::shared_ptr<RenderNode>> m_nodeList;
 #endif
@@ -77,7 +84,7 @@ class Box2DBodyManager
 	friend class Box2DCapsuleRenderNode;
 
 public:
-	static void DisableLayerCollision(LAYER _layer01, LAYER _layer02);
+	static void DisableLayerCollision(FILTER _layer01, FILTER _layer02);
 private:
 #ifdef DEBUG_TRUE
 	static void Init();
@@ -85,12 +92,12 @@ private:
 	//対応したオブジェクトを動かす
 	static void ExcuteMoveFunction();
 	//指定したLayerのmaskBit取得
-	static unsigned int GetMaskLayerBit(LAYER _layer);
+	static unsigned int GetMaskLayerBit(FILTER _layer);
 private:
 	//bodyの位置変更関数リスト
 	static std::vector<std::function<void()>> moveFunctions;
 	//layerのフィルターのビットを格納
-	static std::unordered_map<LAYER, unsigned int> m_layerFilterBit;
+	static std::unordered_map<FILTER, unsigned int> m_layerFilterBit;
 
 #ifdef DEBUG_TRUE
 	// More segments = smoother circle

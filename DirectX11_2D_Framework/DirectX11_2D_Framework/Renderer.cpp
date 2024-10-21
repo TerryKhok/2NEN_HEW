@@ -24,6 +24,16 @@ Renderer::Renderer(GameObject* _pObject,const wchar_t* texpath)
 	RenderManager::AddRenderList(m_node, _pObject->GetLayer());
 }
 
+Renderer::Renderer(GameObject* _pObject,Animator* _animator)
+{
+	auto node = new UVRenderNode();
+	node->m_object = _pObject;
+	m_node = std::shared_ptr<RenderNode>(node);
+	RenderManager::AddRenderList(m_node, _pObject->GetLayer());
+
+	_animator->m_uvNode = node;
+}
+
 void Renderer::SetActive(bool _active)
 {
 	m_node->Active(_active);
@@ -41,6 +51,17 @@ void Renderer::SetLayer(const LAYER _layer)
 	RenderManager::AddRenderList(m_node, _layer);
 }
 
+void Renderer::SetUVRenderNode(Animator* _animator)
+{
+	m_node->Delete();
+	auto node = new UVRenderNode();
+	node->m_object = m_this;
+	m_node = std::shared_ptr<RenderNode>(node);
+	RenderManager::AddRenderList(m_node, m_this->GetLayer());
+
+	_animator->m_uvNode = node;
+}
+
 void Renderer::SetTexture(const wchar_t* _texPath)
 {
 	m_node->SetTexture(_texPath);
@@ -51,6 +72,20 @@ void Renderer::SetColor(XMFLOAT4 _color)
 	m_node->m_color = _color;
 }
 
+void Renderer::SetTexcode(int _splitX, int _splitY, int _frameX, int _frameY)
+{
+	m_node->Delete();
+	auto node = new UVRenderNode();
+	node->m_object = m_this;
+	node->m_pTextureView = m_node->m_pTextureView;
+	node->m_scaleX = 1.0f / _splitX;
+	node->m_scaleY = 1.0f / _splitY;
+	node->m_frameX = _frameX;
+	node->m_frameY = _frameY;
+	m_node = std::shared_ptr<RenderNode>(node);
+	RenderManager::AddRenderList(m_node, m_this->GetLayer());
+}
+
 RenderNode::RenderNode()
 {
 	m_pTextureView = DirectX11::m_pTextureView;
@@ -58,9 +93,9 @@ RenderNode::RenderNode()
 	Active(true);
 }
 
-RenderNode::RenderNode(const wchar_t* texpath)
+RenderNode::RenderNode(const wchar_t* _texpath)
 {
-	TextureAssets::pLoadTexture(m_pTextureView, texpath);
+	TextureAssets::pLoadTexture(m_pTextureView, _texpath);
 	NextEnd();
 	Active(true);
 }
@@ -78,9 +113,12 @@ inline void RenderNode::Draw()
 	//テクスチャをピクセルシェーダーに渡す
 	DirectX11::m_pDeviceContext->PSSetShaderResources(0, 1, m_pTextureView.GetAddressOf());
 
+	cb.uvScale = XMFLOAT2(1, 1);
+	cb.uvOffset = XMFLOAT2(0, 0);
+
 	//行列をシェーダーに渡す
 	DirectX11::m_pDeviceContext->UpdateSubresource(
-		DirectX11::m_pVSConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
+		DirectX11::m_pVSObjectConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
 
 	DirectX11::m_pDeviceContext->DrawIndexed(6, 0, 0);
 
@@ -99,17 +137,17 @@ void RenderNode::Delete()
 	if (next == nullptr)
 	{
 		back->NextEnd();
+
+		//このノードがレイヤーの最後の場合
+		auto& listEnd = RenderManager::currentList[m_object->GetLayer()].second;
+		if (listEnd.get() == this)
+		{
+			listEnd = back;
+		}
 	}
 	else
 	{
 		next->back = back;
-	}
-
-	//このノードがレイヤーの最後の場合
-	auto& listEnd = RenderManager::m_rendererList[m_object->GetLayer()].second;
-	if (listEnd.get() == this)
-	{
-		listEnd = back;
 	}
 
 	back = nullptr;
@@ -130,7 +168,6 @@ inline void RenderNode::DeleteList()
 	//NextEnd();
 }
 
-
 inline void UVRenderNode::Draw()
 {
 	auto& cb = m_object->GetContantBuffer();
@@ -144,13 +181,14 @@ inline void UVRenderNode::Draw()
 
 	//行列をシェーダーに渡す
 	DirectX11::m_pDeviceContext->UpdateSubresource(
-		DirectX11::m_pVSConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
+		DirectX11::m_pVSObjectConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
 
 	DirectX11::m_pDeviceContext->DrawIndexed(6, 0, 0);
 
 	//次のポインタにつなぐ
 	NextFunc();
 }
+
 
 
 HRESULT RenderManager::Init()
@@ -242,6 +280,8 @@ void RenderManager::GenerateList()
 
 void RenderManager::Draw()
 {
+	DirectX11::m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
 #ifndef DEBUG_TRUE
 	for (auto& node : m_rendererList)
 	{
@@ -262,6 +302,9 @@ void RenderManager::Draw()
 	}
 
 	DirectX11::m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+
+	//テクスチャをピクセルシェーダーに渡す
+	DirectX11::m_pDeviceContext->PSSetShaderResources(0, 1, DirectX11::m_pTextureView.GetAddressOf());
 
 	//DirectX11::m_pDeviceContext->RSSetState(DirectX11::m_pWireframeRasterState.Get());
 
