@@ -1,13 +1,16 @@
 #include "Camera.h"
 
-Vector2 CameraManager::cameraPosition = { 0.0f,0.0f };
-float CameraManager::cameraRotation = 0.0f;
-float CameraManager::cameraZoom = 2.0f;
 
-void CameraManager::CameraMatrixCalculation()
+
+Vector2 CameraManager::cameraPosition = { 0.0f,0.0f };
+Vector2 CameraManager::cameraZoom = { 2.0f,2.0f };
+float CameraManager::cameraRotation = 0.0f;
+VSCameraConstantBuffer CameraManager::m_cb;
+
+
+void CameraManager::SetCameraMatrix()
 {
     //auto& cb = GameObject::m_cb;
-    static VSCameraConstantBuffer cb;
 
     //View変換
     static XMVECTOR cameraPos = XMVectorSet(0.0f, 0.0f, -1.0f, 0.0f);
@@ -16,25 +19,26 @@ void CameraManager::CameraMatrixCalculation()
 
     float rad = Math::DegToRad(cameraRotation);
 
-    cameraPos =  XMVectorSet(cameraPosition.x, cameraPosition.y, -4.0f, 0.0f);
+    cameraPos =  XMVectorSet(cameraPosition.x, cameraPosition.y, -2.0f, 0.0f);
     focusPoint = XMVectorSet(cameraPosition.x, cameraPosition.y, 0.0f, 0.0f);
     upDirection = XMVectorSet(sin(rad), cos(rad), 0.0f, 0.0f);
 
-    cb.view = XMMatrixLookAtLH(cameraPos, focusPoint, upDirection);
-    cb.view = DirectX::XMMatrixTranspose(cb.view);
+    m_cb.view = XMMatrixLookAtLH(cameraPos, focusPoint, upDirection);
+    m_cb.view = DirectX::XMMatrixTranspose(m_cb.view);
 
     //Projection変換
     float width = PROJECTION_WIDTH;
     float height = PROJECTION_HEIGHT;
 
-    cameraZoom = max(0.1f, cameraZoom);
+    cameraZoom.x = max(0.1f, cameraZoom.x);
+    cameraZoom.y = max(0.1f, cameraZoom.y);
 
-    width /= cameraZoom;
-    height /= cameraZoom;
+    width /= cameraZoom.x;
+    height /= cameraZoom.y;
 
-    cb.projection = DirectX::XMMatrixOrthographicLH(width, height, 0.0f, 5.0f);
+    m_cb.projection = DirectX::XMMatrixOrthographicLH(width, height, 0.0f, 3.0f);
 
     //行列をシェーダーに渡す
     DirectX11::m_pDeviceContext->UpdateSubresource(
-        DirectX11::m_pVSCameraConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
+        DirectX11::m_pVSCameraConstantBuffer.Get(), 0, NULL, &m_cb, 0, 0);
 }

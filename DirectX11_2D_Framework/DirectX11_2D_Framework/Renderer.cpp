@@ -3,6 +3,9 @@
 thread_local RenderManager::RenderList* RenderManager::currentList = RenderManager::m_rendererList;
 std::mutex RenderManager::listMutex;
 
+Vector2 RenderManager::renderOffset = { 0.0f,0.0f };
+Vector2 RenderManager::renderZoom = { 1.0f,1.0f };
+
 RenderManager::RenderList RenderManager::m_rendererList[LAYER::LATER_MAX];
 RenderManager::RenderList RenderManager::m_nextRendererList[LAYER::LATER_MAX];
 ComPtr<ID3D11Buffer> RenderManager::m_vertexBuffer = nullptr;
@@ -280,38 +283,85 @@ void RenderManager::GenerateList()
 
 void RenderManager::Draw()
 {
-	DirectX11::m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-#ifndef DEBUG_TRUE
-	for (auto& node : m_rendererList)
-	{
-		node.first->NextFunc();
-	}
-#else
-
+	//フォントで変わったバッファを戻す
 	UINT strides = sizeof(Vertex);
 	UINT offsets = 0;
 
 	DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_vertexBuffer.GetAddressOf(), &strides, &offsets);
 	DirectX11::m_pDeviceContext->IASetIndexBuffer(RenderManager::m_indexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
 
-	for (int i = 0; i < LAYER::LAYER_BOX2D_DEBUG; i++)
+
+	RECT rect;
+	for (auto& view : DirectX11::m_pRenderTargetViewList)
 	{
-		auto& node = m_rendererList[i];
-		node.first->NextFunc();
+		//モニターの解像度所得
+		static const int monitorHalfWidth = GetSystemMetrics(SM_CXSCREEN) / 2;
+		static const int monitorHalfHeight = GetSystemMetrics(SM_CYSCREEN) / 2;
+
+		if (GetWindowRect(view.first, &rect))
+		{
+			CameraManager::cameraPosition = { 
+				(static_cast<float>(rect.left + rect.right) / 2 - monitorHalfWidth + renderOffset.x) / renderZoom.x,
+				(static_cast<float>(rect.top + rect.bottom) / -2 + monitorHalfHeight + renderOffset.y) / renderZoom.y
+			};
+		}
+
+		if (GetClientRect(view.first, &rect))
+		{
+			CameraManager::cameraZoom.x = PROJECTION_WIDTH / static_cast<float>(rect.right) * renderZoom.x;
+			CameraManager::cameraZoom.y = PROJECTION_HEIGHT / static_cast<float>(rect.bottom) * renderZoom.y;
+		}
+
+		CameraManager::SetCameraMatrix();
+
+		// 描画先のキャンバスと使用する深度バッファを指定する
+		DirectX11::m_pDeviceContext->OMSetRenderTargets(1, view.second.GetAddressOf(), DirectX11::m_pDepthStencilView.Get());
+
+#ifndef DEBUG_TRUE
+		for (int i = 0; i < LAYER::LAYER_UI; i++)
+		{
+			auto& node = m_rendererList[i];
+			node.first->NextFunc();
+		}
+#else
+		
+		for (int i = 0; i < LAYER::LAYER_BOX2D_DEBUG; i++)
+		{
+			auto& node = m_rendererList[i];
+			node.first->NextFunc();
+		}
+
+		DirectX11::m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+
+		//テクスチャをピクセルシェーダーに渡す
+		DirectX11::m_pDeviceContext->PSSetShaderResources(0, 1, DirectX11::m_pTextureView.GetAddressOf());
+
+		m_rendererList[LAYER::LAYER_BOX2D_DEBUG].first->NextFunc();
+
+		//設定戻す
+		//======================================================================================================================
+		DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_vertexBuffer.GetAddressOf(), &strides, &offsets);
+		DirectX11::m_pDeviceContext->IASetIndexBuffer(RenderManager::m_indexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+
+		DirectX11::m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		//======================================================================================================================
+#endif
 	}
 
-	DirectX11::m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	// 描画先のキャンバスと使用する深度バッファを指定する
+	DirectX11::m_pDeviceContext->OMSetRenderTargets(1,
+		DirectX11::m_pRenderTargetViewList.begin()->second.GetAddressOf(), DirectX11::m_pDepthStencilView.Get());
 
-	//テクスチャをピクセルシェーダーに渡す
-	DirectX11::m_pDeviceContext->PSSetShaderResources(0, 1, DirectX11::m_pTextureView.GetAddressOf());
+	static VSCameraConstantBuffer cb = {
+			XMMatrixIdentity(),
+			DirectX::XMMatrixOrthographicLH(PROJECTION_WIDTH, PROJECTION_HEIGHT, 0.0f, 5.0f)
+	};
 
-	//DirectX11::m_pDeviceContext->RSSetState(DirectX11::m_pWireframeRasterState.Get());
+	//行列をシェーダーに渡す
+	DirectX11::m_pDeviceContext->UpdateSubresource(
+		DirectX11::m_pVSCameraConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
 
-	m_rendererList[LAYER::LAYER_BOX2D_DEBUG].first->NextFunc();
-
-	//DirectX11::m_pDeviceContext->RSSetState(0);
-#endif
+	m_rendererList[LAYER::LAYER_UI].first->NextFunc();
 }
 
 void RenderManager::AddRenderList(std::shared_ptr<RenderNode> _node, LAYER _layer)

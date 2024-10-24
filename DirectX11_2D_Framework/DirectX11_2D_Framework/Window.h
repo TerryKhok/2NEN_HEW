@@ -1,7 +1,6 @@
 #pragma once
 
 // マクロ定義
-#define CLASS_NAME   "DX11"// ウインドウクラスの名前
 #define WINDOW_NAME  "DX2DFramework"// ウィンドウの名前
 
 //フレームレート
@@ -11,8 +10,14 @@
 
 //初期画面の大きさ
 //================================================================
-#define SCREEN_WIDTH (640)	// ウインドウの幅
-#define SCREEN_HEIGHT (480)	// ウインドウの高さ
+#define SCREEN_WIDTH (960)	// ウインドウの幅
+#define SCREEN_HEIGHT (720)	// ウインドウの高さ
+//================================================================
+
+//初期画面の大きさ
+//================================================================
+#define SUB_SCREEN_WIDTH (640)	// ウインドウの幅
+#define SUB_SCREEN_HEIGHT (640)	// ウインドウの高さ
 //================================================================
 
 //画面を映す大きさ（これが座標系の大きさになる）
@@ -29,11 +34,19 @@
 
 class Window final
 {
+public:
+	enum HANDLE_TYPE
+	{
+		MAIN,
+		HANDLE_MAX
+	};
+
+private:
 	Window() = delete;
 
-	static HWND hWnd;
+	static HWND mainHwnd;
 	static MSG msg;
-	static RECT windowRect;
+	static RECT windowSize;
 	static LARGE_INTEGER liWork; 
 	static long long frequency;
 	static long long oldCount;
@@ -44,9 +57,14 @@ class Window final
 
 	//スレッドの終わりフラグ
 	static std::atomic<bool> terminateFlag;
+
+	//ウィンドウを動かしているかのフラグ
+	static std::atomic<bool> windowSizeMove;
 public:
 	//ウィンドウ生成
 	static LRESULT WindowCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+	//サブウィンドウ作成
+	static LRESULT WindowSubCreate(HINSTANCE hInstance,int nCmdShow,const char* _windowName = "SUB");
 	//ウィンドウ初期化(シーンの初期化を渡す)
 	static LRESULT WindowInit(void(*p_mainInitFunc)(void));
 	//ウィンドウ更新
@@ -58,4 +76,6 @@ public:
 private:	
 	//コールバック関数
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+	//サブウィンドウ用コールバック関数
+	static LRESULT CALLBACK WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 };

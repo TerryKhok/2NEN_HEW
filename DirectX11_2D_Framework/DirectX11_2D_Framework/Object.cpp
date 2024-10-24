@@ -59,6 +59,8 @@ void GameObject::SetActive(bool _active)
 	{
 		component.second->SetActive(_active);
 	}
+	//更新関数ポインターを設定
+	pUpdate = _active ? &GameObject::UpdateComponent : &GameObject::Void;
 }
 
 void GameObject::SetLayer(const LAYER _layer)
@@ -268,7 +270,9 @@ void ObjectManager::UpdateObjectComponent()
 {
 	for (auto& [key, value] : *m_objectList)
 	{
-		value->UpdateComponent();
+		//参照を剥がして関数ポインタに直接アクセス
+		//(しかし、関数を介して関数ポインタにアクセスするのと速度はあまり変わらない)
+		(value.get()->*value->pUpdate)();
 	}
 }
 

@@ -62,6 +62,17 @@ public:
 		return *this;
 	}
 	/// <summary>
+	/// ‰ÁZ‘ã“ü‰‰Z
+	/// </summary>
+	/// <param name="_v"></param>
+	/// <returns></returns>
+	Vector2& operator+=(const float& _v)
+	{
+		vec.x += _v;
+		vec.y += _v;
+		return *this;
+	}
+	/// <summary>
 	/// æZ‰‰Z
 	/// </summary>
 	/// <param name="_v"></param>
@@ -103,6 +114,17 @@ public:
 	{
 		vec.x -= _v.x;
 		vec.y -= _v.y;
+		return *this;
+	}
+	/// <summary>
+	/// Œ¸Z‘ã“ü‰‰Z
+	/// </summary>
+	/// <param name="_v"></param>
+	/// <returns></returns>
+	Vector2& operator-=(const float& _v)
+	{
+		vec.x -= _v;
+		vec.y -= _v;
 		return *this;
 	}
 	/// <summary>

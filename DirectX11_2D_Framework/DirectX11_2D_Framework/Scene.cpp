@@ -47,7 +47,8 @@ void SceneManager::Init()
 {
     if (m_sceneList.empty())
     {
-        assert(false && "sceneList is empty!");
+        MessageBoxA(NULL, "シーンが一つも登録されていません", "エラー", MB_ICONERROR | MB_OK);
+        PostQuitMessage(0);
     }
 
     auto it = m_sceneList.begin();
@@ -79,6 +80,9 @@ void SceneManager::NextScene()
 #else
     m_currentScene->Uninit();
 #endif
+
+    //古いオブジェクトの移動情報を一応消しておく
+    Box2DBodyManager::moveFunctions.clear();
     
     m_currentScene = std::move(m_nextScene);
     //m_nextScene.reset(nullptr);

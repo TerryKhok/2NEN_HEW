@@ -7,6 +7,7 @@ enum LAYER
 #ifdef DEBUG_TRUE
 	LAYER_BOX2D_DEBUG,
 #endif
+	LAYER_UI,
 	LATER_MAX
 };
 

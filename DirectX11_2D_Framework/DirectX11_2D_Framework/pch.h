@@ -4,12 +4,14 @@
 #define PCH_H
 
 #include <d3d11.h>  // DirectX11を使うためのヘッダーファイル
+#include <dxgi.h>
 #include<DirectXMath.h>
 
 #include<windows.h>
 #include <d3dcompiler.h>
 
 #pragma comment (lib, "d3d11.lib")
+#pragma comment (lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 
 #include <Xinput.h> //XInputを使うためのヘッダーファイル
@@ -17,17 +19,17 @@
 
 
 //フォント用ライブラリ
-#pragma warning(push)
-#pragma warning(disable:4005)
-
-#include <dwrite.h>  
-#include <d2d1_2.h>						// Direct2D
-#include <DWrite.h>						// DirectWrite
-
-#pragma comment(lib, "D2d1.lib")		// Direct2D用
-#pragma comment(lib,"Dwrite.lib")		// DirectWrite用
-
-#pragma warning(pop)
+//#pragma warning(push)
+//#pragma warning(disable:4005)
+//
+//#include <dwrite.h>  
+//#include <d2d1_2.h>						// Direct2D
+//#include <DWrite.h>						// DirectWrite
+//
+//#pragma comment(lib, "D2d1.lib")		// Direct2D用
+//#pragma comment(lib,"Dwrite.lib")		// DirectWrite用
+//
+//#pragma warning(pop)
 
 #include <locale.h>
 #include <atltypes.h> // CRectを使うためのヘッダーファイル
@@ -63,6 +65,7 @@
 #include <cwchar>   // For wchar_t
 #include <commdlg.h>  // For common dialogs (GetSaveFileName)
 #include <fstream>
+#include <exception>
 
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
@@ -74,7 +77,6 @@
 #include "Debug.h"
 #include "Window.h"
 #include "directX3D.h"
-#include "DirectWrite.h"
 #include "Input.h"
 #include "TextureAsset.h"
 #include "Layer.h"
@@ -83,7 +85,7 @@
 #include "Animator.h"
 #include "Object.h"
 #include "Renderer.h"
-#include "DWText.h"
+#include "SFText.h"
 #include "Scene.h"
 #include "Box2DBody.h"
 #include "Camera.h"

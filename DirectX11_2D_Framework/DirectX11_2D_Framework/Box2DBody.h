@@ -11,6 +11,8 @@ private:
 	inline void Update() override;
 	//後かたずけ
 	void Delete() override;
+	//アクティブ設定
+	void SetActive(bool _active) override;
 public:
 	//bodyIdの取得
 	const b2BodyId GetBodyId() { return m_bodyId; }

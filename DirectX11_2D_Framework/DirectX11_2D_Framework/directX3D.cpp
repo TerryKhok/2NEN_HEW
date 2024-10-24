@@ -3,12 +3,16 @@
 
 // ※ID3D11で始まるポインタ型の変数は、解放する必要がある
 ComPtr<ID3D11Device> DirectX11::m_pDevice = nullptr; // デバイス＝DirectXの各種機能を作る
+//スワップチェーンだけを生成するため(生成用インス
+ComPtr<IDXGIFactory> DirectX11::m_pDxgiFactory;
 // コンテキスト＝描画関連を司る機能
 ComPtr<ID3D11DeviceContext> DirectX11::m_pDeviceContext = nullptr;
 // スワップチェイン＝ダブルバッファ機能
-ComPtr<IDXGISwapChain> DirectX11::m_pSwapChain = nullptr;
+std::unordered_map<HWND, ComPtr<IDXGISwapChain>> DirectX11::m_pSwapChainList;
 // レンダーターゲット＝描画先を表す機能
-ComPtr<ID3D11RenderTargetView> DirectX11::m_pRenderTargetView = nullptr;
+std::unordered_map<HWND, ComPtr<ID3D11RenderTargetView>> DirectX11::m_pRenderTargetViewList;
+//デプスステート
+ComPtr<ID3D11DepthStencilState> DirectX11::m_pDSState;
 // デプスバッファ
 ComPtr<ID3D11DepthStencilView> DirectX11::m_pDepthStencilView = nullptr;
 // インプットレイアウト
@@ -208,14 +212,20 @@ HRESULT DirectX11::CreatePixelShader(const BYTE* byteCode, SIZE_T size, ID3D11Pi
 	return S_OK;
 }
 
-HRESULT DirectX11::D3D_Create(HWND hwnd)
+HRESULT DirectX11::D3D_Create(HWND mainHwnd)
 {
 	HRESULT  hr; // HRESULT型・・・Windowsプログラムで関数実行の成功/失敗を受け取る
 
 	D3D_FEATURE_LEVEL pLevels[] = { D3D_FEATURE_LEVEL_11_0 };
 	D3D_FEATURE_LEVEL level;
 	CRect              rect;
-	::GetClientRect(hwnd, &rect);
+	::GetClientRect(mainHwnd, &rect);
+
+	//生成ファクトリ作成
+	hr = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)m_pDxgiFactory.GetAddressOf());
+	if (FAILED(hr)) {
+		return hr;
+	}
 
 	// デバイス、スワップチェーン作成
 	DXGI_SWAP_CHAIN_DESC swapChainDesc{};
@@ -227,33 +237,38 @@ HRESULT DirectX11::D3D_Create(HWND hwnd)
 	swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
 	swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	swapChainDesc.OutputWindow = hwnd;
+	swapChainDesc.OutputWindow = mainHwnd;
 	swapChainDesc.SampleDesc.Count = 1;
 	swapChainDesc.SampleDesc.Quality = 0;
 	swapChainDesc.Windowed = TRUE;
 
+	//新しいスワップチェインポインター追加
+	m_pSwapChainList.insert(std::make_pair(mainHwnd, nullptr));
+	auto& swapchain = m_pSwapChainList.find(mainHwnd)->second;
 
 	// デバイスとスワップチェインを同時に作成する関数の呼び出し
 	hr = D3D11CreateDeviceAndSwapChain(
 		NULL,
 		D3D_DRIVER_TYPE_HARDWARE,
 		NULL,
-		D3D11_CREATE_DEVICE_BGRA_SUPPORT,
+		NULL,
 		pLevels,
 		1,
 		D3D11_SDK_VERSION,
 		&swapChainDesc,
-		&m_pSwapChain,
+		&swapchain,
 		&m_pDevice,
 		&level,
 		&m_pDeviceContext);
 	if (FAILED(hr)) return hr; // 上の関数呼び出しが失敗してないかifでチェック
 
+	m_pRenderTargetViewList.insert(std::make_pair(mainHwnd, nullptr));
+
 	// レンダーターゲットビュー作成
 	ID3D11Texture2D* renderTarget;
-	hr = m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&renderTarget);
+	hr = swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&renderTarget);
 	if (FAILED(hr)) return hr;
-	hr = m_pDevice->CreateRenderTargetView(renderTarget, NULL, m_pRenderTargetView.GetAddressOf());
+	hr = m_pDevice->CreateRenderTargetView(renderTarget, NULL, m_pRenderTargetViewList.find(mainHwnd)->second.GetAddressOf());
 	renderTarget->Release();
 	if (FAILED(hr)) return hr;
 
@@ -371,16 +386,14 @@ HRESULT DirectX11::D3D_Create(HWND hwnd)
 	m_pDevice->CreateBlendState(&BlendStateDesc, m_pBlendState.GetAddressOf());
 	if (FAILED(hr)) return hr;
 
-
-	ID3D11DepthStencilState* pDSState;
+	//深度テストを無効にする
 	D3D11_DEPTH_STENCIL_DESC dsDesc;
 	ZeroMemory(&dsDesc, sizeof(dsDesc));
 	dsDesc.DepthEnable = FALSE;//
 	dsDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 	dsDesc.DepthFunc = D3D11_COMPARISON_LESS;
-	hr = m_pDevice->CreateDepthStencilState(&dsDesc, &pDSState);
+	hr = m_pDevice->CreateDepthStencilState(&dsDesc, m_pDSState.GetAddressOf());
 	if (FAILED(hr)) return hr;
-	m_pDeviceContext->OMSetDepthStencilState(pDSState, 1);
 
 	//ワイヤーフレーム
 	D3D11_RASTERIZER_DESC rasterDesc;
@@ -397,8 +410,8 @@ HRESULT DirectX11::D3D_Create(HWND hwnd)
 	//共通のpixelTexture読み込み
 	CreateOnePixelTexture(m_pTextureView.GetAddressOf());
 
-	// 描画先のキャンバスと使用する深度バッファを指定する
-	m_pDeviceContext->OMSetRenderTargets(1, m_pRenderTargetView.GetAddressOf(), m_pDepthStencilView.Get());
+	//深度テスト設定
+	m_pDeviceContext->OMSetDepthStencilState(m_pDSState.Get(), 1);
 
 	//そのブレンディングをコンテキストに設定
 	//float blendFactor[4] = { D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO, D3D11_BLEND_ZERO };
@@ -416,6 +429,9 @@ HRESULT DirectX11::D3D_Create(HWND hwnd)
 	//定数バッファを頂点シェーダーにセットする
 	m_pDeviceContext->VSSetConstantBuffers(1, 1, m_pVSCameraConstantBuffer.GetAddressOf());
 
+	//RenderManagerでDrawするときに後方で設定を戻しているので初めに一回設定しておく
+	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
 	return S_OK;
 }
 
@@ -426,16 +442,28 @@ void DirectX11::D3D_Release()
 
 void DirectX11::D3D_StartRender()
 {
+	//SpriteBatchで設定が変わるので戻すため
+	//===========================================================================================
+	//インプットレイアウト設定
+	m_pDeviceContext->IASetInputLayout(m_pInputLayout.Get());
+
+	//定数バッファを頂点シェーダーにセットする
+	m_pDeviceContext->VSSetConstantBuffers(0, 1, m_pVSObjectConstantBuffer.GetAddressOf());
+	//===========================================================================================
+
 	// 画面塗りつぶし色
 	float clearColor[4] = { 0.0f, 0.5f, 0.5f, 1.0f }; //red,green,blue,alpha
 
-	// 描画先キャンバスを塗りつぶす
-	m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetView.Get(), clearColor);
+	for (auto& targetView : m_pRenderTargetViewList)
+	{
+		// 描画先キャンバスを塗りつぶす
+		m_pDeviceContext->ClearRenderTargetView(targetView.second.Get(), clearColor);
+	}
+
 	// 深度バッファをリセットする
 	m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-
-	//今は一つしかシェーダーを使っていない
+	//今は一つしかシェーダーを使っていないので設定する必要はない
 	//=======================================================================
 	//頂点シェーダ設定
 	m_pDeviceContext->VSSetShader(m_pVertexShader.Get(), NULL, 0);
@@ -446,8 +474,11 @@ void DirectX11::D3D_StartRender()
 
 void DirectX11::D3D_FinishRender()
 {
-	// ダブルバッファの切り替えを行い画面を更新する
-	m_pSwapChain->Present(0, 0);
+	for (auto swapChain : m_pSwapChainList)
+	{
+		// ダブルバッファの切り替えを行い画面を更新する
+		swapChain.second->Present(0, 0);
+	}
 }
 
 void DirectX11::CreateOnePixelTexture(ID3D11ShaderResourceView** _resourceView)
@@ -487,5 +518,44 @@ void DirectX11::CreateOnePixelTexture(ID3D11ShaderResourceView** _resourceView)
 		}
 		pTexture->Release();
 	}
+}
+
+HRESULT DirectX11::CreateWindowSwapchain(HWND hWnd)
+{
+	// Describe the swap chain
+	DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
+	::ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
+	swapChainDesc.BufferCount = 1;
+	swapChainDesc.BufferDesc.Width = SCREEN_WIDTH;
+	swapChainDesc.BufferDesc.Height = SCREEN_HEIGHT;
+	swapChainDesc.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	swapChainDesc.BufferDesc.RefreshRate.Numerator = 60;
+	swapChainDesc.BufferDesc.RefreshRate.Denominator = 1;
+	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+	swapChainDesc.OutputWindow = hWnd;
+	swapChainDesc.SampleDesc.Count = 1;
+	swapChainDesc.SampleDesc.Quality = 0;
+	swapChainDesc.Windowed = TRUE;
+
+	// Create the swap chain using the factory
+	IDXGISwapChain* swapChain = nullptr;
+	HRESULT hr = m_pDxgiFactory->CreateSwapChain(m_pDevice.Get(), &swapChainDesc, &swapChain);
+	if (FAILED(hr)) {
+		return hr;
+	}
+
+	// レンダーターゲットビュー作成
+	ID3D11Texture2D* renderTarget;
+	ID3D11RenderTargetView* renderTargetView;
+	hr = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&renderTarget);
+	if (FAILED(hr)) return hr;
+	hr = m_pDevice->CreateRenderTargetView(renderTarget, NULL, &renderTargetView);
+	renderTarget->Release();
+	if (FAILED(hr)) return hr;
+
+	m_pSwapChainList.insert(std::make_pair(hWnd, swapChain));
+	m_pRenderTargetViewList.insert(std::make_pair(hWnd, renderTargetView));
+
+	return S_OK;
 }
 

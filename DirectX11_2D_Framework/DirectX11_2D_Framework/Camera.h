@@ -7,12 +7,17 @@
 class CameraManager
 {
 	friend class Window;
+	friend class RenderManager;
 private:
 	CameraManager() = delete;
 	//カメラの行列計算をする
-	static void CameraMatrixCalculation();
-public:
+	static void SetCameraMatrix();
+private:
+	//各ウィンドウ調節用
 	static Vector2 cameraPosition;
+	static Vector2 cameraZoom;
+public:
 	static float cameraRotation;
-	static float cameraZoom;
+private:
+	static VSCameraConstantBuffer m_cb;
 };

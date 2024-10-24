@@ -80,6 +80,7 @@ void Box2DBody::Delete()
 	Box2D::WorldManager::pResumeWorldUpdate();
 #endif
 }
+
 #else
 void Box2DBody::Delete()
 {
@@ -87,6 +88,24 @@ void Box2DBody::Delete()
 }
 #endif
 
+void Box2DBody::SetActive(bool _active)
+{
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pPauseWorldUpdate();
+#endif
+	_active ? b2Body_Enable(m_bodyId) : b2Body_Disable(m_bodyId);
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+
+#ifdef DEBUG_TRUE
+	for (auto& node : m_nodeList) 
+	{
+		node->Active(_active);
+	}
+#endif
+}
 
 void Box2DBody::SetFilter(const FILTER _filter)
 {

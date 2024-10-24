@@ -66,10 +66,7 @@
     <ClCompile Include="Debug.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="DirectWrite.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="DWText.cpp">
+    <ClCompile Include="SFText.cpp">
       <Filter>Src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -134,10 +131,7 @@
     <ClInclude Include="Angle.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="DirectWrite.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="DWText.h">
+    <ClInclude Include="SFText.h">
       <Filter>Src</Filter>
     </ClInclude>
   </ItemGroup>

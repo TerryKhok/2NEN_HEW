@@ -9,15 +9,19 @@ class SampleScene_Animation : public Scene
 
 	void Load()
 	{
-		object = Instantiate("text");
-		auto rend = object->AddComponent<Renderer>();
-		//object->transform.position.x += 100.0f;
+		object = Instantiate("Character", L"asset/pic/rzqLOX.png");
+		//rend = object->AddComponent<Renderer>(L"asset/pic/rzqLOX.png");
+		//rend->SetTexcode(8, 9, 0, 0);
+		object->transform.position.x = 100.0f;
+		anim = object->AddComponent<Animator>();
 
-		/*object = Instantiate("Character", L"asset/pic/rzqLOX.png");
-		SAFE_POINTER(Renderer, rend);
-		rend = object->AddComponent<Renderer>(L"asset/pic/rzqLOX.png");
-		rend->SetTexcode(8, 9, 0, 0);
-		anim = object->AddComponent<Animator>();*/
+		auto obj = Instantiate();
+		obj->transform.scale.x = 8;
+		obj->SetLayer(LAYER_UI);
+		auto rend = obj->AddComponent<Renderer>();
+		rend->SetColor({ 0, 0, 1, 1 });
+		auto text = obj->AddComponent<SFText>("aaaaa‚ ‚„‚Ó‚Ÿ\n‚¦‚ ‚¦‚Ó‚Ÿ‚¦‚†");
+		text->offset = { 0,10 };
 
 		/*wchar_t* texPath;
 		float scaleX = 0.5f;
@@ -69,6 +73,8 @@ class SampleScene_Animation : public Scene
 		anim->Play("Idel");
 	}
 
+	Vector2 oldMousePos;
+
 	void Update()
 	{
 
@@ -95,6 +101,29 @@ class SampleScene_Animation : public Scene
 		if (Input::Get().KeyTrigger(VK_SPACE))
 		{
 			SceneManager::LoadScene<SampleScene_Title>();
+		}
+
+		if (Input::Get().MouseRightTrigger())
+		{
+			oldMousePos = Input::Get().MousePoint();
+			//cameraPos = CameraManager::cameraPosition;
+		}
+
+		if (Input::Get().MouseRightPress())
+		{
+			Vector2 dis = Input::Get().MousePoint() - oldMousePos;
+			oldMousePos = Input::Get().MousePoint();
+			dis *= -1.0f;
+			RenderManager::renderOffset += dis;
+		}
+
+		if (Input::Get().MouseWheelDelta() > 0)
+		{
+			RenderManager::renderZoom += 0.01f;
+		}
+		else if (Input::Get().MouseWheelDelta() < 0)
+		{
+			RenderManager::renderZoom -= 0.01f;
 		}
 	}
 };

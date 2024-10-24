@@ -33,6 +33,7 @@ class GameObject final
 	friend class Component;
 	friend class CameraManager;
 
+	using functionPointer = void (GameObject::*)();
 private:
 	//コンストラクタ
 	GameObject() { transform.gameobject = this; }
@@ -58,9 +59,12 @@ private:
 	}
 	//コンポーネントの更新
 	void UpdateComponent();
-
+	//なにもしない
+	void Void(){}
+private:
+	functionPointer pUpdate = &GameObject::UpdateComponent;
 public:
-	//アクティブを変更する
+	//アクティブを変更する(※処理が多いため頻繁に使用しない)
 	void SetActive(bool _active);
 	//レイヤーの設定（※処理が多いため頻繁に使用しない）
 	void SetLayer(const LAYER _layer);

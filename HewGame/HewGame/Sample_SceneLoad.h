@@ -21,7 +21,7 @@ class SampleScene_Title : public Scene
 	void Load() override
 	{
 		//オブジェクト生成(名前、テクスチャ指定)
-		Instantiate("HartR", L"asset/pic/hartR.png");
+		auto object = Instantiate("HartR", L"asset/pic/hartR.png");
 	}
 
 	//更新処理(オーバライド)

@@ -58,8 +58,8 @@ class SampleScene_Box2D :public Scene
 		//object->AddComponent<Box2DBody>()->CreateBoxShape();
 	}
 
-	Vector2 mousePos;
-	Vector2 cameraPos;
+	Vector2 oldMousePos;
+	//Vector2 cameraPos;
 
 	int count = 0;
 
@@ -67,7 +67,10 @@ class SampleScene_Box2D :public Scene
 	{
 		if (Input::Get().KeyTrigger(VK_E))
 		{
-			DeleteObject(gameObject);
+			static bool active = false;
+			gameObject->SetActive(active);
+
+			active = !active;
 		}
 
 		if (Input::Get().KeyTrigger(VK_L))
@@ -127,24 +130,25 @@ class SampleScene_Box2D :public Scene
 
 		if (Input::Get().MouseRightTrigger())
 		{
-			mousePos = Input::Get().MousePoint();
-			cameraPos = CameraManager::cameraPosition;
+			oldMousePos = Input::Get().MousePoint();
+			//cameraPos = CameraManager::cameraPosition;
 		}
 
 		if (Input::Get().MouseRightPress())
 		{
-			Vector2 dis = Input::Get().MousePoint() - mousePos;
+			Vector2 dis = Input::Get().MousePoint() - oldMousePos;
+			oldMousePos = Input::Get().MousePoint();
 			dis *= -1.0f;
-			CameraManager::cameraPosition = cameraPos + dis / 8;
+			RenderManager::renderOffset += dis;
 		}
 
 		if (Input::Get().MouseWheelDelta() > 0)
 		{
-			CameraManager::cameraZoom += 0.01f;
+			RenderManager::renderZoom += 0.01f;
 		}
 		else if (Input::Get().MouseWheelDelta() < 0)
 		{
-			CameraManager::cameraZoom -= 0.01f;
+			RenderManager::renderZoom -= 0.01f;
 		}
 	}
 };

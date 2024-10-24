@@ -44,6 +44,7 @@ class RenderNode
 	friend class Renderer;
 	friend class RenderManager;
 	friend class Box2DBody;
+	friend class Animator;
 
 	//描画関連
 protected:
@@ -138,6 +139,11 @@ private:
 	static void ChangeNextRenderList();
 	//次のノードリストに繋ぐ
 	static void LinkNextRenderList();
+public:
+	//ウィンドウ全体の位置
+	static Vector2 renderOffset;
+	//ウィンドウ全体の拡大率
+	static Vector2 renderZoom;
 private:
 	// スレッドごとの現在のリスト
 	static thread_local RenderList* currentList;

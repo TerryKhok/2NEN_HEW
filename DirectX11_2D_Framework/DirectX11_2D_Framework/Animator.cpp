@@ -1,5 +1,6 @@
 #include "Animator.h"
 
+std::shared_ptr<AnimationClip> AnimatorManager::m_commonClip;
 long long AnimatorManager::deltaCount;
 
 void AnimationClip::SetUVRenderNode(UVRenderNode* _renderNode)
@@ -64,6 +65,10 @@ void AnimationClipLoop::Update(long long _count, UVRenderNode* _renderNode)
 
 Animator::Animator(GameObject* _gameObject)
 {
+	//プレイするまでなにもしないに設定
+	m_currentClip.reset(new AnimationClip());
+	Pause();
+
 	auto renderer = _gameObject->GetComponent<Renderer>();
 	if (renderer == nullptr)
 	{
@@ -80,9 +85,24 @@ void Animator::Update()
 	(m_currentClip.get()->*pUpdate)(AnimatorManager::deltaCount, m_uvNode);
 }
 
+void Animator::SetActive(bool _active)
+{
+	m_uvNode->Active(_active);
+}
+
 void Animator::Play(const std::string& _clipName)
 {
-	m_currentClip = m_clip.find(_clipName)->second;
+	//再開開始
+	Resume();
+
+	auto iter = m_clip.find(_clipName);
+	if(iter == m_clip.end())
+	{
+		LOG_WARNING("not find AnimationClip : %s", _clipName.c_str());
+		return;
+	}
+
+	m_currentClip =iter->second;
 	m_currentClip->Awake(m_uvNode);
 }
 

@@ -1,7 +1,12 @@
 #pragma once
 
+//directXTK関係
 #include "directxtk/include/directxtk/WICTextureLoader.h"
 #include "directxtk/include/directxtk/SpriteFont.h"
+#include "directxtk/include/directxtk/SimpleMath.h"
+//#include "directxtk/include/directxtk/SpriteBatch.h"
+//#include "directxtk/include/directxtk/VertexTypes.h"
+//#include "directxtk/include/directxtk/Effects.h"
 
 // Direct3D解放の簡略化マクロ
 #define SAFE_RELEASE(p) { if( nullptr != p ) { p->Release(); p = nullptr; } }
@@ -58,6 +63,7 @@ class DirectX11 final
 	friend class UVRenderNode;
 	friend class RenderManager;
 	friend class CameraManager;
+	friend class SFTextManager;
 	friend class Box2DBodyManager;
 	friend class Box2DBoxRenderNode;
 	friend class Box2DCircleRenderNode;
@@ -67,6 +73,7 @@ class DirectX11 final
 
 	DirectX11() = delete;
 
+private:
 	// 頂点シェーダーオブジェクトを生成、同時に頂点レイアウトも生成
 	static HRESULT CreateVertexShader(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,
 		D3D11_INPUT_ELEMENT_DESC* layout, unsigned int numElements, ID3D11VertexShader** ppVertexShader, ID3D11InputLayout** ppVertexLayout);
@@ -79,21 +86,29 @@ class DirectX11 final
 	static HRESULT CreatePixelShader(const BYTE* byteCode, SIZE_T size, ID3D11PixelShader** ppPixelShader);
 
 	// 関数のプロトタイプ宣言
-	static HRESULT D3D_Create(HWND hwnd);
+	static HRESULT D3D_Create(HWND mainHwnd);
 	static void D3D_Release();
 	static void D3D_StartRender();
 	static void D3D_FinishRender();
 
+	//1pixelのテクスチャ作成
 	static void CreateOnePixelTexture(ID3D11ShaderResourceView** _resourceView);
+	//ウィンドウに対応した新しいスワップチェイン作成
+	static HRESULT CreateWindowSwapchain(HWND hWnd);
+
 private:
 	// ※ID3D11で始まるポインタ型の変数は、解放する必要がある
 	static ComPtr<ID3D11Device> m_pDevice; // デバイス＝DirectXの各種機能を作る
+	//スワップチェーンだけを生成するため(生成用インスタンス)
+	static ComPtr<IDXGIFactory> m_pDxgiFactory;
 	// コンテキスト＝描画関連を司る機能
 	static ComPtr<ID3D11DeviceContext> m_pDeviceContext;
 	// スワップチェイン＝ダブルバッファ機能
-	static ComPtr<IDXGISwapChain> m_pSwapChain;
+	static std::unordered_map<HWND, ComPtr<IDXGISwapChain>> m_pSwapChainList;
 	// レンダーターゲット＝描画先を表す機能
-	static ComPtr<ID3D11RenderTargetView> m_pRenderTargetView;
+	static std::unordered_map<HWND, ComPtr<ID3D11RenderTargetView>> m_pRenderTargetViewList;
+	//デプスステート
+	static ComPtr<ID3D11DepthStencilState> m_pDSState;
 	// デプスバッファ
 	static ComPtr<ID3D11DepthStencilView> m_pDepthStencilView;
 	// インプットレイアウト

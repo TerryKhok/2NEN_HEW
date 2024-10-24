@@ -32,7 +32,7 @@ protected:
 	}
 	//現在のframeIndexに更新
 	void SetUVRenderNode(UVRenderNode* _renderNode);
-	//初期化処理
+	//初期化処理(Clip切り替え時に呼び出す)
 	virtual void Awake(UVRenderNode* _renderNode);
 	//更新処理
 	virtual void Update(long long _count, UVRenderNode* _renderNode)
@@ -54,6 +54,7 @@ protected:
 	long long nowCount = 0;
 };
 
+
 class AnimationClipLoop : public AnimationClip
 {
 	friend class Animator;
@@ -65,6 +66,7 @@ private:
 	void Awake(UVRenderNode* _renderNode);
 };
 
+
 class Animator : public Component
 {
 	friend class GameObject;
@@ -74,18 +76,15 @@ class Animator : public Component
 	//削除禁止
 	~Animator() = default;
 	void Update() override;
+
+	void SetActive(bool _active);
 public:
 	//デバッグ用
 	//============================================================================
 	void AddClip(std::string _name, std::vector<AnimationFrame>& _frames,bool _loop = true)
 	{
-		AnimationClip* clip;
-		if (_loop){
-			clip = new AnimationClipLoop();
-		}
-		else {
-			clip = new AnimationClip();
-		}
+		AnimationClip* clip = _loop ? new AnimationClipLoop() : new AnimationClip();
+		
 		for (auto& frame : _frames)
 		{
 			clip->AddFrame(frame);
@@ -105,11 +104,14 @@ private:
 	UVRenderNode* m_uvNode = nullptr;
 };
 
+
 class AnimatorManager
 {
 	friend class Animator;
 	friend class Window;
 
+	AnimatorManager() = delete;
 private:
+	static std::shared_ptr<AnimationClip> m_commonClip;
 	static long long deltaCount;
 };

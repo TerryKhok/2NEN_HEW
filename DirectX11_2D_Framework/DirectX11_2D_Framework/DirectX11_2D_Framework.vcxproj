@@ -159,9 +159,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Debug.cpp" />
-    <ClCompile Include="DirectWrite.cpp" />
     <ClCompile Include="directX3D.cpp" />
-    <ClCompile Include="DWText.cpp" />
     <ClCompile Include="HelloBox2d.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Object.cpp" />
@@ -171,6 +169,7 @@
     </ClCompile>
     <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SFText.cpp" />
     <ClCompile Include="TextureAsset.cpp" />
     <ClCompile Include="Vector.cpp" />
     <ClCompile Include="Window.cpp" />
@@ -183,9 +182,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Debug.h" />
-    <ClInclude Include="DirectWrite.h" />
     <ClInclude Include="directX3D.h" />
-    <ClInclude Include="DWText.h" />
     <ClInclude Include="HelloBox2d.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Layer.h" />
@@ -194,6 +191,7 @@
     <ClInclude Include="pch.h" />
     <ClInclude Include="Renderer.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SFText.h" />
     <ClInclude Include="shaders.h" />
     <ClInclude Include="TextureAsset.h" />
     <ClInclude Include="Vector.h" />

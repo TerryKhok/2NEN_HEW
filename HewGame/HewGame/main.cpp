@@ -20,6 +20,9 @@ void MainInit()
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
 	Window::WindowCreate(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
+	Window::WindowSubCreate(hInstance, nCmdShow);
+	Window::WindowSubCreate(hInstance, nCmdShow);
+	Window::WindowSubCreate(hInstance, nCmdShow);
 	Window::WindowInit(MainInit);
 	Window::WindowUpdate();
 
