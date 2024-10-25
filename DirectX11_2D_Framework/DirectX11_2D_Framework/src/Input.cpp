@@ -1,4 +1,3 @@
-#include "Input.h"
 
 POINT Input::mousePoint = {};
 bool Input::isMouseLeft = false;

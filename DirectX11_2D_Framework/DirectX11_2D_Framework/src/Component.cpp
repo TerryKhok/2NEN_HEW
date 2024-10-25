@@ -1,4 +1,3 @@
-#include "Component.h"
 
 
 GameObject* Component::Instantiate()

@@ -1,5 +1,3 @@
-#include "Camera.h"
-
 
 
 Vector2 CameraManager::cameraPosition = { 0.0f,0.0f };

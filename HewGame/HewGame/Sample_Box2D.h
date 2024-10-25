@@ -7,6 +7,11 @@ class SampleScene_Box2D :public Scene
 
 	void Load()
 	{
+		auto text = Instantiate("text");
+		text->transform.position = { 0.0f,0.0f };
+		text->AddComponent<SFText>("ƒƒCƒ“ƒQ[ƒ€‰æ–Ê!!")->scale = 3.0f;
+		
+
 		std::vector<b2Vec2> mesh =
 		{
 			{-25,25},{-30,10} ,{-25,-25},{ 0,-50 },{25,-25},{30,10} ,{25,25},{0,50}
@@ -128,19 +133,21 @@ class SampleScene_Box2D :public Scene
 			SceneManager::ChangeScene();
 		}
 
-		if (Input::Get().MouseRightTrigger())
-		{
-			oldMousePos = Input::Get().MousePoint();
-			//cameraPos = CameraManager::cameraPosition;
-		}
+		RenderManager::renderOffset = gameObject->transform.position;
 
-		if (Input::Get().MouseRightPress())
-		{
-			Vector2 dis = Input::Get().MousePoint() - oldMousePos;
-			oldMousePos = Input::Get().MousePoint();
-			dis *= -1.0f;
-			RenderManager::renderOffset += dis;
-		}
+		//if (Input::Get().MouseRightTrigger())
+		//{
+		//	oldMousePos = Input::Get().MousePoint();
+		//	//cameraPos = CameraManager::cameraPosition;
+		//}
+
+		//if (Input::Get().MouseRightPress())
+		//{
+		//	Vector2 dis = Input::Get().MousePoint() - oldMousePos;
+		//	oldMousePos = Input::Get().MousePoint();
+		//	dis *= -1.0f;
+		//	RenderManager::renderOffset += dis;
+		//}
 
 		if (Input::Get().MouseWheelDelta() > 0)
 		{

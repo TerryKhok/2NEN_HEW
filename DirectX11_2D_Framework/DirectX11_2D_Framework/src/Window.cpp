@@ -1,5 +1,3 @@
-#include "Window.h"
-#include "HelloBox2d.h"
 
 
 void CreateConsoleWindow() {
@@ -184,6 +182,7 @@ LRESULT Window::WindowInit(void(*p_mainInitFunc)(void))
 	//テキスト初期化(Font生成)
 	SFTextManager::Init();
 #endif
+
 	//=================================================
 
 	return LRESULT();
@@ -384,7 +383,6 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 
 int Window::WindowEnd(HINSTANCE hInstance)
 {
-
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::StopWorldUpdate();
 #endif 
@@ -447,7 +445,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		RenderManager::Draw();
 
 #ifdef SFTEXT_TRUE
-		SFTextManager::ExcuteDrawString();
+		SFTextManager::KeepExcuteDrawString();
 #endif
 
 		DirectX11::D3D_FinishRender();
@@ -541,7 +539,7 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		RenderManager::Draw();
 
 #ifdef SFTEXT_TRUE
-		SFTextManager::ExcuteDrawString();
+		SFTextManager::KeepExcuteDrawString();
 #endif
 
 		DirectX11::D3D_FinishRender();

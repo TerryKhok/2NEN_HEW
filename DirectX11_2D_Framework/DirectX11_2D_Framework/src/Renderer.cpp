@@ -1,4 +1,3 @@
-#include "Renderer.h"
 
 thread_local RenderManager::RenderList* RenderManager::currentList = RenderManager::m_rendererList;
 std::mutex RenderManager::listMutex;
@@ -290,6 +289,9 @@ void RenderManager::Draw()
 	DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_vertexBuffer.GetAddressOf(), &strides, &offsets);
 	DirectX11::m_pDeviceContext->IASetIndexBuffer(RenderManager::m_indexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
 
+	//ズーム修正
+	renderZoom.x = max(0.2f, renderZoom.x);
+	renderZoom.y = max(0.2f, renderZoom.y);
 
 	RECT rect;
 	for (auto& view : DirectX11::m_pRenderTargetViewList)
@@ -301,8 +303,8 @@ void RenderManager::Draw()
 		if (GetWindowRect(view.first, &rect))
 		{
 			CameraManager::cameraPosition = { 
-				(static_cast<float>(rect.left + rect.right) / 2 - monitorHalfWidth + renderOffset.x) / renderZoom.x,
-				(static_cast<float>(rect.top + rect.bottom) / -2 + monitorHalfHeight + renderOffset.y) / renderZoom.y
+				(static_cast<float>(rect.left + rect.right) / 2 - monitorHalfWidth) / renderZoom.x + renderOffset.x,
+				(static_cast<float>(rect.top + rect.bottom) / -2 + monitorHalfHeight) / renderZoom.y + renderOffset.y
 			};
 		}
 
@@ -350,7 +352,7 @@ void RenderManager::Draw()
 
 	// 描画先のキャンバスと使用する深度バッファを指定する
 	DirectX11::m_pDeviceContext->OMSetRenderTargets(1,
-		DirectX11::m_pRenderTargetViewList.begin()->second.GetAddressOf(), DirectX11::m_pDepthStencilView.Get());
+		DirectX11::m_pRenderTargetViewList.find(Window::GetMainHwnd())->second.GetAddressOf(), DirectX11::m_pDepthStencilView.Get());
 
 	static VSCameraConstantBuffer cb = {
 			XMMatrixIdentity(),

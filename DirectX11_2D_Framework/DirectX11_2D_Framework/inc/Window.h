@@ -73,6 +73,8 @@ public:
 	static LRESULT WindowUpdate(std::future<void>& sceneFuture,bool& loading);
 	//ウィンドウかたずけ
 	static int WindowEnd(HINSTANCE hInstance);
+	//メインのウィンドウハンドル取得
+	static const HWND& GetMainHwnd(){return mainHwnd;}
 private:	
 	//コールバック関数
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);

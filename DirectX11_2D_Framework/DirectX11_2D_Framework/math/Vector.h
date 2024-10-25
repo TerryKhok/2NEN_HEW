@@ -224,6 +224,14 @@ public:
 		return { this->x,this->y,this->z };
 	}
 	/// <summary>
+	/// Vector2‚Ö‚ÌˆÃ–Ù‚Ì•ÏŠ·B
+	/// </summary>
+	/// <returns></returns>
+	operator Vector2() const
+	{
+		return Vector2(vec.x, vec.y);
+	}
+	/// <summary>
 	/// Vector3‚Ö‚Ì•ÏŠ·B
 	/// </summary>
 	/// <returns></returns>

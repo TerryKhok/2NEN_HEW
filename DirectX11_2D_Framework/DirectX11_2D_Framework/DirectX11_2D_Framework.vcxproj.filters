@@ -13,125 +13,131 @@
     <Filter Include="Math">
       <UniqueIdentifier>{a7540092-7e21-446a-a614-3226dcc8bbbc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\未実装">
-      <UniqueIdentifier>{9df072e2-792e-4f73-b1d2-b4de0872cf39}</UniqueIdentifier>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{d92a4736-4e27-4f24-87da-a5ad3b4d5e35}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Box2D.cpp">
+    <ClCompile Include="scene\AnimationBuilder.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Box2D.cpp">
       <Filter>box2d</Filter>
     </ClCompile>
-    <ClCompile Include="Box2DBody.cpp">
+    <ClCompile Include="src\Box2DBody.cpp">
       <Filter>box2d</Filter>
     </ClCompile>
-    <ClCompile Include="HelloBox2d.cpp">
+    <ClCompile Include="src\HelloBox2d.cpp">
       <Filter>box2d</Filter>
     </ClCompile>
-    <ClCompile Include="Vector.cpp">
+    <ClCompile Include="math\Vector.cpp">
       <Filter>Math</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
+    <ClCompile Include="src\Animator.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="Component.cpp">
+    <ClCompile Include="src\Camera.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="directX3D.cpp">
+    <ClCompile Include="src\Component.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="Input.cpp">
+    <ClCompile Include="src\Debug.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="Object.cpp">
+    <ClCompile Include="src\directX3D.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="pch.cpp">
+    <ClCompile Include="src\Input.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="Renderer.cpp">
+    <ClCompile Include="src\Object.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="Scene.cpp">
+    <ClCompile Include="src\pch.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="TextureAsset.cpp">
+    <ClCompile Include="src\Renderer.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="Window.cpp">
+    <ClCompile Include="src\Scene.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="Animator.cpp">
-      <Filter>Src\未実装</Filter>
-    </ClCompile>
-    <ClCompile Include="Debug.cpp">
+    <ClCompile Include="src\SFText.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="SFText.cpp">
+    <ClCompile Include="src\TextureAsset.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Window.cpp">
       <Filter>Src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Box2D.h">
+    <ClInclude Include="AnimationBuilder.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Box2D.h">
       <Filter>box2d</Filter>
     </ClInclude>
-    <ClInclude Include="Box2DBody.h">
+    <ClInclude Include="inc\Box2DBody.h">
       <Filter>box2d</Filter>
     </ClInclude>
-    <ClInclude Include="HelloBox2d.h">
+    <ClInclude Include="inc\HelloBox2d.h">
       <Filter>box2d</Filter>
     </ClInclude>
-    <ClInclude Include="Math.h">
+    <ClInclude Include="inc\Animator.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Camera.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Component.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Debug.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\directX3D.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Input.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Object.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Renderer.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Scene.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\SFText.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\TextureAsset.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Window.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="math\Angle.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="Vector.h">
+    <ClInclude Include="math\Math.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="Component.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="directX3D.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="Input.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="Layer.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="pch.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="shaders.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureAsset.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="Window.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="Animator.h">
-      <Filter>Src\未実装</Filter>
-    </ClInclude>
-    <ClInclude Include="Debug.h">
-      <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="Angle.h">
+    <ClInclude Include="math\Vector.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="SFText.h">
+    <ClInclude Include="src\Layer.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\pch.h">
+      <Filter>Src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\shaders.h">
       <Filter>Src</Filter>
     </ClInclude>
   </ItemGroup>

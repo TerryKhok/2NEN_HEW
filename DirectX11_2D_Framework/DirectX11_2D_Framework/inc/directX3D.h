@@ -1,9 +1,9 @@
 #pragma once
 
 //directXTKŠÖŒW
-#include "directxtk/include/directxtk/WICTextureLoader.h"
-#include "directxtk/include/directxtk/SpriteFont.h"
-#include "directxtk/include/directxtk/SimpleMath.h"
+#include "../directxtk/include/directxtk/WICTextureLoader.h"
+#include "../directxtk/include/directxtk/SpriteFont.h"
+#include "../directxtk/include/directxtk/SimpleMath.h"
 //#include "directxtk/include/directxtk/SpriteBatch.h"
 //#include "directxtk/include/directxtk/VertexTypes.h"
 //#include "directxtk/include/directxtk/Effects.h"

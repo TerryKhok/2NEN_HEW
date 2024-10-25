@@ -2,6 +2,7 @@
 
 const char* ConvertWCharToChar(const wchar_t* wstr);
 
+
 class TextureAssets final
 {
 	friend class Window;
@@ -14,6 +15,9 @@ private:
 	{
 		m_textureLib.clear();
 	}
+
+	static HRESULT Init();
+	static void Uninit();
 	
 	//static HRESULT LoadTexture(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName);
 	static HRESULT Load(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName);
@@ -23,6 +27,7 @@ private:
 	//テクスチャ読み込み関数ポインタ
 	static HRESULT(* pLoadTexture)(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName);
 private:
+	static ComPtr<IWICImagingFactory> m_pWICFactory;
 	static std::unordered_map<const wchar_t*, ComPtr<ID3D11ShaderResourceView>> m_textureLib;
 	
 };

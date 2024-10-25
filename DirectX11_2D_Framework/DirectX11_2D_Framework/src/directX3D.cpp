@@ -1,4 +1,3 @@
-#include "directX3D.h"
 #include "shaders.h"
 
 // ※ID3D11で始まるポインタ型の変数は、解放する必要がある

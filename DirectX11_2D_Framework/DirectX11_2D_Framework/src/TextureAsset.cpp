@@ -1,5 +1,5 @@
 
-
+ComPtr<IWICImagingFactory> TextureAssets::m_pWICFactory = nullptr;
 std::unordered_map<const wchar_t*, ComPtr<ID3D11ShaderResourceView>> TextureAssets::m_textureLib;
 HRESULT(*TextureAssets::pLoadTexture)(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName) = Load;
 
@@ -15,6 +15,19 @@ const char* ConvertWCharToChar(const wchar_t* wstr) {
 	wcstombs_s(nullptr, buffer, requiredSize, wstr, _TRUNCATE);
 
 	return buffer;  // Remember to free the memory later
+}
+
+
+HRESULT TextureAssets::Init()
+{
+	HRESULT hr = CoInitialize(NULL);
+	hr = CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&m_pWICFactory));
+	return hr;
+}
+
+void TextureAssets::Uninit()
+{
+	CoUninitialize();
 }
 
 HRESULT TextureAssets::Load(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName)

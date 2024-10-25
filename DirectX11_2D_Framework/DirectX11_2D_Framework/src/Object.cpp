@@ -1,4 +1,3 @@
-#include "Object.h"
 
 VSObjectConstantBuffer GameObject::m_cb = {};
 

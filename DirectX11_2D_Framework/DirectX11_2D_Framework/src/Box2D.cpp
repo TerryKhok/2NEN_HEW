@@ -1,4 +1,3 @@
-#include "Box2D.h"
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 thread_local void(*Box2D::WorldManager::pPauseWorldUpdate)() = PauseWorldUpdate;

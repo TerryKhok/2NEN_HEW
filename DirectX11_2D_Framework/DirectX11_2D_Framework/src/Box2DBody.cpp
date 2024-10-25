@@ -1,4 +1,3 @@
-#include "Box2DBody.h"
 
 std::vector<std::function<void()>> Box2DBodyManager::moveFunctions;
 

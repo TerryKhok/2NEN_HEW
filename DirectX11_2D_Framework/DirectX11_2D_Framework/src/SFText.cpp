@@ -1,8 +1,9 @@
 #ifdef SFTEXT_TRUE
 
-#include "font/msGothic.c"
+#include "../font/msGothic.c"
 
 std::vector<SFTextManager::StringNode> SFTextManager::m_stringNode;
+std::vector<SFTextManager::StringNode> SFTextManager::m_oldStringNode;
 DirectX::XMMATRIX SFTextManager::worldMatrix;
 std::unique_ptr<SpriteBatch> SFTextManager::spriteBatch;
 std::unique_ptr<SpriteFont> SFTextManager::spriteFont;
@@ -67,7 +68,7 @@ void SFTextManager::Init()
 	spriteBatch->SetRotation(DXGI_MODE_ROTATION_IDENTITY);// これで行列が適用されなくなります。
 
 	worldMatrix = DirectX::XMMatrixScaling(1, 1, 1); // World座標はY座標が逆になっている為修正します。
-	worldMatrix *= DirectX::XMMatrixTranslation(PROJECTION_WIDTH / 2, PROJECTION_HEIGHT / 2, 0.5f);
+	worldMatrix *= DirectX::XMMatrixTranslation(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.5f);
 }
 
 void SFTextManager::ExcuteDrawString()
@@ -105,8 +106,51 @@ void SFTextManager::ExcuteDrawString()
 			);
 		}
 
-		m_stringNode.clear();
+		m_oldStringNode = std::move(m_stringNode);
 
+		// End()関数により、描画の終了を行います。
+		spriteBatch->End();
+	}
+	catch (const std::exception&)
+	{
+		throw;
+	}
+}
+
+void SFTextManager::KeepExcuteDrawString()
+{
+	try
+	{
+		// テストの為にテキストとテキスト枠を表示させます。
+		HRESULT    hr = S_OK;
+		// Begin()関数により、描画の開始を行います。
+
+		spriteBatch->SpriteBatch::Begin(
+			DirectX::SpriteSortMode_Deferred,
+			DirectX11::m_pBlendState.Get(),
+			nullptr,
+			nullptr,
+			nullptr,/*DirectX11::m_pWireframeRasterState.Get(),*///m_pWireframeRasterState,
+			nullptr,
+			worldMatrix
+		);    // world_view_proj行列はここで渡します。
+
+
+		// SpriteFontによりテキストを描画します。
+		for (auto& node : m_oldStringNode)
+		{
+			spriteFont->DrawString(
+				spriteBatch.get(),
+				node.str.c_str(),
+				node.pos,					// XMFLOAT2 const& position,
+				node.color,					// FXMVECTOR color = Colors::White,
+				node.rot,                   // float rotation = 0,
+				node.origin,				//*DirectX::XMFLOAT2(size * 4, 0)*/ // XMFLOAT2 const& origin = Float2Zero,
+				node.scale,                 // float scale = 1,
+				DirectX::SpriteEffects_None,// SpriteEffects effects = SpriteEffects_None,
+				0.0                         // float layerDepth = 0
+			);
+		}
 		// End()関数により、描画の終了を行います。
 		spriteBatch->End();
 	}

@@ -1,4 +1,3 @@
-#include "Scene.h"
 
 std::unordered_map<std::string, std::function<void()>> SceneManager::m_sceneList;
 std::unique_ptr<Scene, void(*)(Scene*)> SceneManager::m_currentScene(nullptr, [](Scene* p) {delete p; });

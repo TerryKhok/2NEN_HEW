@@ -42,10 +42,15 @@ class SFTextManager
 		float scale;
 	};
 private:
+	//初期化処理
 	static void Init();
+	//要求のあった文字列を表示
 	static void ExcuteDrawString();
+	//リストを削除しない
+	static void KeepExcuteDrawString();
 private:
 	static std::vector<StringNode> m_stringNode;
+	static std::vector<StringNode> m_oldStringNode;
 	static DirectX::XMMATRIX worldMatrix;
 	static std::unique_ptr<SpriteBatch> spriteBatch;
 	static std::unique_ptr<SpriteFont> spriteFont;

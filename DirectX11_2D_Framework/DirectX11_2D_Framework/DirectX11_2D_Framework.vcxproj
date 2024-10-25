@@ -153,49 +153,48 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Animator.cpp" />
-    <ClCompile Include="Box2D.cpp" />
-    <ClCompile Include="Box2DBody.cpp" />
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Component.cpp" />
-    <ClCompile Include="Debug.cpp" />
-    <ClCompile Include="directX3D.cpp" />
-    <ClCompile Include="HelloBox2d.cpp" />
-    <ClCompile Include="Input.cpp" />
-    <ClCompile Include="Object.cpp" />
-    <ClCompile Include="pch.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="Scene.cpp" />
-    <ClCompile Include="SFText.cpp" />
-    <ClCompile Include="TextureAsset.cpp" />
-    <ClCompile Include="Vector.cpp" />
-    <ClCompile Include="Window.cpp" />
+    <ClCompile Include="math\Vector.cpp" />
+    <ClCompile Include="scene\AnimationBuilder.cpp" />
+    <ClCompile Include="src\Animator.cpp" />
+    <ClCompile Include="src\Box2D.cpp" />
+    <ClCompile Include="src\Box2DBody.cpp" />
+    <ClCompile Include="src\Camera.cpp" />
+    <ClCompile Include="src\Component.cpp" />
+    <ClCompile Include="src\Debug.cpp" />
+    <ClCompile Include="src\directX3D.cpp" />
+    <ClCompile Include="src\HelloBox2d.cpp" />
+    <ClCompile Include="src\Input.cpp" />
+    <ClCompile Include="src\Object.cpp" />
+    <ClCompile Include="src\pch.cpp" />
+    <ClCompile Include="src\Renderer.cpp" />
+    <ClCompile Include="src\Scene.cpp" />
+    <ClCompile Include="src\SFText.cpp" />
+    <ClCompile Include="src\TextureAsset.cpp" />
+    <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Angle.h" />
-    <ClInclude Include="Animator.h" />
-    <ClInclude Include="Box2D.h" />
-    <ClInclude Include="Box2DBody.h" />
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="Component.h" />
-    <ClInclude Include="Debug.h" />
-    <ClInclude Include="directX3D.h" />
-    <ClInclude Include="HelloBox2d.h" />
-    <ClInclude Include="Input.h" />
-    <ClInclude Include="Layer.h" />
-    <ClInclude Include="Math.h" />
-    <ClInclude Include="Object.h" />
-    <ClInclude Include="pch.h" />
-    <ClInclude Include="Renderer.h" />
-    <ClInclude Include="Scene.h" />
-    <ClInclude Include="SFText.h" />
-    <ClInclude Include="shaders.h" />
-    <ClInclude Include="TextureAsset.h" />
-    <ClInclude Include="Vector.h" />
-    <ClInclude Include="Window.h" />
+    <ClInclude Include="AnimationBuilder.h" />
+    <ClInclude Include="inc\Animator.h" />
+    <ClInclude Include="inc\Box2D.h" />
+    <ClInclude Include="inc\Box2DBody.h" />
+    <ClInclude Include="inc\Camera.h" />
+    <ClInclude Include="inc\Component.h" />
+    <ClInclude Include="inc\Debug.h" />
+    <ClInclude Include="inc\directX3D.h" />
+    <ClInclude Include="inc\HelloBox2d.h" />
+    <ClInclude Include="inc\Input.h" />
+    <ClInclude Include="inc\Object.h" />
+    <ClInclude Include="inc\Renderer.h" />
+    <ClInclude Include="inc\Scene.h" />
+    <ClInclude Include="inc\SFText.h" />
+    <ClInclude Include="inc\TextureAsset.h" />
+    <ClInclude Include="inc\Window.h" />
+    <ClInclude Include="math\Angle.h" />
+    <ClInclude Include="math\Math.h" />
+    <ClInclude Include="math\Vector.h" />
+    <ClInclude Include="src\Layer.h" />
+    <ClInclude Include="src\pch.h" />
+    <ClInclude Include="src\shaders.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
