@@ -69,6 +69,12 @@ namespace Box2D
 		static void PauseWorldUpdate();
 		//ワールドの更新を再開
 		static void ResumeWorldUpdate();
+		//ワールドの更新を変更する機能再開
+		static void EnableWorldUpdate();
+		//ワールドの更新を変更する機能停止
+		static void DisableWorldUpdate();
+		//ワールドのタスクを追加する
+		static void AddWorldTask(std::function<void()>&& _task);
 #else
 		//ワールドの更新
 		static void WorldUpdate();
@@ -90,9 +96,11 @@ namespace Box2D
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	private:
-		//非同期ロードの時にワールド更新を止めない
+		//非同期ロードの時にワールド更新を
+		//止めないようにするため関数を切り替える
 		static thread_local void(*pPauseWorldUpdate)();
 		static thread_local void(*pResumeWorldUpdate)();
+	private:
 		//マルチスレッド用変数
 		static std::atomic<bool> running;
 		static std::atomic<bool> paused;
@@ -102,8 +110,8 @@ namespace Box2D
 		static std::condition_variable cv;
 		static std::condition_variable pauseCv;
 
-		/*static std::vector<std::function<void()>> worldFunc;
-		static std::mutex worldFuncMutex;*/
+		static std::vector<std::function<void()>> worldTask;
+		static std::mutex worldTaskMutex;
 #endif
 	};
 

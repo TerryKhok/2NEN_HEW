@@ -84,8 +84,10 @@ public:
 		component = new T();
 		component->m_this = this;
 
+		TRY_CATCH_LOG(component->Start());
+
 		//リストに追加(デストラクタ登録)
-		m_componentList.insert(std::make_pair(typeid(Component).name(),
+		m_componentList.insert(std::make_pair(typeid(T).name(),
 			std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; })));
 
 		T* downcast = dynamic_cast<T*>(component);
@@ -106,8 +108,10 @@ public:
 		component = new T(_arg);
 		component->m_this = this;
 
+		TRY_CATCH_LOG(component->Start());
+
 		//リストに追加(デストラクタ登録)
-		m_componentList.insert(std::make_pair(typeid(Component).name(),
+		m_componentList.insert(std::make_pair(typeid(T).name(),
 			std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; })));
 
 		T* downcast = dynamic_cast<T*>(component);

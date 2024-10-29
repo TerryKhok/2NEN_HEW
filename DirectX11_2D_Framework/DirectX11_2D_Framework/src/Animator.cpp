@@ -1,4 +1,3 @@
-#include "Animator.h"
 
 std::shared_ptr<AnimationClip> AnimatorManager::m_commonClip;
 long long AnimatorManager::deltaCount;

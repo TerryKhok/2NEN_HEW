@@ -31,6 +31,7 @@ private:
 	void SetUVRenderNode(Animator* _animator);
 public:
 	void SetTexture(const wchar_t* _texPath);
+	void SetTexture(const std::string& _filePath);
 	void SetColor(XMFLOAT4 _color);
 	void SetTexcode(int _splitX, int _splitY, int _frameX, int _frameY);
 private:
@@ -60,6 +61,8 @@ protected:
 	void VoidNext() { NextFunc(); }
 	//テクスチャーの設定
 	void SetTexture(const wchar_t* _texpath);
+	//テクスチャーの設定
+	void SetTexture(const std::string& _filePath);
 private:
 	//描画関数ポインター
 	void(RenderNode::* pDrawFunc)(void) = nullptr;

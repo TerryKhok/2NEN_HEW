@@ -451,12 +451,19 @@ void DirectX11::D3D_StartRender()
 	//===========================================================================================
 
 	// 画面塗りつぶし色
-	float clearColor[4] = { 0.0f, 0.5f, 0.5f, 1.0f }; //red,green,blue,alpha
+	static const float clearColor[4][4] = {
+		{0.0f, 0.5f, 0.5f, 1.0f},
+		{0.0f, 0.0f, 0.0f, 1.0f},
+		{0.5f, 0.5f, 0.0f, 1.0f},
+		{0.5f, 0.0f, 0.5f, 1.0f}
+	};
 
+	int colorIndex = 0;
 	for (auto& targetView : m_pRenderTargetViewList)
 	{
 		// 描画先キャンバスを塗りつぶす
-		m_pDeviceContext->ClearRenderTargetView(targetView.second.Get(), clearColor);
+		m_pDeviceContext->ClearRenderTargetView(targetView.second.Get(), clearColor[colorIndex]);
+		//colorIndex = (colorIndex + 1) % 4;
 	}
 
 	// 深度バッファをリセットする

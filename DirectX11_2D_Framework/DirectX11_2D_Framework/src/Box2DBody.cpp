@@ -161,7 +161,6 @@ void Box2DBody::CreateBoxShape(Vector2 _size, Vector2 _offset, float _angle)
 	Box2D::WorldManager::pResumeWorldUpdate();
 #endif
 
-
 #ifdef DEBUG_TRUE
 
 	Vector2 offset;
@@ -437,6 +436,20 @@ void Box2DBody::AddForceImpule(b2Vec2 _force)
 	_force.x *= DEFAULT_OBJECT_SIZE;
 	_force.y *= DEFAULT_OBJECT_SIZE;
 	b2Body_ApplyLinearImpulseToCenter(m_bodyId, _force, true);
+}
+
+void Box2DBody::SetGravityScale(float _scale)
+{
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	b2BodyId id = m_bodyId;
+	Box2D::WorldManager::AddWorldTask(std::move([id, _scale]()
+		{
+			b2Body_SetGravityScale(id, _scale);
+		})
+	);
+#else
+	b2Body_SetGravityScale(m_bodyId, _scale);
+#endif
 }
 
 void Box2DBodyManager::DisableLayerCollision(FILTER _filter01, FILTER _filter02)

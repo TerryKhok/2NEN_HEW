@@ -26,6 +26,10 @@
 #define PROJECTION_HEIGHT (480)
 //================================================================
 
+	//画面の大きさと座標の大きさの比
+constexpr float DISPALY_ASPECT_WIDTH = static_cast<float>(SCREEN_WIDTH) / PROJECTION_WIDTH;
+constexpr float DISPALY_ASPECT_HEIGHT = static_cast<float>(SCREEN_HEIGHT) / PROJECTION_HEIGHT;
+
 //Fpsを表示するかどうか（たぶんあとで動的に変更できるようにする）
 //================================================================
 #define SHOW_FPS
@@ -55,7 +59,12 @@ private:
 	static long long nowTick;	//今回計測時
 	static long long nowCount;
 
-	//スレッドの終わりフラグ
+#ifdef MAINLOOP__MALUTITHREAD
+	//メイン処理の終わりフラグ
+	static std::atomic<bool> mainLoopRun;
+#endif
+
+	//非同期ロードの終わりフラグ
 	static std::atomic<bool> terminateFlag;
 
 	//ウィンドウを動かしているかのフラグ
@@ -70,7 +79,7 @@ public:
 	//ウィンドウ更新
 	static LRESULT WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/);
 	//非同期更新
-	static LRESULT WindowUpdate(std::future<void>& sceneFuture,bool& loading);
+	static LRESULT WindowUpdate(std::future<void>& sceneFuture, bool& loading);
 	//ウィンドウかたずけ
 	static int WindowEnd(HINSTANCE hInstance);
 	//メインのウィンドウハンドル取得

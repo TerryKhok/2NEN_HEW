@@ -65,6 +65,8 @@ public:
 	void AddForce(b2Vec2 _force);
 	//—Í‚ğ‚Ï‚Á‚Æ‰Á‚¦‚é
 	void AddForceImpule(b2Vec2 _force);
+	//d—Í‚ğ‘å‚«‚³•ÏX
+	void SetGravityScale(float _scale);
 private:
 	b2BodyId m_bodyId;
 	//Shape‚ğŠi”[‚·‚é

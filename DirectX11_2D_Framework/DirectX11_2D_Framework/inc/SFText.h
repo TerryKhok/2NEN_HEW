@@ -16,11 +16,13 @@ private:
 	SFText(std::string _str) {
 		SetString(_str);
 	}
+	~SFText() = default;
+
 	void Update() override;
-	void SetString(std::string _str);
 public:
+	void SetString(std::string _str);
 	XMVECTOR color = Colors::White;
-	Vector2 offset = { 0,0 };
+	Vector2 offset = { 0.0f,0.0f };
 	float scale = 1.0f;
 private:
 	std::wstring m_str = L" ";

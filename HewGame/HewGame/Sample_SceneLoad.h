@@ -31,12 +31,7 @@ class SampleScene_Title : public Scene
 		if (Input::Get().KeyTrigger(VK_SPACE))
  		{
 			//ロード中のシーンに遷移(同期) ※なくてもいい
-			SceneManager::LoadScene<SampleScene_Loading>();
-
-			//シーンのローディング(非同期)
-			SceneManager::LoadingScene<SampleScene_Box2D>();
-			//ロードしたシーンに遷移
-			SceneManager::ChangeScene();
+			SceneManager::LoadScene<SampleScene_Box2D>();
 		}
 	}
 };
@@ -46,16 +41,21 @@ class SampleScene_Loading : public Scene
 	//オブジェクトポインター
 	GameObject* arrow = nullptr;
 
-	void Load()
+	void Init()
 	{
 		arrow = Instantiate("Arrow", L"asset/pic/rollArrow.png");
+
+		//シーンのローディング(非同期)
+		SceneManager::LoadScene<SampleScene_Box2D>();
+		//ロードしたシーンに遷移
+		//SceneManager::ChangeScene();
 	}
 
 	void Update()
 	{
 		//回転させてるだけ
 		static float angle = 0.0f;
-		angle -= 0.1f;
+		angle -= 1.0f;
 		if (abs(angle) > 360.0f)
 			angle = 0.0f;
 		

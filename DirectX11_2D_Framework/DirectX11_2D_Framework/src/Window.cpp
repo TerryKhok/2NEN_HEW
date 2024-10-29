@@ -19,6 +19,11 @@ void CloseConsoleWindow() {
 	FreeConsole();
 }
 
+#ifdef MAINLOOP__MALUTITHREAD
+//メイン処理の終わりフラグ
+std::atomic<bool> Window::mainLoopRun;
+#endif
+
 HWND  Window::mainHwnd;
 MSG Window::msg;
 RECT Window::windowSize;
@@ -73,7 +78,7 @@ LRESULT Window::WindowCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR
 		0,										// 拡張ウィンドウスタイル
 		"MAIN_WINDOW",								// ウィンドウクラスの名前
 		WINDOW_NAME,									// ウィンドウの名前
-		WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU,// ウィンドウスタイル
+		WS_OVERLAPPEDWINDOW,//WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU,// ウィンドウスタイル
 		CW_USEDEFAULT,							// ウィンドウの左上Ｘ座標
 		CW_USEDEFAULT,							// ウィンドウの左上Ｙ座標 
 		SCREEN_WIDTH,							// ウィンドウの幅
@@ -108,14 +113,15 @@ LRESULT Window::WindowCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR
 	//DirectX生成
 	DirectX11::D3D_Create(mainHwnd);
 
-
+#ifdef DEBUG_TRUE
+	ImGuiApp::Init(mainHwnd);
+#endif
 
 	return LRESULT();
 }
 
 LRESULT Window::WindowSubCreate(HINSTANCE hInstance, int nCmdShow, const char* _windowName)
 {
-
 	HWND hWnd = CreateWindowEx(
 		0,										// 拡張ウィンドウスタイル
 		"SUB_WINDOW",								// ウィンドウクラスの名前
@@ -188,12 +194,12 @@ LRESULT Window::WindowInit(void(*p_mainInitFunc)(void))
 	return LRESULT();
 }
 
-
 LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 {
 	const long long frameCount = frequency / FPS;
 	// ゲームループ
-	while (1)
+
+	while(true)
 	{
 		// 新たにメッセージがあれば
 		if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
@@ -209,7 +215,6 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 
 			continue;
 		}
-
 		
 		//現在時間を取得
 		QueryPerformanceCounter(&liWork);
@@ -224,19 +229,9 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 #endif
 			Input::Get().Update();
 
-#ifdef DEBUG_TRUE
-			try
-			{
-				SceneManager::m_currentScene->Update();
-			}
-			//例外キャッチ(nullptr参照とか)
-			catch (const std::exception& e) {
-				LOG_ERROR(e.what());
-			}
-#else
-			SceneManager::m_currentScene->Update();
-#endif
-			ObjectManager::UpdateObjectComponent();
+			TRY_CATCH_LOG(SceneManager::m_currentScene->Update());
+
+			TRY_CATCH_LOG(ObjectManager::UpdateObjectComponent());
 
 			Box2DBodyManager::ExcuteMoveFunction();
 
@@ -251,26 +246,31 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 			SFTextManager::ExcuteDrawString();
 #endif
 
+#ifdef DEBUG_TRUE
+			ImGuiApp::Begin();
+
+			ImGuiApp::Draw();
+
+			ImGuiApp::Rend();
+#endif
+
 			DirectX11::D3D_FinishRender();
 
 			oldCount = nowCount;
+
+#ifdef DEBUG_TRUE
 			fpsCounter++;
 			nowTick = GetTickCount64();
 
 			if (nowTick >= oldTick + 1000)
 			{
-#ifdef SHOW_FPS
-				char str[32];
-				wsprintfA(str, "FPS = %d", fpsCounter);
-				SetWindowTextA(mainHwnd, str);
-#endif
-
+				ImGuiApp::fpsCounter = fpsCounter;
 				fpsCounter = 0;
 				oldTick = nowTick;
 			}
+#endif
 		}
 	}
-	
 
 	return LRESULT();
 }
@@ -311,20 +311,9 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 #endif
 				Input::Get().Update();
 
-#ifdef DEBUG_TRUE
-				try
-				{
-					SceneManager::m_currentScene->Update();
-				}
-				//例外キャッチ(nullptr参照とか)
-				catch (const std::exception& e) {
-					LOG_ERROR(e.what());
-				}
-#else
-				SceneManager::m_currentScene->Update();
-#endif
+				TRY_CATCH_LOG(SceneManager::m_currentScene->Update());
 
-				ObjectManager::UpdateObjectComponent();
+				TRY_CATCH_LOG(ObjectManager::UpdateObjectComponent());
 
 				Box2DBodyManager::ExcuteMoveFunction();
 
@@ -338,23 +327,29 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 				SFTextManager::ExcuteDrawString();
 #endif
 
+#ifdef DEBUG_TRUE
+				ImGuiApp::Begin();
+
+				ImGuiApp::Draw();
+
+				ImGuiApp::Rend();
+#endif
+
 				DirectX11::D3D_FinishRender();
 
 				oldCount = nowCount;
+
+#ifdef DEBUG_TRUE
 				fpsCounter++;
 				nowTick = GetTickCount64();
 
 				if (nowTick >= oldTick + 1000)
 				{
-#ifdef SHOW_FPS
-					char str[32];
-					wsprintfA(str, "FPS = %d", fpsCounter);
-					SetWindowTextA(mainHwnd, str);
-#endif
-
+					ImGuiApp::fpsCounter = fpsCounter;
 					fpsCounter = 0;
 					oldTick = nowTick;
 				}
+#endif
 
 				// Check if the loading is complete
 				if (sceneFuture.wait_for(std::chrono::milliseconds(0)) == std::future_status::ready) {
@@ -398,6 +393,10 @@ int Window::WindowEnd(HINSTANCE hInstance)
 	//シーンの破棄
 	SceneManager::Uninit();
 
+#ifdef DEBUG_TRUE
+	ImGuiApp::Uninit();
+#endif
+
 	//DirectXかたずけ
 	DirectX11::D3D_Release();
 
@@ -416,9 +415,14 @@ int Window::WindowEnd(HINSTANCE hInstance)
 
 	return (int)msg.wParam;
 }
+// Declare isDragging as a static or global variable
+bool isDragging = false;
 
 LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+	static float screenWindowAspectWidth = 1.0f;
+	static float screenWindowAspectHeight = 1.0f;
+
 	switch (uMsg)
 	{
 	case WM_DESTROY:// ウィンドウ破棄のメッセージ
@@ -435,6 +439,32 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 	break;
 
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	case WM_NCLBUTTONDOWN:
+
+		Box2D::WorldManager::pPauseWorldUpdate();
+		isDragging = true;
+		SetTimer(hWnd, 1, 50, NULL);
+		return DefWindowProc(hWnd, uMsg, wParam, lParam);
+
+	case WM_TIMER:
+		if (isDragging && !(GetAsyncKeyState(VK_LBUTTON) & 0x8000)) {
+			// If the left mouse button is no longer down
+			isDragging = false;
+			KillTimer(hWnd, 1);          // Stop the timer
+			Box2D::WorldManager::pResumeWorldUpdate();
+		}
+		return 0;
+
+	case WM_EXITSIZEMOVE:
+		if (isDragging) {
+			isDragging = false;  // Reset the flag
+			KillTimer(hWnd, 1);          // Stop the timer
+			Box2D::WorldManager::pResumeWorldUpdate();
+		}
+		return 0;
+#endif
+
 	case WM_MOVING:
 	{
 		//カメラ関連行列セット
@@ -446,6 +476,14 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 #ifdef SFTEXT_TRUE
 		SFTextManager::KeepExcuteDrawString();
+#endif
+
+#ifdef DEBUG_TRUE
+		ImGuiApp::Begin();
+
+		ImGuiApp::Draw();
+
+		ImGuiApp::Rend();
 #endif
 
 		DirectX11::D3D_FinishRender();
@@ -462,11 +500,11 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		GetCursorPos(&Input::mousePoint);
 		ScreenToClient(hWnd, &Input::mousePoint);
-		static const LONG HALF_SCREEN_WIDTH = SCREEN_WIDTH / 2;
-		static const LONG HALF_SCREEN_HEIGHT = SCREEN_HEIGHT / 2;
-		Input::mousePoint.x = Input::mousePoint.x * SCREEN_WIDTH / windowSize.right - HALF_SCREEN_WIDTH;
-		Input::mousePoint.y = Input::mousePoint.y * SCREEN_WIDTH / windowSize.bottom - HALF_SCREEN_HEIGHT;
-		Input::mousePoint.y *= (LONG)-1.0;
+		static const LONG HALF_SCREEN_WIDTH = PROJECTION_WIDTH / 2;
+		static const LONG HALF_SCREEN_HEIGHT = PROJECTION_HEIGHT / 2;
+		Input::mousePoint.x = static_cast<LONG>(Input::mousePoint.x * screenWindowAspectWidth) - HALF_SCREEN_WIDTH;
+		Input::mousePoint.y = static_cast<LONG>(Input::mousePoint.y * screenWindowAspectHeight) - HALF_SCREEN_HEIGHT;
+		Input::mousePoint.y *= -1;
 	}
 	break;
 
@@ -494,8 +532,36 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 		//画面の大きさ取得
 	case WM_SIZE:
+
 		GetClientRect(hWnd, &windowSize);
+		screenWindowAspectWidth = PROJECTION_WIDTH / static_cast<float>(windowSize.right);
+		screenWindowAspectHeight = PROJECTION_HEIGHT / static_cast<float>(windowSize.bottom);
 		break;
+
+	case WM_SIZING:
+	{
+		//カメラ関連行列セット
+		CameraManager::SetCameraMatrix();
+
+		DirectX11::D3D_StartRender();
+
+		RenderManager::Draw();
+
+#ifdef SFTEXT_TRUE
+		SFTextManager::KeepExcuteDrawString();
+#endif
+
+#ifdef DEBUG_TRUE
+		ImGuiApp::Begin();
+
+		ImGuiApp::Draw();
+
+		ImGuiApp::Rend();
+#endif
+
+		DirectX11::D3D_FinishRender();
+	}
+	break;
 	default:
 		// 受け取ったメッセージに対してデフォルトの処理を実行
 		return DefWindowProc(hWnd, uMsg, wParam, lParam);
@@ -529,6 +595,32 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 	break;
 
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	case WM_NCLBUTTONDOWN:
+
+		Box2D::WorldManager::pPauseWorldUpdate();
+		isDragging = true;
+		SetTimer(hWnd, 1, 50, NULL);
+		return DefWindowProc(hWnd, uMsg, wParam, lParam);
+
+	case WM_TIMER:
+		if (isDragging && !(GetAsyncKeyState(VK_LBUTTON) & 0x8000)) {
+			// If the left mouse button is no longer down
+			isDragging = false;
+			KillTimer(hWnd, 1);          // Stop the timer
+			Box2D::WorldManager::pResumeWorldUpdate();
+		}
+		return 0;
+
+	case WM_EXITSIZEMOVE:
+		if (isDragging) {
+			isDragging = false;  // Reset the flag
+			KillTimer(hWnd, 1);          // Stop the timer
+			Box2D::WorldManager::pResumeWorldUpdate();
+		}
+		return 0;
+#endif
+
 	case WM_MOVING:
 	{		
 		//カメラ関連行列セット
@@ -540,6 +632,14 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 #ifdef SFTEXT_TRUE
 		SFTextManager::KeepExcuteDrawString();
+#endif
+
+#ifdef DEBUG_TRUE
+		ImGuiApp::Begin();
+
+		ImGuiApp::Draw();
+
+		ImGuiApp::Rend();
 #endif
 
 		DirectX11::D3D_FinishRender();

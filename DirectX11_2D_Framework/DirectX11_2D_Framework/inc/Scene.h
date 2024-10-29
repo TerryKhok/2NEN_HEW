@@ -65,6 +65,10 @@ public:
 		auto it = m_sceneList.find(sceneName);
 		if (it != m_sceneList.end()) {
 
+#ifdef BOX2D_UPDATE_MULTITHREAD
+			Box2D::WorldManager::DisableWorldUpdate();
+			Box2D::WorldManager::PauseWorldUpdate();
+#endif
 			//新しいリストに変える
 			RenderManager::GenerateList();
 			ObjectManager::GenerateList();
@@ -72,10 +76,17 @@ public:
 			it->second();
 			//シーン切り替え
 			NextScene();
-			
+			//シーン初期化
+			TRY_CATCH_LOG(m_currentScene->Init());
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+			Box2D::WorldManager::EnableWorldUpdate();
+			Box2D::WorldManager::ResumeWorldUpdate();
+#endif	
 			LOG_NL;
 			LOG("Now Switching to %s",sceneName.substr(6).c_str());
-			return;
+
+			throw "";
 		}
 
 		//シーンが見つからなかった場合
@@ -153,7 +164,12 @@ public:
 #endif
 			async = false;
 
+			//シーン初期化
+			TRY_CATCH_LOG(m_currentScene->Init());
+
 			LOG("Now Switching to the New Scene...");
+
+			throw "";
 		}
 	}
 
@@ -161,6 +177,11 @@ public:
 	template<typename T>
 	static void RegisterScene() {
 		std::string sceneName = typeid(T).name();
+
+		if (firstScene.empty())
+		{
+			firstScene = sceneName;
+		}
 
 		//シーンが既にある場合
 		auto it = m_sceneList.find(sceneName);
@@ -177,8 +198,7 @@ public:
 				std::unique_ptr<Scene, void(*)(Scene*)> scene(new T, [](Scene* p) {delete p; });
 				m_nextScene = std::move(scene);
 #ifdef DEBUG_TRUE
-				try
-				{
+				try{
 					m_nextScene->Load();
 				}
 				//例外キャッチ(nullptr参照とか)
@@ -186,7 +206,10 @@ public:
 					LOG_ERROR(e.what());
 				}
 #else
-				m_nextScene->Load();
+				try{
+					m_nextScene->Load();
+				}
+				catch(...){}
 #endif
 			};
 
@@ -195,6 +218,8 @@ public:
 	}
 
 private:
+	//初めのシーン
+	static std::string firstScene;
 	//シーンリスト
 	static std::unordered_map<std::string,std::function<void()>> m_sceneList;
 	//今のシーン

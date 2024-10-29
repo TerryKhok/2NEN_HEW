@@ -19,8 +19,8 @@ std::mutex Box2D::WorldManager::threadMutex;
 std::condition_variable Box2D::WorldManager::cv;
 std::condition_variable Box2D::WorldManager::pauseCv;
 
-//std::vector<std::function<void()>> Box2D::WorldManager::worldFunc;
-//std::mutex Box2D::WorldManager::worldFuncMutex;
+std::vector<std::function<void()>> Box2D::WorldManager::worldTask;
+std::mutex Box2D::WorldManager::worldTaskMutex;
 #endif
 
 void Box2D::WorldManager::CreateWorld()
@@ -90,15 +90,25 @@ void Box2D::WorldManager::WorldUpdate()
 		nowCount = liWork.QuadPart;
 		if (nowCount >= oldCount + frequency / FPS)
 		{
-			/*{
-				std::lock_guard<std::mutex> lock(worldFuncMutex);
-				for (auto& func : worldFunc)
-				{
-					func();
-				}
+			//ワールドのタスクを移す
+			//=================================================================
+			std::unique_lock<std::mutex> lock(worldTaskMutex);
+			std::vector<std::function<void()>> tempTasks = std::move(worldTask);
+			worldTask.clear();
+			//=================================================================
 
-				worldFunc.clear();
-			}*/
+			lock.unlock();
+
+			// Execute all tasks in the temporary list
+			std::vector<std::future<void>> futures;
+			for (auto& task : tempTasks) {
+				futures.push_back(std::async(std::launch::async, task));
+			}
+
+			// Wait for all tasks to complete
+			for (auto& future : futures) {
+				future.get();
+			}
 
 			//ワールドの更新
 			b2World_Step(worldId, timeStep, subStepCount);
@@ -193,6 +203,25 @@ void Box2D::WorldManager::ResumeWorldUpdate()
 	//待機している全てのスレッドを起床させる
 	cv.notify_all(); // Wake up the paused thread
 }
+
+void Box2D::WorldManager::EnableWorldUpdate()
+{
+	//ワールド更新に変更を加えれるように設定
+	pPauseWorldUpdate = PauseWorldUpdate;
+	pResumeWorldUpdate = ResumeWorldUpdate;
+}
+
+void Box2D::WorldManager::DisableWorldUpdate()
+{
+	//ワールド更新に変更を加えれないように設定
+	pPauseWorldUpdate = []() {};
+	pResumeWorldUpdate = []() {};
+}
+void Box2D::WorldManager::AddWorldTask(std::function<void()>&& _task)
+{
+	std::lock_guard<std::mutex> lock(worldTaskMutex);
+	worldTask.push_back(_task);
+}
 #else
 void Box2D::WorldManager::WorldUpdate()
 {
@@ -247,3 +276,5 @@ void Box2D::WorldManager::DeleteOldWorld()
 		b2DestroyWorld(eraseWorldId);
 	}
 }
+
+

@@ -69,6 +69,11 @@ void Renderer::SetTexture(const wchar_t* _texPath)
 	m_node->SetTexture(_texPath);
 }
 
+void Renderer::SetTexture(const std::string& _filePath)
+{
+	m_node->SetTexture(_filePath);
+}
+
 void Renderer::SetColor(XMFLOAT4 _color)
 {
 	m_node->m_color = _color;
@@ -131,6 +136,11 @@ inline void RenderNode::Draw()
 void RenderNode::SetTexture(const wchar_t* _texPath)
 {
 	TextureAssets::pLoadTexture(m_pTextureView, _texPath);
+}
+
+void RenderNode::SetTexture(const std::string& _filePath)
+{
+	TextureAssets::LoadFromC(m_pTextureView, _filePath);
 }
 
 void RenderNode::Delete()
@@ -310,6 +320,8 @@ void RenderManager::Draw()
 
 		if (GetClientRect(view.first, &rect))
 		{
+			rect.right = max(rect.right, 1);
+			rect.bottom = max(rect.bottom, 1);
 			CameraManager::cameraZoom.x = PROJECTION_WIDTH / static_cast<float>(rect.right) * renderZoom.x;
 			CameraManager::cameraZoom.y = PROJECTION_HEIGHT / static_cast<float>(rect.bottom) * renderZoom.y;
 		}
@@ -326,7 +338,6 @@ void RenderManager::Draw()
 			node.first->NextFunc();
 		}
 #else
-		
 		for (int i = 0; i < LAYER::LAYER_BOX2D_DEBUG; i++)
 		{
 			auto& node = m_rendererList[i];
@@ -352,7 +363,7 @@ void RenderManager::Draw()
 
 	// 描画先のキャンバスと使用する深度バッファを指定する
 	DirectX11::m_pDeviceContext->OMSetRenderTargets(1,
-		DirectX11::m_pRenderTargetViewList.find(Window::GetMainHwnd())->second.GetAddressOf(), DirectX11::m_pDepthStencilView.Get());
+		DirectX11::m_pRenderTargetViewList[Window::GetMainHwnd()].GetAddressOf(), DirectX11::m_pDepthStencilView.Get());
 
 	static VSCameraConstantBuffer cb = {
 			XMMatrixIdentity(),

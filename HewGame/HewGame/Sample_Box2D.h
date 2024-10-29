@@ -20,6 +20,8 @@ class SampleScene_Box2D :public Scene
 		gameObject = Instantiate("DynamicBox");
 		gameObject->AddComponent<Renderer>(L"asset/pic/hartR.png");
 
+		RenderManager::renderOffset = gameObject->transform.position;
+
 		/*auto text = gameObject->AddComponent<DWText>();
 		text->SetText("aaaa");*/
 
@@ -30,11 +32,12 @@ class SampleScene_Box2D :public Scene
 		box2dbody = gameObject->AddComponent<Box2DBody>(&bodyDef);
 		//box2dbody->CreateCapsuleShape();
 		box2dbody->CreatePolygonShape(mesh);
+		box2dbody->SetGravityScale(10.0f);
 		//box2d->CreateCircleShape();
 		//box2d->CreateCircleShape(7.0f, { 20.0f,0.0f });
 
-		/*
-		for (int y = -10; y < 65; y++)
+		
+		/*for (int y = -10; y < 10; y++)
 		{
 			for (int x = -20; x < 20; x++)
 			{
@@ -86,22 +89,7 @@ class SampleScene_Box2D :public Scene
 				box2dbody->SetFilter(FILTER_01);
 		}
 
-		if (Input::Get().KeyPress(VK_D))
-		{
-			box2dbody->SetVelocityX(10.0f);
-		}
-		if (Input::Get().KeyPress(VK_A))
-		{
-			box2dbody->SetVelocityX(-10.0f);
-		}
-		if (Input::Get().KeyPress(VK_W))
-		{
-			box2dbody->SetVelocityY(10.0f);
-		}
-		if (Input::Get().KeyPress(VK_S))
-		{
-			box2dbody->SetVelocityY(-10.0f);
-		}
+		
 
 		if (Input::Get().KeyPress(VK_G))
 		{

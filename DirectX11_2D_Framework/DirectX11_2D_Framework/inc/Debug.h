@@ -39,6 +39,25 @@ template <typename T> class SafePointer;
 #define SAFE_POINTER(type,var) type* var;
 #endif
 
+#ifdef DEBUG_TRUE
+
+#define TRY_CATCH_LOG(process) \
+    try { \
+        process; \
+    } catch (const std::exception& e) { \
+        LOG_ERROR(e.what()); \
+    } catch (...) { \
+    }\
+
+#else
+
+#define TRY_CATCH_LOG(process) \
+    try { \
+        process; \
+    }catch (...) { \
+    }\
+
+#endif
 
 class SafePointerBase {
 public:
@@ -50,20 +69,6 @@ public:
     //レジスタで比較するためにvoid*の生ポインタを取得
     virtual void* getRawPointer() const = 0;
 };
-
-// SafePointerBase* 用のカスタムコンパレータ
-//struct SafePointerHash {
-//    std::size_t operator()(const SafePointerBase* p) const {
-//        return std::hash<void*>()(p->getRawPointer());
-//    }
-//};
-//
-////SafePointerBase* 用のハッシュ関数
-//struct SafePointerEqual {
-//    bool operator()(const SafePointerBase* p1, const void* ptr) const {
-//        return p1->getRawPointer() == ptr;
-//    }
-//};
 
 class PointerRegistry {
 
@@ -85,20 +90,6 @@ private:
         pointers.remove(p);
     }
 
-    // std::unordered_setとカスタム比較を使用した削除の通知
-    //void notifyDeletion(void* _ptr) {
-    //    auto it = std::find_if(pointers.begin(), pointers.end(),
-    //        [_ptr](SafePointerBase* p) { 
-    //            return p->getRawPointer() == _ptr;
-    //        });
-
-    //    while (it != pointers.end()) {
-    //        (*it)->invalidate();  // Invalidate the matching pointer
-    //        it = std::find_if(pointers.begin(), pointers.end(),
-    //            [_ptr](SafePointerBase* p) { return p->getRawPointer() == _ptr; });
-    //    }
-    //}
-
     void notifyDeletion(void* ptr) {
         for (auto& p : pointers) {
             if (p->getRawPointer() == ptr) {
@@ -108,8 +99,6 @@ private:
     }
 
 private:
-    //SafePointerを基底クラスで格納する
-    //std::unordered_set<SafePointerBase*, SafePointerHash, SafePointerEqual> pointers;
     std::list<SafePointerBase*> pointers;
 };
 
@@ -142,7 +131,7 @@ private:
 template <typename T>
 class SafePointer : public SafePointerBase{
  
-public:   
+public:
     SafePointer(T* _p = nullptr, const std::string& _name = typeid(T).name(), PointerRegistry& _reg = PointerRegistryManager::getRegistry())
         : ptr(_p), ptrName(_name), registry(_reg) {
         registry.registerPointer(this);

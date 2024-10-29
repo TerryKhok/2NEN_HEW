@@ -1,4 +1,5 @@
 
+std::string SceneManager::firstScene;
 std::unordered_map<std::string, std::function<void()>> SceneManager::m_sceneList;
 std::unique_ptr<Scene, void(*)(Scene*)> SceneManager::m_currentScene(nullptr, [](Scene* p) {delete p; });
 std::unique_ptr<Scene, void(*)(Scene*)> SceneManager::m_nextScene(nullptr, [](Scene* p) {delete p; });
@@ -50,8 +51,8 @@ void SceneManager::Init()
         PostQuitMessage(0);
     }
 
-    auto it = m_sceneList.begin();
-    it->second();
+    //ロード
+    m_sceneList[firstScene]();
 
     m_currentScene = std::move(m_nextScene);
     //m_nextScene.reset(nullptr);
@@ -67,36 +68,13 @@ void SceneManager::Uninit()
 
 void SceneManager::NextScene()
 {
-#ifdef DEBUG_TRUE
-    try
-    {
-        m_currentScene->Uninit();
-    }
-    //例外キャッチ(nullptr参照とか)
-    catch (const std::exception& e) {
-        LOG_ERROR(e.what());
-    }
-#else
-    m_currentScene->Uninit();
-#endif
+    //シーンのかたずけ
+    TRY_CATCH_LOG(m_currentScene->Uninit());
 
     //古いオブジェクトの移動情報を一応消しておく
     Box2DBodyManager::moveFunctions.clear();
     
     m_currentScene = std::move(m_nextScene);
-    //m_nextScene.reset(nullptr);
-
-#ifdef DEBUG_TRUE
-    try
-    {
-        m_currentScene->Init();
-    }
-    //例外キャッチ(nullptr参照とか)
-    catch (const std::exception& e) {
-        LOG_ERROR(e.what());
-    }
-#else
-    m_currentScene->Init();
-#endif
+    //m_nextScene.reset(nullptr); 
 }
 

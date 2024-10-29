@@ -37,7 +37,7 @@ void SFText::Update()
 	SFTextManager::m_stringNode.push_back(
 		SFTextManager::StringNode(
 			m_str,													//std::wstring str;
-			XMFLOAT2(transform.position.x, transform.position.y),	//XMFLOAT2 pos;
+			XMFLOAT2(transform.position.x * DISPALY_ASPECT_WIDTH, transform.position.y * -DISPALY_ASPECT_WIDTH),	//XMFLOAT2 pos;
 			color,													//FXMVECTOR color;
 			static_cast<float>(transform.angle.z.Get()),			//float rot;
 			XMFLOAT2(m_origin.x + offset.x, m_origin.y + offset.y), //XMFLOAT2 origin;
@@ -67,7 +67,7 @@ void SFTextManager::Init()
 
 	spriteBatch->SetRotation(DXGI_MODE_ROTATION_IDENTITY);// これで行列が適用されなくなります。
 
-	worldMatrix = DirectX::XMMatrixScaling(1, 1, 1); // World座標はY座標が逆になっている為修正します。
+	worldMatrix = DirectX::XMMatrixScaling(SCREEN_WIDTH / PROJECTION_WIDTH, SCREEN_HEIGHT / PROJECTION_HEIGHT, 1); // World座標はY座標が逆になっている為修正します。
 	worldMatrix *= DirectX::XMMatrixTranslation(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.5f);
 }
 

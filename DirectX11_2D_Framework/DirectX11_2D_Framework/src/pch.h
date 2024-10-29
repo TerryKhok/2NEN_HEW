@@ -74,12 +74,15 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 
+
+
 #include "../../DirectX11_2D_Framework/math/Math.h"
 #include "../../DirectX11_2D_Framework/math/Vector.h"
 #include "../../DirectX11_2D_Framework/math/Angle.h"
 #include "../../DirectX11_2D_Framework/inc/Debug.h"
 #include "../../DirectX11_2D_Framework/inc/Window.h"
 #include "../../DirectX11_2D_Framework/inc/directX3D.h"
+#include "../../DirectX11_2D_Framework/inc/ImGuiApp.h"
 #include "../../DirectX11_2D_Framework/inc/Input.h"
 #include "../../DirectX11_2D_Framework/inc/TextureAsset.h"
 #include "../../DirectX11_2D_Framework/src/Layer.h"
@@ -92,7 +95,7 @@
 #include "../../DirectX11_2D_Framework/inc/Scene.h"
 #include "../../DirectX11_2D_Framework/inc/Box2DBody.h"
 #include "../../DirectX11_2D_Framework/inc/Camera.h"
-
+#include "../../DirectX11_2D_Framework/inc/Button.h"
 #endif
 
 

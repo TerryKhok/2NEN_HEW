@@ -57,6 +57,7 @@ struct VSCameraConstantBuffer final
 class DirectX11 final
 {
 	friend class Window;
+	friend class ImGuiApp;
 	friend class DWTextManager;
 	friend class TextureAssets;
 	friend class RenderNode;
