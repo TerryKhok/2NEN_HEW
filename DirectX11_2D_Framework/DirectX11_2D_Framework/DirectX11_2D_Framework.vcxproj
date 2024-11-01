@@ -207,6 +207,7 @@
     <ClInclude Include="inc\SFText.h" />
     <ClInclude Include="inc\TextureAsset.h" />
     <ClInclude Include="inc\Window.h" />
+    <ClInclude Include="inc\WindowRect.h" />
     <ClInclude Include="math\Angle.h" />
     <ClInclude Include="math\Math.h" />
     <ClInclude Include="math\Vector.h" />

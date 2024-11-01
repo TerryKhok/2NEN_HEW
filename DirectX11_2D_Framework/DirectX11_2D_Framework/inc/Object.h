@@ -7,6 +7,7 @@ const float HALF_OBJECT_SIZE = DEFAULT_OBJECT_SIZE / 2.0f;
 //===========================================================
 
 class Renderer;
+class WindowRect;
 
 struct Transform final
 {
@@ -22,8 +23,10 @@ struct Transform final
 
 class GameObject final
 {
+	friend class Window;
 	friend class RenderNode;
 	friend class UVRenderNode;
+	friend class Box2D::WorldManager;
 	friend class Box2DBoxRenderNode;
 	friend class Box2DCircleRenderNode;
 	friend class Box2DCapsuleRenderNode;
@@ -141,6 +144,11 @@ public:
 	//bodyDef指定
 	template<>
 	Box2DBody* AddComponent<Box2DBody,b2BodyDef*>(b2BodyDef* _bodyDef);
+	template<>
+	WindowRect* AddComponent<WindowRect>();
+	//bodyDef指定
+	template<>
+	WindowRect* AddComponent<WindowRect, const char*>(const char* _windowName);
 	//コンポーネント削除
 	template<typename T>
 	void RemoveComponent()
@@ -179,6 +187,29 @@ public:
 	//tarnsformComponent完全特殊化
 	template<>
 	Transform* GetComponent(void);
+
+	template<typename T>
+	bool TryGetComponent(T** _output)
+	{
+		auto iter = m_componentList.find(typeid(T).name());
+		if (iter != m_componentList.end())
+		{
+			T* downcast = dynamic_cast<T*>(iter->second.get());
+			if (downcast == nullptr)
+			{
+				LOG_ERROR("%s : %s component down_cast faild", name.c_str(), typeid(T).name());
+			}
+			*_output = downcast;
+			return true;
+		}
+
+		LOG_WARNING("%s : %s component not exist", name.c_str(), typeid(T).name());
+		*_output = nullptr;
+		return false;
+	}
+
+	template<>
+	bool TryGetComponent(Transform** _output);
 public:
 	Transform transform;
 private:
@@ -204,7 +235,7 @@ class ObjectManager final
 	using ObjectList = std::unordered_map<std::string, std::unique_ptr<GameObject, void(*)(GameObject*)>>;
 
 public:
-	//オブジェクト一覧から見つける アクセス速度n(1)
+	//オブジェクト一覧から見つける アクセス速度n(1)なのでめっちゃはやい
 	static GameObject* Find(const std::string& _name);
 private:
 	//生成禁止

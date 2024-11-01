@@ -178,6 +178,28 @@ Animator* GameObject::AddComponent<Animator>()
 }
 
 template<>
+Box2DBody* GameObject::AddComponent<Box2DBody>()
+{
+	if (ExistComponent<Box2DBody>()) return GetComponent<Box2DBody>();
+
+	Component* component = nullptr;
+	component = new Box2DBody(this);
+	component->m_this = this;
+
+	//リストに追加(デストラクタ登録)
+	m_componentList.insert(std::make_pair(typeid(Box2DBody).name(),
+		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; })));
+
+	Box2DBody* render = dynamic_cast<Box2DBody*>(component);
+	if (render == nullptr)
+	{
+		LOG_WARNING("%s component down_cast faild", typeid(Box2DBody).name());
+	}
+
+	return render;
+}
+
+template<>
 Box2DBody* GameObject::AddComponent(b2BodyDef* _bodyDef)
 {
 	if (ExistComponent<Box2DBody>()) return GetComponent<Box2DBody>();
@@ -200,22 +222,44 @@ Box2DBody* GameObject::AddComponent(b2BodyDef* _bodyDef)
 }
 
 template<>
-Box2DBody* GameObject::AddComponent<Box2DBody>()
+WindowRect* GameObject::AddComponent<WindowRect>()
 {
-	if (ExistComponent<Box2DBody>()) return GetComponent<Box2DBody>();
+	if (ExistComponent<WindowRect>()) return GetComponent<WindowRect>();
 
 	Component* component = nullptr;
-	component = new Box2DBody(this);
+	component = new WindowRect(this);
 	component->m_this = this;
 
 	//リストに追加(デストラクタ登録)
-	m_componentList.insert(std::make_pair(typeid(Box2DBody).name(),
+	m_componentList.insert(std::make_pair(typeid(WindowRect).name(),
 		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; })));
 
-	Box2DBody* render = dynamic_cast<Box2DBody*>(component);
+	WindowRect* render = dynamic_cast<WindowRect*>(component);
 	if (render == nullptr)
 	{
-		LOG_WARNING("%s component down_cast faild", typeid(Box2DBody).name());
+		LOG_WARNING("%s component down_cast faild", typeid(WindowRect).name());
+	}
+
+	return render;
+}
+
+template<>
+WindowRect* GameObject::AddComponent(const char* _windowName)
+{
+	if (ExistComponent<WindowRect>()) return GetComponent<WindowRect>();
+
+	Component* component = nullptr;
+	component = new WindowRect(this, _windowName);
+	component->m_this = this;
+
+	//リストに追加(デストラクタ登録)
+	m_componentList.insert(std::make_pair(typeid(WindowRect).name(),
+		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; })));
+
+	WindowRect* render = dynamic_cast<WindowRect*>(component);
+	if (render == nullptr)
+	{
+		LOG_WARNING("%s component down_cast faild", typeid(WindowRect).name());
 	}
 
 	return render;
@@ -242,6 +286,13 @@ template<>
 Transform* GameObject::GetComponent()
 {
 	return &transform;
+}
+
+template<>
+bool GameObject::TryGetComponent(Transform** _output)
+{
+	*_output = &transform;
+	return true;
 }
 
 GameObject* ObjectManager::Find(const std::string& _name)

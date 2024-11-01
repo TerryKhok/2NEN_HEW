@@ -44,11 +44,9 @@ public:
 	/// </summary>
 	/// <param name="_v"></param>
 	/// <returns></returns>
-	Vector2& operator+(const Vector2& _v)
+	Vector2 operator+(const Vector2& _v)
 	{
-		vec.x += _v.x;
-		vec.y += _v.y;
-		return *this;
+		return { vec.x + _v.x, vec.y + _v.y };
 	}
 	/// <summary>
 	/// ‰ÁZ‘ã“ü‰‰Z
@@ -77,11 +75,9 @@ public:
 	/// </summary>
 	/// <param name="_v"></param>
 	/// <returns></returns>
-	Vector2& operator*(const float& _v)
+	Vector2 operator*(const float& _v)
 	{
-		vec.x *= _v;
-		vec.y *= _v;
-		return *this;
+		return{ vec.x * _v, vec.y * _v };
 	}
 	/// <summary>
 	/// æZ‘ã“ü‰‰Z
@@ -95,26 +91,13 @@ public:
 		return *this;
 	}
 	/// <summary>
-	/// Œ¸Z‘ã“ü
-	/// </summary>
-	/// <param name="_v"></param>
-	/// <returns></returns>
-	Vector2& operator-(const Vector2& _v)
-	{
-		vec.x -= _v.x;
-		vec.y -= _v.y;
-		return *this;
-	}
-	/// <summary>
 	/// Œ¸Z‘ã“ü‰‰Z
 	/// </summary>
 	/// <param name="_v"></param>
 	/// <returns></returns>
-	Vector2& operator-=(const Vector2& _v)
+	Vector2 operator-(const Vector2& _v)
 	{
-		vec.x -= _v.x;
-		vec.y -= _v.y;
-		return *this;
+		return { vec.x - _v.x, vec.y - _v.y };
 	}
 	/// <summary>
 	/// Œ¸Z‘ã“ü‰‰Z
@@ -132,11 +115,9 @@ public:
 	/// </summary>
 	/// <param name="_v"></param>
 	/// <returns></returns>
-	Vector2& operator/(const float& _v)
+	Vector2 operator/(const float& _v)
 	{
-		vec.x /= _v;
-		vec.y /= _v;
-		return *this;
+		return{ vec.x / _v, vec.y / _v };
 	}
 	/// <summary>
 	/// ™Z‘ã“ü‰‰Z
@@ -520,40 +501,36 @@ public:
 	/// </summary>
 	/// <param name="_v"></param>
 	/// <returns></returns>
-	Vector3& operator+(const Vector3& _v)
+	Vector3 operator+(const Vector3& _v)
 	{
-		Add(_v);
-		return *this;
+		return { x + _v.x,y + _v.y,z + _v.z };
 	}
 	/// <summary>
 	/// æZ‰‰ZqB
 	/// </summary>
 	/// <param name="_v"></param>
 	/// <returns></returns>
-	Vector3& operator*(const float& s)
+	Vector3 operator*(const float& s)
 	{
-		Scale(s);
-		return *this;
+		return { x * s,y * s,z * s };
 	}
 	/// <summary>
 	/// Œ¸Z‰‰ZqB
 	/// </summary>
 	/// <param name="_v"></param>
 	/// <returns></returns>
-	Vector3& operator-(const Vector3& _v)
+	Vector3 operator-(const Vector3& _v)
 	{
-		Subtract(_v);
-		return *this;
+		return { x - _v.x,y - _v.y,z - _v.z };
 	}
 	/// <summary>
 	/// ™Z‰‰ZqB
 	/// </summary>
 	/// <param name="_v"></param>
 	/// <returns></returns>
-	Vector3& operator/(const float& s)
+	Vector3 operator/(const float& s)
 	{
-		Div(s);
-		return *this;
+		return { x / s,y / s,z / s };
 	}
 
 	/// <summary>

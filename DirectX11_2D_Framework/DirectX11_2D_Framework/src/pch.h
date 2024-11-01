@@ -95,6 +95,7 @@
 #include "../../DirectX11_2D_Framework/inc/Scene.h"
 #include "../../DirectX11_2D_Framework/inc/Box2DBody.h"
 #include "../../DirectX11_2D_Framework/inc/Camera.h"
+#include "../../DirectX11_2D_Framework/inc/WindowRect.h"
 #include "../../DirectX11_2D_Framework/inc/Button.h"
 #endif
 

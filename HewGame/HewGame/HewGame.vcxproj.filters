@@ -16,6 +16,9 @@
     <Filter Include="Scene">
       <UniqueIdentifier>{fd3f16b7-c2fd-4753-a3da-72277ed37410}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{f20e245c-32fc-4897-ac05-f0e3bb2d3d07}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sample_Box2D.h">
@@ -33,6 +36,21 @@
     <ClInclude Include="AnimationBuilderh.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Scene_ProtoType.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="MovePlayer.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="AntiGravity.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="LowGravity.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="Permeation.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -43,6 +61,9 @@
     </ClCompile>
     <ClCompile Include="AnimationBuilder.cpp">
       <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Permeation.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -49,4 +49,21 @@ public:
 	{
 		return t0 + (t1 - t0) * rate;
 	}
+	/// <summary>
+	/// 二つの点の距離を求める
+	/// </summary>
+	template<typename T>
+	static T PointDistance(T x, T y, T x2, T y2) {
+		T distance = sqrt((x2 - x) * (x2 - x) + (y2 - y) * (y2 - y));
+
+		return distance;
+	}
+	/// <summary>
+	/// 二点間の角度をラジアンで取得
+	/// </summary>
+	template<typename T>
+	static T PointRadian(T x, T y, T x2, T y2) {
+		T radian = atan2(y2 - y, x2 - x);
+		return radian;
+	}
 };

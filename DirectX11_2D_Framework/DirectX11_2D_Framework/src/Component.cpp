@@ -30,9 +30,23 @@ void Component::DeleteObject(std::string _name)
     auto iter = list->find(_name);
     if (iter != list->end())
     {
+        auto& b2bodyMoveList = Box2DBodyManager::moveFunctions;
+        if (!b2bodyMoveList.empty())
+        {
+            b2bodyMoveList.back()();
+            b2bodyMoveList.pop_back();
+        }
+
 #ifdef DEBUG_TRUE
         PointerRegistryManager::deletePointer(iter->second.get());
 #endif
         list->erase(iter);
+
+#ifdef DEBUG_TRUE
+        if (m_this->GetName() == _name)
+        {
+            throw "";
+        }
+#endif
     }
 }

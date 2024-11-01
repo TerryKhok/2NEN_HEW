@@ -122,6 +122,7 @@ class RenderManager final
 	friend class Renderer;
 	friend class RenderManager;
 	friend class SceneManager;
+	friend class Box2D::WorldManager;
 	friend class Box2DBody;
 	friend class Box2DBoxRenderNode;
 	friend class Box2DCapsuleRenderNode;
@@ -160,4 +161,20 @@ private:
 	static ComPtr<ID3D11Buffer> m_vertexBuffer;
 	//共通のインデックスバッファー
 	static ComPtr<ID3D11Buffer> m_indexBuffer;
+#ifdef DEBUG_TRUE
+	struct DrawRayNode
+	{
+		Vector2 center;
+		float length;
+		float radian;
+		XMFLOAT4 color;
+	};
+
+	//rayを描画するための線の頂点
+	static ComPtr<ID3D11Buffer> m_lineVertexBuffer;
+	//共通のrayを描画するための線のインデックス
+	static ComPtr<ID3D11Buffer> m_lineIndexBuffer;
+	//rayを描画するための要素
+	static std::vector<DrawRayNode> m_drawRayNode;
+#endif
 };

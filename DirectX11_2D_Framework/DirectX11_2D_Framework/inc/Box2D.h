@@ -40,7 +40,7 @@ namespace Box2D
 
 	//ワールド更新ステップ
 	//======================================
-	const float timeStep = 1.0f / 60.0f;
+	const float timeStep = 1.0f / WORLD_FPS;
 	const int subStepCount = 4;
 	//======================================
 
@@ -50,6 +50,19 @@ namespace Box2D
 		friend class GameObject;
 		friend class Box2DBody;
 		friend class SceneManager;
+
+	public:
+		//StartからEndまでbox2dBodyがあるか
+		static bool RayCast(Vector2 _start, Vector2 _end);
+		//StartからEndまでbox2dBodyがあるか(outputに衝突位置を代入)
+		static bool RayCast(Vector2 _start, Vector2 _end, Vector2& _output);
+		//StartからEndまでbox2dBodyがあるか(filter指定)
+		static bool RayCast(Vector2 _start, Vector2 _end, FILTER _filter);
+		//StartからEndまでbox2dBodyがあるか(outputに衝突位置を代入,filter指定)
+		static bool RayCast(Vector2 _start, Vector2 _end, Vector2& _output, FILTER _filter);
+
+		static bool RayCastAll(Vector2 _start, Vector2 _end, std::vector<Vector2>& _output);
+		static bool RayCastAll(Vector2 _start, Vector2 _end, std::vector<Vector2>& _output, FILTER _filter);
 
 	private:
 		//生成禁止
@@ -79,6 +92,8 @@ namespace Box2D
 		//ワールドの更新
 		static void WorldUpdate();
 #endif
+		//センサーイベントの確認と実行
+		static void ExcuteSensorEvent();
 		//ワールドのかたずけ
 		static void DeleteAllWorld();
 		//次のワールドにする

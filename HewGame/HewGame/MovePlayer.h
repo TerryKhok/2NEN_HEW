@@ -6,30 +6,55 @@ class MovePlayer : public Component
 	
 	void Start()
 	{
-		rb = m_this->GetComponent<Box2DBody>();
-		if (rb == nullptr)
+		if (!m_this->TryGetComponent<Box2DBody>(&rb))
 		{
-			m_this->AddComponent<Box2DBody>();
+			rb = m_this->AddComponent<Box2DBody>();
 		}
+		rb->SetFilter(F_PLAYER);
+		rb->SetFixedRotation(true);
+		rb->CreateCapsuleShape();
 	}
+
+	bool jumping = false;
+	int count = 0;
 
 	void Update()
 	{
-		if (Input::Get().KeyPress(VK_D))
+		bool isGround = false;
+		Vector2 rayEnd = m_this->transform.position;
+		rayEnd.y -= 50.0f;
+		if (Box2D::WorldManager::RayCast(m_this->transform.position, rayEnd))
 		{
-			rb->SetVelocityX(10.0f);
+			isGround = true;
 		}
-		if (Input::Get().KeyPress(VK_A))
+
+		if (Input::Get().KeyPress(VK_E))
 		{
-			rb->SetVelocityX(-10.0f);
+			DeleteObject(m_this);
 		}
-		if (Input::Get().KeyPress(VK_W))
+
+		if (Input::Get().KeyPress(VK_RIGHT))
 		{
-			rb->SetVelocityY(10.0f);
+			rb->SetVelocityX(15.0f);
 		}
-		if (Input::Get().KeyPress(VK_S))
+		if (Input::Get().KeyPress(VK_LEFT))
 		{
-			rb->SetVelocityY(-10.0f);
+			rb->SetVelocityX(-15.0f);
+		}
+
+		if (Input::Get().KeyTrigger(VK_UP) && isGround && !jumping)
+		{
+			rb->AddForceImpule({ 0.0f,50.0f });
+		}
+
+		if (jumping)
+		{
+			count++;
+			if (count > 20)
+			{
+				count = 0;
+				jumping = false;
+			}
 		}
 	}
 };

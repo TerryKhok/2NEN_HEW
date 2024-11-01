@@ -106,6 +106,7 @@ class PointerRegistryManager {
     template <typename T>
     friend class SafePointer;
 
+    friend class Window;
     friend class Scene;
     friend class GameObject;
     friend class Component;
@@ -153,7 +154,7 @@ public:
         ptr = _p;
         return *this;
     }
-    //T型への変換
+    //T*型への変換
     operator T* ()const
     {
         if (ptr == nullptr) {
@@ -162,6 +163,10 @@ public:
         }
 
         return ptr;
+    }
+  
+    T** operator&() {
+        return &ptr;
     }
 
     //ポインタ剥がし
@@ -181,6 +186,15 @@ public:
         return ptr;
     }
 
+    bool operator==(const T* _value) {
+        return ptr == _value;
+    }
+
+    bool operator!=(const T* _value) {
+        return ptr != _value;
+    }
+
+private:
     //保持しているアドレスの無効化
     void invalidate() override {
         ptr = nullptr;

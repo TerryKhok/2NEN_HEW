@@ -31,7 +31,7 @@ class SampleScene_Title : public Scene
 		if (Input::Get().KeyTrigger(VK_SPACE))
  		{
 			//ロード中のシーンに遷移(同期) ※なくてもいい
-			SceneManager::LoadScene<SampleScene_Box2D>();
+			SceneManager::LoadScene<SampleScene_Loading>();
 		}
 	}
 };

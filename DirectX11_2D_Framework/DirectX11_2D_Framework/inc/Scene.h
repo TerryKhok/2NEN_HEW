@@ -121,7 +121,8 @@ public:
 					Box2D::WorldManager::ChengeNextWorld();
 					RenderManager::ChangeNextRenderList();
 					ObjectManager::ChangeNextObjectList();
-					
+					//生成するウィンドウを表示しない
+					Window::WindowSubLoadingBegin();
 					//シーンのロード処理
 					it->second();
 					//古いワールドを削除する
@@ -151,6 +152,9 @@ public:
 			//ロードしておいたリストに切り替える
 			RenderManager::LinkNextRenderList();
 
+			//現在あるサブウィンドウオブジェクトを隠す
+			Window::WindowSubHide();
+
 #ifdef BOX2D_UPDATE_MULTITHREAD
 			//ワールドの更新を一時停止
 			Box2D::WorldManager::PauseWorldUpdate();
@@ -162,6 +166,9 @@ public:
 			//ワールドの更新を再開
 			Box2D::WorldManager::ResumeWorldUpdate();
 #endif
+			//すべてのウィンドウを表示
+			Window::WindowSubLoadingEnd();
+
 			async = false;
 
 			//シーン初期化

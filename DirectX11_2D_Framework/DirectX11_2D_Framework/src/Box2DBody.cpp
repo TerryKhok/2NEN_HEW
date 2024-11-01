@@ -3,6 +3,9 @@ std::vector<std::function<void()>> Box2DBodyManager::moveFunctions;
 
 std::unordered_map<FILTER, unsigned int> Box2DBodyManager::m_layerFilterBit;
 
+//shapeIdに対応したオブジェクトの名前を格納
+std::unordered_map<int32_t, std::string> Box2DBodyManager::m_bodyObjectName;
+
 #ifdef DEBUG_TRUE
 const int Box2DBodyManager::numSegments = 36;
 //box用インデックス
@@ -32,6 +35,8 @@ Box2DBody::Box2DBody(GameObject* _object)
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pResumeWorldUpdate();
 #endif
+
+	Box2DBodyManager::m_bodyObjectName.insert(std::pair(m_bodyId.index1, _object->GetName()));
 }
 
 Box2DBody::Box2DBody(GameObject* _object, b2BodyDef* _bodyDef)
@@ -47,6 +52,8 @@ Box2DBody::Box2DBody(GameObject* _object, b2BodyDef* _bodyDef)
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pResumeWorldUpdate();
 #endif
+
+	Box2DBodyManager::m_bodyObjectName.insert(std::pair(m_bodyId.index1, _object->GetName()));
 }
 
 inline void Box2DBody::Update()
@@ -70,6 +77,11 @@ void Box2DBody::Delete()
 	{
 		node->Delete();
 	}
+	auto& list = Box2DBodyManager::m_bodyObjectName;
+	auto it = list.find(m_bodyId.index1);
+	if (it != list.end()) {
+		list.erase(it);
+	}
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pPauseWorldUpdate();
 #endif
@@ -83,6 +95,11 @@ void Box2DBody::Delete()
 #else
 void Box2DBody::Delete()
 {
+	auto& list = Box2DBodyManager::m_bodyObjectName;
+	auto it = list.find(m_bodyId.index1);
+	if (it != list.end()) {
+		list.erase(it);
+	}
 	b2DestroyBody(m_bodyId);
 }
 #endif
@@ -126,19 +143,19 @@ void Box2DBody::SetFilter(const FILTER _filter)
 #endif 
 }
 
-void Box2DBody::CreateBoxShape()
+void Box2DBody::CreateBoxShape(bool _sensor)
 {
 	auto scale = m_this->transform.scale;
-	CreateBoxShape({ scale.x, scale.y });
+	CreateBoxShape({ scale.x, scale.y }, { 0.0f,0.0f }, 0.0f, _sensor);
 }
 
-void Box2DBody::CreateBoxShape(float _offsetX, float _offsetY, float _angle)
+void Box2DBody::CreateBoxShape(float _offsetX, float _offsetY, float _angle, bool _sensor)
 {
 	auto scale = m_this->transform.scale;
-	CreateBoxShape({ scale.x, scale.y }, { _offsetX ,_offsetY }, _angle);
+	CreateBoxShape({ scale.x, scale.y }, { _offsetX ,_offsetY }, _angle, _sensor);
 }
 
-void Box2DBody::CreateBoxShape(Vector2 _size, Vector2 _offset, float _angle)
+void Box2DBody::CreateBoxShape(Vector2 _size, Vector2 _offset, float _angle,bool _sensor)
 {
 	float rad = Math::DegToRad(_angle);
 
@@ -149,6 +166,7 @@ void Box2DBody::CreateBoxShape(Vector2 _size, Vector2 _offset, float _angle)
 	//シェイプを作成して地面のボディを仕上げる
 	b2ShapeDef shapeDef = b2DefaultShapeDef();
 
+	shapeDef.isSensor = _sensor;
 	shapeDef.filter.categoryBits = m_filter;
 	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(m_filter);
 
@@ -403,6 +421,22 @@ void Box2DBody::CreateChain(std::vector<b2Vec2>& _pointList)
 #endif
 }
 
+void Box2DBody::SetPosition(Vector2 _pos)
+{
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	b2BodyId id = m_bodyId;
+	Box2D::WorldManager::AddWorldTask(std::move([id, _pos]()
+		{
+			b2Vec2 pos = { _pos.x / DEFAULT_OBJECT_SIZE,_pos.y / DEFAULT_OBJECT_SIZE };
+			b2Body_SetTransform(id, pos, b2Body_GetRotation(id));
+		})
+	);
+#else
+	b2Vec2 pos = { _pos.x / DEFAULT_OBJECT_SIZE,_pos.y / DEFAULT_OBJECT_SIZE };
+	b2Body_SetTransform(m_bodyId, pos, b2Body_GetRotation(m_bodyId));
+#endif
+}
+
 void Box2DBody::SetVelocity(b2Vec2 _velocity)
 {
 	/*_velocity.x /= DEFAULT_OBJECT_SIZE;
@@ -424,6 +458,11 @@ void Box2DBody::SetVelocityY(float _velocityY)
 	b2Body_SetLinearVelocity(m_bodyId, vec);
 }
 
+const b2Vec2 Box2DBody::GetVelocity() const
+{
+	return b2Body_GetLinearVelocity(m_bodyId);
+}
+
 void Box2DBody::AddForce(b2Vec2 _force)
 {
 	_force.x *= DEFAULT_OBJECT_SIZE;
@@ -438,6 +477,11 @@ void Box2DBody::AddForceImpule(b2Vec2 _force)
 	b2Body_ApplyLinearImpulseToCenter(m_bodyId, _force, true);
 }
 
+float  Box2DBody::GetGravityScale() const
+{
+	return b2Body_GetGravityScale(m_bodyId);
+}
+
 void Box2DBody::SetGravityScale(float _scale)
 {
 #ifdef BOX2D_UPDATE_MULTITHREAD
@@ -450,6 +494,162 @@ void Box2DBody::SetGravityScale(float _scale)
 #else
 	b2Body_SetGravityScale(m_bodyId, _scale);
 #endif
+}
+
+void Box2DBody::SetFixedRotation(bool _flag)
+{
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	b2BodyId id = m_bodyId;
+	Box2D::WorldManager::AddWorldTask(std::move([id, _flag]()
+		{
+			b2Body_SetFixedRotation(id, _flag);
+		})
+	);
+#else
+	b2Body_SetFixedRotation(m_bodyId, _flag);
+#endif
+}
+
+void Box2DBody::SetAwake(bool _awake)
+{
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	b2BodyId id = m_bodyId;
+	Box2D::WorldManager::AddWorldTask(std::move([id, _awake]()
+		{
+			b2Body_SetAwake(id, _awake);
+		})
+	);
+#else
+	b2Body_SetAwake(m_bodyId, _awake);
+#endif
+}
+
+bool OverlapResultFcn(b2ShapeId shapeId, void* context)
+{
+	std::vector<b2ShapeId>* shpeIds = (std::vector<b2ShapeId>*)context;
+
+	shpeIds->push_back(shapeId);
+	// continue the query
+	return true;
+}
+
+
+void Box2DBody::GetOverlapObject(std::vector<GameObject*>& _objects)
+{
+	const b2Transform b2tf = b2Body_GetTransform(m_bodyId);
+	GetOverlapObject(_objects, b2tf);
+}
+
+void Box2DBody::GetOverlapObject(std::vector<GameObject*>& _objects, b2Transform _tf)
+{
+	std::vector<b2ShapeId> shpeIds;
+	b2QueryFilter filter;
+	filter.categoryBits = m_filter;
+	filter.maskBits = Box2DBodyManager::GetMaskLayerBit(m_filter);
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pPauseWorldUpdate();
+#endif 
+	for (auto& shpeId : m_shapeList)
+	{
+		switch (b2Shape_GetType(shpeId))
+		{
+		case b2_polygonShape:
+		{
+			auto polygon = b2Shape_GetPolygon(shpeId);
+			b2World_OverlapPolygon(*Box2D::WorldManager::currentWorldId, &polygon, _tf, filter, OverlapResultFcn, &shpeIds);
+		}
+		break;
+		case b2_circleShape:
+		{
+			auto circle = b2Shape_GetCircle(shpeId);
+			b2World_OverlapCircle(*Box2D::WorldManager::currentWorldId, &circle, _tf, filter, OverlapResultFcn, &shpeIds);
+		}
+		break;
+		case b2_capsuleShape:
+		{
+			auto causule = b2Shape_GetCapsule(shpeId);
+			b2World_OverlapCapsule(*Box2D::WorldManager::currentWorldId, &causule, _tf, filter, OverlapResultFcn, &shpeIds);
+		}
+		break;
+		}
+		}
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+	for (auto& id : shpeIds)
+	{
+		auto bodyId = b2Shape_GetBody(id);
+		//if (bodyId.index1 == m_bodyId.index1) continue;
+
+		auto iter = Box2DBodyManager::m_bodyObjectName.find(bodyId.index1);
+		if (iter != Box2DBodyManager::m_bodyObjectName.end())
+		{
+			auto object = ObjectManager::Find(iter->second);
+			if (object != nullptr)
+			{
+				_objects.push_back(object);
+			}
+		}
+	}
+}
+
+void Box2DBody::GetOverlapObject(std::unordered_map<GameObject*, b2ShapeId>& _objects)
+{
+	const b2Transform b2tf = b2Body_GetTransform(m_bodyId);
+	GetOverlapObject(_objects, b2tf);
+}
+
+void Box2DBody::GetOverlapObject(std::unordered_map<GameObject*, b2ShapeId>& _objects, b2Transform _tf)
+{
+	std::vector<b2ShapeId> shpeIds;
+	b2QueryFilter filter;
+	filter.categoryBits = m_filter;
+	filter.maskBits = Box2DBodyManager::GetMaskLayerBit(m_filter);
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pPauseWorldUpdate();
+#endif 
+	for (auto& shpeId : m_shapeList)
+	{
+		switch (b2Shape_GetType(shpeId))
+		{
+		case b2_polygonShape:
+		{
+			auto polygon = b2Shape_GetPolygon(shpeId);
+			b2World_OverlapPolygon(*Box2D::WorldManager::currentWorldId, &polygon, _tf, filter, OverlapResultFcn, &shpeIds);
+		}
+		break;
+		case b2_circleShape:
+		{
+			auto circle = b2Shape_GetCircle(shpeId);
+			b2World_OverlapCircle(*Box2D::WorldManager::currentWorldId, &circle, _tf, filter, OverlapResultFcn, &shpeIds);
+		}
+		break;
+		case b2_capsuleShape:
+		{
+			auto causule = b2Shape_GetCapsule(shpeId);
+			b2World_OverlapCapsule(*Box2D::WorldManager::currentWorldId, &causule, _tf, filter, OverlapResultFcn, &shpeIds);
+		}
+		break;
+		}
+	}
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+	for (auto& id : shpeIds)
+	{
+		auto bodyId = b2Shape_GetBody(id);
+		//if (bodyId.index1 == m_bodyId.index1) continue;
+
+		auto iter = Box2DBodyManager::m_bodyObjectName.find(bodyId.index1);
+		if (iter != Box2DBodyManager::m_bodyObjectName.end())
+		{
+			auto object = ObjectManager::Find(iter->second);
+			if (object != nullptr)
+			{
+				_objects.insert(std::make_pair(object, id));
+			}
+		}
+	}
 }
 
 void Box2DBodyManager::DisableLayerCollision(FILTER _filter01, FILTER _filter02)
@@ -469,6 +669,17 @@ void Box2DBodyManager::DisableLayerCollision(FILTER _filter01, FILTER _filter02)
 		filter = _filter02;
 		target = _filter01;
 	}
+}
+
+void Box2DBodyManager::OnlyCollisionFilter(FILTER _filter, FILTER _target)
+{
+	auto iter = m_layerFilterBit.find(_filter);
+	if (iter == m_layerFilterBit.end())
+	{
+		m_layerFilterBit.insert(std::make_pair(_filter, ALL_BITS));
+		iter = m_layerFilterBit.find(_filter);
+	}
+	iter->second = _target;
 }
 
 #ifdef DEBUG_TRUE

@@ -28,11 +28,11 @@ public:
 	// ヒットボックス生成
 	//=================================
 	//当たり判定の作成(Box)
-	void CreateBoxShape();
+	void CreateBoxShape(bool _sensor = false);
 	//Boxオフセット指定
-	void CreateBoxShape(float _offsetX, float _offsetY, float _angle = 0.0f);
+	void CreateBoxShape(float _offsetX, float _offsetY, float _angle = 0.0f, bool _sensor = false);
 	//Boxサイズ指定
-	void CreateBoxShape(Vector2 _size, Vector2 _offset = { 0.0f,0.0f }, float _angle = 0.0f);
+	void CreateBoxShape(Vector2 _size, Vector2 _offset = { 0.0f,0.0f }, float _angle = 0.0f, bool _sensor = false);
 	//当たり判定の作成
 	void CreateCircleShape();
 	//Circleオフセット指定
@@ -55,18 +55,37 @@ public:
 	//=================================
 	//bodyの制御
 	//=================================
+	//positionのテレポート(高処理)
+	void SetPosition(Vector2 _pos);
 	//力の向きの設定
 	void SetVelocity(b2Vec2 _velocity);
 	//力の向きの設定(xだけ)
 	void SetVelocityX(float _velocityX);
 	//力の向きの設定(yだけ)
 	void SetVelocityY(float _velocityY);
+	//力の向きを取得
+	const b2Vec2 GetVelocity() const;
 	//力をじわじわ加える
 	void AddForce(b2Vec2 _force);
 	//力をぱっと加える
 	void AddForceImpule(b2Vec2 _force);
+	//重力の大きさ取得
+	float GetGravityScale() const;
 	//重力を大きさ変更
 	void SetGravityScale(float _scale);
+	//回転を止める設定
+	void SetFixedRotation(bool _flag);
+	//処理の停止を変更する
+	void SetAwake(bool _awake);
+
+	//現在重なっているオブジェクトの詮索
+	void GetOverlapObject(std::vector<GameObject*>& _objects);
+	//現在重なっているオブジェクトの詮索(Transform指定)
+	void GetOverlapObject(std::vector<GameObject*>& _objects,b2Transform _tf);
+	//現在重なっているオブジェクトの詮索
+	void GetOverlapObject(std::unordered_map<GameObject*,b2ShapeId>& _objects);
+	//現在重なっているオブジェクトの詮索(Transform指定)
+	void GetOverlapObject(std::unordered_map<GameObject*, b2ShapeId>& _objects, b2Transform _tf);
 private:
 	b2BodyId m_bodyId;
 	//Shapeを格納する
@@ -81,14 +100,19 @@ private:
 class Box2DBodyManager
 {
 	friend class Window;
+	friend class Component;
 	friend class Box2DBody;
 	friend class SceneManager;
+	friend class Box2D::WorldManager;
 	friend class Box2DBoxRenderNode;
 	friend class Box2DCircleRenderNode;
 	friend class Box2DCapsuleRenderNode;
 
 public:
-	static void DisableLayerCollision(FILTER _layer01, FILTER _layer02);
+	//指定したフィルターが衝突しない設定にする
+	static void DisableLayerCollision(FILTER _filter01, FILTER _filter02);
+	//フィルター１はフィルター２にしか衝突しない設定にする
+	static void OnlyCollisionFilter(FILTER _filter, FILTER _target);
 private:
 #ifdef DEBUG_TRUE
 	static void Init();
@@ -102,10 +126,12 @@ private:
 	static std::vector<std::function<void()>> moveFunctions;
 	//layerのフィルターのビットを格納
 	static std::unordered_map<FILTER, unsigned int> m_layerFilterBit;
+	//bodyIdに対応したオブジェクトの名前を格納
+	static std::unordered_map<int32_t, std::string> m_bodyObjectName;
 
 #ifdef DEBUG_TRUE
 	// More segments = smoother circle
-	static const int numSegments; 
+	static const int numSegments;
 	//box用インデックス
 	static ComPtr<ID3D11Buffer> m_boxIndexBuffer;
 	//Circle用頂点データ
@@ -168,9 +194,8 @@ class Box2DMeshRenderNode : public RenderNode
 {
 	friend class Box2DBody;
 
-	
-	Box2DMeshRenderNode(std::vector<b2Vec2>& _pointList, b2BodyId _bodyId, bool _loop);
 protected:
+	Box2DMeshRenderNode(std::vector<b2Vec2>& _pointList, b2BodyId _bodyId, bool _loop);
 	Box2DMeshRenderNode(b2BodyId _bodyId):m_bodyId(_bodyId){}
 private:
 	inline void Draw();

@@ -4,7 +4,9 @@
 
 class Component
 {
+	friend class Window;
 	friend class GameObject;
+	friend class Box2D::WorldManager;
 
 protected:
 	//生成禁止
@@ -45,4 +47,14 @@ private:
 	virtual inline void Update() {}
 	//非アクティブになったときに呼び出す
 	virtual void OnDisable() {}
+	//オブジェクトのセンサーに侵入したとき
+	virtual void OnColliderEnter(GameObject* _ohter) {}
+	//オブジェクトのセンサーから出た時
+	virtual void OnColliderExit(GameObject* _other) {}
+	//ウィンドウを触った時
+	virtual void OnWindowEnter(HWND _target) {}
+	//ウィンドウを離した時
+	virtual void OnWindowExit(HWND _target) {}
+	//ウィンドウを動かしたとき
+	virtual void OnWindowMove(HWND _target) {}
 };

@@ -191,5 +191,8 @@
     <ClInclude Include="inc\ImGuiApp.h">
       <Filter>Inc</Filter>
     </ClInclude>
+    <ClInclude Include="inc\WindowRect.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

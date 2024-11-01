@@ -10,6 +10,15 @@ RenderManager::RenderList RenderManager::m_nextRendererList[LAYER::LATER_MAX];
 ComPtr<ID3D11Buffer> RenderManager::m_vertexBuffer = nullptr;
 ComPtr<ID3D11Buffer> RenderManager::m_indexBuffer = nullptr;
 
+#ifdef DEBUG_TRUE
+//rayを描画するための線の頂点
+ComPtr<ID3D11Buffer> RenderManager::m_lineVertexBuffer;
+//共通のrayを描画するための線のインデックス
+ComPtr<ID3D11Buffer> RenderManager::m_lineIndexBuffer;
+//rayを描画するための要素
+std::vector<RenderManager::DrawRayNode> RenderManager::m_drawRayNode;
+#endif
+
 Renderer::Renderer(GameObject* _pObject)
 {
 	RenderNode* node = new RenderNode();
@@ -275,6 +284,35 @@ HRESULT RenderManager::Init()
 		node.first = std::shared_ptr<RenderNode>(renderNode);
 		node.second = node.first;
 	}
+
+#ifdef DEBUG_TRUE
+	Vertex lineVertexList[] =
+	{
+		{-0.5f, 0.0f, 0.5f,	1.0f,1.0f,1.0f,1.0f, 0.0f,0.0f},
+		{ 0.5f, 0.0f, 0.5f,	1.0f,1.0f,1.0f,1.0f, 1.0f,0.0f},
+	};
+
+	bufferDesc.ByteWidth = sizeof(lineVertexList);// 確保するバッファサイズを指定
+	subResourceData.pSysMem = lineVertexList;// VRAMに送るデータを指定
+
+	hr = DirectX11::m_pDevice->CreateBuffer(&bufferDesc, &subResourceData, m_lineVertexBuffer.GetAddressOf());
+	if (FAILED(hr)) return hr;
+
+	WORD lineIndexList[]{
+		0, 1
+	};
+
+	ibDesc.ByteWidth = sizeof(WORD) * 2;
+	irData.pSysMem = lineIndexList;
+
+	hr = DirectX11::m_pDevice->CreateBuffer(&ibDesc, &irData, m_lineIndexBuffer.GetAddressOf());
+	if (FAILED(hr))
+	{
+		MessageBoxA(NULL, "頂点バッファー作成失敗", "エラー", MB_ICONERROR | MB_OK);
+
+		return hr;
+	}
+#endif
 	
 	return S_OK;
 }
@@ -299,22 +337,25 @@ void RenderManager::Draw()
 	DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_vertexBuffer.GetAddressOf(), &strides, &offsets);
 	DirectX11::m_pDeviceContext->IASetIndexBuffer(RenderManager::m_indexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
 
+#ifdef CAMERA_ON_WINDOW
 	//ズーム修正
 	renderZoom.x = max(0.2f, renderZoom.x);
 	renderZoom.y = max(0.2f, renderZoom.y);
 
 	RECT rect;
+#endif
+
+#ifdef DEBUG_TRUE
+	static VSObjectConstantBuffer rayCb;
+#endif
 	for (auto& view : DirectX11::m_pRenderTargetViewList)
 	{
-		//モニターの解像度所得
-		static const int monitorHalfWidth = GetSystemMetrics(SM_CXSCREEN) / 2;
-		static const int monitorHalfHeight = GetSystemMetrics(SM_CYSCREEN) / 2;
-
+#ifdef CAMERA_ON_WINDOW
 		if (GetWindowRect(view.first, &rect))
 		{
 			CameraManager::cameraPosition = { 
-				(static_cast<float>(rect.left + rect.right) / 2 - monitorHalfWidth) / renderZoom.x + renderOffset.x,
-				(static_cast<float>(rect.top + rect.bottom) / -2 + monitorHalfHeight) / renderZoom.y + renderOffset.y
+				(static_cast<float>(rect.left + rect.right) / 2 - MONITER_HALF_WIDTH) / renderZoom.x + renderOffset.x,
+				(static_cast<float>(rect.top + rect.bottom) / -2 + MONITER_HALF_HEIGHT) / renderZoom.y + renderOffset.y
 			};
 		}
 
@@ -327,6 +368,7 @@ void RenderManager::Draw()
 		}
 
 		CameraManager::SetCameraMatrix();
+#endif
 
 		// 描画先のキャンバスと使用する深度バッファを指定する
 		DirectX11::m_pDeviceContext->OMSetRenderTargets(1, view.second.GetAddressOf(), DirectX11::m_pDepthStencilView.Get());
@@ -351,6 +393,27 @@ void RenderManager::Draw()
 
 		m_rendererList[LAYER::LAYER_BOX2D_DEBUG].first->NextFunc();
 
+		//rayの描画
+		DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_lineVertexBuffer.GetAddressOf(), &strides, &offsets);
+		DirectX11::m_pDeviceContext->IASetIndexBuffer(RenderManager::m_lineIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+
+		for (auto& rayNode : m_drawRayNode)
+		{
+			//ワールド変換行列の作成
+			//ー＞オブジェクトの位置・大きさ・向きを指定
+			rayCb.world = DirectX::XMMatrixScaling(rayNode.length, 1.0f, 1.0f);
+			rayCb.world *= DirectX::XMMatrixRotationZ(rayNode.radian);
+			rayCb.world *= DirectX::XMMatrixTranslation(rayNode.center.x, rayNode.center.y, 0.5f);
+			rayCb.world = DirectX::XMMatrixTranspose(rayCb.world);
+			rayCb.color = rayNode.color;
+		
+			//行列をシェーダーに渡す
+			DirectX11::m_pDeviceContext->UpdateSubresource(
+				DirectX11::m_pVSObjectConstantBuffer.Get(), 0, NULL, &rayCb, 0, 0);
+
+			DirectX11::m_pDeviceContext->DrawIndexed(2, 0, 0);
+		}
+
 		//設定戻す
 		//======================================================================================================================
 		DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_vertexBuffer.GetAddressOf(), &strides, &offsets);
@@ -360,6 +423,10 @@ void RenderManager::Draw()
 		//======================================================================================================================
 #endif
 	}
+
+#ifdef DEBUG_TRUE
+	m_drawRayNode.clear();
+#endif
 
 	// 描画先のキャンバスと使用する深度バッファを指定する
 	DirectX11::m_pDeviceContext->OMSetRenderTargets(1,

@@ -23,6 +23,246 @@ std::vector<std::function<void()>> Box2D::WorldManager::worldTask;
 std::mutex Box2D::WorldManager::worldTaskMutex;
 #endif
 
+bool Box2D::WorldManager::RayCast(Vector2 _start, Vector2 _end)
+{
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pPauseWorldUpdate();
+#endif 
+	b2Vec2 rayStart = { _start.x / DEFAULT_OBJECT_SIZE,_start.y / DEFAULT_OBJECT_SIZE };
+	b2Vec2 rayEnd =	{ _end.x / DEFAULT_OBJECT_SIZE,_end.y / DEFAULT_OBJECT_SIZE };
+
+	b2RayResult result = b2World_CastRayClosest(*currentWorldId, rayStart, b2Sub(rayEnd, rayStart), b2DefaultQueryFilter());
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+
+#ifdef DEBUG_TRUE
+	Vector2 hitPoint = _end;
+	if (result.hit)
+	{
+		hitPoint = { result.point.x * DEFAULT_OBJECT_SIZE ,result.point.y * DEFAULT_OBJECT_SIZE };
+	}
+	RenderManager::DrawRayNode rayNode;
+	Vector2 dis = hitPoint - _start;
+	rayNode.center = _start + dis / 2;
+	//rayNode.length = Math::PointDistance(_start.x, _start.y, hitPoint.x, hitPoint.y);
+	rayNode.length = sqrt(dis.x * dis.x + dis.y * dis.y);
+	rayNode.radian = Math::PointRadian(_start.x, _start.y, hitPoint.x, hitPoint.y);
+	rayNode.color = result.hit ? XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) : XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+
+	RenderManager::m_drawRayNode.push_back(rayNode);
+#endif
+
+	return result.hit;
+}
+
+bool Box2D::WorldManager::RayCast(Vector2 _start, Vector2 _end, Vector2& _output)
+{
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pPauseWorldUpdate();
+#endif 
+	b2Vec2 rayStart = { _start.x / DEFAULT_OBJECT_SIZE,_start.y / DEFAULT_OBJECT_SIZE };
+	b2Vec2 rayEnd = { _end.x / DEFAULT_OBJECT_SIZE,_end.y / DEFAULT_OBJECT_SIZE };
+
+	b2RayResult result = b2World_CastRayClosest(*currentWorldId, rayStart, b2Sub(rayEnd, rayStart), b2DefaultQueryFilter());
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+
+	Vector2 hitPoint = _end;
+	if (result.hit)
+	{
+		hitPoint = { result.point.x * DEFAULT_OBJECT_SIZE ,result.point.y * DEFAULT_OBJECT_SIZE };
+	}
+	_output = hitPoint;
+
+#ifdef DEBUG_TRUE
+	RenderManager::DrawRayNode rayNode;
+	Vector2 dis = hitPoint - _start;
+	rayNode.center = _start + dis / 2;
+	//rayNode.length = Math::PointDistance(_start.x, _start.y, hitPoint.x, hitPoint.y);
+	rayNode.length = sqrt(dis.x * dis.x + dis.y * dis.y);
+	rayNode.radian = Math::PointRadian(_start.x, _start.y, hitPoint.x, hitPoint.y);
+	rayNode.color = result.hit ? XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) : XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+
+	RenderManager::m_drawRayNode.push_back(rayNode);
+#endif
+
+	return result.hit;
+}
+
+bool Box2D::WorldManager::RayCast(Vector2 _start, Vector2 _end, FILTER _filter)
+{
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pPauseWorldUpdate();
+#endif 
+	b2Vec2 rayStart = { _start.x / DEFAULT_OBJECT_SIZE,_start.y / DEFAULT_OBJECT_SIZE };
+	b2Vec2 rayEnd = { _end.x / DEFAULT_OBJECT_SIZE,_end.y / DEFAULT_OBJECT_SIZE };
+
+	b2QueryFilter filter;
+	filter.categoryBits = _filter;
+	filter.maskBits = Box2DBodyManager::GetMaskLayerBit(_filter);
+	b2RayResult result = b2World_CastRayClosest(*currentWorldId, rayStart, b2Sub(rayEnd, rayStart), filter);
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+
+#ifdef DEBUG_TRUE
+	Vector2 hitPoint = _end;
+	if (result.hit)
+	{
+		hitPoint = { result.point.x * DEFAULT_OBJECT_SIZE ,result.point.y * DEFAULT_OBJECT_SIZE };
+	}
+	RenderManager::DrawRayNode rayNode;
+	Vector2 dis = hitPoint - _start;
+	rayNode.center = _start + dis / 2;
+	//rayNode.length = Math::PointDistance(_start.x, _start.y, hitPoint.x, hitPoint.y);
+	rayNode.length = sqrt(dis.x * dis.x + dis.y * dis.y);
+	rayNode.radian = Math::PointRadian(_start.x, _start.y, hitPoint.x, hitPoint.y);
+	rayNode.color = result.hit ? XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) : XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+
+	RenderManager::m_drawRayNode.push_back(rayNode);
+#endif
+
+	return result.hit;
+}
+
+bool Box2D::WorldManager::RayCast(Vector2 _start, Vector2 _end, Vector2& _output, FILTER _filter)
+{
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pPauseWorldUpdate();
+#endif 
+	b2Vec2 rayStart = { _start.x / DEFAULT_OBJECT_SIZE,_start.y / DEFAULT_OBJECT_SIZE };
+	b2Vec2 rayEnd = { _end.x / DEFAULT_OBJECT_SIZE,_end.y / DEFAULT_OBJECT_SIZE };
+
+	b2QueryFilter filter;
+	filter.categoryBits = _filter;
+	filter.maskBits = Box2DBodyManager::GetMaskLayerBit(_filter);
+	b2RayResult result = b2World_CastRayClosest(*currentWorldId, rayStart, b2Sub(rayEnd, rayStart), filter);
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+	Vector2 hitPoint = _end;
+	if (result.hit)
+	{
+		hitPoint = { result.point.x * DEFAULT_OBJECT_SIZE ,result.point.y * DEFAULT_OBJECT_SIZE };
+	}
+	_output = hitPoint;
+
+#ifdef DEBUG_TRUE
+	RenderManager::DrawRayNode rayNode;
+	Vector2 dis = hitPoint - _start;
+	rayNode.center = _start + dis / 2;
+	//rayNode.length = Math::PointDistance(_start.x, _start.y, hitPoint.x, hitPoint.y);
+	rayNode.length = sqrt(dis.x * dis.x + dis.y * dis.y);
+	rayNode.radian = Math::PointRadian(_start.x, _start.y, hitPoint.x, hitPoint.y);
+	rayNode.color = result.hit ? XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) : XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+
+	RenderManager::m_drawRayNode.push_back(rayNode);
+#endif
+
+	return result.hit;
+}
+
+float b2CastResultPosFcn(b2ShapeId shapeId, b2Vec2 point, b2Vec2 normal, float fraction, void* context)
+{
+	std::vector<b2Vec2>* posList = (std::vector<b2Vec2>*)context;
+	posList->push_back(point);
+
+	return 1;
+}
+
+bool Box2D::WorldManager::RayCastAll(Vector2 _start, Vector2 _end, std::vector<Vector2>& _output)
+{
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pPauseWorldUpdate();
+#endif 
+	b2Vec2 rayStart = { _start.x / DEFAULT_OBJECT_SIZE,_start.y / DEFAULT_OBJECT_SIZE };
+	b2Vec2 rayEnd = { _end.x / DEFAULT_OBJECT_SIZE,_end.y / DEFAULT_OBJECT_SIZE };
+
+	std::vector<b2Vec2> posList;
+	b2World_CastRay(*currentWorldId, rayStart, b2Sub(rayEnd, rayStart), b2DefaultQueryFilter(), b2CastResultPosFcn, &posList);
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+
+	for (auto& vec2 : posList)
+	{
+		_output.push_back(
+			{
+				vec2.x * DEFAULT_OBJECT_SIZE,
+				vec2.y * DEFAULT_OBJECT_SIZE,
+			}
+		);
+	}
+
+	bool hit = posList.size() != 0;
+
+#ifdef DEBUG_TRUE
+	RenderManager::DrawRayNode rayNode;
+	Vector2 dis = _end - _start;
+	rayNode.center = _start + dis / 2;
+	//rayNode.length = Math::PointDistance(_start.x, _start.y, hitPoint.x, hitPoint.y);
+	rayNode.length = sqrt(dis.x * dis.x + dis.y * dis.y);
+	rayNode.radian = Math::PointRadian(_start.x, _start.y, _end.x, _end.y);
+	rayNode.color = hit ? XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) : XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+
+	RenderManager::m_drawRayNode.push_back(rayNode);
+#endif
+
+	return hit;
+}
+
+bool Box2D::WorldManager::RayCastAll(Vector2 _start, Vector2 _end, std::vector<Vector2>& _output, FILTER _filter)
+{
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pPauseWorldUpdate();
+#endif 
+	b2Vec2 rayStart = { _start.x / DEFAULT_OBJECT_SIZE,_start.y / DEFAULT_OBJECT_SIZE };
+	b2Vec2 rayEnd = { _end.x / DEFAULT_OBJECT_SIZE,_end.y / DEFAULT_OBJECT_SIZE };
+
+	b2QueryFilter filter;
+	filter.categoryBits = _filter;
+	filter.maskBits = Box2DBodyManager::GetMaskLayerBit(_filter);
+	std::vector<b2Vec2> posList;
+	b2World_CastRay(*currentWorldId, rayStart, b2Sub(rayEnd, rayStart), filter, b2CastResultPosFcn, &posList);
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+
+	for (auto& vec2 : posList)
+	{
+		_output.push_back(
+			{
+				vec2.x * DEFAULT_OBJECT_SIZE,
+				vec2.y * DEFAULT_OBJECT_SIZE,
+			}
+		);
+	}
+
+	bool hit = posList.size() != 0;
+
+#ifdef DEBUG_TRUE
+	RenderManager::DrawRayNode rayNode;
+	Vector2 dis = _end - _start;
+	rayNode.center = _start + dis / 2;
+	//rayNode.length = Math::PointDistance(_start.x, _start.y, hitPoint.x, hitPoint.y);
+	rayNode.length = sqrt(dis.x * dis.x + dis.y * dis.y);
+	rayNode.radian = Math::PointRadian(_start.x, _start.y, _end.x, _end.y);
+	rayNode.color = hit ? XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) : XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+
+	RenderManager::m_drawRayNode.push_back(rayNode);
+#endif
+
+	return hit;
+}
+
 void Box2D::WorldManager::CreateWorld()
 {
 	//ワールド定義、初期化
@@ -54,8 +294,8 @@ void Box2D::WorldManager::WorldUpdate()
 	LARGE_INTEGER liWork;
 	long long frequency = 0;
 	long long oldCount = 0;
-	long long oldTick = GetTickCount64();	//前回計測時
-	long long nowTick = oldTick;	//今回計測時
+	//long long oldTick = GetTickCount64();	//前回計測時
+	//long long nowTick = oldTick;	//今回計測時
 	long long nowCount = oldCount;
 
 	//FPS固定用変数
@@ -63,6 +303,8 @@ void Box2D::WorldManager::WorldUpdate()
 	frequency = liWork.QuadPart;
 	QueryPerformanceCounter(&liWork);
 	oldCount = liWork.QuadPart;
+
+	const long long frameCount = frequency / WORLD_FPS;
 
 	while (running)
 	{
@@ -88,7 +330,7 @@ void Box2D::WorldManager::WorldUpdate()
 		//現在時間を取得
 		QueryPerformanceCounter(&liWork);
 		nowCount = liWork.QuadPart;
-		if (nowCount >= oldCount + frequency / FPS)
+		if (nowCount >= oldCount + frameCount)
 		{
 			//ワールドのタスクを移す
 			//=================================================================
@@ -114,11 +356,6 @@ void Box2D::WorldManager::WorldUpdate()
 			b2World_Step(worldId, timeStep, subStepCount);
 
 			oldCount = nowCount;
-			nowTick = GetTickCount64();
-			if (nowTick >= oldTick + 1000)
-			{
-				oldTick = nowTick;
-			}
 		}
 	}
 
@@ -230,7 +467,53 @@ void Box2D::WorldManager::WorldUpdate()
 }
 #endif
 
+void Box2D::WorldManager::ExcuteSensorEvent()
+{
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	pPauseWorldUpdate();
+#endif
+	b2SensorEvents sensorEvents = b2World_GetSensorEvents(worldId);
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	pResumeWorldUpdate();
+#endif
+	for (int i = 0; i < sensorEvents.beginCount; i++)
+	{
+		b2SensorBeginTouchEvent event = sensorEvents.beginEvents[i];
+		auto iter = Box2DBodyManager::m_bodyObjectName.find(b2Shape_GetBody(event.sensorShapeId).index1);
+		if (iter != Box2DBodyManager::m_bodyObjectName.end())
+		{
+			GameObject* sensorObject = ObjectManager::Find(iter->second);
+			auto it = Box2DBodyManager::m_bodyObjectName.find(b2Shape_GetBody(event.visitorShapeId).index1);
+			if (it != Box2DBodyManager::m_bodyObjectName.end())
+			{
+				GameObject* visitorObject = ObjectManager::Find(it->second);
+				for (auto& component : sensorObject->m_componentList)
+				{
+					component.second->OnColliderEnter(visitorObject);
+				}
+			}
+		}
+	}
 
+	for (int i = 0; i < sensorEvents.endCount; i++)
+	{
+		b2SensorEndTouchEvent event = sensorEvents.endEvents[i];
+		auto iter = Box2DBodyManager::m_bodyObjectName.find(b2Shape_GetBody(event.sensorShapeId).index1);
+		if (iter != Box2DBodyManager::m_bodyObjectName.end())
+		{
+			GameObject* sensorObject = ObjectManager::Find(iter->second);
+			auto it = Box2DBodyManager::m_bodyObjectName.find(b2Shape_GetBody(event.visitorShapeId).index1);
+			if (it != Box2DBodyManager::m_bodyObjectName.end())
+			{
+				GameObject* visitorObject = ObjectManager::Find(it->second);
+				for (auto& component : sensorObject->m_componentList)
+				{
+					component.second->OnColliderExit(visitorObject);
+				}
+			}
+		}
+	}
+}
 
 void Box2D::WorldManager::DeleteAllWorld()
 {

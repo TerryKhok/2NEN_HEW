@@ -23,6 +23,7 @@ private:
 
 	static void Uninit();
 private:
-	static int fpsCounter;
+	static int worldFpsCounter;
+	static int updateFpsCounter;
 };
 

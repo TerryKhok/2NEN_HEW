@@ -1,5 +1,6 @@
 
-int ImGuiApp::fpsCounter = 0;
+int ImGuiApp::worldFpsCounter;
+int ImGuiApp::updateFpsCounter = 0;
 
 void ImGuiApp::Init(HWND hWnd)
 {
@@ -21,9 +22,13 @@ void ImGuiApp::Begin()
 
 void ImGuiApp::Draw()
 {	
+	ImVec2 newSize(300, 70); // Set the new size (width, height)
+	ImGui::SetNextWindowSize(newSize, ImGuiCond_Once); // ImGuiCond_Once makes it set the size only on the first frame
 	// Your ImGui code (e.g., create windows, buttons, etc.)
 	ImGui::Begin("Example Window");
-	ImGui::Text("fps = %d",fpsCounter);
+	ImGui::Text("world average %.3f ms/frame (%d FPS)",1000.0f / worldFpsCounter, worldFpsCounter);
+	ImGui::Text("update average %.3f ms/frame (%d FPS)", 1000.0f / updateFpsCounter, updateFpsCounter);
+	
 	ImGui::End();
 }
 

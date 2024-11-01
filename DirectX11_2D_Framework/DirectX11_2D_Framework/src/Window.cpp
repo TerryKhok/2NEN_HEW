@@ -24,24 +24,34 @@ void CloseConsoleWindow() {
 std::atomic<bool> Window::mainLoopRun;
 #endif
 
+HINSTANCE Window::m_hInstance;
+int Window::m_nCmdShow;
 HWND  Window::mainHwnd;
 MSG Window::msg;
 RECT Window::windowSize;
 LARGE_INTEGER Window::liWork;
 long long Window::frequency;
-long long Window::oldCount;
-int Window::fpsCounter = 0;						//FPS計測変数
+long long Window::worldOldCount;
+long long Window::updateOldCount;
+long long Window::worldLag = 0;
+long long Window::updateLag = 0;
+int Window::worldFpsounter = 0;		//FPS計測変数
+int Window::updateFpsCounter = 0;						//FPS計測変数
 long long Window::oldTick = GetTickCount64();	//前回計測時
 long long Window::nowTick = oldTick;				//今回計測時
-long long Window::nowCount = oldCount;
+long long Window::nowCount = worldOldCount;
 
 std::atomic<bool> Window::terminateFlag(false);
 
-//ウィンドウを動かしているかのフラグ
-std::atomic<bool> Window::windowSizeMove(false);
+thread_local HWND(*Window::pWindowSubCreate)(std::string, std::string, int, int) = WindowSubCreate;
+
+//ウィンドウのハンドルに対応したオブジェクトの名前
+std::unordered_map<HWND, std::string> Window::m_hwndObjNames;
 
 LRESULT Window::WindowCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
+	//DebugとReleaseのDpiを統一するため
+	SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 
 #ifdef DEBUG_TRUE
 	//コンソール画面起動
@@ -75,10 +85,14 @@ LRESULT Window::WindowCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR
 
 	// ウィンドウの情報をまとめる
 	mainHwnd = CreateWindowEx(
-		0,										// 拡張ウィンドウスタイル
+		0, // Extended styles,// 拡張ウィンドウスタイル
 		"MAIN_WINDOW",								// ウィンドウクラスの名前
 		WINDOW_NAME,									// ウィンドウの名前
-		WS_OVERLAPPEDWINDOW,//WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU,// ウィンドウスタイル
+#ifdef MAINWINDOW_LOCK
+		WS_OVERLAPPED | WS_SYSMENU | WS_CAPTION,	// ウィンドウスタイル
+#else
+		WS_OVERLAPPEDWINDOW,
+#endif
 		CW_USEDEFAULT,							// ウィンドウの左上Ｘ座標
 		CW_USEDEFAULT,							// ウィンドウの左上Ｙ座標 
 		SCREEN_WIDTH,							// ウィンドウの幅
@@ -104,11 +118,14 @@ LRESULT Window::WindowCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR
 	// ウィンドウの状態を直ちに反映(ウィンドウのクライアント領域を更新)
 	UpdateWindow(mainHwnd);
 
+	SetWindowPosition(mainHwnd, { 0.0f,0.0f });
+
 	//FPS固定用変数
 	QueryPerformanceFrequency(&liWork);
 	frequency = liWork.QuadPart;
 	QueryPerformanceCounter(&liWork);
-	oldCount = liWork.QuadPart;
+	worldOldCount = liWork.QuadPart;
+	updateOldCount = liWork.QuadPart;
 
 	//DirectX生成
 	DirectX11::D3D_Create(mainHwnd);
@@ -117,58 +134,132 @@ LRESULT Window::WindowCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR
 	ImGuiApp::Init(mainHwnd);
 #endif
 
+	m_hInstance = hInstance;
+	m_nCmdShow = nCmdShow;
+
 	return LRESULT();
 }
 
-LRESULT Window::WindowSubCreate(HINSTANCE hInstance, int nCmdShow, const char* _windowName)
+std::string objectName;
+std::string windowName;
+int windowWidth;
+int windowHeight;
+
+
+HWND Window::WindowSubCreate(std::string _objName, std::string _windowName, int _width, int _height)
 {
 	HWND hWnd = CreateWindowEx(
 		0,										// 拡張ウィンドウスタイル
 		"SUB_WINDOW",								// ウィンドウクラスの名前
-		_windowName,							// ウィンドウの名前
+		_windowName.c_str(),							// ウィンドウの名前
 		WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU,// ウィンドウスタイル
 		CW_USEDEFAULT,							// ウィンドウの左上Ｘ座標
 		CW_USEDEFAULT,							// ウィンドウの左上Ｙ座標 
-		SUB_SCREEN_WIDTH,							// ウィンドウの幅
-		SUB_SCREEN_HEIGHT,							// ウィンドウの高さ
+		_width,							// ウィンドウの幅
+		_height,							// ウィンドウの高さ
 		NULL,									// 親ウィンドウのハンドル
 		NULL,									// メニューハンドルまたは子ウィンドウID
-		hInstance,								// インスタンスハンドル
+		m_hInstance,								// インスタンスハンドル
 		NULL								// ウィンドウ作成データ
 	);
+
+	// After creating the window, modify the system menu to remove the close button
+	HMENU hMenu = GetSystemMenu(hWnd, FALSE);
+	if (hMenu != NULL) {
+		// Disable the close button by removing the SC_CLOSE item from the system menu
+		RemoveMenu(hMenu, SC_CLOSE, MF_BYCOMMAND);
+	}
 
 	//ウィンドウのサイズを修正
 	RECT rc1, rc2;
 	GetWindowRect(hWnd, &rc1);
 	GetClientRect(hWnd, &rc2);
-	int sx = SUB_SCREEN_WIDTH;
-	int sy = SUB_SCREEN_HEIGHT;
+	int sx = _width;
+	int sy = _height;
 	sx += ((rc1.right - rc1.left) - (rc2.right - rc2.left));
 	sy += ((rc1.bottom - rc1.top) - (rc2.bottom - rc2.top));
-	SetWindowPos(hWnd, NULL, 0, 0, sx, sy, (SWP_NOZORDER |
+	SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, sx, sy, (SWP_NOZORDER |
 		SWP_NOOWNERZORDER | SWP_NOMOVE));
 
-	// 指定されたウィンドウの表示状態を設定(ウィンドウを表示)
-	ShowWindow(hWnd, nCmdShow);
+	ShowWindow(hWnd, m_nCmdShow);
 	// ウィンドウの状態を直ちに反映(ウィンドウのクライアント領域を更新)
 	UpdateWindow(hWnd);
 
-	//リストに追加
-	//hWnds.push_back(hWnd);
-
 	DirectX11::CreateWindowSwapchain(hWnd);
 
-	return LRESULT();
+	m_hwndObjNames.insert(std::make_pair(hWnd, _objName));
+
+	return hWnd;
+}
+
+//まだ表示されていないウィンドウハンドル
+std::vector<HWND> unShowHwnds;
+
+HWND Window::WindowSubCreateAsync(std::string _objName, std::string _windowName, int _width, int _height)
+{
+	// Create a promise and future for window handle
+	std::promise<HWND> handlePromise;
+	std::future<HWND> handleFuture = handlePromise.get_future();
+
+	objectName = _objName;
+	windowName = _windowName;
+	windowWidth = _width;
+	windowHeight = _height;
+
+	// Send a message to the main thread to create the window
+	PostMessage(mainHwnd, WM_CREATE_NEW_WINDOW, reinterpret_cast<WPARAM>(&handlePromise), 0);
+
+	// Wait for the window handle to be set in the future
+	HWND hNewWindow = handleFuture.get();
+	unShowHwnds.push_back(hNewWindow);
+	return hNewWindow;
+}
+
+void Window::WindowSubRelease(HWND hWnd)
+{
+	PostMessage(mainHwnd, WM_DELETE_WINDOW, (WPARAM)hWnd, 0);
+}
+
+BOOL StackShowWindow(HWND _hwnd, int cCmdShow)
+{ 
+	unShowHwnds.push_back(_hwnd);
+	return false; 
+}
+
+void Window::WindowSubLoadingBegin()
+{
+	pWindowSubCreate = WindowSubCreateAsync;
+}
+
+void Window::WindowSubLoadingEnd()
+{
+	for (auto hwnd : unShowHwnds)
+	{
+		ShowWindow(hwnd, SW_SHOW);
+	}
+	unShowHwnds.clear();
+}
+
+void Window::WindowSubHide()
+{
+	for (auto node : m_hwndObjNames)
+	{
+		ShowWindow(node.first, SW_HIDE);
+	}
 }
 
 LRESULT Window::WindowInit(void(*p_mainInitFunc)(void))
 {
 	//初期化処理
 	//=================================================
-
 	SceneManager::m_sceneList.clear();
 	//Box2Dワールド作成
 	Box2D::WorldManager::CreateWorld();
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	//ワールドの更新スタート
+	Box2D::WorldManager::StartWorldUpdate();
+#endif
 
 	RenderManager::Init();
 	p_mainInitFunc();
@@ -178,11 +269,6 @@ LRESULT Window::WindowInit(void(*p_mainInitFunc)(void))
 #ifdef DEBUG_TRUE
 	Box2DBodyManager::Init();
 #endif 
-
-#ifdef BOX2D_UPDATE_MULTITHREAD
-	//ワールドの更新スタート
-	Box2D::WorldManager::StartWorldUpdate();
-#endif
 
 #ifdef SFTEXT_TRUE
 	//テキスト初期化(Font生成)
@@ -196,9 +282,10 @@ LRESULT Window::WindowInit(void(*p_mainInitFunc)(void))
 
 LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 {
-	const long long frameCount = frequency / FPS;
-	// ゲームループ
+	const long long worldFrameCount = frequency / WORLD_FPS;
+	const long long updateFrameCount = frequency / UPDATE_FPS;
 
+	// ゲームループ
 	while(true)
 	{
 		// 新たにメッセージがあれば
@@ -219,14 +306,32 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 		//現在時間を取得
 		QueryPerformanceCounter(&liWork);
 		nowCount = liWork.QuadPart;
-		if (nowCount >= oldCount + frameCount)
+		worldLag += (nowCount - worldOldCount);
+		worldOldCount = nowCount;
+		//FixedUpdate
+		if(worldLag >= worldFrameCount)
 		{
-			//Animator用のカウント更新
-			AnimatorManager::deltaCount = nowCount - oldCount;
-
+			worldLag -= worldFrameCount;
 #ifndef BOX2D_UPDATE_MULTITHREAD
 			Box2D::WorldManager::WorldUpdate();
 #endif
+			TRY_CATCH_LOG(Box2D::WorldManager::ExcuteSensorEvent());
+
+#ifdef DEBUG_TRUE
+			worldFpsounter++;
+#endif
+		}
+
+		updateLag += (nowCount - updateOldCount);
+		updateOldCount = nowCount;
+		
+		//if (nowCount >= previewCount + updateFrameCount)
+		if(updateLag >= updateFrameCount)
+		{
+			updateLag -= updateFrameCount;
+			//Animator用のカウント更新
+			AnimatorManager::deltaCount = nowCount - worldOldCount;
+
 			Input::Get().Update();
 
 			TRY_CATCH_LOG(SceneManager::m_currentScene->Update());
@@ -256,16 +361,16 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 
 			DirectX11::D3D_FinishRender();
 
-			oldCount = nowCount;
-
 #ifdef DEBUG_TRUE
-			fpsCounter++;
+			updateFpsCounter++;
 			nowTick = GetTickCount64();
 
 			if (nowTick >= oldTick + 1000)
 			{
-				ImGuiApp::fpsCounter = fpsCounter;
-				fpsCounter = 0;
+				ImGuiApp::worldFpsCounter = worldFpsounter;
+				worldFpsounter = 0;
+				ImGuiApp::updateFpsCounter = updateFpsCounter;
+				updateFpsCounter = 0;
 				oldTick = nowTick;
 			}
 #endif
@@ -277,8 +382,8 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 
 LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 {
-	const long long frameCount = frequency / FPS;
-
+	const long long worldFrameCount = frequency / WORLD_FPS;
+	const long long updateFrameCount = frequency / UPDATE_FPS;
 	// Example main loop with a loading screen
 	bool loadingComplete = false;
 
@@ -301,14 +406,33 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 			//現在時間を取得
 			QueryPerformanceCounter(&liWork);
 			nowCount = liWork.QuadPart;
-			if (nowCount >= oldCount + frameCount)
+			worldLag += (nowCount - worldOldCount);
+			worldOldCount = nowCount;
+			//FixedUpdate
+			//if (nowCount >= worldOldCount + worldFrameCount)
+			if (worldLag >= worldFrameCount/* && worldFpsounter <= FIXED_FPS*/)
 			{
-				//Animator用のカウント更新
-				AnimatorManager::deltaCount = nowCount - oldCount;
-
+				worldLag -= worldFrameCount;
 #ifndef BOX2D_UPDATE_MULTITHREAD
 				Box2D::WorldManager::WorldUpdate();
 #endif
+				TRY_CATCH_LOG(Box2D::WorldManager::ExcuteSensorEvent());
+
+#ifdef DEBUG_TRUE
+				worldFpsounter++;
+#endif
+			}
+
+			updateLag += (nowCount - updateOldCount);
+			updateOldCount = nowCount;
+
+			//if (nowCount >= previewCount + updateFrameCount)
+			if (updateLag >= updateFrameCount)
+			{
+				updateLag -= updateFrameCount;
+				//Animator用のカウント更新
+				AnimatorManager::deltaCount = nowCount - worldOldCount;
+
 				Input::Get().Update();
 
 				TRY_CATCH_LOG(SceneManager::m_currentScene->Update());
@@ -317,6 +441,7 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 
 				Box2DBodyManager::ExcuteMoveFunction();
 
+				//カメラ関連行列セット
 				CameraManager::SetCameraMatrix();
 
 				DirectX11::D3D_StartRender();
@@ -337,20 +462,19 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 
 				DirectX11::D3D_FinishRender();
 
-				oldCount = nowCount;
-
 #ifdef DEBUG_TRUE
-				fpsCounter++;
+				updateFpsCounter++;
 				nowTick = GetTickCount64();
 
 				if (nowTick >= oldTick + 1000)
 				{
-					ImGuiApp::fpsCounter = fpsCounter;
-					fpsCounter = 0;
+					ImGuiApp::worldFpsCounter = worldFpsounter;
+					worldFpsounter = 0;
+					ImGuiApp::updateFpsCounter = updateFpsCounter;
+					updateFpsCounter = 0;
 					oldTick = nowTick;
 				}
 #endif
-
 				// Check if the loading is complete
 				if (sceneFuture.wait_for(std::chrono::milliseconds(0)) == std::future_status::ready) {
 					loadingComplete = true;
@@ -376,7 +500,7 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 	return LRESULT();
 }
 
-int Window::WindowEnd(HINSTANCE hInstance)
+int Window::WindowEnd()
 {
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::StopWorldUpdate();
@@ -405,9 +529,9 @@ int Window::WindowEnd(HINSTANCE hInstance)
 	CloseConsoleWindow();
 #endif
 
-	UnregisterClass("MAIN_WINDOW", hInstance);
+	UnregisterClass("MAIN_WINDOW", m_hInstance);
 
-	UnregisterClass("SUB_WINDOW", hInstance);
+	UnregisterClass("SUB_WINDOW", m_hInstance);
 
 	//メモリリーク詳細検知
 	//(unique_ptr系はこのあと解放されるので検知されてしまう)
@@ -431,18 +555,134 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	case WM_CLOSE:  // 「x」ボタンが押されたら
 	{
+		ObjectManager::m_eraseObjectList.reset();
+
 		int res = MessageBoxA(NULL, "終了しますか？", "確認", MB_OKCANCEL);
-		if (res == IDOK) {
+		if (res == IDOK) 
+		{
 			terminateFlag = true;
 			DestroyWindow(hWnd);  // 「WM_DESTROY」メッセージを送る
 		}
+
+		//現在時間を取得
+		QueryPerformanceCounter(&liWork);
+		nowCount = liWork.QuadPart;
+		worldOldCount = nowCount;
+		updateOldCount = nowCount;
 	}
 	break;
 
-#ifdef BOX2D_UPDATE_MULTITHREAD
+#ifdef SUBWINDOW_IS_TOP
+
+	case WM_ACTIVATE:
+	{
+		if (LOWORD(wParam) != WA_INACTIVE)
+		{
+			// Post a custom message to adjust the z-order after activation
+			PostMessage(hWnd, WM_ADJUST_Z_ORDER, 0, 0);
+		}
+	}
+	break;
+	case WM_ADJUST_Z_ORDER:
+	{
+		RECT rect;
+		for (auto hwnd : m_hwndObjNames)
+		{
+			GetWindowRect(hwnd.first, &rect);
+			int width = rect.right - rect.left;
+			int height = rect.bottom - rect.top;
+			SetWindowPos(hwnd.first, HWND_TOP, rect.left, rect.top, width, height, SWP_SHOWWINDOW);
+		}
+	}
+	break;
+#endif
+
+	case WM_CREATE_NEW_WINDOW:
+	{
+		HWND hWnd = CreateWindowEx(
+			0,										// 拡張ウィンドウスタイル
+			"SUB_WINDOW",								// ウィンドウクラスの名前
+			windowName.c_str(),							// ウィンドウの名前
+			WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU,// ウィンドウスタイル
+			CW_USEDEFAULT,							// ウィンドウの左上Ｘ座標
+			CW_USEDEFAULT,							// ウィンドウの左上Ｙ座標 
+			windowWidth,							// ウィンドウの幅
+			windowHeight,							// ウィンドウの高さ
+			NULL,									// 親ウィンドウのハンドル
+			NULL,									// メニューハンドルまたは子ウィンドウID
+			m_hInstance,								// インスタンスハンドル
+			NULL								// ウィンドウ作成データ
+		);
+
+		//ウィンドウのサイズを修正
+		RECT rc1, rc2;
+		GetWindowRect(hWnd, &rc1);
+		GetClientRect(hWnd, &rc2);
+		int sx = windowWidth;
+		int sy = windowHeight;
+		sx += ((rc1.right - rc1.left) - (rc2.right - rc2.left));
+		sy += ((rc1.bottom - rc1.top) - (rc2.bottom - rc2.top));
+		SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, sx, sy, (SWP_NOZORDER |
+			SWP_NOOWNERZORDER | SWP_NOMOVE));
+
+		// ウィンドウの状態を直ちに反映(ウィンドウのクライアント領域を更新)
+		UpdateWindow(hWnd);
+
+		DirectX11::CreateWindowSwapchain(hWnd);
+
+		m_hwndObjNames.insert(std::make_pair(hWnd, objectName));
+
+		// Fulfill the promise to return the window handle
+		std::promise<HWND>* pPromise = reinterpret_cast<std::promise<HWND>*>(wParam);
+		pPromise->set_value(hWnd);
+	}
+	break;
+
+	case WM_DELETE_WINDOW:
+	{
+		HWND hTargetWnd = (HWND)wParam;
+		auto& swaplist = DirectX11::m_pSwapChainList;
+		auto swapiter = swaplist.find(hTargetWnd);
+		if (swapiter != swaplist.end())
+		{
+			swapiter->second.Get()->Release();
+			swaplist.erase(swapiter);
+		}
+
+		auto& viewlist = DirectX11::m_pRenderTargetViewList;
+		auto viewiter = viewlist.find(hTargetWnd);
+		if (viewiter != viewlist.end())
+		{
+			viewiter->second.Get()->Release();
+			viewlist.erase(viewiter);
+		}
+
+		auto objIter = m_hwndObjNames.find(hTargetWnd);
+		if (objIter != m_hwndObjNames.end())
+		{
+			m_hwndObjNames.erase(objIter);
+		}
+
+		DestroyWindow(hTargetWnd);
+	}
+	break;
+
 	case WM_NCLBUTTONDOWN:
 
+#ifdef MAINWINDOW_LOCK
+		if (wParam == HTCLOSE) {
+			PostMessage(hWnd, WM_CLOSE, 0, 0);
+			//return DefWindowProc(hWnd, uMsg, wParam, lParam);
+			return 0;
+		}
+		else{
+			return 0;
+		}
+#endif
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
 		Box2D::WorldManager::pPauseWorldUpdate();
+#endif
 		isDragging = true;
 		SetTimer(hWnd, 1, 50, NULL);
 		return DefWindowProc(hWnd, uMsg, wParam, lParam);
@@ -452,7 +692,14 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			// If the left mouse button is no longer down
 			isDragging = false;
 			KillTimer(hWnd, 1);          // Stop the timer
+#ifdef BOX2D_UPDATE_MULTITHREAD
 			Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+			//現在時間を取得
+			QueryPerformanceCounter(&liWork);
+			nowCount = liWork.QuadPart;
+			worldOldCount = nowCount;
+			updateOldCount = nowCount;
 		}
 		return 0;
 
@@ -460,10 +707,16 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		if (isDragging) {
 			isDragging = false;  // Reset the flag
 			KillTimer(hWnd, 1);          // Stop the timer
+#ifdef BOX2D_UPDATE_MULTITHREAD
 			Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+			//現在時間を取得
+			QueryPerformanceCounter(&liWork);
+			nowCount = liWork.QuadPart;
+			worldOldCount = nowCount;
+			updateOldCount = nowCount;
 		}
 		return 0;
-#endif
 
 	case WM_MOVING:
 	{
@@ -532,7 +785,6 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 		//画面の大きさ取得
 	case WM_SIZE:
-
 		GetClientRect(hWnd, &windowSize);
 		screenWindowAspectWidth = PROJECTION_WIDTH / static_cast<float>(windowSize.right);
 		screenWindowAspectHeight = PROJECTION_HEIGHT / static_cast<float>(windowSize.bottom);
@@ -581,6 +833,7 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		auto swapiter = swaplist.find(hWnd);
 		if (swapiter != swaplist.end())
 		{
+			swapiter->second.Get()->Release();
 			swaplist.erase(swapiter);
 		}
 
@@ -588,27 +841,72 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		auto viewiter = viewlist.find(hWnd);
 		if (viewiter != viewlist.end())
 		{
+			viewiter->second.Get()->Release();
 			viewlist.erase(viewiter);
+		}
+
+		auto objIter = m_hwndObjNames.find(hWnd);
+		if (objIter != m_hwndObjNames.end())
+		{
+			m_hwndObjNames.erase(objIter);
 		}
 
 		DestroyWindow(hWnd);
 	}
 	break;
 
-#ifdef BOX2D_UPDATE_MULTITHREAD
 	case WM_NCLBUTTONDOWN:
-
+	{
+#ifdef BOX2D_UPDATE_MULTITHREAD
 		Box2D::WorldManager::pPauseWorldUpdate();
+#endif
 		isDragging = true;
 		SetTimer(hWnd, 1, 50, NULL);
+
+		auto iter = m_hwndObjNames.find(hWnd);
+		if (iter != m_hwndObjNames.end())
+		{
+			auto gameObject = ObjectManager::Find(iter->second);
+			if (gameObject != nullptr)
+			{
+				const auto& list = gameObject->m_componentList;
+				for (auto& component : list)
+				{
+					component.second->OnWindowEnter(hWnd);
+				}
+			}
+		}
+
 		return DefWindowProc(hWnd, uMsg, wParam, lParam);
+	}
 
 	case WM_TIMER:
 		if (isDragging && !(GetAsyncKeyState(VK_LBUTTON) & 0x8000)) {
 			// If the left mouse button is no longer down
 			isDragging = false;
 			KillTimer(hWnd, 1);          // Stop the timer
+#ifdef BOX2D_UPDATE_MULTITHREAD
 			Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+			//現在時間を取得
+			QueryPerformanceCounter(&liWork);
+			nowCount = liWork.QuadPart;
+			worldOldCount = nowCount;
+			updateOldCount = nowCount;
+
+			auto iter = m_hwndObjNames.find(hWnd);
+			if (iter != m_hwndObjNames.end())
+			{
+				auto gameObject = ObjectManager::Find(iter->second);
+				if (gameObject != nullptr)
+				{
+					const auto& list = gameObject->m_componentList;
+					for (auto& component : list)
+					{
+						component.second->OnWindowExit(hWnd);
+					}
+				}
+			}
 		}
 		return 0;
 
@@ -616,13 +914,47 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		if (isDragging) {
 			isDragging = false;  // Reset the flag
 			KillTimer(hWnd, 1);          // Stop the timer
+#ifdef BOX2D_UPDATE_MULTITHREAD
 			Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+			//現在時間を取得
+			QueryPerformanceCounter(&liWork);
+			nowCount = liWork.QuadPart;
+			worldOldCount = nowCount;
+			updateOldCount = nowCount;
+
+			auto iter = m_hwndObjNames.find(hWnd);
+			if (iter != m_hwndObjNames.end())
+			{
+				auto gameObject = ObjectManager::Find(iter->second);
+				if (gameObject != nullptr)
+				{
+					const auto& list = gameObject->m_componentList;
+					for (auto& component : list)
+					{
+						component.second->OnWindowExit(hWnd);
+					}
+				}
+			}
 		}
 		return 0;
-#endif
 
 	case WM_MOVING:
-	{		
+	{
+		auto iter = m_hwndObjNames.find(hWnd);
+		if (iter != m_hwndObjNames.end())
+		{
+			auto gameObject = ObjectManager::Find(iter->second);
+			if (gameObject != nullptr)
+			{
+				const auto& list = gameObject->m_componentList;
+				for (auto& component : list)
+				{
+					component.second->OnWindowMove(hWnd);
+				}
+			}
+		}
+
 		//カメラ関連行列セット
 		CameraManager::SetCameraMatrix();
 
@@ -655,4 +987,24 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	return LRESULT();
 }
 
+Vector2 GetWindowPosition(HWND _hWnd)
+{
+	RECT rect;
+	GetWindowRect(_hWnd, &rect);
+	Vector2 pos =
+	{
+		static_cast<float>(rect.left + rect.right) / 2 - MONITER_HALF_WIDTH,
+		static_cast<float>(rect.top + rect.bottom) / -2 + MONITER_HALF_HEIGHT
+	};
 
+	return pos;
+}
+
+void SetWindowPosition(HWND _hWnd, Vector2 pos)
+{
+	RECT rect;
+	GetWindowRect(_hWnd, &rect);
+	int x = static_cast<int>(pos.x) + MONITER_HALF_WIDTH - (rect.right - rect.left) / 2;
+	int y = -static_cast<int>(pos.y) + MONITER_HALF_HEIGHT - (rect.bottom - rect.top) / 2;
+	SetWindowPos(_hWnd, nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+}
