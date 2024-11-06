@@ -7,6 +7,7 @@ class Component
 	friend class Window;
 	friend class GameObject;
 	friend class Box2D::WorldManager;
+	friend class ImGuiApp;
 
 protected:
 	//生成禁止
@@ -57,4 +58,9 @@ private:
 	virtual void OnWindowExit(HWND _target) {}
 	//ウィンドウを動かしたとき
 	virtual void OnWindowMove(HWND _target, RECT* _rect) {}
+private:
+	//============================================
+	// imguiで描画する
+	//============================================
+	virtual void DrawImGui(){}
 };

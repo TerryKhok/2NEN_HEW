@@ -123,6 +123,12 @@ void Box2DBody::SetActive(bool _active)
 #endif
 }
 
+void Box2DBody::DrawImGui()
+{
+	auto vec = b2Body_GetLinearVelocity(m_bodyId);
+	ImGui::Text("LinerVelocity\nx: %.2f   y:%.2f", vec.x, vec.y);
+}
+
 void Box2DBody::SetFilter(const FILTER _filter)
 {
 	m_filter = _filter;
@@ -439,8 +445,6 @@ void Box2DBody::SetPosition(Vector2 _pos)
 
 void Box2DBody::SetVelocity(b2Vec2 _velocity)
 {
-	/*_velocity.x /= DEFAULT_OBJECT_SIZE;
-	_velocity.y /= DEFAULT_OBJECT_SIZE;*/
 	b2Body_SetLinearVelocity(m_bodyId, _velocity);
 }
 

@@ -120,6 +120,10 @@ HRESULT ImGuiApp::Init(HINSTANCE hInstance)
 		context[type] = ImGui::CreateContext();
 		ImGui::SetCurrentContext(context[type]);
 
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+
 		m_hWndContexts.insert(std::make_pair(hWnd, context[type]));
 
 		ImGui_ImplWin32_Init(m_hWnd[type]); // hWnd is your main window handle
@@ -128,9 +132,6 @@ HRESULT ImGuiApp::Init(HINSTANCE hInstance)
 		ImGuiSetKeyMap(context[type]);
 	}
 	
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-
 	ImGui::StyleColorsDark(); // Set ImGui style (optional)
 
 	return HRESULT();
@@ -233,13 +234,10 @@ void ImGuiApp::DrawInspecterGui()
 
 			ImGui::SeparatorText("Component");
 
-			
-			
 			if (ImGui::TreeNode("Transform"))
 			{
 				bool enabled = true;
 				ImGui::Checkbox("Enabled", &enabled);
-				
 
 				ImGui::InputFloat3("Position", selectedObject->transform.position.data(), "%.1f");
 				ImGui::InputFloat3("Scale", selectedObject->transform.scale.data(), "%.1f");
@@ -263,6 +261,7 @@ void ImGuiApp::DrawInspecterGui()
 
 				if (ImGui::TreeNode(componentName.substr(6).c_str()))
 				{
+					component.second->DrawImGui();
 					ImGui::TreePop();
 				}
 			}
@@ -350,6 +349,7 @@ void ImGuiSetKeyMap(ImGuiContext* _imguiContext)
 {
 	ImGui::SetCurrentContext(_imguiContext);
 	ImGuiIO& io = ImGui::GetIO();
+#ifdef _WIN32
 	io.KeyMap[ImGuiKey_Tab] = VK_TAB;             // Map the Tab key
 	io.KeyMap[ImGuiKey_LeftArrow] = VK_LEFT;      // Map the Left Arrow key
 	io.KeyMap[ImGuiKey_RightArrow] = VK_RIGHT;    // Map the Right Arrow key
@@ -371,4 +371,27 @@ void ImGuiSetKeyMap(ImGuiContext* _imguiContext)
 	io.KeyMap[ImGuiKey_X] = 'X';                  // Map the 'X' key (for Ctrl+X, etc.)
 	io.KeyMap[ImGuiKey_Y] = 'Y';                  // Map the 'Y' key (for Ctrl+Y, etc.)
 	io.KeyMap[ImGuiKey_Z] = 'Z';                  // Map the 'Z' key (for Ctrl+Z, etc.)
+#elif defined(__APPLE__)
+	io.KeyMap[ImGuiKey_Tab] = kVK_Tab;             // Map the Tab key
+	io.KeyMap[ImGuiKey_LeftArrow] = kVK_LEFT;      // Map the Left Arrow key
+	io.KeyMap[ImGuiKey_RightArrow] = kVK_Right;    // Map the Right Arrow key
+	io.KeyMap[ImGuiKey_UpArrow] = kVK_Up;          // Map the Up Arrow key
+	io.KeyMap[ImGuiKey_DownArrow] = kVK_Down;      // Map the Down Arrow key
+	io.KeyMap[ImGuiKey_PageUp] = kVK_Prior;        // Map the Page Up key
+	io.KeyMap[ImGuiKey_PageDown] = kVK_Next;       // Map the Page Down key
+	io.KeyMap[ImGuiKey_Home] = kVK_Home;           // Map the Home key
+	io.KeyMap[ImGuiKey_End] = kVK_End;             // Map the End key
+	io.KeyMap[ImGuiKey_Insert] = kVK_Insert;       // Map the Insert key
+	io.KeyMap[ImGuiKey_Delete] = kVK_Delete;       // Map the Delete key
+	io.KeyMap[ImGuiKey_Backspace] = kVK_Back;      // Map the Backspace key
+	io.KeyMap[ImGuiKey_Space] = kVK_Space;         // Map the Space key
+	io.KeyMap[ImGuiKey_Enter] = kVK_Return;        // Map the Enter key
+	io.KeyMap[ImGuiKey_Escape] = kVK_Escape;       // Map the Escape key
+	io.KeyMap[ImGuiKey_A] = 'A';                  // Map the 'A' key (for Ctrl+A, etc.)
+	io.KeyMap[ImGuiKey_C] = 'C';                  // Map the 'C' key (for Ctrl+C, etc.)
+	io.KeyMap[ImGuiKey_V] = 'V';                  // Map the 'V' key (for Ctrl+V, etc.)
+	io.KeyMap[ImGuiKey_X] = 'X';                  // Map the 'X' key (for Ctrl+X, etc.)
+	io.KeyMap[ImGuiKey_Y] = 'Y';                  // Map the 'Y' key (for Ctrl+Y, etc.)
+	io.KeyMap[ImGuiKey_Z] = 'Z';                  // Map the 'Z' key (for Ctrl+Z, etc.)
+#endif
 }
