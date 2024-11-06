@@ -129,6 +129,7 @@ HRESULT ImGuiApp::Init(HINSTANCE hInstance)
 	}
 	
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
 	ImGui::StyleColorsDark(); // Set ImGui style (optional)
 
@@ -232,8 +233,14 @@ void ImGuiApp::DrawInspecterGui()
 
 			ImGui::SeparatorText("Component");
 
+			
+			
 			if (ImGui::TreeNode("Transform"))
 			{
+				bool enabled = true;
+				ImGui::Checkbox("Enabled", &enabled);
+				
+
 				ImGui::InputFloat3("Position", selectedObject->transform.position.data(), "%.1f");
 				ImGui::InputFloat3("Scale", selectedObject->transform.scale.data(), "%.1f");
 				auto& angle = selectedObject->transform.angle;
@@ -248,6 +255,16 @@ void ImGuiApp::DrawInspecterGui()
 				angle.x = angles[2];
 
 				ImGui::TreePop();
+			}
+
+			for (auto& component : selectedObject->m_componentList)
+			{
+				std::string componentName = component.first;
+
+				if (ImGui::TreeNode(componentName.substr(6).c_str()))
+				{
+					ImGui::TreePop();
+				}
 			}
 		}
 		else
