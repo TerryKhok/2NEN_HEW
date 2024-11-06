@@ -451,18 +451,13 @@ void DirectX11::D3D_StartRender()
 	//===========================================================================================
 
 	// ‰æ–Ê“h‚è‚Â‚Ô‚µF
-	static const float clearColor[4][4] = {
-		{0.0f, 0.5f, 0.5f, 1.0f},
-		{0.0f, 0.0f, 0.0f, 1.0f},
-		{0.5f, 0.5f, 0.0f, 1.0f},
-		{0.5f, 0.0f, 0.5f, 1.0f}
-	};
+	static const float clearColor[4] = { 0.0f, 0.5f, 0.5f, 1.0f };
 
 	int colorIndex = 0;
 	for (auto& targetView : m_pRenderTargetViewList)
 	{
 		// •`‰ææƒLƒƒƒ“ƒoƒX‚ð“h‚è‚Â‚Ô‚·
-		m_pDeviceContext->ClearRenderTargetView(targetView.second.Get(), clearColor[colorIndex]);
+		m_pDeviceContext->ClearRenderTargetView(targetView.second.Get(), clearColor);
 		//colorIndex = (colorIndex + 1) % 4;
 	}
 

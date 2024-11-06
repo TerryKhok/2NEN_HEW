@@ -98,8 +98,8 @@ Renderer* GameObject::AddComponent<Renderer>()
 	component->m_this = this;
 
 	//リストに追加(デストラクタ登録)
-	m_componentList.insert(std::make_pair(typeid(Renderer).name(), 
-		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; })));
+	m_componentList.emplace(typeid(Renderer).name(), 
+		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
 
 	Renderer* render = dynamic_cast<Renderer*>(component);
 	if (render == nullptr)
@@ -121,8 +121,8 @@ Renderer* GameObject::AddComponent<Renderer>(const wchar_t* _texPath)
 	component->m_this = this;
 
 	//リストに追加(デストラクタ登録)
-	m_componentList.insert(std::make_pair(typeid(Renderer).name(),
-		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; })));
+	m_componentList.emplace(typeid(Renderer).name(),
+		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
 
 	Renderer* render = dynamic_cast<Renderer*>(component);
 	if (render == nullptr)
@@ -143,8 +143,8 @@ Renderer* GameObject::AddComponent(Animator* _animator)
 	component->m_this = this;
 
 	//リストに追加(デストラクタ登録)
-	m_componentList.insert(std::make_pair(typeid(Renderer).name(),
-		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; })));
+	m_componentList.emplace(typeid(Renderer).name(),
+		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
 
 	Renderer* render = dynamic_cast<Renderer*>(component);
 	if (render == nullptr)
@@ -165,8 +165,8 @@ Animator* GameObject::AddComponent<Animator>()
 	component->m_this = this;
 
 	//リストに追加(デストラクタ登録)
-	m_componentList.insert(std::make_pair(typeid(Animator).name(),
-		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; })));
+	m_componentList.emplace(typeid(Animator).name(),
+		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
 
 	Animator* animator = dynamic_cast<Animator*>(component);
 	if (animator == nullptr)
@@ -187,8 +187,8 @@ Box2DBody* GameObject::AddComponent<Box2DBody>()
 	component->m_this = this;
 
 	//リストに追加(デストラクタ登録)
-	m_componentList.insert(std::make_pair(typeid(Box2DBody).name(),
-		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; })));
+	m_componentList.emplace(typeid(Box2DBody).name(),
+		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
 
 	Box2DBody* render = dynamic_cast<Box2DBody*>(component);
 	if (render == nullptr)
@@ -209,8 +209,8 @@ Box2DBody* GameObject::AddComponent(b2BodyDef* _bodyDef)
 	component->m_this = this;
 
 	//リストに追加(デストラクタ登録)
-	m_componentList.insert(std::make_pair(typeid(Box2DBody).name(),
-		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; })));
+	m_componentList.emplace(typeid(Box2DBody).name(),
+		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
 
 	Box2DBody* render = dynamic_cast<Box2DBody*>(component);
 	if (render == nullptr)
@@ -231,8 +231,8 @@ WindowRect* GameObject::AddComponent<WindowRect>()
 	component->m_this = this;
 
 	//リストに追加(デストラクタ登録)
-	m_componentList.insert(std::make_pair(typeid(WindowRect).name(),
-		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; })));
+	m_componentList.emplace(typeid(WindowRect).name(),
+		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
 
 	WindowRect* render = dynamic_cast<WindowRect*>(component);
 	if (render == nullptr)
@@ -253,8 +253,8 @@ WindowRect* GameObject::AddComponent(const char* _windowName)
 	component->m_this = this;
 
 	//リストに追加(デストラクタ登録)
-	m_componentList.insert(std::make_pair(typeid(WindowRect).name(),
-		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; })));
+	m_componentList.emplace(typeid(WindowRect).name(),
+		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
 
 	WindowRect* render = dynamic_cast<WindowRect*>(component);
 	if (render == nullptr)

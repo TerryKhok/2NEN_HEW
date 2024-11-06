@@ -11,6 +11,10 @@ ComPtr<ID3D11Buffer> RenderManager::m_vertexBuffer = nullptr;
 ComPtr<ID3D11Buffer> RenderManager::m_indexBuffer = nullptr;
 
 #ifdef DEBUG_TRUE
+//当たり判定の描画
+bool RenderManager::drawHitBox = true;
+//rayの描画
+bool RenderManager::drawRay = true;
 //rayを描画するための線の頂点
 ComPtr<ID3D11Buffer> RenderManager::m_lineVertexBuffer;
 //共通のrayを描画するための線のインデックス
@@ -52,19 +56,19 @@ void Renderer::SetActive(bool _active)
 
 void Renderer::Delete()
 {
-	m_node->Delete();
+	m_node->Delete(m_this->GetLayer());
 	m_node.reset();
 }
 
 void Renderer::SetLayer(const LAYER _layer)
 {
-	m_node->Delete();
+	m_node->Delete(m_this->GetLayer());
 	RenderManager::AddRenderList(m_node, _layer);
 }
 
 void Renderer::SetUVRenderNode(Animator* _animator)
 {
-	m_node->Delete();
+	m_node->Delete(m_this->GetLayer());
 	auto node = new UVRenderNode();
 	node->m_object = m_this;
 	m_node = std::shared_ptr<RenderNode>(node);
@@ -90,7 +94,7 @@ void Renderer::SetColor(XMFLOAT4 _color)
 
 void Renderer::SetTexcode(int _splitX, int _splitY, int _frameX, int _frameY)
 {
-	m_node->Delete();
+	m_node->Delete(m_this->GetLayer());
 	auto node = new UVRenderNode();
 	node->m_object = m_this;
 	node->m_pTextureView = m_node->m_pTextureView;
@@ -149,10 +153,10 @@ void RenderNode::SetTexture(const wchar_t* _texPath)
 
 void RenderNode::SetTexture(const std::string& _filePath)
 {
-	TextureAssets::LoadFromC(m_pTextureView, _filePath);
+	TextureAssets::StbiLoad(m_pTextureView, _filePath);
 }
 
-void RenderNode::Delete()
+void RenderNode::Delete(LAYER _nodeLayer)
 {
 	back->next = next;
 	if (next == nullptr)
@@ -160,7 +164,7 @@ void RenderNode::Delete()
 		back->NextEnd();
 
 		//このノードがレイヤーの最後の場合
-		auto& listEnd = RenderManager::currentList[m_object->GetLayer()].second;
+		auto& listEnd = RenderManager::currentList[_nodeLayer].second;
 		if (listEnd.get() == this)
 		{
 			listEnd = back;
@@ -386,32 +390,38 @@ void RenderManager::Draw()
 			node.first->NextFunc();
 		}
 
-		DirectX11::m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-
-		//テクスチャをピクセルシェーダーに渡す
-		DirectX11::m_pDeviceContext->PSSetShaderResources(0, 1, DirectX11::m_pTextureView.GetAddressOf());
-
-		m_rendererList[LAYER::LAYER_BOX2D_DEBUG].first->NextFunc();
-
-		//rayの描画
-		DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_lineVertexBuffer.GetAddressOf(), &strides, &offsets);
-		DirectX11::m_pDeviceContext->IASetIndexBuffer(RenderManager::m_lineIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
-
-		for (auto& rayNode : m_drawRayNode)
+		if (drawHitBox)
 		{
-			//ワールド変換行列の作成
-			//ー＞オブジェクトの位置・大きさ・向きを指定
-			rayCb.world = DirectX::XMMatrixScaling(rayNode.length, 1.0f, 1.0f);
-			rayCb.world *= DirectX::XMMatrixRotationZ(rayNode.radian);
-			rayCb.world *= DirectX::XMMatrixTranslation(rayNode.center.x, rayNode.center.y, 0.5f);
-			rayCb.world = DirectX::XMMatrixTranspose(rayCb.world);
-			rayCb.color = rayNode.color;
-		
-			//行列をシェーダーに渡す
-			DirectX11::m_pDeviceContext->UpdateSubresource(
-				DirectX11::m_pVSObjectConstantBuffer.Get(), 0, NULL, &rayCb, 0, 0);
+			DirectX11::m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
-			DirectX11::m_pDeviceContext->DrawIndexed(2, 0, 0);
+			//テクスチャをピクセルシェーダーに渡す
+			DirectX11::m_pDeviceContext->PSSetShaderResources(0, 1, DirectX11::m_pTextureView.GetAddressOf());
+
+			m_rendererList[LAYER::LAYER_BOX2D_DEBUG].first->NextFunc();
+		}
+		
+		if (drawRay)
+		{
+			//rayの描画
+			DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_lineVertexBuffer.GetAddressOf(), &strides, &offsets);
+			DirectX11::m_pDeviceContext->IASetIndexBuffer(RenderManager::m_lineIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+
+			for (auto& rayNode : m_drawRayNode)
+			{
+				//ワールド変換行列の作成
+				//ー＞オブジェクトの位置・大きさ・向きを指定
+				rayCb.world = DirectX::XMMatrixScaling(rayNode.length, 1.0f, 1.0f);
+				rayCb.world *= DirectX::XMMatrixRotationZ(rayNode.radian);
+				rayCb.world *= DirectX::XMMatrixTranslation(rayNode.center.x, rayNode.center.y, 0.5f);
+				rayCb.world = DirectX::XMMatrixTranspose(rayCb.world);
+				rayCb.color = rayNode.color;
+
+				//行列をシェーダーに渡す
+				DirectX11::m_pDeviceContext->UpdateSubresource(
+					DirectX11::m_pVSObjectConstantBuffer.Get(), 0, NULL, &rayCb, 0, 0);
+
+				DirectX11::m_pDeviceContext->DrawIndexed(2, 0, 0);
+			}
 		}
 
 		//設定戻す

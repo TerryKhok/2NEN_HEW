@@ -40,7 +40,7 @@ const int MONITER_HALF_HEIGHT = GetSystemMetrics(SM_CYSCREEN) / 2;
 
 //メインウィンドウを動かせないようにする
 //================================================================
-//#define MAINWINDOW_LOCK
+#define MAINWINDOW_LOCK
 //================================================================
 
 //常にメインの上にサブが来る
@@ -104,7 +104,7 @@ private:
 	static std::unordered_map<HWND, std::string> m_hwndObjNames;
 public:
 	//ウィンドウ生成
-	static LRESULT WindowCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
+	static LRESULT WindowMainCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
 
 	//サブウィンドウ削除
 	static void WindowSubRelease(HWND hWnd);

@@ -42,7 +42,7 @@ public:
 		Window::WindowSubRelease(m_hWnd);
 	}
 
-	void OnWindowMove(HWND _hWnd) override
+	void OnWindowMove(HWND _hWnd, RECT* _rect) override
 	{
 		m_this->transform.position = GetWindowPosition(_hWnd);
 	}

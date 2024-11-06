@@ -56,5 +56,5 @@ private:
 	//ウィンドウを離した時
 	virtual void OnWindowExit(HWND _target) {}
 	//ウィンドウを動かしたとき
-	virtual void OnWindowMove(HWND _target) {}
+	virtual void OnWindowMove(HWND _target, RECT* _rect) {}
 };

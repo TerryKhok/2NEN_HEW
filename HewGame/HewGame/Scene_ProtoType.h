@@ -58,8 +58,8 @@ class Scene_ProtoType :public Scene
 		bodyDef2 = b2DefaultBodyDef();
 		bodyDef2.type = b2_kinematicBody;
 		box2d = object->AddComponent<Box2DBody>(&bodyDef2);
-		box2d->SetFilter(F_WINDOW);
-		box2d->CreateBoxShape(true);
+		box2d->SetFilter(F_PERWINDOW);
+		box2d->CreateBoxShape({ 28.0f,18.0f }, { 0.0f,0.0f }, 0.0f, true);
 		object->AddComponent<Renderer>();
 		object->AddComponent<WindowRect>("Permeation");
 		object->AddComponent<Permeation>();

@@ -86,6 +86,8 @@ public:
 	void GetOverlapObject(std::unordered_map<GameObject*,b2ShapeId>& _objects);
 	//現在重なっているオブジェクトの詮索(Transform指定)
 	void GetOverlapObject(std::unordered_map<GameObject*, b2ShapeId>& _objects, b2Transform _tf);
+	//現在重なっているオブジェクトの詮索(Transform,filter指定)
+	void GetOverlapObject(std::unordered_map<GameObject*, b2ShapeId>& _objects, b2Transform _tf, FILTER _filter);
 private:
 	b2BodyId m_bodyId;
 	//Shapeを格納する
@@ -110,7 +112,9 @@ class Box2DBodyManager
 
 public:
 	//指定したフィルターが衝突しない設定にする
-	static void DisableLayerCollision(FILTER _filter01, FILTER _filter02);
+	static void DisableCollisionFilter(FILTER _filter01, FILTER _filter02);
+	//指定したフィルターが衝突する設定にする
+	static void EnableCollisionFilter(FILTER _filter01, FILTER _filter02);
 	//フィルター１はフィルター２にしか衝突しない設定にする
 	static void OnlyCollisionFilter(FILTER _filter, FILTER _target);
 private:
@@ -123,7 +127,7 @@ private:
 	static unsigned int GetMaskLayerBit(FILTER _layer);
 private:
 	//bodyの位置変更関数リスト
-	static std::vector<std::function<void()>> moveFunctions;
+	static std::unordered_map<std::string, std::function<void()>> moveFunctions;
 	//layerのフィルターのビットを格納
 	static std::unordered_map<FILTER, unsigned int> m_layerFilterBit;
 	//bodyIdに対応したオブジェクトの名前を格納

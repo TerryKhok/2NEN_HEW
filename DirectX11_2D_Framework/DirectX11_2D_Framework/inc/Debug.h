@@ -109,6 +109,7 @@ class PointerRegistryManager {
     friend class Window;
     friend class Scene;
     friend class GameObject;
+    friend class ObjectManager;
     friend class Component;
 private:
     //ê∂ê¨ã÷é~

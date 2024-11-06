@@ -1,25 +1,25 @@
 
 // Open File Dialog to select PNG
-std::string OpenFileDialog() {
-	OPENFILENAME ofn;
-	char szFile[260];
-	ZeroMemory(&ofn, sizeof(ofn));
-	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = NULL;
-	ofn.lpstrFile = szFile;
-	ofn.lpstrFile[0] = '\0';
-	ofn.lpstrFilter = "PNG Files (*.png)\0*.png\0";//All Files (*.*)\0*.*\0;
-	ofn.nMaxFile = sizeof(szFile);
-	ofn.lpstrTitle = "Select a PNG file";
-	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
-
-	if (GetOpenFileName(&ofn)) {
-		std::string str = szFile;
-		return str;
-	}
-
-	return " ";
-}
+//std::string OpenFileDialog() {
+//	OPENFILENAME ofn;
+//	char szFile[260];
+//	ZeroMemory(&ofn, sizeof(ofn));
+//	ofn.lStructSize = sizeof(ofn);
+//	ofn.hwndOwner = NULL;
+//	ofn.lpstrFile = szFile;
+//	ofn.lpstrFile[0] = '\0';
+//	ofn.lpstrFilter = "PNG Files (*.png)\0*.png\0";//All Files (*.*)\0*.*\0;
+//	ofn.nMaxFile = sizeof(szFile);
+//	ofn.lpstrTitle = "Select a PNG file";
+//	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+//
+//	if (GetOpenFileName(&ofn)) {
+//		std::string str = szFile;
+//		return str;
+//	}
+//
+//	return " ";
+//}
 
 //// Function to display Save File dialog and get the file path
 //std::string GetSaveFilePath() {
@@ -91,29 +91,29 @@ void AnimationBulider_Scene::Load()
 
 	delete filePath;*/
 
-	auto object = Instantiate("test");
-	object->SetLayer(LAYER_UI);
+	//auto object = Instantiate("test");
+	//object->SetLayer(LAYER_UI);
 
-	imgLoadButton = Instantiate("imgLoadButton");
-	imgLoadButton->transform.position = { 250.0f,0.0f };
-	imgLoadButton->transform.scale = { 10.0f,3.0f };
-	imgLoadButton->SetLayer(LAYER_UI);
-	auto rend = imgLoadButton->AddComponent<Renderer>();
-	rend->SetColor({ 0.2f,0.2f,0.2f,0.7f });
-	auto button = imgLoadButton->AddComponent<Button>();
-	button->SetEvent(std::move([&](){
-		std::string filePath = OpenFileDialog();
-		if (filePath != " ")
-		{
-			auto object = Instantiate("test");
-			object->transform.scale = { 10.0f,10.0f };
-			object->SetLayer(LAYER_UI);
-			object->AddComponent<Renderer>()->SetTexture(filePath);
-		}		
-		}));
-	auto text = imgLoadButton->AddComponent<SFText>();
-	text->SetString("‰æ‘œ‚ð“Ç‚Ýž‚Þ");
-	text->offset.y = 8.0f;
+	//imgLoadButton = Instantiate("imgLoadButton");
+	//imgLoadButton->transform.position = { 250.0f,0.0f };
+	//imgLoadButton->transform.scale = { 10.0f,3.0f };
+	//imgLoadButton->SetLayer(LAYER_UI);
+	//auto rend = imgLoadButton->AddComponent<Renderer>();
+	//rend->SetColor({ 0.2f,0.2f,0.2f,0.7f });
+	//auto button = imgLoadButton->AddComponent<Button>();
+	//button->SetEvent(std::move([&](){
+	//	std::string filePath = OpenFileDialog();
+	//	if (filePath != " ")
+	//	{
+	//		auto object = Instantiate("test");
+	//		object->transform.scale = { 10.0f,10.0f };
+	//		object->SetLayer(LAYER_UI);
+	//		object->AddComponent<Renderer>()->SetTexture(filePath);
+	//	}		
+	//	}));
+	//auto text = imgLoadButton->AddComponent<SFText>();
+	//text->SetString("‰æ‘œ‚ð“Ç‚Ýž‚Þ");
+	//text->offset.y = 8.0f;
 
 	/*img = Instantiate("img");
 	img->SetLayer(LAYER_UI);

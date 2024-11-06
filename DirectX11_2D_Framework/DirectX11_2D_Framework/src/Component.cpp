@@ -31,10 +31,11 @@ void Component::DeleteObject(std::string _name)
     if (iter != list->end())
     {
         auto& b2bodyMoveList = Box2DBodyManager::moveFunctions;
-        if (!b2bodyMoveList.empty())
+        auto it = b2bodyMoveList.find(_name); 
+        if (it != b2bodyMoveList.end())
         {
-            b2bodyMoveList.back()();
-            b2bodyMoveList.pop_back();
+            it->second();
+            b2bodyMoveList.erase(it);
         }
 
 #ifdef DEBUG_TRUE
@@ -42,11 +43,9 @@ void Component::DeleteObject(std::string _name)
 #endif
         list->erase(iter);
 
-#ifdef DEBUG_TRUE
         if (m_this->GetName() == _name)
         {
             throw "";
         }
-#endif
     }
 }

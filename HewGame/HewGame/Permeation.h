@@ -22,12 +22,32 @@ class Permeation : public Component
 			rb = m_this->AddComponent<Box2DBody>();
 		}
 
-		
+		CreateObstacleSegment();
+
+		std::unordered_map<GameObject*, b2ShapeId> exitObjects;
+		rb->GetOverlapObject(exitObjects);
+		for (auto object : exitObjects)
+		{
+			Box2DBody* rb = nullptr;
+			if (object.first->TryGetComponent<Box2DBody>(&rb))
+			{
+				switch (rb->GetFilter())
+				{
+				case F_OBSTACLE:
+					rb->SetFilter(F_PEROBSTACLE);
+					m_enterBox2dFilters.insert(std::make_pair(rb, F_OBSTACLE));
+					break;
+				default:
+					rb->SetAwake(true);
+					break;
+				}
+			}
+		}
 	}
 
-	std::vector<GameObject*> m_barrier;
+	std::vector<std::string> m_barrier;
 
-	void CreateObstacleSegment();
+	bool CreateObstacleSegment();
 
 	std::unordered_set<GameObject*> enters;
 
@@ -38,9 +58,19 @@ class Permeation : public Component
 		Box2DBody* rb = nullptr;
 		if (_other->TryGetComponent<Box2DBody>(&rb))
 		{
-			enters.insert(_other);
-			m_enterBox2dFilters.insert(std::make_pair(rb, rb->GetFilter()));
-			rb->SetFilter(F_PERMEATION);
+			enters.emplace(_other);
+			FILTER filter = rb->GetFilter();
+			switch (filter)
+			{
+			case F_OBSTACLE:
+				rb->SetFilter(F_PEROBSTACLE);
+				break;
+			default:
+				rb->SetFilter(F_PERMEATION);
+				break;
+			}
+			m_enterBox2dFilters.insert(std::make_pair(rb, filter));
+			
 			rend->SetColor(enterColor);
 			inCount++;
 		}
@@ -82,10 +112,15 @@ class Permeation : public Component
 		m_barrier.clear();
 	}
 
+	void OnWindowMove(HWND _hWnd,RECT* _rect) override
+	{
+
+	}
+
 	void OnWindowExit(HWND _hWnd) override
 	{
 		CreateObstacleSegment();
-
+		
 		Vector2 pos = GetWindowPosition(_hWnd);
 		rb->SetPosition(pos);
 
@@ -126,7 +161,16 @@ class Permeation : public Component
 				Box2DBody* rb = nullptr;
 				if (object.first->TryGetComponent<Box2DBody>(&rb))
 				{
-					rb->SetAwake(true);
+					switch (rb->GetFilter())
+					{
+					case F_OBSTACLE:
+						rb->SetFilter(F_PEROBSTACLE);
+						m_enterBox2dFilters.insert(std::make_pair(rb, F_OBSTACLE));
+						break;
+					default:
+						rb->SetAwake(true);
+						break;
+					}
 				}
 			}
 		}

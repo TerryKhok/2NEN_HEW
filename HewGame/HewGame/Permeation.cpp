@@ -28,7 +28,7 @@ void SearchHitPos(Vector2 start, Vector2 end, std::list<Vector2>& list,Vector2 a
 	}
 }
 
-void Permeation::CreateObstacleSegment()
+bool Permeation::CreateObstacleSegment()
 {
 	Vector2 center = m_this->transform.position;
 	Vector2 halfScale = m_this->transform.scale * DEFAULT_OBJECT_SIZE / 2;
@@ -39,6 +39,7 @@ void Permeation::CreateObstacleSegment()
 		{center.x - halfScale.x,center.y - halfScale.y}
 	};
 
+	bool hit = false;
 	for (int i = 0; i < VERTICES_MAX; i++)
 	{
 		const int start = i;
@@ -60,6 +61,8 @@ void Permeation::CreateObstacleSegment()
 
 		for (auto pos : fromStartPos)
 		{
+			hit = true;
+
 			auto object = Instantiate("Barrier");
 			b2BodyDef bodyDef = b2DefaultBodyDef();
 			auto box2d = object->AddComponent<Box2DBody>(&bodyDef);
@@ -75,7 +78,9 @@ void Permeation::CreateObstacleSegment()
 			fromEndPos.pop_back();
 
 			box2d->CreateSegment(points);
-			m_barrier.push_back(object);
+			m_barrier.push_back(object->GetName());
 		}
 	}
+
+	return hit;
 }

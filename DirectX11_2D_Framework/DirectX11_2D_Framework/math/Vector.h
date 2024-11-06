@@ -254,6 +254,14 @@ public:
 		Set(x, y, z);
 	}
 	/// <summary>
+	/// データ配列をポインタで返す
+	/// </summary>
+	/// <returns></returns>
+	float* data()
+	{
+		return v;
+	}
+	/// <summary>
 	/// 線形補完
 	/// </summary>
 	/// <remarks>

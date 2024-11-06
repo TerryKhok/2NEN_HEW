@@ -1,5 +1,5 @@
 
-std::vector<std::function<void()>> Box2DBodyManager::moveFunctions;
+std::unordered_map<std::string, std::function<void()>> Box2DBodyManager::moveFunctions;
 
 std::unordered_map<FILTER, unsigned int> Box2DBodyManager::m_layerFilterBit;
 
@@ -67,7 +67,7 @@ inline void Box2DBody::Update()
 			m_this->transform.angle.z.Set(rot);
 		};
 
-	Box2DBodyManager::moveFunctions.emplace_back(func);
+	Box2DBodyManager::moveFunctions.emplace(m_this->GetName(), func);
 }
 
 #ifdef DEBUG_TRUE
@@ -75,7 +75,7 @@ void Box2DBody::Delete()
 {
 	for (auto& node : m_nodeList)
 	{
-		node->Delete();
+		node->Delete(LAYER_BOX2D_DEBUG);
 	}
 	auto& list = Box2DBodyManager::m_bodyObjectName;
 	auto it = list.find(m_bodyId.index1);
@@ -596,15 +596,20 @@ void Box2DBody::GetOverlapObject(std::vector<GameObject*>& _objects, b2Transform
 void Box2DBody::GetOverlapObject(std::unordered_map<GameObject*, b2ShapeId>& _objects)
 {
 	const b2Transform b2tf = b2Body_GetTransform(m_bodyId);
-	GetOverlapObject(_objects, b2tf);
+	GetOverlapObject(_objects, b2tf, m_filter);
 }
 
 void Box2DBody::GetOverlapObject(std::unordered_map<GameObject*, b2ShapeId>& _objects, b2Transform _tf)
 {
+	GetOverlapObject(_objects, _tf, m_filter);
+}
+
+void Box2DBody::GetOverlapObject(std::unordered_map<GameObject*, b2ShapeId>& _objects, b2Transform _tf, FILTER _filter)
+{
 	std::vector<b2ShapeId> shpeIds;
 	b2QueryFilter filter;
-	filter.categoryBits = m_filter;
-	filter.maskBits = Box2DBodyManager::GetMaskLayerBit(m_filter);
+	filter.categoryBits = _filter;
+	filter.maskBits = Box2DBodyManager::GetMaskLayerBit(_filter);
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pPauseWorldUpdate();
 #endif 
@@ -631,7 +636,7 @@ void Box2DBody::GetOverlapObject(std::unordered_map<GameObject*, b2ShapeId>& _ob
 		}
 		break;
 		}
-	}
+		}
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pResumeWorldUpdate();
 #endif
@@ -652,7 +657,7 @@ void Box2DBody::GetOverlapObject(std::unordered_map<GameObject*, b2ShapeId>& _ob
 	}
 }
 
-void Box2DBodyManager::DisableLayerCollision(FILTER _filter01, FILTER _filter02)
+void Box2DBodyManager::DisableCollisionFilter(FILTER _filter01, FILTER _filter02)
 {
 	FILTER filter = _filter01;
 	FILTER target = _filter02;
@@ -665,6 +670,25 @@ void Box2DBodyManager::DisableLayerCollision(FILTER _filter01, FILTER _filter02)
 			iter = m_layerFilterBit.find(filter);
 		}
 		iter->second &= ~target;
+
+		filter = _filter02;
+		target = _filter01;
+	}
+}
+
+void Box2DBodyManager::EnableCollisionFilter(FILTER _filter01, FILTER _filter02)
+{
+	FILTER filter = _filter01;
+	FILTER target = _filter02;
+	for (int i = 0; i < 2; i++)
+	{
+		auto iter = m_layerFilterBit.find(filter);
+		if (iter == m_layerFilterBit.end())
+		{
+			m_layerFilterBit.insert(std::make_pair(filter, ALL_BITS));
+			iter = m_layerFilterBit.find(filter);
+		}
+		iter->second |= target;
 
 		filter = _filter02;
 		target = _filter01;
@@ -755,7 +779,7 @@ void Box2DBodyManager::Init()
 void Box2DBodyManager::ExcuteMoveFunction()
 {
 	for (const auto& func : moveFunctions) {
-		func();
+		func.second();
 	}
 
 	moveFunctions.clear();

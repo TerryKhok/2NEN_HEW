@@ -15,18 +15,22 @@ void MainInit()
 	SceneManager::RegisterScene<SampleScene_Animation>();
 
 	//LAYER_01Ç∆LAYER_02Ç™è’ìÀÇµÇ»Ç¢ÇÊÇ§Ç…Ç∑ÇÈ
-	Box2DBodyManager::DisableLayerCollision(F_WINDOW, F_TERRAIN);
-	Box2DBodyManager::DisableLayerCollision(F_WINDOW, F_WINDOW);
-	Box2DBodyManager::DisableLayerCollision(F_WINDOW, F_OBSTACLE);
-	Box2DBodyManager::DisableLayerCollision(F_PERMEATION, F_OBSTACLE);
+	Box2DBodyManager::DisableCollisionFilter(F_WINDOW, F_TERRAIN);
+	Box2DBodyManager::DisableCollisionFilter(F_WINDOW, F_WINDOW);
+	Box2DBodyManager::DisableCollisionFilter(F_WINDOW, F_OBSTACLE);
+	Box2DBodyManager::DisableCollisionFilter(F_PERMEATION, F_PEROBSTACLE);
+	Box2DBodyManager::DisableCollisionFilter(F_PERWINDOW, F_TERRAIN);
+	Box2DBodyManager::DisableCollisionFilter(F_PERWINDOW, F_WINDOW);
+	Box2DBodyManager::DisableCollisionFilter(F_PERWINDOW, F_PERWINDOW);
 	Box2DBodyManager::OnlyCollisionFilter(F_ONLYOBSTACLE, F_OBSTACLE);
+	Box2DBodyManager::EnableCollisionFilter(F_ONLYOBSTACLE, F_PEROBSTACLE);
 }
 //============================================================
 
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_  HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
-	Window::WindowCreate(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
+	Window::WindowMainCreate(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 	Window::WindowInit(MainInit);
 	Window::WindowUpdate();
 

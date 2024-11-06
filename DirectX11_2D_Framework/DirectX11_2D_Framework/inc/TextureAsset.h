@@ -19,10 +19,11 @@ private:
 	static HRESULT Init();
 	static void Uninit();
 	
-	static HRESULT Load(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName);
+	static HRESULT WICLoad(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName);
 	static HRESULT Void(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName);
 
-	static HRESULT LoadFromC(ComPtr<ID3D11ShaderResourceView>& _textureView, std::string _filePath);
+	static HRESULT StbiLoad(ComPtr<ID3D11ShaderResourceView>& _textureView, std::string _filePath);
+	static HRESULT StbiLoad(ComPtr<ID3D11ShaderResourceView>& _textureView, std::string _filePath, int* _width, int* _height);
 	static void LoadEnd();
 private:
 	//テクスチャ読み込み関数ポインタ

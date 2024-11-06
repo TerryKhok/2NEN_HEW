@@ -35,11 +35,11 @@ class MovePlayer : public Component
 
 		if (Input::Get().KeyPress(VK_RIGHT))
 		{
-			rb->SetVelocityX(15.0f);
+			rb->SetVelocityX(10.0f);
 		}
 		if (Input::Get().KeyPress(VK_LEFT))
 		{
-			rb->SetVelocityX(-15.0f);
+			rb->SetVelocityX(-10.0f);
 		}
 
 		if (Input::Get().KeyTrigger(VK_UP) && isGround && !jumping)

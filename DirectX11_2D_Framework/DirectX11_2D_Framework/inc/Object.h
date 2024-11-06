@@ -35,6 +35,7 @@ class GameObject final
 	friend class Scene;
 	friend class Component;
 	friend class CameraManager;
+	friend class ImGuiApp;
 
 	using functionPointer = void (GameObject::*)();
 private:
@@ -227,6 +228,7 @@ private:
 class ObjectManager final
 {
 	friend class Window;
+	friend class ImGuiApp;
 	friend class Component;
 	friend class Scene;
 	friend class SceneManager;

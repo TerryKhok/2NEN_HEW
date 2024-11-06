@@ -48,7 +48,7 @@ thread_local HWND(*Window::pWindowSubCreate)(std::string, std::string, int, int)
 //ウィンドウのハンドルに対応したオブジェクトの名前
 std::unordered_map<HWND, std::string> Window::m_hwndObjNames;
 
-LRESULT Window::WindowCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+LRESULT Window::WindowMainCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	//DebugとReleaseのDpiを統一するため
 	SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
@@ -89,7 +89,7 @@ LRESULT Window::WindowCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR
 		"MAIN_WINDOW",								// ウィンドウクラスの名前
 		WINDOW_NAME,									// ウィンドウの名前
 #ifdef MAINWINDOW_LOCK
-		WS_OVERLAPPED | WS_SYSMENU | WS_CAPTION,	// ウィンドウスタイル
+		WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU,	// ウィンドウスタイル
 #else
 		WS_OVERLAPPEDWINDOW,
 #endif
@@ -131,7 +131,7 @@ LRESULT Window::WindowCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR
 	DirectX11::D3D_Create(mainHwnd);
 
 #ifdef DEBUG_TRUE
-	ImGuiApp::Init(mainHwnd);
+	ImGuiApp::Init(hInstance);
 #endif
 
 	m_hInstance = hInstance;
@@ -152,7 +152,7 @@ HWND Window::WindowSubCreate(std::string _objName, std::string _windowName, int 
 		0,										// 拡張ウィンドウスタイル
 		"SUB_WINDOW",								// ウィンドウクラスの名前
 		_windowName.c_str(),							// ウィンドウの名前
-		WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU,// ウィンドウスタイル
+		WS_OVERLAPPED | WS_CAPTION /*| WS_SYSMENU*/,// ウィンドウスタイル
 		CW_USEDEFAULT,							// ウィンドウの左上Ｘ座標
 		CW_USEDEFAULT,							// ウィンドウの左上Ｙ座標 
 		_width,							// ウィンドウの幅
@@ -352,11 +352,7 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 #endif
 
 #ifdef DEBUG_TRUE
-			ImGuiApp::Begin();
-
 			ImGuiApp::Draw();
-
-			ImGuiApp::Rend();
 #endif
 
 			DirectX11::D3D_FinishRender();
@@ -453,11 +449,7 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 #endif
 
 #ifdef DEBUG_TRUE
-				ImGuiApp::Begin();
-
 				ImGuiApp::Draw();
-
-				ImGuiApp::Rend();
 #endif
 
 				DirectX11::D3D_FinishRender();
@@ -603,7 +595,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			0,										// 拡張ウィンドウスタイル
 			"SUB_WINDOW",								// ウィンドウクラスの名前
 			windowName.c_str(),							// ウィンドウの名前
-			WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU,// ウィンドウスタイル
+			WS_OVERLAPPED | WS_CAPTION,// ウィンドウスタイル
 			CW_USEDEFAULT,							// ウィンドウの左上Ｘ座標
 			CW_USEDEFAULT,							// ウィンドウの左上Ｙ座標 
 			windowWidth,							// ウィンドウの幅
@@ -732,11 +724,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 #endif
 
 #ifdef DEBUG_TRUE
-		ImGuiApp::Begin();
-
 		ImGuiApp::Draw();
-
-		ImGuiApp::Rend();
 #endif
 
 		DirectX11::D3D_FinishRender();
@@ -804,11 +792,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 #endif
 
 #ifdef DEBUG_TRUE
-		ImGuiApp::Begin();
-
 		ImGuiApp::Draw();
-
-		ImGuiApp::Rend();
 #endif
 
 		DirectX11::D3D_FinishRender();
@@ -941,6 +925,8 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	case WM_MOVING:
 	{
+		RECT* rect = reinterpret_cast<RECT*>(lParam);
+
 		auto iter = m_hwndObjNames.find(hWnd);
 		if (iter != m_hwndObjNames.end())
 		{
@@ -950,7 +936,7 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				const auto& list = gameObject->m_componentList;
 				for (auto& component : list)
 				{
-					component.second->OnWindowMove(hWnd);
+					component.second->OnWindowMove(hWnd, rect);
 				}
 			}
 		}
@@ -967,14 +953,46 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 #endif
 
 #ifdef DEBUG_TRUE
-		ImGuiApp::Begin();
-
 		ImGuiApp::Draw();
-
-		ImGuiApp::Rend();
 #endif
 
 		DirectX11::D3D_FinishRender();
+
+		//RECT* rect = reinterpret_cast<RECT*>(lParam);
+
+		//// Calculate the window width and height
+		//int width = rect->right - rect->left;
+		//int height = rect->bottom - rect->top;
+
+		//// Adjust position to keep within the left boundary
+		//if (rect->left < leftBoundary)
+		//{
+		//	rect->left = leftBoundary;
+		//	rect->right = leftBoundary + width;
+		//}
+
+		//// Adjust position to keep within the right boundary
+		//if (rect->right > rightBoundary)
+		//{
+		//	rect->right = rightBoundary;
+		//	rect->left = rightBoundary - width;
+		//}
+
+		//// Adjust position to keep within the top boundary
+		//if (rect->top < topBoundary)
+		//{
+		//	rect->top = topBoundary;
+		//	rect->bottom = topBoundary + height;
+		//}
+
+		//// Adjust position to keep within the bottom boundary
+		//if (rect->bottom > bottomBoundary)
+		//{
+		//	rect->bottom = bottomBoundary;
+		//	rect->top = bottomBoundary - height;
+		//}
+
+		//return TRUE;  // Indicate that we've modified the window position
 	}
 	break;
 

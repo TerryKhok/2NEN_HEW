@@ -3,7 +3,7 @@
 
 ComPtr<IWICImagingFactory> TextureAssets::m_pWICFactory = nullptr;
 std::unordered_map<const wchar_t*, ComPtr<ID3D11ShaderResourceView>> TextureAssets::m_textureLib;
-HRESULT(*TextureAssets::pLoadTexture)(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName) = Load;
+HRESULT(*TextureAssets::pLoadTexture)(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName) = WICLoad;
 
 const char* ConvertWCharToChar(const wchar_t* wstr) {
 	size_t requiredSize = 0;
@@ -32,7 +32,7 @@ void TextureAssets::Uninit()
 	CoUninitialize();
 }
 
-HRESULT TextureAssets::Load(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName)
+HRESULT TextureAssets::WICLoad(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName)
 {
 	auto iter = m_textureLib.find(_texName);
 	if (iter != m_textureLib.end())
@@ -90,11 +90,17 @@ std::string GetSaveFilePath() {
 }
 
 
-HRESULT TextureAssets::LoadFromC(ComPtr<ID3D11ShaderResourceView>& _textureView, std::string _filePath)
+HRESULT TextureAssets::StbiLoad(ComPtr<ID3D11ShaderResourceView>& _textureView, std::string _filePath)
+{
+	int width, height;
+	return StbiLoad(_textureView, _filePath, &width, &height);
+}
+
+HRESULT TextureAssets::StbiLoad(ComPtr<ID3D11ShaderResourceView>& _textureView, std::string _filePath, int* _width, int* _height)
 {
 	// Load the PNG and decode it to raw pixel data (RGBA)
-	int width, height, channels;
-	unsigned char* decodedData = stbi_load(_filePath.c_str(), &width, &height, &channels, 4);  // Force RGBA format
+	int channels;
+	unsigned char* decodedData = stbi_load(_filePath.c_str(), _width, _height, &channels, 4);  // Force RGBA format
 	if (!decodedData) {
 		LOG_WARNING("Failed to load image: %s", _filePath.c_str());
 		return S_FALSE;
@@ -102,8 +108,8 @@ HRESULT TextureAssets::LoadFromC(ComPtr<ID3D11ShaderResourceView>& _textureView,
 
 	// Set up the texture description
 	D3D11_TEXTURE2D_DESC textureDesc = {};
-	textureDesc.Width = width;
-	textureDesc.Height = height;
+	textureDesc.Width = *_width;
+	textureDesc.Height = *_height;
 	textureDesc.MipLevels = 1;
 	textureDesc.ArraySize = 1;
 	textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;  // RGBA format
@@ -114,7 +120,7 @@ HRESULT TextureAssets::LoadFromC(ComPtr<ID3D11ShaderResourceView>& _textureView,
 	// Define the initial texture data
 	D3D11_SUBRESOURCE_DATA initData = {};
 	initData.pSysMem = decodedData;
-	initData.SysMemPitch = width * 4;  // 4 bytes per pixel for RGBA
+	initData.SysMemPitch = *_width * 4;  // 4 bytes per pixel for RGBA
 
 	// Create the texture
 	ComPtr<ID3D11Texture2D> texture;
@@ -136,38 +142,38 @@ HRESULT TextureAssets::LoadFromC(ComPtr<ID3D11ShaderResourceView>& _textureView,
 		LOG_WARNING("Failed to create shader resource view.");
 	}
 
-	std::string outputFilePath = GetSaveFilePath();
-	if (outputFilePath == "")
-	{
-		// Free the decoded image data
-		stbi_image_free(decodedData);
+	//std::string outputFilePath = GetSaveFilePath();
+	//if (outputFilePath == "")
+	//{
+	//	// Free the decoded image data
+	//	stbi_image_free(decodedData);
 
-		return S_OK;
-	}
+	//	return S_OK;
+	//}
 
 	// Open the output file
-	std::ofstream outputFile(outputFilePath.c_str());
-	if (!outputFile) {
-		std::cerr << "Error opening output file.\n";
-		stbi_image_free(decodedData);
-		return S_OK;
-	}
+	//std::ofstream outputFile(outputFilePath.c_str());
+	//if (!outputFile) {
+	//	std::cerr << "Error opening output file.\n";
+	//	stbi_image_free(decodedData);
+	//	return S_OK;
+	//}
 
-	// Write the C array header
-	outputFile << "const uint8_t imageData[] = {\n";
-	size_t dataSize = width * height * 4;  // 4 bytes per pixel for RGBA
-	for (size_t i = 0; i < dataSize; ++i) {
-		if (i % 12 == 0) outputFile << "    ";  // 12 values per line
-		outputFile << "0x" << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(decodedData[i]);
-		if (i < dataSize - 1) outputFile << ", ";
-		if (i % 12 == 11) outputFile << "\n";
-	}
-	outputFile << "\n};\n";
+	//// Write the C array header
+	//outputFile << "const uint8_t imageData[] = {\n";
+	//size_t dataSize = width * height * 4;  // 4 bytes per pixel for RGBA
+	//for (size_t i = 0; i < dataSize; ++i) {
+	//	if (i % 12 == 0) outputFile << "    ";  // 12 values per line
+	//	outputFile << "0x" << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(decodedData[i]);
+	//	if (i < dataSize - 1) outputFile << ", ";
+	//	if (i % 12 == 11) outputFile << "\n";
+	//}
+	//outputFile << "\n};\n";
 
 	// Free the decoded image data
 	stbi_image_free(decodedData);
 
-	outputFile.close();
+	//outputFile.close();
 
 	// Clean up
 	//stbi_image_free(decodedData);  // Free the decoded image data now that it's in the texture

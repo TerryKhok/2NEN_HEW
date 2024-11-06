@@ -84,7 +84,7 @@ protected:
 	//ノードの切れ端
 	void End() {}
 	//リストからこのインスタンスを削除する
-	void Delete();	
+	void Delete(LAYER _nodeLayer);
 	//リストの削除
 	inline void DeleteList();
 private:
@@ -126,6 +126,7 @@ class RenderManager final
 	friend class Box2DBody;
 	friend class Box2DBoxRenderNode;
 	friend class Box2DCapsuleRenderNode;
+	friend class ImGuiApp;
 
 	using RenderList = std::pair < std::shared_ptr<RenderNode>, std::shared_ptr<RenderNode>>;
 
@@ -169,7 +170,10 @@ private:
 		float radian;
 		XMFLOAT4 color;
 	};
-
+	//当たり判定の描画
+	static bool drawHitBox;
+	//rayの描画
+	static bool drawRay;
 	//rayを描画するための線の頂点
 	static ComPtr<ID3D11Buffer> m_lineVertexBuffer;
 	//共通のrayを描画するための線のインデックス
