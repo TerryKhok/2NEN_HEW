@@ -126,7 +126,52 @@ void Box2DBody::SetActive(bool _active)
 void Box2DBody::DrawImGui()
 {
 	auto vec = b2Body_GetLinearVelocity(m_bodyId);
-	ImGui::Text("LinerVelocity\nx: %.2f   y:%.2f", vec.x, vec.y);
+	ImGui::Text(" LinerVelocity\n  <x: %.2f   y:%.2f>", vec.x, vec.y);
+
+	ImGui::Text(" Filter     : %s", magic_enum::enum_name(m_filter).data());
+	float mass = b2Body_GetMass(m_bodyId);
+	ImGui::Text(" Mass       : %.3f", mass);
+	float gravity = b2Body_GetGravityScale(m_bodyId);
+	ImGui::Text(" Gravity    : %.3f", gravity);
+
+	if (!m_shapeList.empty())
+	{
+		
+		if (ImGui::TreeNode("Shape"))
+		{
+			ImGui::BeginDisabled(true); // Disable interaction
+			for (auto& shape : m_shapeList)
+			{
+				b2ShapeType type = b2Shape_GetType(shape);
+				switch (type)
+				{
+				case b2_polygonShape:
+					ImGui::Text("Polygon");
+					break;
+				case b2_circleShape:
+					ImGui::Text("Circle");
+					break;
+				case b2_capsuleShape:
+					ImGui::Text("Capsule");
+					break;
+				case b2_segmentShape:
+					ImGui::Text("Segment");
+					break;
+				default:
+					ImGui::Text("unkown shape!");
+					break;
+				}
+				bool sensor = b2Shape_IsSensor(shape);
+				ImGui::Checkbox(" sensor", &sensor);
+				float friction = b2Shape_GetFriction(shape);
+				ImGui::Text(" friction  : %.3f", friction);
+				float density = b2Shape_GetDensity(shape);
+				ImGui::Text(" density   : %.3f", density);
+			}
+			ImGui::EndDisabled(); // Re-enable interaction
+			ImGui::TreePop();
+		}
+	}
 }
 
 void Box2DBody::SetFilter(const FILTER _filter)
@@ -440,6 +485,32 @@ void Box2DBody::SetPosition(Vector2 _pos)
 #else
 	b2Vec2 pos = { _pos.x / DEFAULT_OBJECT_SIZE,_pos.y / DEFAULT_OBJECT_SIZE };
 	b2Body_SetTransform(m_bodyId, pos, b2Body_GetRotation(m_bodyId));
+#endif
+}
+
+void Box2DBody::SetAngle(float _deg)
+{
+	Angle angle(_deg);
+	SetAngle(angle);
+}
+
+void Box2DBody::SetAngle(double _rad)
+{
+	Angle angle(_rad);
+	SetAngle(angle);
+}
+
+void Box2DBody::SetAngle(Angle _angle)
+{
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	b2BodyId id = m_bodyId;
+	Box2D::WorldManager::AddWorldTask(std::move([id, _pos]()
+		{
+			b2Body_SetTransform(m_bodyId, b2Body_GetPosition(m_bodyId), b2MakeRot(_rad));
+		})
+	);
+#else
+	b2Body_SetTransform(m_bodyId, b2Body_GetPosition(m_bodyId), b2MakeRot(static_cast<float>(_angle.Get())));
 #endif
 }
 

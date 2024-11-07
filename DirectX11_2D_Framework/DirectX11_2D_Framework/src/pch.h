@@ -74,8 +74,6 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 
-
-
 #include "../../DirectX11_2D_Framework/math/Math.h"
 #include "../../DirectX11_2D_Framework/math/Vector.h"
 #include "../../DirectX11_2D_Framework/math/Angle.h"

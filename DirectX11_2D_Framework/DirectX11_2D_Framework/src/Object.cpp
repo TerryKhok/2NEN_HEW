@@ -54,22 +54,14 @@ void GameObject::UpdateComponent()
 
 void GameObject::SetActive(bool _active)
 {
+	if (active != _active) active = _active; else return;
+
 	for (auto& component : m_componentList)
 	{
 		component.second->SetActive(_active);
 	}
 	//更新関数ポインターを設定
 	pUpdate = _active ? &GameObject::UpdateComponent : &GameObject::Void;
-}
-
-void GameObject::SetLayer(const LAYER _layer)
-{
-	for (auto& component : m_componentList)
-	{
-		component.second->SetLayer(_layer);
-	}
-	//最後に変更する(Renderで古いLayerを参照しているため)
-	m_layer = _layer;
 }
 
 void GameObject::SetName(const std::string _name)
@@ -81,11 +73,6 @@ void GameObject::SetName(const std::string _name)
 const std::string GameObject::GetName() const
 {
 	return name;
-}
-
-const LAYER GameObject::GetLayer() const
-{
-	return m_layer;
 }
 
 template<>

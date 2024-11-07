@@ -59,6 +59,10 @@ public:
 	//=================================
 	//positionのテレポート(高処理)
 	void SetPosition(Vector2 _pos);
+	//angleの強制変更(高処理)
+	void SetAngle(float _deg);
+	void SetAngle(double _rad);
+	void SetAngle(Angle _angle);
 	//力の向きの設定
 	void SetVelocity(b2Vec2 _velocity);
 	//力の向きの設定(xだけ)
@@ -111,6 +115,7 @@ class Box2DBodyManager
 	friend class Box2DBoxRenderNode;
 	friend class Box2DCircleRenderNode;
 	friend class Box2DCapsuleRenderNode;
+	friend class ImGuiApp;
 
 public:
 	//指定したフィルターが衝突しない設定にする

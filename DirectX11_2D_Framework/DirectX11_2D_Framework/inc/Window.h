@@ -34,10 +34,6 @@
 constexpr float DISPALY_ASPECT_WIDTH = static_cast<float>(SCREEN_WIDTH) / PROJECTION_WIDTH;
 constexpr float DISPALY_ASPECT_HEIGHT = static_cast<float>(SCREEN_HEIGHT) / PROJECTION_HEIGHT;
 
-//モニターの解像度所得
-const int MONITER_HALF_WIDTH = GetSystemMetrics(SM_CXSCREEN) / 2;
-const int MONITER_HALF_HEIGHT = GetSystemMetrics(SM_CYSCREEN) / 2;
-
 //メインウィンドウを動かせないようにする
 //================================================================
 #define MAINWINDOW_LOCK
@@ -71,6 +67,10 @@ public:
 		MAIN,
 		HANDLE_MAX
 	};
+
+	//モニターの解像度所得
+	static int MONITER_HALF_WIDTH;
+	static int MONITER_HALF_HEIGHT;
 
 private:
 	Window() = delete;

@@ -33,9 +33,6 @@
     <ClInclude Include="Sample_Animation.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="AnimationBuilderh.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Scene_ProtoType.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -58,9 +55,6 @@
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="AnimationBuilder.cpp">
-      <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="Permeation.cpp">
       <Filter>ソース ファイル</Filter>

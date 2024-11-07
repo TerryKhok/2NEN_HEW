@@ -141,7 +141,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AnimationBuilderh.h" />
     <ClInclude Include="LowGravity.h" />
     <ClInclude Include="MovePlayer.h" />
     <ClInclude Include="Permeation.h" />
@@ -153,7 +152,6 @@
     <ClInclude Include="AntiGravity.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AnimationBuilder.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Permeation.cpp" />
     <ClCompile Include="stdafx.cpp">

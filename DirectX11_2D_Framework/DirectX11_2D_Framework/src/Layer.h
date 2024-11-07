@@ -27,3 +27,4 @@ enum FILTER
 	F_ONLYOBSTACLE	= 0x00000800,
 	ALL_BITS = (~0u)
 };
+

@@ -30,8 +30,6 @@ protected:
 private:
 	//アクティブを変更
 	virtual void SetActive(bool _active) {}
-	//レイヤーを変更
-	virtual void SetLayer(const LAYER _layer) {}
 	//コンポーネント削除処理
 	virtual void Delete() {}
 private:
@@ -62,5 +60,7 @@ private:
 	//============================================
 	// imguiで描画する
 	//============================================
-	virtual void DrawImGui(){}
+	virtual void DrawImGui(){
+		ImGui::Text(" not override DrawImGui function!");
+	}
 };

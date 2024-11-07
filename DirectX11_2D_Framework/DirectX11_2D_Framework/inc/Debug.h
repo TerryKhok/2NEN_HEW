@@ -111,6 +111,7 @@ class PointerRegistryManager {
     friend class GameObject;
     friend class ObjectManager;
     friend class Component;
+    friend class ImGuiApp;
 private:
     //ê∂ê¨ã÷é~
     PointerRegistryManager() {}

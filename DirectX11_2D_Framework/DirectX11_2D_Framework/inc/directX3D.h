@@ -96,6 +96,8 @@ private:
 	static void CreateOnePixelTexture(ID3D11ShaderResourceView** _resourceView);
 	//ウィンドウに対応した新しいスワップチェイン作成
 	static HRESULT CreateWindowSwapchain(HWND hWnd);
+	//テクスチャの解像度を取得する
+	static void GetTextureDpi(ID3D11ShaderResourceView* _view, UINT& _width, UINT& _height);
 
 private:
 	// ※ID3D11で始まるポインタ型の変数は、解放する必要がある

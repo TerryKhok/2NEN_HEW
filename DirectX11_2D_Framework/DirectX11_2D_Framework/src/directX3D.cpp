@@ -560,3 +560,26 @@ HRESULT DirectX11::CreateWindowSwapchain(HWND hWnd)
 	return S_OK;
 }
 
+void DirectX11::GetTextureDpi(ID3D11ShaderResourceView* _view, UINT& _width, UINT& _height)
+{
+	// Assume `textureView` is a pointer to an ID3D11ShaderResourceView instance
+	ID3D11Resource* pResource = nullptr;
+	_view->GetResource(&pResource);
+
+	ID3D11Texture2D* pTexture2D = nullptr;
+	HRESULT hr = pResource->QueryInterface(__uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&pTexture2D));
+	if (SUCCEEDED(hr) && pTexture2D)
+	{
+		D3D11_TEXTURE2D_DESC desc;
+		pTexture2D->GetDesc(&desc);
+
+		_width = desc.Width;
+		_height = desc.Height;
+
+		// Now you have the width and height of the texture
+		pTexture2D->Release();
+	}
+
+	pResource->Release();
+}
+

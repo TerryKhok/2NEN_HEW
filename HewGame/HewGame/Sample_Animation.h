@@ -17,7 +17,6 @@ class SampleScene_Animation : public Scene
 
 		auto obj = Instantiate();
 		obj->transform.scale.x = 8;
-		obj->SetLayer(LAYER_UI);
 		auto rend = obj->AddComponent<Renderer>();
 		rend->SetColor({ 0, 0, 1, 1 });
 		auto text = obj->AddComponent<SFText>("aaaaa‚ ‚„‚Ó‚Ÿ\n‚¦‚ ‚¦‚Ó‚Ÿ‚¦‚†");

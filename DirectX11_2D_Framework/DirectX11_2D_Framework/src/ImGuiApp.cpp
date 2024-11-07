@@ -1,3 +1,5 @@
+#include"../../DirectX11_2D_Framework/img/iconss.c"
+
 
 int ImGuiApp::worldFpsCounter;
 int ImGuiApp::updateFpsCounter = 0;
@@ -9,9 +11,14 @@ ImGuiContext* ImGuiApp::context[TYPE_MAX];
 std::unordered_map<HWND, ImGuiContext*> ImGuiApp::m_hWndContexts;
 ComPtr<IDXGISwapChain> ImGuiApp::m_pSwapChain[TYPE_MAX];
 ComPtr<ID3D11RenderTargetView> ImGuiApp::m_pRenderTargetView[TYPE_MAX];
+ComPtr<ID3D11ShaderResourceView> ImGuiApp::m_pIconTexture;
 void(*ImGuiApp::pDrawImGui[ImGuiApp::TYPE_MAX])() = {};
 
 void ImGuiSetKeyMap(ImGuiContext* _imguiContext);
+
+std::vector<const char*> filterNames;
+
+constexpr long long numFilter = magic_enum::enum_count<FILTER>() - 1;
 
 HRESULT ImGuiApp::Init(HINSTANCE hInstance)
 {
@@ -37,8 +44,8 @@ HRESULT ImGuiApp::Init(HINSTANCE hInstance)
 	RegisterClassEx(&wc);
 
 	Vector2 windowPos[TYPE_MAX];
-	windowPos[OPTIONS] = { MONITER_HALF_WIDTH / -1.35f,0 };
-	windowPos[INSPECTER] = { MONITER_HALF_WIDTH / 1.35f,0 };
+	windowPos[OPTIONS] = { Window::MONITER_HALF_WIDTH / -1.35f,0 };
+	windowPos[INSPECTER] = { Window::MONITER_HALF_WIDTH / 1.35f,0 };
 
 	// Use std::fill to set all elements to the same function
 	std::fill(std::begin(pDrawImGui), std::end(pDrawImGui), []() {});
@@ -134,6 +141,18 @@ HRESULT ImGuiApp::Init(HINSTANCE hInstance)
 	
 	ImGui::StyleColorsDark(); // Set ImGui style (optional)
 
+	UINT filter = 1;
+	for (long long i = 0; i < numFilter; ++i)
+	{
+		filterNames.push_back(magic_enum::enum_name((FILTER)filter).data());
+		filter *= 2;
+	}
+
+	//texture’Ç‰Á‚Ìˆ—‚ð‚·‚é
+	HRESULT  hr;
+	hr = DirectX::CreateWICTextureFromMemory(
+		DirectX11::m_pDevice.Get(), _aciconss, sizeof(_aciconss) / sizeof(_aciconss[0]), NULL, m_pIconTexture.GetAddressOf());
+
 	return HRESULT();
 }
 
@@ -164,7 +183,7 @@ std::string OpenFileDialog() {
 static float clearColor[4] = { 0.0f, 0.25f, 0.25f, 1.0f };
 
 void ImGuiApp::Draw()
-{	
+{
 	for (int type = 0; type < TYPE_MAX; type++)
 	{
 		ImGui::SetCurrentContext(context[type]);
@@ -193,6 +212,18 @@ GameObject* selectedObject = nullptr;
 
 void ImGuiApp::DrawOptionGui()
 {
+	if (selectedObject != nullptr && ImGui::IsKeyPressed(ImGuiKey_Delete))
+	{
+		auto& list = ObjectManager::m_currentList;
+		auto iter = list->find(selectedObject->name);
+		if (iter != list->end())
+		{
+			PointerRegistryManager::deletePointer(iter->second.get());
+			list->erase(iter);
+			selectedObject = nullptr;
+		}
+	}
+
 	if (ImGui::Begin("Status"))
 	{
 		ImGui::Text("world average %.3f ms/frame (%d FPS)", 1000.0f / worldFpsCounter, worldFpsCounter);
@@ -200,24 +231,109 @@ void ImGuiApp::DrawOptionGui()
 	}
 	ImGui::End();
 
-	if (ImGui::Begin("Menu"))
-	{
-		ImGui::ColorEdit3("clear color", clearColor); // Edit 3 floats representing a color
-		ImGui::Checkbox("HitBox", &RenderManager::drawHitBox);
-		ImGui::Checkbox("Ray", &RenderManager::drawRay);
-		if (ImGui::Button("Button"))
+	static bool showFilterTable = false;
+
+	static float iconTexScale = 1.0f / 44;
+
+	if (ImGui::Begin("Menu")) {
+		ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
+		if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
 		{
-			OpenFileDialog();
+			if (ImGui::BeginTabItem("Tool"))
+			{
+				/*static bool jointObject = false;
+				ImVec4 b2col = jointObject ? ImVec4(0, 0, 1, 1) : ImVec4(0, 0, 1, 0.2f);
+				if(ImGui::ImageButton("joint object", (ImTextureID)m_pIconTexture.Get(), ImVec2(50, 50), ImVec2(1.0f - iconTexScale, iconTexScale * 17.5f), ImVec2(1.0f, iconTexScale * 18.5f), b2col))
+				{
+					jointObject = !jointObject;
+				}*/
+				ImGui::ColorEdit3("clear color", clearColor); // Edit 3 floats representing a color
+				if (ImGui::Button("Button"))
+				{
+					OpenFileDialog();
+				}
+				ImGui::EndTabItem();
+			}
+			if (ImGui::BeginTabItem("Box2D"))
+			{
+				ImGui::Checkbox("HitBox", &RenderManager::drawHitBox);
+				ImGui::Checkbox("Ray", &RenderManager::drawRay);
+				ImGui::Checkbox("Filter Table", &showFilterTable);
+				ImGui::EndTabItem();
+			}
+			ImGui::EndTabBar();
 		}
+		ImGui::Separator();
 	}
 	ImGui::End();
+
+
+	// 3. Show another simple window.
+	if (showFilterTable)
+	{
+		static ImGuiTableFlags table_flags = ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollX | ImGuiTableFlags_ScrollY | ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersInnerH | ImGuiTableFlags_Hideable | ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_HighlightHoveredColumn;
+		static ImGuiTableColumnFlags column_flags = ImGuiTableColumnFlags_AngledHeader | ImGuiTableColumnFlags_WidthFixed;
+		static int frozen_cols = 1;
+		static int frozen_rows = 2;
+
+		ImGui::Begin("Filter Table", &showFilterTable);
+		//const int numFilter = static_cast<int>(filterNames.size());
+		bool dummy = false;
+		if (ImGui::BeginTable("fitler table", numFilter + 1, table_flags))
+		{
+			ImGui::TableSetupColumn("FILTER", ImGuiTableColumnFlags_NoHide | ImGuiTableColumnFlags_NoReorder);
+			for (int n = numFilter - 1; n >= 0; n--)
+				ImGui::TableSetupColumn(filterNames[n], column_flags);
+			ImGui::TableSetupScrollFreeze(frozen_cols, frozen_rows);
+
+			ImGui::TableAngledHeadersRow(); // Draw angled headers for all columns with the ImGuiTableColumnFlags_AngledHeader flag.
+			ImGui::TableHeadersRow();       // Draw remaining headers and allow access to context-menu and other functions.
+			// Disable input for the following items
+			ImGui::BeginDisabled(true); // Disable interaction
+			for (int row = 0; row < numFilter; row++)
+			{
+				ImGui::PushID(row);
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				ImGui::AlignTextToFramePadding();
+				ImGui::Text("%s", filterNames[row]);
+
+				UINT maskbit = Box2DBodyManager::GetMaskLayerBit((FILTER)pow(2, row));
+				for (int column = 1; column < numFilter - row + 1; column++)
+					if (ImGui::TableSetColumnIndex(column))
+					{
+						ImGui::PushID(column);
+						UINT filter = static_cast<UINT>(pow(2, numFilter - column));
+						UINT bit = maskbit & filter;
+						bool collision = filter == bit;
+						ImGui::Checkbox("", &collision);
+						ImGui::PopID();
+					}
+				ImGui::PopID();
+			}
+			ImGui::EndDisabled(); // Re-enable interaction
+
+			ImGui::EndTable();
+		}
+
+		ImGui::End();
+	}
 
 	if (ImGui::Begin("Object List", nullptr, ImGuiWindowFlags_None))
 	{
 		for (auto& object : *ObjectManager::m_currentList) {
-			if (ImGui::Selectable(object.second->GetName().c_str())) {
+			bool selected = object.second.get() == selectedObject;
+			if (!object.second->active)
+			{
+				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 0.4f)); // Set text color to red
+			}
+			if (ImGui::Selectable(object.second->GetName().c_str(), selected)) {
 				// Handle selection, e.g., highlighting the object or showing more details
 				selectedObject = object.second.get();
+			}
+			if (!object.second->active)
+			{
+				ImGui::PopStyleColor();
 			}
 		}
 	}
@@ -230,16 +346,29 @@ void ImGuiApp::DrawInspecterGui()
 	{
 		if (selectedObject != nullptr)
 		{
-			ImGui::Text("selected \n: %s", selectedObject->name.c_str());
+			ImGui::SeparatorText("General");
+
+			ImGui::Text("Selected : %s", selectedObject->name.c_str());
+			bool active = selectedObject->active;
+			ImGui::SameLine();
+			ImGui::Checkbox(" ", &active);
+			if (active != selectedObject->active)
+			{
+				selectedObject->SetActive(active);
+			}
 
 			ImGui::SeparatorText("Component");
 
-			if (ImGui::TreeNode("Transform"))
+			if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_None))
 			{
-				bool enabled = true;
-				ImGui::Checkbox("Enabled", &enabled);
-
-				ImGui::InputFloat3("Position", selectedObject->transform.position.data(), "%.1f");
+				if (ImGui::InputFloat3("Position", selectedObject->transform.position.data(), "%.1f"))
+				{
+					if (selectedObject->ExistComponent<Box2DBody>())
+					{
+						auto box2d = selectedObject->GetComponent<Box2DBody>();
+						box2d->SetPosition(selectedObject->transform.position);
+					}
+				}
 				ImGui::InputFloat3("Scale", selectedObject->transform.scale.data(), "%.1f");
 				auto& angle = selectedObject->transform.angle;
 				float angles[3] = {
@@ -247,22 +376,34 @@ void ImGuiApp::DrawInspecterGui()
 					static_cast<float>(angle.y),
 					static_cast<float>(angle.z)
 				};
-				ImGui::InputFloat3("Angle", angles, "%.1f");
-				angle.x = angles[0];
-				angle.x = angles[1];
-				angle.x = angles[2];
+				if (ImGui::InputFloat3("Angle", angles, "%.1f"))
+				{
+					angle.x = angles[0];
+					angle.y = angles[1];
 
-				ImGui::TreePop();
+					Angle radZ(angles[2]);
+					if (angle.z != radZ)
+					{
+						angle.z = radZ;
+						if (selectedObject->ExistComponent<Box2DBody>())
+						{
+							auto box2d = selectedObject->GetComponent<Box2DBody>();
+							box2d->SetAngle(radZ);
+						}
+					}
+				}
+
+				//ImGui::TreePop();
 			}
 
 			for (auto& component : selectedObject->m_componentList)
 			{
 				std::string componentName = component.first;
 
-				if (ImGui::TreeNode(componentName.substr(6).c_str()))
+				if (ImGui::CollapsingHeader(componentName.substr(6).c_str(), ImGuiTreeNodeFlags_None))
 				{
 					component.second->DrawImGui();
-					ImGui::TreePop();
+					//ImGui::TreePop();
 				}
 			}
 		}

@@ -48,19 +48,6 @@ private:
 
 	//プロジェクション行列変換までして渡す（描画以外では基本使わない）
 	VSObjectConstantBuffer& GetContantBuffer();
-	//すでにコンポーネントがついてるか確かめる
-	template<typename T>
-	bool ExistComponent()
-	{
-		auto iter = m_componentList.find(typeid(T).name());
-		if (iter != m_componentList.end())
-		{
-			LOG_WARNING("%s : %s component is exist", name.c_str(), typeid(T).name());
-			return true;
-		}
-
-		return false;
-	}
 	//コンポーネントの更新
 	void UpdateComponent();
 	//なにもしない
@@ -70,14 +57,22 @@ private:
 public:
 	//アクティブを変更する(※処理が多いため頻繁に使用しない)
 	void SetActive(bool _active);
-	//レイヤーの設定（※処理が多いため頻繁に使用しない）
-	void SetLayer(const LAYER _layer);
 	//名前の変更
 	void SetName(const std::string _name);
 	//名前の取得
 	const std::string GetName() const;
-	//レイヤー取得
-	const LAYER GetLayer() const;
+	//すでにコンポーネントがついてるか確かめる
+	template<typename T>
+	bool ExistComponent()
+	{
+		auto iter = m_componentList.find(typeid(T).name());
+		if (iter != m_componentList.end())
+		{
+			return true;
+		}
+
+		return false;
+	}
 	//コンポーネント追加
 	template<typename T>
 	T* AddComponent(void)
@@ -215,8 +210,8 @@ public:
 	Transform transform;
 private:
 	std::string name = "GameObject";
+	bool active = true;
 	static VSObjectConstantBuffer m_cb;
-	LAYER m_layer = LAYER::LAYER_01;
 	std::unordered_map<const char*, std::unique_ptr<Component, void(*)(Component*)>> m_componentList;
 };
 

@@ -23,12 +23,13 @@ ComPtr<ID3D11Buffer> RenderManager::m_lineIndexBuffer;
 std::vector<RenderManager::DrawRayNode> RenderManager::m_drawRayNode;
 #endif
 
+
 Renderer::Renderer(GameObject* _pObject)
 {
 	RenderNode* node = new RenderNode();
 	node->m_object = _pObject;
 	m_node = std::shared_ptr<RenderNode>(node);
-	RenderManager::AddRenderList(m_node, _pObject->GetLayer());
+	RenderManager::AddRenderList(m_node, m_layer);
 }
 
 Renderer::Renderer(GameObject* _pObject,const wchar_t* texpath)
@@ -36,7 +37,10 @@ Renderer::Renderer(GameObject* _pObject,const wchar_t* texpath)
 	RenderNode* node = new RenderNode(texpath);
 	node->m_object = _pObject;
 	m_node = std::shared_ptr<RenderNode>(node);
-	RenderManager::AddRenderList(m_node, _pObject->GetLayer());
+	RenderManager::AddRenderList(m_node, m_layer);
+#ifdef DEBUG_TRUE
+	texPath = ConvertWCharToChar(texpath);
+#endif
 }
 
 Renderer::Renderer(GameObject* _pObject,Animator* _animator)
@@ -44,7 +48,7 @@ Renderer::Renderer(GameObject* _pObject,Animator* _animator)
 	auto node = new UVRenderNode();
 	node->m_object = _pObject;
 	m_node = std::shared_ptr<RenderNode>(node);
-	RenderManager::AddRenderList(m_node, _pObject->GetLayer());
+	RenderManager::AddRenderList(m_node, m_layer);
 
 	_animator->m_uvNode = node;
 }
@@ -56,35 +60,52 @@ void Renderer::SetActive(bool _active)
 
 void Renderer::Delete()
 {
-	m_node->Delete(m_this->GetLayer());
+	m_node->Delete(m_layer);
 	m_node.reset();
 }
 
 void Renderer::SetLayer(const LAYER _layer)
 {
-	m_node->Delete(m_this->GetLayer());
+	m_node->Delete(m_layer);
 	RenderManager::AddRenderList(m_node, _layer);
+	m_layer = _layer;
 }
 
 void Renderer::SetUVRenderNode(Animator* _animator)
 {
-	m_node->Delete(m_this->GetLayer());
+	m_node->Delete(m_layer);
 	auto node = new UVRenderNode();
 	node->m_object = m_this;
 	m_node = std::shared_ptr<RenderNode>(node);
-	RenderManager::AddRenderList(m_node, m_this->GetLayer());
+	RenderManager::AddRenderList(m_node, m_layer);
 
 	_animator->m_uvNode = node;
+}
+
+void Renderer::DrawImGui()
+{
+	ImGui::Text(" Layer : %s", magic_enum::enum_name(m_layer).data());
+
+	ImGui::Text(" path  : %s", texPath.c_str());
+	ImGui::ColorEdit4("color", &m_node->m_color.x);
+	ImVec4 color(m_node->m_color.x, m_node->m_color.y, m_node->m_color.z, m_node->m_color.w);
+	ImGui::Image((ImTextureID)(m_node->m_pTextureView.Get()), ImVec2(50, 50), ImVec2(0, 0), ImVec2(1, 1), color);
 }
 
 void Renderer::SetTexture(const wchar_t* _texPath)
 {
 	m_node->SetTexture(_texPath);
+#ifdef DEBUG_TRUE
+	texPath = ConvertWCharToChar(_texPath);
+#endif
 }
 
 void Renderer::SetTexture(const std::string& _filePath)
 {
 	m_node->SetTexture(_filePath);
+#ifdef DEBUG_TRUE
+	texPath = _filePath;
+#endif
 }
 
 void Renderer::SetColor(XMFLOAT4 _color)
@@ -94,7 +115,7 @@ void Renderer::SetColor(XMFLOAT4 _color)
 
 void Renderer::SetTexcode(int _splitX, int _splitY, int _frameX, int _frameY)
 {
-	m_node->Delete(m_this->GetLayer());
+	m_node->Delete(m_layer);
 	auto node = new UVRenderNode();
 	node->m_object = m_this;
 	node->m_pTextureView = m_node->m_pTextureView;
@@ -103,7 +124,7 @@ void Renderer::SetTexcode(int _splitX, int _splitY, int _frameX, int _frameY)
 	node->m_frameX = _frameX;
 	node->m_frameY = _frameY;
 	m_node = std::shared_ptr<RenderNode>(node);
-	RenderManager::AddRenderList(m_node, m_this->GetLayer());
+	RenderManager::AddRenderList(m_node, m_layer);
 }
 
 RenderNode::RenderNode()
@@ -116,6 +137,7 @@ RenderNode::RenderNode()
 RenderNode::RenderNode(const wchar_t* _texpath)
 {
 	TextureAssets::pLoadTexture(m_pTextureView, _texpath);
+
 	NextEnd();
 	Active(true);
 }
@@ -358,8 +380,8 @@ void RenderManager::Draw()
 		if (GetWindowRect(view.first, &rect))
 		{
 			CameraManager::cameraPosition = { 
-				(static_cast<float>(rect.left + rect.right) / 2 - MONITER_HALF_WIDTH) / renderZoom.x + renderOffset.x,
-				(static_cast<float>(rect.top + rect.bottom) / -2 + MONITER_HALF_HEIGHT) / renderZoom.y + renderOffset.y
+				(static_cast<float>(rect.left + rect.right) / 2 - Window::MONITER_HALF_WIDTH) / renderZoom.x + renderOffset.x,
+				(static_cast<float>(rect.top + rect.bottom) / -2 + Window::MONITER_HALF_HEIGHT) / renderZoom.y + renderOffset.y
 			};
 		}
 
@@ -488,5 +510,4 @@ void RenderManager::LinkNextRenderList()
 		node.second = node.first;
 	}
 }
-
 

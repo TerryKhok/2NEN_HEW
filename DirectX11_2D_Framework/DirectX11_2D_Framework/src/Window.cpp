@@ -24,6 +24,11 @@ void CloseConsoleWindow() {
 std::atomic<bool> Window::mainLoopRun;
 #endif
 
+//モニターの解像度所得
+int Window::MONITER_HALF_WIDTH = GetSystemMetrics(SM_CXSCREEN) / 2;
+int Window::MONITER_HALF_HEIGHT = GetSystemMetrics(SM_CYSCREEN) / 2;
+
+
 HINSTANCE Window::m_hInstance;
 int Window::m_nCmdShow;
 HWND  Window::mainHwnd;
@@ -52,6 +57,10 @@ LRESULT Window::WindowMainCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, L
 {
 	//DebugとReleaseのDpiを統一するため
 	SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+
+	//モニターの解像度所得
+	MONITER_HALF_WIDTH = GetSystemMetrics(SM_CXSCREEN) / 2;
+	MONITER_HALF_HEIGHT = GetSystemMetrics(SM_CYSCREEN) / 2;
 
 #ifdef DEBUG_TRUE
 	//コンソール画面起動
@@ -547,8 +556,6 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	case WM_CLOSE:  // 「x」ボタンが押されたら
 	{
-		ObjectManager::m_eraseObjectList.reset();
-
 		int res = MessageBoxA(NULL, "終了しますか？", "確認", MB_OKCANCEL);
 		if (res == IDOK) 
 		{
@@ -583,7 +590,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			GetWindowRect(hwnd.first, &rect);
 			int width = rect.right - rect.left;
 			int height = rect.bottom - rect.top;
-			SetWindowPos(hwnd.first, HWND_TOP, rect.left, rect.top, width, height, SWP_SHOWWINDOW);
+			SetWindowPos(hwnd.first, HWND_TOP, rect.left, rect.top, width, height, SWP_NOSIZE);
 		}
 	}
 	break;
@@ -1011,8 +1018,8 @@ Vector2 GetWindowPosition(HWND _hWnd)
 	GetWindowRect(_hWnd, &rect);
 	Vector2 pos =
 	{
-		static_cast<float>(rect.left + rect.right) / 2 - MONITER_HALF_WIDTH,
-		static_cast<float>(rect.top + rect.bottom) / -2 + MONITER_HALF_HEIGHT
+		static_cast<float>(rect.left + rect.right) / 2 - Window::MONITER_HALF_WIDTH,
+		static_cast<float>(rect.top + rect.bottom) / -2 + Window::MONITER_HALF_HEIGHT
 	};
 
 	return pos;
@@ -1022,7 +1029,7 @@ void SetWindowPosition(HWND _hWnd, Vector2 pos)
 {
 	RECT rect;
 	GetWindowRect(_hWnd, &rect);
-	int x = static_cast<int>(pos.x) + MONITER_HALF_WIDTH - (rect.right - rect.left) / 2;
-	int y = -static_cast<int>(pos.y) + MONITER_HALF_HEIGHT - (rect.bottom - rect.top) / 2;
+	int x = static_cast<int>(pos.x) + Window::MONITER_HALF_WIDTH - (rect.right - rect.left) / 2;
+	int y = -static_cast<int>(pos.y) + Window::MONITER_HALF_HEIGHT - (rect.bottom - rect.top) / 2;
 	SetWindowPos(_hWnd, nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 }

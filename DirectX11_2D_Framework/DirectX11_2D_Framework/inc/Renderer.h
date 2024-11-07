@@ -21,22 +21,33 @@ private:
 	void SetActive(bool _active);
 	//対応したノードの削除
 	void Delete();
-	//レイヤーの変更
-	void SetLayer(const LAYER _layer);
 	//Debug用のポインター取得
 	Renderer* GetDevide(){
 		return this;
 	}
 	//UVRenderNodeへ切り替える
 	void SetUVRenderNode(Animator* _animator);
+	//imguiの描画
+	void DrawImGui() override;
 public:
+	//レイヤーの変更
+	void SetLayer(const LAYER _layer);
+	//テクスチャの変更
 	void SetTexture(const wchar_t* _texPath);
 	void SetTexture(const std::string& _filePath);
+	//色の変更
 	void SetColor(XMFLOAT4 _color);
+	//uv座標の変更(ちょっと重い)
 	void SetTexcode(int _splitX, int _splitY, int _frameX, int _frameY);
 private:
 	//対応したノード
 	std::shared_ptr<RenderNode> m_node;
+	//描画する順番
+	LAYER m_layer = LAYER::LAYER_01;
+#ifdef DEBUG_TRUE
+	//テクスチャパス
+	std::string texPath = "not texture path";
+#endif
 };
 
 //双方向リストノード

@@ -7,10 +7,16 @@
 #include "../../DirectX11_2D_Framework/imgui/imgui_impl_dx11.h"
 #include "../../DirectX11_2D_Framework/imgui/imgui_impl_win32.h"
 
+
+#define MAGIC_ENUM_RANGE_MIN 0  // ç≈è¨ílÇ…çáÇÌÇπÇƒí≤êÆ
+#define MAGIC_ENUM_RANGE_MAX 0x00000800   // ç≈ëÂílÇ…çáÇÌÇπÇƒí≤êÆ
+
+#include "../../DirectX11_2D_Framework/magic_enum/magic_enum.hpp"
+
 #define IMGUI_WINDOW_NAME "imGui Window"
 
 #define IMGUI_WINDOW_WIDTH (480)
-#define IMGUI_WINDOW_HEIGHT (640)
+#define IMGUI_WINDOW_HEIGHT (720)
 
 class ImGuiApp
 {
@@ -49,6 +55,7 @@ private:
 	static std::unordered_map<HWND, ImGuiContext*> m_hWndContexts;
 	static ComPtr<IDXGISwapChain> m_pSwapChain[TYPE_MAX];
 	static ComPtr<ID3D11RenderTargetView> m_pRenderTargetView[TYPE_MAX];
+	static ComPtr<ID3D11ShaderResourceView> m_pIconTexture;
 	static void(*pDrawImGui[TYPE_MAX])();
 };
 
