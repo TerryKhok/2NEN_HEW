@@ -103,7 +103,7 @@ bool Box2D::WorldManager::RayCast(Vector2 _start, Vector2 _end, FILTER _filter)
 
 	b2QueryFilter filter;
 	filter.categoryBits = _filter;
-	filter.maskBits = Box2DBodyManager::GetMaskLayerBit(_filter);
+	filter.maskBits = Box2DBodyManager::GetMaskFilterBit(_filter);
 	b2RayResult result = b2World_CastRayClosest(*currentWorldId, rayStart, b2Sub(rayEnd, rayStart), filter);
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
@@ -140,7 +140,7 @@ bool Box2D::WorldManager::RayCast(Vector2 _start, Vector2 _end, Vector2& _output
 
 	b2QueryFilter filter;
 	filter.categoryBits = _filter;
-	filter.maskBits = Box2DBodyManager::GetMaskLayerBit(_filter);
+	filter.maskBits = Box2DBodyManager::GetMaskFilterBit(_filter);
 	b2RayResult result = b2World_CastRayClosest(*currentWorldId, rayStart, b2Sub(rayEnd, rayStart), filter);
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
@@ -228,7 +228,7 @@ bool Box2D::WorldManager::RayCastAll(Vector2 _start, Vector2 _end, std::vector<V
 
 	b2QueryFilter filter;
 	filter.categoryBits = _filter;
-	filter.maskBits = Box2DBodyManager::GetMaskLayerBit(_filter);
+	filter.maskBits = Box2DBodyManager::GetMaskFilterBit(_filter);
 	std::vector<b2Vec2> posList;
 	b2World_CastRay(*currentWorldId, rayStart, b2Sub(rayEnd, rayStart), filter, b2CastResultPosFcn, &posList);
 

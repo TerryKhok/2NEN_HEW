@@ -185,7 +185,7 @@ void Box2DBody::SetFilter(const FILTER _filter)
 	{
 		auto filter = b2Shape_GetFilter(shape);
 		filter.categoryBits = m_filter;
-		filter.maskBits = Box2DBodyManager::GetMaskLayerBit(m_filter);
+		filter.maskBits = Box2DBodyManager::GetMaskFilterBit(m_filter);
 		b2Shape_SetFilter(shape, filter);
 	}
 	
@@ -219,7 +219,7 @@ void Box2DBody::CreateBoxShape(Vector2 _size, Vector2 _offset, float _angle,bool
 
 	shapeDef.isSensor = _sensor;
 	shapeDef.filter.categoryBits = m_filter;
-	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(m_filter);
+	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskFilterBit(m_filter);
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pPauseWorldUpdate();
@@ -267,7 +267,7 @@ void Box2DBody::CreateCircleShape(float _diameter, Vector2 _offset)
 	//シェイプを作成して地面のボディを仕上げる
 	b2ShapeDef shapeDef = b2DefaultShapeDef();
 	shapeDef.filter.categoryBits = m_filter;
-	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(m_filter);
+	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskFilterBit(m_filter);
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pPauseWorldUpdate();
@@ -321,7 +321,7 @@ void Box2DBody::CreateCapsuleShape(float _diameter, float _height, float _angle,
 	//シェイプを作成して地面のボディを仕上げる
 	b2ShapeDef shapeDef = b2DefaultShapeDef();
 	shapeDef.filter.categoryBits = m_filter;
-	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(m_filter);
+	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskFilterBit(m_filter);
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pPauseWorldUpdate();
@@ -371,7 +371,7 @@ void Box2DBody::CreatePolygonShape(std::vector<b2Vec2> _pointList)
 
 	b2ShapeDef shapeDef = b2DefaultShapeDef();
 	shapeDef.filter.categoryBits = m_filter;
-	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(m_filter);
+	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskFilterBit(m_filter);
 
 	b2Hull hull = b2ComputeHull(_pointList.data(), count);
 	b2Polygon polygon = b2MakePolygon(&hull, 0.0f);
@@ -415,7 +415,7 @@ void Box2DBody::CreateSegment(std::vector<b2Vec2> _pointList)
 
 	b2ShapeDef shapeDef = b2DefaultShapeDef();
 	shapeDef.filter.categoryBits = m_filter;
-	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(m_filter);
+	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskFilterBit(m_filter);
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pPauseWorldUpdate();
@@ -456,7 +456,7 @@ void Box2DBody::CreateChain(std::vector<b2Vec2>& _pointList)
 
 	b2ChainDef chainDef = b2DefaultChainDef();
 	chainDef.filter.categoryBits = m_filter;
-	chainDef.filter.maskBits = Box2DBodyManager::GetMaskLayerBit(m_filter);
+	chainDef.filter.maskBits = Box2DBodyManager::GetMaskFilterBit(m_filter);
 
 	chainDef.points = _pointList.data();
 	chainDef.count = static_cast<int32_t>(_pointList.size());
@@ -620,7 +620,7 @@ void Box2DBody::GetOverlapObject(std::vector<GameObject*>& _objects, b2Transform
 	std::vector<b2ShapeId> shpeIds;
 	b2QueryFilter filter;
 	filter.categoryBits = m_filter;
-	filter.maskBits = Box2DBodyManager::GetMaskLayerBit(m_filter);
+	filter.maskBits = Box2DBodyManager::GetMaskFilterBit(m_filter);
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pPauseWorldUpdate();
 #endif 
@@ -684,7 +684,7 @@ void Box2DBody::GetOverlapObject(std::unordered_map<GameObject*, b2ShapeId>& _ob
 	std::vector<b2ShapeId> shpeIds;
 	b2QueryFilter filter;
 	filter.categoryBits = _filter;
-	filter.maskBits = Box2DBodyManager::GetMaskLayerBit(_filter);
+	filter.maskBits = Box2DBodyManager::GetMaskFilterBit(_filter);
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pPauseWorldUpdate();
 #endif 
@@ -860,16 +860,16 @@ void Box2DBodyManager::ExcuteMoveFunction()
 	moveFunctions.clear();
 }
 
-unsigned int Box2DBodyManager::GetMaskLayerBit(FILTER _layer)
+unsigned int Box2DBodyManager::GetMaskFilterBit(FILTER _filter)
 {
-	auto iter = m_layerFilterBit.find(_layer);
+	auto iter = m_layerFilterBit.find(_filter);
 	if (iter != m_layerFilterBit.end())
 	{
 		return iter->second;
 	}
 
-	m_layerFilterBit.insert(std::make_pair(_layer, ALL_BITS));
-	return m_layerFilterBit.find(_layer)->second;
+	m_layerFilterBit.insert(std::make_pair(_filter, ALL_BITS));
+	return m_layerFilterBit.find(_filter)->second;
 }
 
 #ifdef DEBUG_TRUE

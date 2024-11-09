@@ -123,11 +123,11 @@ public:
 	//メインのウィンドウハンドル取得
 	static const HWND& GetMainHwnd(){return mainHwnd;}
 public:
-	static thread_local HWND(*pWindowSubCreate)(std::string, std::string, int, int);
+	static thread_local HWND(*pWindowSubCreate)(std::string, std::string, int, int, Vector2);
 private:	
-	static HWND WindowSubCreate(std::string _objName, std::string _windowName = "SUB", int _width = SUB_SCREEN_WIDTH, int _height = SUB_SCREEN_HEIGHT);
+	static HWND WindowSubCreate(std::string _objName, std::string _windowName = "SUB", int _width = SUB_SCREEN_WIDTH, int _height = SUB_SCREEN_HEIGHT, Vector2 _pos = { 0,0 });
 	//サブウィンドウ作成
-	static HWND WindowSubCreateAsync(std::string _objName, std::string _windowName = "SUB", int _width = SUB_SCREEN_WIDTH, int _height = SUB_SCREEN_HEIGHT);
+	static HWND WindowSubCreateAsync(std::string _objName, std::string _windowName = "SUB", int _width = SUB_SCREEN_WIDTH, int _height = SUB_SCREEN_HEIGHT, Vector2 _pos = { 0,0 });
 	//コールバック関数
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	//サブウィンドウ用コールバック関数

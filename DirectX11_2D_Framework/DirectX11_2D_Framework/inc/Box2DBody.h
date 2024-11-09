@@ -131,7 +131,7 @@ private:
 	//対応したオブジェクトを動かす
 	static void ExcuteMoveFunction();
 	//指定したLayerのmaskBit取得
-	static unsigned int GetMaskLayerBit(FILTER _layer);
+	static unsigned int GetMaskFilterBit(FILTER _filter);
 private:
 	//bodyの位置変更関数リスト
 	static std::unordered_map<std::string, std::function<void()>> moveFunctions;

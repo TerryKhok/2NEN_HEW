@@ -15,7 +15,7 @@ class Permeation : public Component
 	void Start() override
 	{
 		rend = m_this->GetComponent<Renderer>();
-		rend->SetColor(enterColor);
+		rend->SetColor(exitColor);
 
 		if (!m_this->TryGetComponent<Box2DBody>(&rb))
 		{

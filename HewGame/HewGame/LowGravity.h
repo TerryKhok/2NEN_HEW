@@ -33,7 +33,7 @@ class LowGravity : public Component
 		{
 			enters.insert(_other);
 			rb->SetGravityScale(rb->GetGravityScale() / lowPower);
-			rend->SetColor(enterColor);
+			rend->SetColor(exitColor);
 			inCount++;
 		}
 	}

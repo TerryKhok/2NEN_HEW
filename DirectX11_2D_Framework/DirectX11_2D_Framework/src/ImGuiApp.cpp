@@ -408,6 +408,14 @@ void ImGuiApp::DrawOptionGui()
 
 					pauseGame = !pauseGame;
 				}
+				uvX = 19;
+				uvY = 1;
+				ImGui::SameLine();
+				if (ImGui::ImageButton("ReloadGame", m_imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
+				{
+					SceneManager::ReloadCurrentScene();
+					
+				}
 				ImGui::PopStyleVar();
 				ImGui::ColorEdit3("clear color", clearColor); // Edit 3 floats representing a color
 				if (ImGui::Button("Button"))
@@ -450,7 +458,7 @@ void ImGuiApp::DrawOptionGui()
 			ImGui::TableAngledHeadersRow(); // Draw angled headers for all columns with the ImGuiTableColumnFlags_AngledHeader flag.
 			ImGui::TableHeadersRow();       // Draw remaining headers and allow access to context-menu and other functions.
 			// Disable input for the following items
-			ImGui::BeginDisabled(true); // Disable interaction
+			//ImGui::BeginDisabled(true); // Disable interaction
 			for (int row = 0; row < numFilter; row++)
 			{
 				ImGui::PushID(row);
@@ -459,20 +467,29 @@ void ImGuiApp::DrawOptionGui()
 				ImGui::AlignTextToFramePadding();
 				ImGui::Text("%s", filterNames[row]);
 
-				UINT maskbit = Box2DBodyManager::GetMaskLayerBit((FILTER)pow(2, row));
+				FILTER rowFilter = (FILTER)pow(2, row);
+				UINT maskbit = Box2DBodyManager::GetMaskFilterBit(rowFilter);
 				for (int column = 1; column < numFilter - row + 1; column++)
 					if (ImGui::TableSetColumnIndex(column))
 					{
 						ImGui::PushID(column);
-						UINT filter = static_cast<UINT>(pow(2, numFilter - column));
-						UINT bit = maskbit & filter;
-						bool collision = filter == bit;
-						ImGui::Checkbox("", &collision);
+						FILTER colFilter = static_cast<FILTER>(pow(2, numFilter - column));
+						UINT bit = maskbit & colFilter;
+						bool collision = colFilter == bit;
+						if (ImGui::Checkbox("", &collision))
+						{
+							if (collision){
+								Box2DBodyManager::EnableCollisionFilter(rowFilter, colFilter);
+							}
+							else {
+								Box2DBodyManager::DisableCollisionFilter(rowFilter, colFilter);
+							}
+						}
 						ImGui::PopID();
 					}
 				ImGui::PopID();
 			}
-			ImGui::EndDisabled(); // Re-enable interaction
+			//ImGui::EndDisabled(); // Re-enable interaction
 
 			ImGui::EndTable();
 		}
@@ -484,15 +501,6 @@ void ImGuiApp::DrawOptionGui()
 	{
 		if (ImGui::BeginTabBar("hierarchyTab"))
 		{
-			if (ImGui::BeginTabItem("FileList"))
-			{
-				static fs::path currentPath = fs::current_path();
-
-				RenderDirectoryTree(currentPath);
-
-				ImGui::EndTabItem();
-			}
-
 			if (ImGui::BeginTabItem("ObjectList"))
 			{
 				for (auto& object : *ObjectManager::m_currentList) {
@@ -510,6 +518,15 @@ void ImGuiApp::DrawOptionGui()
 						ImGui::PopStyleColor();
 					}
 				}
+				ImGui::EndTabItem();
+			}
+
+			if (ImGui::BeginTabItem("FileList"))
+			{
+				static fs::path currentPath = fs::current_path();
+
+				RenderDirectoryTree(currentPath);
+
 				ImGui::EndTabItem();
 			}
 			ImGui::EndTabBar();

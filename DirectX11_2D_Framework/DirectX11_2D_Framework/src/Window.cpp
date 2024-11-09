@@ -48,7 +48,7 @@ long long Window::nowCount = worldOldCount;
 
 std::atomic<bool> Window::terminateFlag(false);
 
-thread_local HWND(*Window::pWindowSubCreate)(std::string, std::string, int, int) = WindowSubCreate;
+thread_local HWND(*Window::pWindowSubCreate)(std::string, std::string, int, int, Vector2) = WindowSubCreate;
 
 //ウィンドウのハンドルに対応したオブジェクトの名前
 std::unordered_map<HWND, std::string> Window::m_hwndObjNames;
@@ -153,9 +153,14 @@ std::string objectName;
 std::string windowName;
 int windowWidth;
 int windowHeight;
+Vector2 windowPos;
+
+bool pauseGame = false;
+
+void SetWindowMovable(HWND hwnd, bool movable);
 
 
-HWND Window::WindowSubCreate(std::string _objName, std::string _windowName, int _width, int _height)
+HWND Window::WindowSubCreate(std::string _objName, std::string _windowName, int _width, int _height, Vector2 _pos)
 {
 	HWND hWnd = CreateWindowEx(
 		0,										// 拡張ウィンドウスタイル
@@ -187,8 +192,11 @@ HWND Window::WindowSubCreate(std::string _objName, std::string _windowName, int 
 	int sy = _height;
 	sx += ((rc1.right - rc1.left) - (rc2.right - rc2.left));
 	sy += ((rc1.bottom - rc1.top) - (rc2.bottom - rc2.top));
+
 	SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, sx, sy, (SWP_NOZORDER |
 		SWP_NOOWNERZORDER | SWP_NOMOVE));
+
+	SetWindowPosition(hWnd, _pos);
 
 	ShowWindow(hWnd, m_nCmdShow);
 	// ウィンドウの状態を直ちに反映(ウィンドウのクライアント領域を更新)
@@ -198,13 +206,17 @@ HWND Window::WindowSubCreate(std::string _objName, std::string _windowName, int 
 
 	m_hwndObjNames.insert(std::make_pair(hWnd, _objName));
 
+#ifdef DEBUG_TRUE
+	if (pauseGame) SetWindowMovable(hWnd, false);
+#endif
+
 	return hWnd;
 }
 
 //まだ表示されていないウィンドウハンドル
 std::vector<HWND> unShowHwnds;
 
-HWND Window::WindowSubCreateAsync(std::string _objName, std::string _windowName, int _width, int _height)
+HWND Window::WindowSubCreateAsync(std::string _objName, std::string _windowName, int _width, int _height, Vector2 _pos)
 {
 	// Create a promise and future for window handle
 	std::promise<HWND> handlePromise;
@@ -214,6 +226,7 @@ HWND Window::WindowSubCreateAsync(std::string _objName, std::string _windowName,
 	windowName = _windowName;
 	windowWidth = _width;
 	windowHeight = _height;
+	windowPos = _pos;
 
 	// Send a message to the main thread to create the window
 	PostMessage(mainHwnd, WM_CREATE_NEW_WINDOW, reinterpret_cast<WPARAM>(&handlePromise), 0);
@@ -221,6 +234,11 @@ HWND Window::WindowSubCreateAsync(std::string _objName, std::string _windowName,
 	// Wait for the window handle to be set in the future
 	HWND hNewWindow = handleFuture.get();
 	unShowHwnds.push_back(hNewWindow);
+
+#ifdef DEBUG_TRUE
+	if (pauseGame) SetWindowMovable(hNewWindow, false);
+#endif
+
 	return hNewWindow;
 }
 
@@ -544,7 +562,6 @@ int Window::WindowEnd()
 // Declare isDragging as a static or global variable
 bool isDragging = false;
 
-bool pauseGame = false;
 
 LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -580,6 +597,11 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		long long pauseNowCount = liWork.QuadPart;
 		long long pauseOldCount = pauseNowCount;
 		long long pauseFrameCount = frequency / 30;
+
+		for (auto hwnd : m_hwndObjNames)
+		{
+			SetWindowMovable(hwnd.first, false);
+		}
 
 		pauseGame = true;
 		while (pauseGame)
@@ -623,6 +645,11 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					DirectX11::D3D_FinishRender();
 				}
 			}
+		}
+
+		for (auto hwnd : m_hwndObjNames)
+		{
+			SetWindowMovable(hwnd.first, true);
 		}
 	}
 	break;
@@ -686,7 +713,13 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		int sy = windowHeight;
 		sx += ((rc1.right - rc1.left) - (rc2.right - rc2.left));
 		sy += ((rc1.bottom - rc1.top) - (rc2.bottom - rc2.top));
-		SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, sx, sy, (SWP_NOZORDER |
+
+		RECT rect;
+		GetWindowRect(hWnd, &rect);
+		int x = static_cast<int>(windowPos.x) + Window::MONITER_HALF_WIDTH - (rect.right - rect.left) / 2;
+		int y = -static_cast<int>(windowPos.y) + Window::MONITER_HALF_HEIGHT - (rect.bottom - rect.top) / 2;
+
+		SetWindowPos(hWnd, HWND_TOPMOST, x, y, sx, sy, (SWP_NOZORDER |
 			SWP_NOOWNERZORDER | SWP_NOMOVE));
 
 		// ウィンドウの状態を直ちに反映(ウィンドウのクライアント領域を更新)
@@ -1098,3 +1131,20 @@ void SetWindowPosition(HWND _hWnd, Vector2 pos)
 	int y = -static_cast<int>(pos.y) + Window::MONITER_HALF_HEIGHT - (rect.bottom - rect.top) / 2;
 	SetWindowPos(_hWnd, nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 }
+
+void SetWindowMovable(HWND hwnd, bool movable) {
+	LONG style = GetWindowLong(hwnd, GWL_STYLE);
+
+	if (movable) {
+		// Add the title bar and resize border back
+		style |= (WS_CAPTION | WS_THICKFRAME);
+	}
+	else {
+		// Remove the title bar and resize border
+		style &= ~(WS_CAPTION | WS_THICKFRAME);
+	}
+
+	SetWindowLong(hwnd, GWL_STYLE, style);
+	//SetWindowPos(hwnd, nullptr, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
+}
+

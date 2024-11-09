@@ -7,34 +7,14 @@ public:
 		Vector2 size = _object->transform.scale;
 		int width = static_cast<int>(size.x * DEFAULT_OBJECT_SIZE);
 		int height = static_cast<int>(size.y * DEFAULT_OBJECT_SIZE);
-		m_hWnd = Window::pWindowSubCreate(_object->GetName(),"SUB", width, height);
-
-		Vector2 pos = GetWindowPosition(m_hWnd);
-		_object->transform.position = pos;
-
-		auto rb = _object->GetComponent<Box2DBody>();
-		if (rb != nullptr)
-		{
-			rb->SetPosition(pos);
-		}
+		m_hWnd = Window::pWindowSubCreate(_object->GetName(), _object->GetName(), width, height, _object->transform.position);
 	}
 
 	WindowRect(GameObject* _object,const char* _windowName) {
 		Vector2 size = _object->transform.scale;
 		int width = static_cast<int>(size.x * DEFAULT_OBJECT_SIZE);
 		int height = static_cast<int>(size.y * DEFAULT_OBJECT_SIZE);
-		m_hWnd = Window::pWindowSubCreate(_object->GetName(), _windowName, width, height);
-
-		SetWindowPosition(m_hWnd, _object->transform.position);
-
-		/*Vector2 pos = GetWindowPosition(m_hWnd);
-		_object->transform.position = pos;*/
-
-		auto rb = _object->GetComponent<Box2DBody>();
-		if (rb != nullptr)
-		{
-			rb->SetPosition(_object->transform.position);
-		}
+		m_hWnd = Window::pWindowSubCreate(_object->GetName(), _windowName, width, height, _object->transform.position);
 	}
 
 	void Delete() override
