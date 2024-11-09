@@ -39,7 +39,7 @@ private:
 
 	static void DrawOptionGui();
 	static void DrawInspecterGui();
-
+	
 	static void Uninit();
 private:
 	static int worldFpsCounter;
@@ -56,6 +56,7 @@ private:
 	static ComPtr<IDXGISwapChain> m_pSwapChain[TYPE_MAX];
 	static ComPtr<ID3D11RenderTargetView> m_pRenderTargetView[TYPE_MAX];
 	static ComPtr<ID3D11ShaderResourceView> m_pIconTexture;
+	static ImTextureID m_imIconTexture;
 	static void(*pDrawImGui[TYPE_MAX])();
 };
 

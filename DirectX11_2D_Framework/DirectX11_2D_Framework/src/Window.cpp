@@ -398,6 +398,7 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 		// 新たにメッセージがあれば
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
+			TranslateMessage(&msg);
 			// ウィンドウプロシージャにメッセージを送る
 			DispatchMessage(&msg);
 
@@ -543,6 +544,8 @@ int Window::WindowEnd()
 // Declare isDragging as a static or global variable
 bool isDragging = false;
 
+bool pauseGame = false;
+
 LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	static float screenWindowAspectWidth = 1.0f;
@@ -570,6 +573,68 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		updateOldCount = nowCount;
 	}
 	break;
+
+	case WM_PAUSE_GAME:
+	{
+		QueryPerformanceCounter(&liWork);
+		long long pauseNowCount = liWork.QuadPart;
+		long long pauseOldCount = pauseNowCount;
+		long long pauseFrameCount = frequency / 30;
+
+		pauseGame = true;
+		while (pauseGame)
+		{
+			// 新たにメッセージがあれば
+			if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+			{
+				TranslateMessage(&msg);
+				// ウィンドウプロシージャにメッセージを送る
+				DispatchMessage(&msg);
+
+				// 「WM_QUIT」メッセージを受け取ったらループを抜ける
+				if (msg.message == WM_QUIT) {
+					break;
+				}
+			}
+			else
+			{
+				QueryPerformanceCounter(&liWork);
+				pauseNowCount = liWork.QuadPart;
+
+				if (pauseNowCount > pauseOldCount + pauseFrameCount)
+				{
+					pauseOldCount = pauseNowCount;
+
+					//カメラ関連行列セット
+					CameraManager::SetCameraMatrix();
+
+					DirectX11::D3D_StartRender();
+
+					RenderManager::Draw();
+
+#ifdef SFTEXT_TRUE
+					SFTextManager::KeepExcuteDrawString();
+#endif
+
+#ifdef DEBUG_TRUE
+					ImGuiApp::Draw();
+#endif
+
+					DirectX11::D3D_FinishRender();
+				}
+			}
+		}
+	}
+	break;
+
+	case WM_RESUME_GAME:
+		pauseGame = false;
+		//現在時間を取得
+		QueryPerformanceCounter(&liWork);
+		nowCount = liWork.QuadPart;
+		worldOldCount = nowCount;
+		updateOldCount = nowCount;
+		break;
 
 #ifdef SUBWINDOW_IS_TOP
 

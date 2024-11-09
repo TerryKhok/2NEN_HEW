@@ -96,6 +96,9 @@
     <ClCompile Include="src\ImGuiApp.cpp">
       <Filter>Src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Utility.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Box2D.h">
@@ -192,6 +195,9 @@
       <Filter>Inc</Filter>
     </ClInclude>
     <ClInclude Include="inc\WindowRect.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Utility.h">
       <Filter>Inc</Filter>
     </ClInclude>
   </ItemGroup>

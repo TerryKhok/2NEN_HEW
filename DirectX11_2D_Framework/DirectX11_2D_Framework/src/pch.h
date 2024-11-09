@@ -68,6 +68,7 @@
 #include <cwchar>   // For wchar_t
 #include <commdlg.h>  // For common dialogs (GetSaveFileName)
 #include <fstream>
+#include <filesystem>
 #include <exception>
 
 #define _CRTDBG_MAP_ALLOC
@@ -77,6 +78,7 @@
 #include "../../DirectX11_2D_Framework/math/Math.h"
 #include "../../DirectX11_2D_Framework/math/Vector.h"
 #include "../../DirectX11_2D_Framework/math/Angle.h"
+#include "../../DirectX11_2D_Framework/inc/Utility.h"
 #include "../../DirectX11_2D_Framework/inc/Debug.h"
 #include "../../DirectX11_2D_Framework/inc/Window.h"
 #include "../../DirectX11_2D_Framework/inc/directX3D.h"

@@ -179,6 +179,7 @@
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\SFText.cpp" />
     <ClCompile Include="src\TextureAsset.cpp" />
+    <ClCompile Include="src\Utility.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -206,6 +207,7 @@
     <ClInclude Include="inc\Scene.h" />
     <ClInclude Include="inc\SFText.h" />
     <ClInclude Include="inc\TextureAsset.h" />
+    <ClInclude Include="inc\Utility.h" />
     <ClInclude Include="inc\Window.h" />
     <ClInclude Include="inc\WindowRect.h" />
     <ClInclude Include="math\Angle.h" />

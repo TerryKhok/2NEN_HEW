@@ -146,19 +146,19 @@ void Box2DBody::DrawImGui()
 				switch (type)
 				{
 				case b2_polygonShape:
-					ImGui::Text("Polygon");
+					ImGui::Text("type : Polygon");
 					break;
 				case b2_circleShape:
-					ImGui::Text("Circle");
+					ImGui::Text("type : Circle");
 					break;
 				case b2_capsuleShape:
-					ImGui::Text("Capsule");
+					ImGui::Text("type : Capsule");
 					break;
 				case b2_segmentShape:
-					ImGui::Text("Segment");
+					ImGui::Text("type : Segment");
 					break;
 				default:
-					ImGui::Text("unkown shape!");
+					ImGui::Text("unkown shape type!");
 					break;
 				}
 				bool sensor = b2Shape_IsSensor(shape);

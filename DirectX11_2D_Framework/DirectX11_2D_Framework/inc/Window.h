@@ -53,6 +53,8 @@ constexpr float DISPALY_ASPECT_HEIGHT = static_cast<float>(SCREEN_HEIGHT) / PROJ
 #define WM_CREATE_NEW_WINDOW (WM_USER + 1)
 #define WM_DELETE_WINDOW (WM_USER + 2)
 #define WM_ADJUST_Z_ORDER (WM_USER + 3)
+#define WM_PAUSE_GAME (WM_USER + 4)
+#define WM_RESUME_GAME (WM_USER + 5)
 
 //ウィンドウの位置を取得する
 Vector2 GetWindowPosition(HWND _hWnd);
@@ -62,11 +64,6 @@ void SetWindowPosition(HWND _hWnd, Vector2 pos);
 class Window final
 {
 public:
-	enum HANDLE_TYPE
-	{
-		MAIN,
-		HANDLE_MAX
-	};
 
 	//モニターの解像度所得
 	static int MONITER_HALF_WIDTH;

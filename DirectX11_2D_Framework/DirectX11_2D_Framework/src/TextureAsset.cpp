@@ -5,20 +5,6 @@ ComPtr<IWICImagingFactory> TextureAssets::m_pWICFactory = nullptr;
 std::unordered_map<const wchar_t*, ComPtr<ID3D11ShaderResourceView>> TextureAssets::m_textureLib;
 HRESULT(*TextureAssets::pLoadTexture)(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName) = WICLoad;
 
-const char* ConvertWCharToChar(const wchar_t* wstr) {
-	size_t requiredSize = 0;
-	// First, calculate the size of the converted string, including the null terminator
-	wcstombs_s(&requiredSize, nullptr, 0, wstr, _TRUNCATE);
-
-	// Allocate buffer to hold the multi-byte string
-	char* buffer = new char[requiredSize];
-
-	// Perform the conversion
-	wcstombs_s(nullptr, buffer, requiredSize, wstr, _TRUNCATE);
-
-	return buffer;  // Remember to free the memory later
-}
-
 
 HRESULT TextureAssets::Init()
 {
@@ -48,11 +34,9 @@ HRESULT TextureAssets::WICLoad(ComPtr<ID3D11ShaderResourceView>& _textureView, c
 
 	if (FAILED(hr))
 	{
-		const char* cstr = ConvertWCharToChar(_texName);
-		std::string log = cstr;
+		std::string log = wstring_to_string(_texName);
 		log = "テクスチャ読み込み失敗 :" + log;
 		MessageBoxA(NULL, log.c_str(), "エラー", MB_ICONERROR | MB_OK);
-		delete[] cstr;  // Free the allocated memory
 	}
 
 	m_textureLib[_texName] = _textureView;

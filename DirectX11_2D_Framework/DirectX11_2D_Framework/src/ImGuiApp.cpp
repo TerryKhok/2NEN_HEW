@@ -1,4 +1,4 @@
-#include"../../DirectX11_2D_Framework/img/iconss.c"
+#include"../../DirectX11_2D_Framework/img/icon_sheet_32x32.c"
 
 
 int ImGuiApp::worldFpsCounter;
@@ -12,6 +12,7 @@ std::unordered_map<HWND, ImGuiContext*> ImGuiApp::m_hWndContexts;
 ComPtr<IDXGISwapChain> ImGuiApp::m_pSwapChain[TYPE_MAX];
 ComPtr<ID3D11RenderTargetView> ImGuiApp::m_pRenderTargetView[TYPE_MAX];
 ComPtr<ID3D11ShaderResourceView> ImGuiApp::m_pIconTexture;
+ImTextureID ImGuiApp::m_imIconTexture;
 void(*ImGuiApp::pDrawImGui[ImGuiApp::TYPE_MAX])() = {};
 
 void ImGuiSetKeyMap(ImGuiContext* _imguiContext);
@@ -20,11 +21,12 @@ std::vector<const char*> filterNames;
 
 constexpr long long numFilter = magic_enum::enum_count<FILTER>() - 1;
 
+ImVec4 windowBgCol;
+
 HRESULT ImGuiApp::Init(HINSTANCE hInstance)
 {
 	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
 
 	// ウィンドウクラス情報をまとめる
 	WNDCLASSEX wc;
@@ -141,6 +143,9 @@ HRESULT ImGuiApp::Init(HINSTANCE hInstance)
 	
 	ImGui::StyleColorsDark(); // Set ImGui style (optional)
 
+	auto style = ImGui::GetStyle();
+	windowBgCol = style.Colors[ImGuiCol_WindowBg];
+
 	UINT filter = 1;
 	for (long long i = 0; i < numFilter; ++i)
 	{
@@ -151,7 +156,9 @@ HRESULT ImGuiApp::Init(HINSTANCE hInstance)
 	//texture追加の処理をする
 	HRESULT  hr;
 	hr = DirectX::CreateWICTextureFromMemory(
-		DirectX11::m_pDevice.Get(), _aciconss, sizeof(_aciconss) / sizeof(_aciconss[0]), NULL, m_pIconTexture.GetAddressOf());
+		DirectX11::m_pDevice.Get(), _acicon_sheet_32x32, sizeof(_acicon_sheet_32x32) / sizeof(_acicon_sheet_32x32[0]), NULL, m_pIconTexture.GetAddressOf());
+
+	m_imIconTexture = (ImTextureID)m_pIconTexture.Get();
 
 	return HRESULT();
 }
@@ -177,6 +184,150 @@ std::string OpenFileDialog() {
 	}
 
 	return " ";
+}
+
+namespace fs = std::filesystem;
+
+// Set of allowed extensions
+std::set<std::string> allowed_extensions = { /*".cpp", ".h", */".txt",".png",".jpg" }; // Add the extensions you want to display
+
+// Set of unallowed folder
+std::set<std::string> unallowed_folders = {"x64"};
+
+// Struct to store move operations
+struct MoveOperation {
+	fs::path src;
+	fs::path dst;
+};
+
+void DisplayFolder(const fs::path& path,std::vector<MoveOperation>& move_operations) {
+	for (const auto& entry : fs::directory_iterator(path)) {
+		if (entry.is_directory()) {
+			if (unallowed_folders.count(entry.path().filename().string()) > 0) continue;
+
+			// Display folder as a drop target
+			bool node_open = ImGui::TreeNode(entry.path().filename().string().c_str());
+
+			// Right-click context menu for directories
+			if (ImGui::BeginPopupContextItem()) {
+				if (ImGui::MenuItem("Add New File")) {
+					fs::path new_file_path = entry.path() / "new_file.txt"; // Replace with desired file name
+					std::ofstream(new_file_path.c_str()); // Create an empty file
+					std::cout << std::endl << "Created file: " << new_file_path << std::endl;
+				}
+				if (ImGui::MenuItem("Add New Folder")) {
+					fs::path new_folder_path = entry.path() / "New Folder"; // Replace with desired folder name
+					fs::create_directory(new_folder_path);
+					std::cout << std::endl << "Created folder: " << new_folder_path << std::endl;
+				}
+				ImGui::EndPopup();
+			}
+
+			// Make folder draggable
+			if (ImGui::BeginDragDropSource()) {
+				std::string folder_path_str = entry.path().string();
+				ImGui::SetDragDropPayload("FOLDER_DRAG", folder_path_str.c_str(), folder_path_str.size() + 1);
+				ImGui::Text("Moving folder: %s", entry.path().filename().string().c_str());
+				ImGui::EndDragDropSource();
+			}
+
+			// Set folder as a drop target
+			if (ImGui::BeginDragDropTarget()) {
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("FOLDER_DRAG")) {
+					std::string src_folder(static_cast<const char*>(payload->Data), payload->DataSize);
+					fs::path destination = entry.path() / fs::path(src_folder).filename();
+
+					// Store the move operation instead of executing it immediately
+					move_operations.push_back({ src_folder, destination });
+				}
+
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("FILE_DRAG")) {
+					std::string src_path(static_cast<const char*>(payload->Data), payload->DataSize);
+					fs::path destination = entry.path() / fs::path(src_path).filename();
+
+					if (src_path != destination.string())
+					{
+						// Move the file
+						try {
+							fs::rename(src_path, destination);
+							std::cout << std::endl << "Moved " << src_path << " to " << destination << std::endl;
+						}
+						catch (const std::filesystem::filesystem_error& e) {
+							std::cerr << std::endl << "Error moving file: " << e.what() << std::endl;
+						}
+					}
+				}
+				ImGui::EndDragDropTarget();
+			}
+
+			// Recursively display subfolders if the folder node is open
+			if (node_open)
+			{
+				DisplayFolder(entry.path(), move_operations);
+				ImGui::TreePop();
+			}				
+		}
+		else 
+		{
+			if (allowed_extensions.count(entry.path().extension().string()) > 0)
+			{
+				// Unique ID for each file by pushing an ID based on its path
+				ImGui::PushID(entry.path().string().c_str());
+				//ImGui::BulletText("%s", entry.path().filename().string().c_str());
+				if (ImGui::Selectable(entry.path().filename().string().c_str())) {
+					// Optional: Handle selection event if needed
+				}
+
+
+				// Make file draggable
+				if (ImGui::BeginDragDropSource()) {
+					std::string path_str = entry.path().string();
+					ImGui::SetDragDropPayload("FILE_DRAG", path_str.c_str(), path_str.size() + 1);
+					ImGui::Text("%s", entry.path().filename().string().c_str());
+					ImGui::EndDragDropSource();
+				}
+
+				ImGui::PopID(); // Restore to avoid ID conflicts
+			}
+		}
+	}
+}
+
+void RenderDirectoryTree(const fs::path& root_path) {
+
+	// Vector to store move operations
+	std::vector<MoveOperation> move_operations;
+
+	if(ImGui::CollapsingHeader(root_path.filename().string().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+	{
+		// Right-click context menu for directories
+		if (ImGui::BeginPopupContextItem()) {
+			if (ImGui::MenuItem("Add New File")) {
+				fs::path new_file_path = root_path / "new_file.txt"; // Replace with desired file name
+				std::ofstream(new_file_path.c_str()); // Create an empty file
+				std::cout << std::endl << "Created file: " << new_file_path << std::endl;
+			}
+			if (ImGui::MenuItem("Add New Folder")) {
+				fs::path new_folder_path = root_path / "New Folder"; // Replace with desired folder name
+				fs::create_directory(new_folder_path);
+				std::cout << std::endl << "Created folder: " << new_folder_path << std::endl;
+			}
+			ImGui::EndPopup();
+		}
+
+		DisplayFolder(root_path, move_operations);
+
+		// Process all move operations after displaying the directory tree
+		for (const auto& operation : move_operations) {
+			try {
+				fs::rename(operation.src, operation.dst); // Execute the move operation
+				std::cout << std::endl << "Moved folder: " << operation.src << " to " << operation.dst << std::endl;
+			}
+			catch (const fs::filesystem_error& e) {
+				std::cerr << std::endl << "Error moving folder: " << e.what() << std::endl;
+			}
+		}
+	}
 }
 
 // 画面塗りつぶし色
@@ -233,7 +384,7 @@ void ImGuiApp::DrawOptionGui()
 
 	static bool showFilterTable = false;
 
-	static float iconTexScale = 1.0f / 44;
+	static float iconTexScale = 1.0f / 20;
 
 	if (ImGui::Begin("Menu")) {
 		ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
@@ -241,12 +392,23 @@ void ImGuiApp::DrawOptionGui()
 		{
 			if (ImGui::BeginTabItem("Tool"))
 			{
-				/*static bool jointObject = false;
-				ImVec4 b2col = jointObject ? ImVec4(0, 0, 1, 1) : ImVec4(0, 0, 1, 0.2f);
-				if(ImGui::ImageButton("joint object", (ImTextureID)m_pIconTexture.Get(), ImVec2(50, 50), ImVec2(1.0f - iconTexScale, iconTexScale * 17.5f), ImVec2(1.0f, iconTexScale * 18.5f), b2col))
+				static bool pauseGame = true;
+				//ImVec4 b2col = playGame ? ImVec4(0.5f, 0.5f, 0.5f, 1.0f) : ImVec4(1, 1, 1, 1);
+				int uvX = pauseGame ? 6 : 12;
+				int uvY = pauseGame ? 4 : 1;
+				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+				if(ImGui::ImageButton("PauseGame",m_imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)),windowBgCol))
 				{
-					jointObject = !jointObject;
-				}*/
+					if (pauseGame){
+						PostMessage(Window::GetMainHwnd(), WM_PAUSE_GAME, 0, 0);
+					}
+					else{
+						PostMessage(Window::GetMainHwnd(), WM_RESUME_GAME, 0, 0);
+					}
+
+					pauseGame = !pauseGame;
+				}
+				ImGui::PopStyleVar();
 				ImGui::ColorEdit3("clear color", clearColor); // Edit 3 floats representing a color
 				if (ImGui::Button("Button"))
 				{
@@ -266,7 +428,6 @@ void ImGuiApp::DrawOptionGui()
 		ImGui::Separator();
 	}
 	ImGui::End();
-
 
 	// 3. Show another simple window.
 	if (showFilterTable)
@@ -319,23 +480,41 @@ void ImGuiApp::DrawOptionGui()
 		ImGui::End();
 	}
 
-	if (ImGui::Begin("Object List", nullptr, ImGuiWindowFlags_None))
+	if (ImGui::Begin("Hierarchy", nullptr, ImGuiWindowFlags_None))
 	{
-		for (auto& object : *ObjectManager::m_currentList) {
-			bool selected = object.second.get() == selectedObject;
-			if (!object.second->active)
+		if (ImGui::BeginTabBar("hierarchyTab"))
+		{
+			if (ImGui::BeginTabItem("FileList"))
 			{
-				ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 0.4f)); // Set text color to red
+				static fs::path currentPath = fs::current_path();
+
+				RenderDirectoryTree(currentPath);
+
+				ImGui::EndTabItem();
 			}
-			if (ImGui::Selectable(object.second->GetName().c_str(), selected)) {
-				// Handle selection, e.g., highlighting the object or showing more details
-				selectedObject = object.second.get();
-			}
-			if (!object.second->active)
+
+			if (ImGui::BeginTabItem("ObjectList"))
 			{
-				ImGui::PopStyleColor();
+				for (auto& object : *ObjectManager::m_currentList) {
+					bool selected = object.second.get() == selectedObject;
+					if (!object.second->active)
+					{
+						ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 0.4f)); // Set text color to red
+					}
+					if (ImGui::Selectable(object.second->GetName().c_str(), selected)) {
+						// Handle selection, e.g., highlighting the object or showing more details
+						selectedObject = object.second.get();
+					}
+					if (!object.second->active)
+					{
+						ImGui::PopStyleColor();
+					}
+				}
+				ImGui::EndTabItem();
 			}
+			ImGui::EndTabBar();
 		}
+		ImGui::Separator();
 	}
 	ImGui::End();
 }
@@ -416,11 +595,17 @@ void ImGuiApp::DrawInspecterGui()
 	ImGui::End();
 }
 
+
 void ImGuiApp::Uninit()
 {
-	ImGui_ImplDX11_Shutdown();
-	ImGui_ImplWin32_Shutdown();
-	ImGui::DestroyContext();
+	for (int type = 0; type < TYPE_MAX; type++)
+	{
+		ImGui::SetCurrentContext(context[type]);
+
+		ImGui_ImplDX11_Shutdown();
+		ImGui_ImplWin32_Shutdown();
+		ImGui::DestroyContext();
+	}
 }
 
 LRESULT ImGuiApp::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)

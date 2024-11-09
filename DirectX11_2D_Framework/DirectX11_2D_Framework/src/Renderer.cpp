@@ -39,7 +39,7 @@ Renderer::Renderer(GameObject* _pObject,const wchar_t* texpath)
 	m_node = std::shared_ptr<RenderNode>(node);
 	RenderManager::AddRenderList(m_node, m_layer);
 #ifdef DEBUG_TRUE
-	texPath = ConvertWCharToChar(texpath);
+	texPath = wstring_to_string(texpath);
 #endif
 }
 
@@ -96,7 +96,7 @@ void Renderer::SetTexture(const wchar_t* _texPath)
 {
 	m_node->SetTexture(_texPath);
 #ifdef DEBUG_TRUE
-	texPath = ConvertWCharToChar(_texPath);
+	texPath = wstring_to_string(_texPath);
 #endif
 }
 
