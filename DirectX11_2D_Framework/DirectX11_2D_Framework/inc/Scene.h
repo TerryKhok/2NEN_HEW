@@ -37,6 +37,7 @@ private:
 class SceneManager final
 {
 	friend class Window;
+	friend class ImGuiApp;
 
 private:
 	//生成禁止
@@ -48,6 +49,42 @@ private:
 	static void Uninit();
 	//次へのシーンの切り替え
 	static void NextScene();
+	//同期シーン切り替え
+	static void LoadScene(std::string _sceneName)
+	{
+		//非同期にシーンをロードしている場合
+		if (async)
+		{
+			LOG("no loding %s,other scene loding now", _sceneName.substr(6).c_str());
+		}
+
+		//シーンが登録済みかどうか
+		auto it = m_sceneList.find(_sceneName);
+		if (it != m_sceneList.end()) {
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+			Box2D::WorldManager::DisableWorldUpdate();
+			Box2D::WorldManager::PauseWorldUpdate();
+#endif
+			//新しいリストに変える
+			RenderManager::GenerateList();
+
+			ObjectManager::GenerateList();
+			//対応したシーンのロード処理
+			it->second();
+			//シーン切り替え
+			NextScene();
+			//シーン初期化
+			TRY_CATCH_LOG(m_currentScene->Init());
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+			Box2D::WorldManager::EnableWorldUpdate();
+			Box2D::WorldManager::ResumeWorldUpdate();
+#endif	
+			LOG_NL;
+			LOG("Now Switching to %s", _sceneName.substr(6).c_str());
+		}
+	}
 public:
 	//シーンの読み込み・切り替え(同期)
 	template<typename T>
@@ -84,7 +121,7 @@ public:
 			Box2D::WorldManager::ResumeWorldUpdate();
 #endif	
 			LOG_NL;
-			LOG("Now Switching to %s",sceneName.substr(6).c_str());
+			LOG("Now Switching to %s", sceneName.substr(6).c_str());
 
 			throw "";
 		}

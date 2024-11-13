@@ -1,13 +1,13 @@
 #pragma once
 
 
-
 class Component
 {
 	friend class Window;
 	friend class GameObject;
 	friend class Box2D::WorldManager;
 	friend class ImGuiApp;
+	friend class ComponentFactory;
 
 protected:
 	//生成禁止
@@ -32,6 +32,23 @@ private:
 	virtual void SetActive(bool _active) {}
 	//コンポーネント削除処理
 	virtual void Delete() {}
+	// Get the type name of the derived class
+	std::string getType() const {
+		return demangle(typeid(*this).name());
+	}
+	// Optional: Demangling function for nicer output on some compilers
+	static std::string demangle(const char* name) {
+#ifdef __GNUG__
+		int status = -1;
+		std::unique_ptr<char, void(*)(void*)> res{
+			abi::__cxa_demangle(name, nullptr, nullptr, &status),
+			std::free
+		};
+		return (status == 0) ? res.get() : name;
+#else
+		return name;  // Fallback if demangling is not available
+#endif
+	}
 private:
 //============================================
 // Awakeはまだ機能してない

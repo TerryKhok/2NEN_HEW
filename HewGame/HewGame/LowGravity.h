@@ -14,7 +14,7 @@ class LowGravity : public Component
 	void Start() override
 	{
 		rend = m_this->GetComponent<Renderer>();
-		rend->SetColor(enterColor);
+		rend->SetColor(exitColor);
 
 		if (!m_this->TryGetComponent<Box2DBody>(&rb))
 		{
@@ -33,7 +33,7 @@ class LowGravity : public Component
 		{
 			enters.insert(_other);
 			rb->SetGravityScale(rb->GetGravityScale() / lowPower);
-			rend->SetColor(exitColor);
+			rend->SetColor(enterColor);
 			inCount++;
 		}
 	}

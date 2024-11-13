@@ -153,7 +153,6 @@ std::string objectName;
 std::string windowName;
 int windowWidth;
 int windowHeight;
-Vector2 windowPos;
 
 bool pauseGame = false;
 
@@ -226,7 +225,6 @@ HWND Window::WindowSubCreateAsync(std::string _objName, std::string _windowName,
 	windowName = _windowName;
 	windowWidth = _width;
 	windowHeight = _height;
-	windowPos = _pos;
 
 	// Send a message to the main thread to create the window
 	PostMessage(mainHwnd, WM_CREATE_NEW_WINDOW, reinterpret_cast<WPARAM>(&handlePromise), 0);
@@ -234,6 +232,8 @@ HWND Window::WindowSubCreateAsync(std::string _objName, std::string _windowName,
 	// Wait for the window handle to be set in the future
 	HWND hNewWindow = handleFuture.get();
 	unShowHwnds.push_back(hNewWindow);
+
+	SetWindowPosition(hNewWindow, _pos);
 
 #ifdef DEBUG_TRUE
 	if (pauseGame) SetWindowMovable(hNewWindow, false);
@@ -357,7 +357,7 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 		{
 			updateLag -= updateFrameCount;
 			//Animator用のカウント更新
-			AnimatorManager::deltaCount = nowCount - worldOldCount;
+			AnimatorManager::deltaCount = updateFrameCount;
 
 			Input::Get().Update();
 
@@ -714,12 +714,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		sx += ((rc1.right - rc1.left) - (rc2.right - rc2.left));
 		sy += ((rc1.bottom - rc1.top) - (rc2.bottom - rc2.top));
 
-		RECT rect;
-		GetWindowRect(hWnd, &rect);
-		int x = static_cast<int>(windowPos.x) + Window::MONITER_HALF_WIDTH - (rect.right - rect.left) / 2;
-		int y = -static_cast<int>(windowPos.y) + Window::MONITER_HALF_HEIGHT - (rect.bottom - rect.top) / 2;
-
-		SetWindowPos(hWnd, HWND_TOPMOST, x, y, sx, sy, (SWP_NOZORDER |
+		SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, sx, sy, (SWP_NOZORDER |
 			SWP_NOOWNERZORDER | SWP_NOMOVE));
 
 		// ウィンドウの状態を直ちに反映(ウィンドウのクライアント領域を更新)

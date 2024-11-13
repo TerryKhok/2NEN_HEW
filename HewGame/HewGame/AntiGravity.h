@@ -39,13 +39,15 @@ class AntiGravity : public Component
 
 	void OnColliderExit(GameObject* _other) override
 	{
+		LOG("exit");
+
 		Box2DBody* rb = nullptr;
 		if (_other->TryGetComponent(&rb))
 		{
 			auto iter = enters.find(_other);
 			if (iter != enters.end()) enters.erase(iter);
 
-			rb->SetGravityScale(rb->GetGravityScale() * -1.0f);
+			rb->SetGravityScale(rb->GetGravityScale() * -0.5f);
 			inCount--;
 			if (inCount <= 0)
 			{
@@ -82,7 +84,7 @@ class AntiGravity : public Component
 					auto iterator = enters.find(object.first);
 					if (iterator != enters.end()) enters.erase(iterator);
 
-					rb->SetGravityScale(rb->GetGravityScale() * -1.0f);
+					rb->SetGravityScale(rb->GetGravityScale() * -2.0f);
 					inCount--;
 					if (inCount <= 0)
 					{

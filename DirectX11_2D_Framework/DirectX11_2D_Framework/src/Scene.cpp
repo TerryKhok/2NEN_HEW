@@ -73,6 +73,10 @@ void SceneManager::NextScene()
 
     //古いオブジェクトの移動情報を一応消しておく
     Box2DBodyManager::moveFunctions.clear();
+
+    //レンダーカメラ設定初期化
+    RenderManager::renderZoom = { 1.0f,1.0f };
+    RenderManager::renderOffset = { 0.0f,0.0f };
     
     m_currentScene = std::move(m_nextScene);
     //m_nextScene.reset(nullptr); 

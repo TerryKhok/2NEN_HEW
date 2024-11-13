@@ -99,6 +99,12 @@
     <ClCompile Include="src\Utility.cpp">
       <Filter>Src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Prefab.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\sound.cpp">
+      <Filter>Src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Box2D.h">
@@ -198,6 +204,12 @@
       <Filter>Inc</Filter>
     </ClInclude>
     <ClInclude Include="inc\Utility.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Prefab.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\sound.h">
       <Filter>Inc</Filter>
     </ClInclude>
   </ItemGroup>

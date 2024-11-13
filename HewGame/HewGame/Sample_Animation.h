@@ -68,8 +68,8 @@ class SampleScene_Animation : public Scene
 			},
 		};
 
-		anim->AddClip("Idel", frames);
-		anim->Play("Idel");
+		anim->AddClip("Idle", frames);
+		anim->Play("Idle");
 	}
 
 	Vector2 oldMousePos;

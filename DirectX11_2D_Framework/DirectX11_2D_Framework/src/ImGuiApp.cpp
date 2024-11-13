@@ -529,6 +529,21 @@ void ImGuiApp::DrawOptionGui()
 
 				ImGui::EndTabItem();
 			}
+
+			if (ImGui::BeginTabItem("SceneList"))
+			{
+				for (auto scene : SceneManager::m_sceneList)
+				{
+					std::string currentSceneName = typeid(*SceneManager::m_currentScene).name();
+					bool current = currentSceneName == scene.first;
+					if (ImGui::Selectable(scene.first.substr(5).c_str(), &current))
+					{
+						SceneManager::LoadScene(scene.first);
+					}
+				}
+
+				ImGui::EndTabItem();
+			}
 			ImGui::EndTabBar();
 		}
 		ImGui::Separator();
