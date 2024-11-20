@@ -3,18 +3,18 @@
 class LowGravity : public Component
 {
 	SAFE_POINTER(Renderer, rend)
-	SAFE_POINTER(Box2DBody, rb)
+		SAFE_POINTER(Box2DBody, rb)
 
-	int inCount = 0;
+		int inCount = 0;
 
 	const XMFLOAT4 enterColor = { 1.0f,1.0f,0.0f,0.5f };
 	const XMFLOAT4 exitColor = { 1.0f,1.0f,0.0f,0.2f };
-	const float lowPower = 3.0f;
+	const float lowPower = 50.0f;
 
 	void Start() override
 	{
 		rend = m_this->GetComponent<Renderer>();
-		rend->SetColor(exitColor);
+		rend->SetColor(enterColor);
 
 		if (!m_this->TryGetComponent<Box2DBody>(&rb))
 		{
@@ -32,6 +32,12 @@ class LowGravity : public Component
 		if (_other->TryGetComponent<Box2DBody>(&rb))
 		{
 			enters.insert(_other);
+			/*float top = rb->GetVelocity().y;
+			if (top <= 0)
+			{
+				rb->SetVelocityY({ rb->GetVelocity().y * 0.2f });
+			}*/
+			//rb->SetVelocityY({ rb->GetVelocity().y * 0.2f});
 			rb->SetGravityScale(rb->GetGravityScale() / lowPower);
 			rend->SetColor(enterColor);
 			inCount++;

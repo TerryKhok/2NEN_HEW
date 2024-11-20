@@ -3,9 +3,9 @@
 class AntiGravity : public Component
 {
 	SAFE_POINTER(Renderer, rend)
-	SAFE_POINTER(Box2DBody, rb)
-		
-	int inCount = 0;
+		SAFE_POINTER(Box2DBody, rb)
+
+		int inCount = 0;
 
 	const XMFLOAT4 enterColor = { 1.0f,0.0f,1.0f,0.5f };
 	const XMFLOAT4 exitColor = { 1.0f,0.0f,1.0f,0.2f };
@@ -13,7 +13,7 @@ class AntiGravity : public Component
 	void Start() override
 	{
 		rend = m_this->GetComponent<Renderer>();
-		rend->SetColor(exitColor);
+		rend->SetColor(enterColor);
 
 		if (!m_this->TryGetComponent<Box2DBody>(&rb))
 		{
@@ -31,7 +31,7 @@ class AntiGravity : public Component
 		if (_other->TryGetComponent<Box2DBody>(&rb))
 		{
 			enters.insert(_other);
-			rb->SetGravityScale(rb->GetGravityScale() * -1.0f);
+			rb->SetGravityScale(rb->GetGravityScale() * -0.5f);
 			rend->SetColor(enterColor);
 			inCount++;
 		}
@@ -39,13 +39,15 @@ class AntiGravity : public Component
 
 	void OnColliderExit(GameObject* _other) override
 	{
+		LOG("exit");
+
 		Box2DBody* rb = nullptr;
 		if (_other->TryGetComponent(&rb))
 		{
 			auto iter = enters.find(_other);
 			if (iter != enters.end()) enters.erase(iter);
 
-			rb->SetGravityScale(rb->GetGravityScale() * -1.0f);
+			rb->SetGravityScale(rb->GetGravityScale() * -2.0f);
 			inCount--;
 			if (inCount <= 0)
 			{
@@ -54,7 +56,7 @@ class AntiGravity : public Component
 		}
 	}
 
-	std::unordered_map<GameObject*,b2ShapeId> enterObjects;
+	std::unordered_map<GameObject*, b2ShapeId> enterObjects;
 	Vector2 enterPos;
 
 	void OnWindowEnter(HWND _hWnd) override
@@ -67,8 +69,8 @@ class AntiGravity : public Component
 	{
 		Vector2 pos = GetWindowPosition(_hWnd);
 		rb->SetPosition(pos);
-	
-		std::unordered_map<GameObject*,b2ShapeId> exitObjects;
+
+		std::unordered_map<GameObject*, b2ShapeId> exitObjects;
 		rb->GetOverlapObject(exitObjects);
 
 		for (auto object : enterObjects)
@@ -82,7 +84,7 @@ class AntiGravity : public Component
 					auto iterator = enters.find(object.first);
 					if (iterator != enters.end()) enters.erase(iterator);
 
-					rb->SetGravityScale(rb->GetGravityScale() * -1.0f);
+					rb->SetGravityScale(rb->GetGravityScale() * -2.0f);
 					inCount--;
 					if (inCount <= 0)
 					{
@@ -98,7 +100,7 @@ class AntiGravity : public Component
 			{
 				Box2DBody* rb = nullptr;
 				if (object.first->TryGetComponent<Box2DBody>(&rb))
-				{					
+				{
 					rb->SetAwake(true);
 				}
 			}

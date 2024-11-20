@@ -4,7 +4,7 @@ class TitleScene : public Scene
 {
 	void Load() override
 	{
-		Sound sound;
+		//Sound sound;
 		//sound.LoadWavFile("asset/sound/se/ƒWƒƒƒ“ƒv_1.wav");
 		auto object = Instantiate("object");
 		auto render = object->AddComponent<Renderer>(/*L"asset/pic/rollArrow.png"*/);
