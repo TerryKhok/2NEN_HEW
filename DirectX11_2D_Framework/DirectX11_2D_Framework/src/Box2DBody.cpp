@@ -596,6 +596,14 @@ void Box2DBody::SetMass(float _mass)
 #endif
 }
 
+void Box2DBody::SetRestitution(float _restitution)
+{
+	for (auto shape : m_shapeList)
+	{
+		b2Shape_SetRestitution(shape, _restitution);
+	}
+}
+
 void Box2DBody::SetFixedRotation(bool _flag)
 {
 #ifdef BOX2D_UPDATE_MULTITHREAD

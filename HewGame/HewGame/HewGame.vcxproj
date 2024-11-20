@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Bounce.h" />
     <ClInclude Include="LowGravity.h" />
     <ClInclude Include="MovePlayer.h" />
     <ClInclude Include="Permeation.h" />

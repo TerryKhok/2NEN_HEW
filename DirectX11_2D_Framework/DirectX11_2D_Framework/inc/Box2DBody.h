@@ -84,6 +84,8 @@ public:
 	float GetMass();
 	//d‚³‚ğ•ÏX
 	void SetMass(float _mass);
+	//’e‚İ‚Ìİ’è
+	void SetRestitution(float _restitution);
 	//‰ñ“]‚ğ~‚ß‚éİ’è
 	void SetFixedRotation(bool _flag);
 	//ˆ—‚Ì’â~‚ğ•ÏX‚·‚é
