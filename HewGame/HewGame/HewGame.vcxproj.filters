@@ -51,6 +51,9 @@
     <ClInclude Include="SeigoTestScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

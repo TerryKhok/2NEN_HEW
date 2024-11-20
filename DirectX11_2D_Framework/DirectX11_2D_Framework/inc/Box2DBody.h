@@ -7,13 +7,14 @@ class Box2DBody : public Component
 private:
 	Box2DBody(GameObject* _object);
 	Box2DBody(GameObject* _object, b2BodyDef* _bodyDef);
+	~Box2DBody() = default;
 	//Box2dWorldから位置と角度を受け取る
 	inline void Update() override;
 	//後かたずけ
 	void Delete() override;
 	//アクティブ設定
 	void SetActive(bool _active) override;
-	//imguiの描画
+	//imGuiの描画
 	void DrawImGui()override;
 public:
 	//bodyIdの取得
@@ -79,6 +80,10 @@ public:
 	float GetGravityScale() const;
 	//重力を大きさ変更
 	void SetGravityScale(float _scale);
+	//重さを取得
+	float GetMass();
+	//重さを変更
+	void SetMass(float _mass);
 	//回転を止める設定
 	void SetFixedRotation(bool _flag);
 	//処理の停止を変更する
@@ -129,12 +134,12 @@ private:
 	static void Init();
 #endif
 	//対応したオブジェクトを動かす
-	static void ExcuteMoveFunction();
-	//指定したLayerのmaskBit取得
+	static void ExecuteMoveFunction();
+	//指定したLayerのMaskBit取得
 	static unsigned int GetMaskFilterBit(FILTER _filter);
 private:
 	//bodyの位置変更関数リスト
-	static std::unordered_map<std::string, std::function<void()>> moveFunctions;
+	static std::unordered_map<GameObject*, b2BodyId> m_moveBodyObjects;
 	//layerのフィルターのビットを格納
 	static std::unordered_map<FILTER, unsigned int> m_layerFilterBit;
 	//bodyIdに対応したオブジェクトの名前を格納
@@ -213,7 +218,7 @@ private:
 protected:
 	//インデックスの数
 	int indexCount = 0;
-	//対象のbody
+	//対象のBody
 	b2BodyId m_bodyId;
 	//Circle用頂点データ
 	ComPtr<ID3D11Buffer> m_chainVertexBuffer;

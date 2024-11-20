@@ -1,5 +1,6 @@
 #include"../../DirectX11_2D_Framework/img/icon_sheet_32x32.c"
 
+#ifdef DEBUG_TRUE
 
 int ImGuiApp::worldFpsCounter;
 int ImGuiApp::updateFpsCounter = 0;
@@ -52,7 +53,7 @@ HRESULT ImGuiApp::Init(HINSTANCE hInstance)
 	// Use std::fill to set all elements to the same function
 	std::fill(std::begin(pDrawImGui), std::end(pDrawImGui), []() {});
 	pDrawImGui[OPTIONS] = DrawOptionGui;
-	pDrawImGui[INSPECTER] = DrawInspecterGui;
+	pDrawImGui[INSPECTER] = DrawInspectorGui;
 
 	for (int type = 0; type < TYPE_MAX; type++)
 	{
@@ -189,7 +190,7 @@ std::string OpenFileDialog() {
 namespace fs = std::filesystem;
 
 // Set of allowed extensions
-std::set<std::string> allowed_extensions = { /*".cpp", ".h", */".txt",".png",".jpg" }; // Add the extensions you want to display
+std::set<std::string> allowed_extensions = { ".txt",".png",".jpg",".json"}; // Add the extensions you want to display
 
 // Set of unallowed folder
 std::set<std::string> unallowed_folders = {"x64"};
@@ -422,6 +423,16 @@ void ImGuiApp::DrawOptionGui()
 				{
 					OpenFileDialog();
 				}
+
+				if(ImGui::Button("Serialize"))
+				{
+					fs::path filePath = /*"asset/object/" + */selectedObject->GetName() + ".json";
+					//filePath /= ;
+					std::ofstream ofs(filePath);
+					cereal::JSONOutputArchive archive(ofs);
+					archive(CEREAL_NVP(*selectedObject));
+				}
+
 				ImGui::EndTabItem();
 			}
 			if (ImGui::BeginTabItem("Box2D"))
@@ -551,9 +562,9 @@ void ImGuiApp::DrawOptionGui()
 	ImGui::End();
 }
 
-void ImGuiApp::DrawInspecterGui()
+void ImGuiApp::DrawInspectorGui()
 {
-	if (ImGui::Begin("Inspecter", nullptr, ImGuiWindowFlags_None))
+	if (ImGui::Begin("Inspector", nullptr, ImGuiWindowFlags_None))
 	{
 		if (selectedObject != nullptr)
 		{
@@ -617,6 +628,17 @@ void ImGuiApp::DrawInspecterGui()
 					//ImGui::TreePop();
 				}
 			}
+
+			ImVec2 buttonPos = ImGui::GetCursorScreenPos();
+			buttonPos.x += 50;
+			buttonPos.y += 25;
+			ImGui::SetCursorScreenPos(buttonPos);
+			if (ImGui::Button("Add Component", ImVec2(300, 30)))
+			{
+			//==================================================
+			// コンポーネント追加gui
+			//==================================================
+			}
 		}
 		else
 		{
@@ -628,7 +650,7 @@ void ImGuiApp::DrawInspecterGui()
 }
 
 
-void ImGuiApp::Uninit()
+void ImGuiApp::UnInit()
 {
 	for (int type = 0; type < TYPE_MAX; type++)
 	{
@@ -753,3 +775,6 @@ void ImGuiSetKeyMap(ImGuiContext* _imguiContext)
 	io.KeyMap[ImGuiKey_Z] = 'Z';                  // Map the 'Z' key (for Ctrl+Z, etc.)
 #endif
 }
+
+
+#endif

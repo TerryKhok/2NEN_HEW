@@ -26,7 +26,7 @@ GameObject::~GameObject()
 	m_componentList.clear();
 }
 
-VSObjectConstantBuffer& GameObject::GetContantBuffer()
+VSObjectConstantBuffer& GameObject::GetConstantBuffer()
 {
 	//ワールド変換行列の作成
 	//ー＞オブジェクトの位置・大きさ・向きを指定
@@ -295,7 +295,7 @@ GameObject* ObjectManager::Find(const std::string& _name)
 }
 
 
-void ObjectManager::Uninit()
+void ObjectManager::UnInit()
 {
 	for (auto& [key, value] : *m_objectList)
 	{

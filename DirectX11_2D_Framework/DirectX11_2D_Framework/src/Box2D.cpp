@@ -277,7 +277,7 @@ void Box2D::WorldManager::CreateWorld()
 	currentWorldId = &worldId;
 }
 
-void Box2D::WorldManager::GenerataeBody(b2BodyId& _bodyId,const b2BodyDef* _bodyDef)
+void Box2D::WorldManager::GenerateBody(b2BodyId& _bodyId,const b2BodyDef* _bodyDef)
 {
 	//グランドボディの作成
 	_bodyId = b2CreateBody(*currentWorldId, _bodyDef);
@@ -467,7 +467,7 @@ void Box2D::WorldManager::WorldUpdate()
 }
 #endif
 
-void Box2D::WorldManager::ExcuteSensorEvent()
+void Box2D::WorldManager::ExecuteSensorEvent()
 {
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	pPauseWorldUpdate();
@@ -532,7 +532,7 @@ void Box2D::WorldManager::DeleteAllWorld()
 	DeleteOldWorld();
 }
 
-void Box2D::WorldManager::ChengeNextWorld()
+void Box2D::WorldManager::ChangeNextWorld()
 {
 	//ワールド定義、初期化
 	b2WorldDef worldDef = b2DefaultWorldDef();

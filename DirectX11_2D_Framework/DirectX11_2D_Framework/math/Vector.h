@@ -104,6 +104,17 @@ public:
 	/// </summary>
 	/// <param name="_v"></param>
 	/// <returns></returns>
+	Vector2& operator-=(const Vector2& _v)
+	{
+		vec.x -= _v.x;
+		vec.y -= _v.y;
+		return *this;
+	}
+	/// <summary>
+	/// 減算代入演算
+	/// </summary>
+	/// <param name="_v"></param>
+	/// <returns></returns>
 	Vector2& operator-=(const float& _v)
 	{
 		vec.x -= _v;
@@ -187,6 +198,9 @@ public:
 	static const Vector3 AxisY;
 	static const Vector3 AxisZ;
 	static const Vector3 One;
+private:
+	GENERATE_SERIALIZE(x, y, z)
+
 public:
 	/// <summary>
 	/// XMVECTORへの暗黙の変換。
@@ -553,6 +567,21 @@ public:
 	const Vector3& operator+=(const Vector3& _v)
 	{
 		Add(_v);
+		return *this;
+	}
+	/// <summary>
+/// 加算代入演算子。
+/// </summary>
+/// <remarks>
+///	ベクトルクラスに下記のような加算代入の機能を提供します。
+///	Vector3 v0 = {20.0f, 30.0f, 40.0f};
+///	Vector3 v1 = {10.0f, 20.0f, 30.0f};
+///	v0 += v1;
+/// </remarks>
+	const Vector3& operator+=(const Vector2& _v)
+	{
+		vec.x += _v.x;
+		vec.y += _v.y;
 		return *this;
 	}
 	/// <summary>

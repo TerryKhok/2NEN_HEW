@@ -18,7 +18,11 @@ struct Transform final
 	Vector3 position = { 0.0f,0.0f,0.0f };
 	Vector3 scale =	{ 5.0f,5.0f,1.0f };
 	Angle3D angle = { 0.0f,0.0f,0.0f };
+
+private:
+	GENERATE_SERIALIZE(position, scale, angle)
 };
+
 
 
 class GameObject final
@@ -47,7 +51,7 @@ private:
 	~GameObject();
 
 	//プロジェクション行列変換までして渡す（描画以外では基本使わない）
-	VSObjectConstantBuffer& GetContantBuffer();
+	VSObjectConstantBuffer& GetConstantBuffer();
 	//コンポーネントの更新
 	void UpdateComponent();
 	//なにもしない
@@ -92,7 +96,7 @@ public:
 		T* downcast = dynamic_cast<T*>(component);
 		if (downcast == nullptr)
 		{
-			LOG_WARNING("%s : %s component down_cast faild",name.c_str(), typeid(T).name());
+			LOG_WARNING("%s : %s component down_cast failed",name.c_str(), typeid(T).name());
 		}
 
 		return downcast;
@@ -116,7 +120,7 @@ public:
 		T* downcast = dynamic_cast<T*>(component);
 		if (downcast == nullptr)
 		{
-			LOG_WARNING("%s : %s component down_cast faild", name.c_str(), typeid(T).name());
+			LOG_WARNING("%s : %s component down_cast failed", name.c_str(), typeid(T).name());
 		}
 
 		return downcast;
@@ -153,7 +157,7 @@ public:
 		if (iter != m_componentList.end())
 		{
 #ifdef DEBUG_TRUE
-			//コンポーネントのSafePointerをnullptrにする
+			//コンポーネントのSafePointerをNullptrにする
 			PointerRegistryManager::deletePointer(iter->second.get());
 #endif 
 			iter->second->Delete();
@@ -172,7 +176,7 @@ public:
 			T* downcast = dynamic_cast<T*>(iter->second.get());
 			if (downcast == nullptr)
 			{
-				LOG_ERROR("%s : %s component down_cast faild", name.c_str(), typeid(T).name());
+				LOG_ERROR("%s : %s component down_cast failed", name.c_str(), typeid(T).name());
 			}
 			return downcast;
 		}
@@ -180,7 +184,7 @@ public:
 		LOG_WARNING("%s : %s component not exist",name.c_str(),typeid(T).name());
 		return nullptr;
 	}
-	//tarnsformComponent完全特殊化
+	//transformComponent完全特殊化
 	template<>
 	Transform* GetComponent(void);
 
@@ -193,7 +197,7 @@ public:
 			T* downcast = dynamic_cast<T*>(iter->second.get());
 			if (downcast == nullptr)
 			{
-				LOG_ERROR("%s : %s component down_cast faild", name.c_str(), typeid(T).name());
+				LOG_ERROR("%s : %s component down_cast failed", name.c_str(), typeid(T).name());
 			}
 			*_output = downcast;
 			return true;
@@ -213,6 +217,15 @@ private:
 	bool active = true;
 	static VSObjectConstantBuffer m_cb;
 	std::unordered_map<const char*, std::unique_ptr<Component, void(*)(Component*)>> m_componentList;
+	
+private:
+		template <class Archive>
+		void serialize(Archive& ar) {
+			ar(CEREAL_NVP(name), CEREAL_NVP(transform), CEREAL_NVP(active)/*, CEREAL_NVP(m_componentList)*/);
+		}
+	
+		// Declare Cereal archive types as friends
+		friend class cereal::access;
 };
 
 //==================================================
@@ -232,7 +245,7 @@ class ObjectManager final
 	using ObjectList = std::unordered_map<std::string, std::unique_ptr<GameObject, void(*)(GameObject*)>>;
 
 public:
-	//オブジェクト一覧から見つける アクセス速度n(1)なのでめっちゃはやい
+	//オブジェクト一覧から見つける アクセス速度n(1)なのではやい
 	static GameObject* Find(const std::string& _name);
 private:
 	//生成禁止
@@ -240,7 +253,7 @@ private:
 	//新しいリストにする
 	static void GenerateList();
 	//オブジェクトかたずけ
-	static void Uninit();
+	static void UnInit();
 	//オブジェクトについたコンポーネント更新
 	static void UpdateObjectComponent();
 	//オブジェクトの追加・名前の重複禁止

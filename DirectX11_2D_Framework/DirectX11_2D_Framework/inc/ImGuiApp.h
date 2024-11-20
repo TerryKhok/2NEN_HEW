@@ -7,11 +7,12 @@
 #include "../../DirectX11_2D_Framework/imgui/imgui_impl_dx11.h"
 #include "../../DirectX11_2D_Framework/imgui/imgui_impl_win32.h"
 
-
 #define MAGIC_ENUM_RANGE_MIN 0  // ç≈è¨ílÇ…çáÇÌÇπÇƒí≤êÆ
 #define MAGIC_ENUM_RANGE_MAX 0x00000800   // ç≈ëÂílÇ…çáÇÌÇπÇƒí≤êÆ
 
 #include "../../DirectX11_2D_Framework/magic_enum/magic_enum.hpp"
+
+#ifdef DEBUG_TRUE
 
 #define IMGUI_WINDOW_NAME "imGui Window"
 
@@ -38,9 +39,9 @@ private:
 	static void Draw();
 
 	static void DrawOptionGui();
-	static void DrawInspecterGui();
+	static void DrawInspectorGui();
 	
-	static void Uninit();
+	static void UnInit();
 private:
 	static int worldFpsCounter;
 	static int updateFpsCounter;
@@ -60,3 +61,5 @@ private:
 	static void(*pDrawImGui[TYPE_MAX])();
 };
 
+
+#endif

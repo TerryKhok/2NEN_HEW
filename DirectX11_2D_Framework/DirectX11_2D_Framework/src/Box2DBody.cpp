@@ -1,5 +1,5 @@
 
-std::unordered_map<std::string, std::function<void()>> Box2DBodyManager::moveFunctions;
+std::unordered_map<GameObject*, b2BodyId> Box2DBodyManager::m_moveBodyObjects;
 
 std::unordered_map<FILTER, unsigned int> Box2DBodyManager::m_layerFilterBit;
 
@@ -30,7 +30,7 @@ Box2DBody::Box2DBody(GameObject* _object)
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pPauseWorldUpdate();
 #endif
-	Box2D::WorldManager::GenerataeBody(m_bodyId, &bodyDef);
+	Box2D::WorldManager::GenerateBody(m_bodyId, &bodyDef);
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pResumeWorldUpdate();
@@ -47,7 +47,7 @@ Box2DBody::Box2DBody(GameObject* _object, b2BodyDef* _bodyDef)
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pPauseWorldUpdate();
 #endif
-	Box2D::WorldManager::GenerataeBody(m_bodyId, _bodyDef);
+	Box2D::WorldManager::GenerateBody(m_bodyId, _bodyDef);
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pResumeWorldUpdate();
@@ -58,7 +58,7 @@ Box2DBody::Box2DBody(GameObject* _object, b2BodyDef* _bodyDef)
 
 inline void Box2DBody::Update()
 {
-	auto func = [&]() 
+	//auto func = [&]() 
 		{
 			auto pos = b2Body_GetPosition(m_bodyId);
 			pos *= DEFAULT_OBJECT_SIZE;
@@ -67,7 +67,9 @@ inline void Box2DBody::Update()
 			m_this->transform.angle.z.Set(rot);
 		};
 
-	Box2DBodyManager::moveFunctions.emplace(m_this->GetName(), func);
+	//Box2DBodyManager::moveFunctions.emplace(m_this->GetName(), func);
+
+	//Box2DBodyManager::m_moveBodyObjects.emplace(std::make_pair(m_this, m_bodyId));
 }
 
 #ifdef DEBUG_TRUE
@@ -504,9 +506,9 @@ void Box2DBody::SetAngle(Angle _angle)
 {
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	b2BodyId id = m_bodyId;
-	Box2D::WorldManager::AddWorldTask(std::move([id, _pos]()
+	Box2D::WorldManager::AddWorldTask(std::move([id, _angle]()
 		{
-			b2Body_SetTransform(m_bodyId, b2Body_GetPosition(m_bodyId), b2MakeRot(_rad));
+			b2Body_SetTransform(id, b2Body_GetPosition(id), b2MakeRot(_angle));
 		})
 	);
 #else
@@ -568,6 +570,29 @@ void Box2DBody::SetGravityScale(float _scale)
 	);
 #else
 	b2Body_SetGravityScale(m_bodyId, _scale);
+#endif
+}
+
+float Box2DBody::GetMass()
+{
+	return b2Body_GetMass(m_bodyId);
+}
+
+void Box2DBody::SetMass(float _mass)
+{
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	b2BodyId id = m_bodyId;
+	Box2D::WorldManager::AddWorldTask(std::move([id, _mass]()
+		{
+			b2MassData massData;
+			massData.mass = _mass;
+			b2Body_SetMassData(id, massData);
+		})
+	);
+#else
+	b2MassData massData;
+	massData.mass = _mass;
+	b2Body_SetMassData(m_bodyId, massData);
 #endif
 }
 
@@ -851,13 +876,24 @@ void Box2DBodyManager::Init()
 #endif
 
 
-void Box2DBodyManager::ExcuteMoveFunction()
+void Box2DBodyManager::ExecuteMoveFunction()
 {
-	for (const auto& func : moveFunctions) {
+	/*for (const auto& func : moveFunctions) {
 		func.second();
 	}
 
-	moveFunctions.clear();
+	moveFunctions.clear();*/
+
+	for (const auto& node : m_moveBodyObjects)
+	{
+		auto pos = b2Body_GetPosition(node.second);
+		pos *= DEFAULT_OBJECT_SIZE;
+		node.first->transform.position = Vector3(pos.x, pos.y, 0.5f);
+		auto rot = b2Rot_GetAngle(b2Body_GetRotation(node.second));
+		node.first->transform.angle.z.Set(rot);
+	}
+
+	m_moveBodyObjects.clear();
 }
 
 unsigned int Box2DBodyManager::GetMaskFilterBit(FILTER _filter)
@@ -885,7 +921,7 @@ void Box2DBoxRenderNode::Draw()
 	static VSObjectConstantBuffer cb;
 
 	const auto& transform = m_object->transform;
-	const auto& objectCb = m_object->GetContantBuffer();
+	const auto& objectCb = m_object->GetConstantBuffer();
 
 	auto rad = static_cast<float>(transform.angle.z.Get());
 	Vector2 offset;
@@ -924,7 +960,7 @@ inline void Box2DCircleRenderNode::Draw()
 	static VSObjectConstantBuffer cb;
 
 	const auto& transform = m_object->transform;
-	const auto& objectCb = m_object->GetContantBuffer();
+	const auto& objectCb = m_object->GetConstantBuffer();
 
 
 	auto rad = static_cast<float>(transform.angle.z.Get());
@@ -964,7 +1000,7 @@ inline void Box2DCapsuleRenderNode::Draw()
 	static VSObjectConstantBuffer cb;
 
 	const auto& transform = m_object->transform;
-	const auto& objectCb = m_object->GetContantBuffer();
+	const auto& objectCb = m_object->GetConstantBuffer();
 
 	const float objectRad = static_cast<float>(transform.angle.z.Get());
 	const float rad = objectRad + m_angle;
@@ -1014,7 +1050,7 @@ inline void Box2DCapsuleRenderNode::Draw()
 	DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_vertexBuffer.GetAddressOf(), &strides, &offsets);
 	DirectX11::m_pDeviceContext->IASetIndexBuffer(Box2DBodyManager::m_boxIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
 
-	//胴体のbox描画
+	//胴体のBox描画
 	//======================================================================================================================
 	//ワールド変換行列の作成
 	//ー＞オブジェクトの位置・大きさ・向きを指定
@@ -1092,7 +1128,7 @@ inline void Box2DMeshRenderNode::Draw()
 	static VSObjectConstantBuffer cb;
 
 	const auto& transform = m_object->transform;
-	const auto& objectCb = m_object->GetContantBuffer();
+	const auto& objectCb = m_object->GetConstantBuffer();
 
 	auto rad = static_cast<float>(transform.angle.z.Get());
 

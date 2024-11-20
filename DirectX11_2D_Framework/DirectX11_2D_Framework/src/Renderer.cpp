@@ -39,7 +39,7 @@ Renderer::Renderer(GameObject* _pObject,const wchar_t* texpath)
 	m_node = std::shared_ptr<RenderNode>(node);
 	RenderManager::AddRenderList(m_node, m_layer);
 #ifdef DEBUG_TRUE
-	texPath = wstring_to_string(texpath);
+	m_node->texPath = wstring_to_string(texpath);
 #endif
 }
 
@@ -84,28 +84,25 @@ void Renderer::SetUVRenderNode(Animator* _animator)
 
 void Renderer::DrawImGui()
 {
+#ifdef DEBUG_TRUE
 	ImGui::Text(" Layer : %s", magic_enum::enum_name(m_layer).data());
 
-	ImGui::Text(" path  : %s", texPath.c_str());
+	ImGui::Text(" path  : %s", m_node->texPath.c_str());
 	ImGui::ColorEdit4("color", &m_node->m_color.x);
 	ImVec4 color(m_node->m_color.x, m_node->m_color.y, m_node->m_color.z, m_node->m_color.w);
 	ImGui::Image((ImTextureID)(m_node->m_pTextureView.Get()), ImVec2(50, 50), ImVec2(0, 0), ImVec2(1, 1), color);
+#endif
 }
 
 void Renderer::SetTexture(const wchar_t* _texPath)
 {
 	m_node->SetTexture(_texPath);
-#ifdef DEBUG_TRUE
-	texPath = wstring_to_string(_texPath);
-#endif
+
 }
 
 void Renderer::SetTexture(const std::string& _filePath)
 {
 	m_node->SetTexture(_filePath);
-#ifdef DEBUG_TRUE
-	texPath = _filePath;
-#endif
 }
 
 void Renderer::SetColor(XMFLOAT4 _color)
@@ -113,7 +110,7 @@ void Renderer::SetColor(XMFLOAT4 _color)
 	m_node->m_color = _color;
 }
 
-void Renderer::SetTexcode(int _splitX, int _splitY, int _frameX, int _frameY)
+void Renderer::SetUV(int _splitX, int _splitY, int _frameX, int _frameY)
 {
 	m_node->Delete(m_layer);
 	auto node = new UVRenderNode();
@@ -149,7 +146,7 @@ void RenderNode::Active(bool _active)
 
 inline void RenderNode::Draw()
 {
-	auto& cb = m_object->GetContantBuffer();
+	auto& cb = m_object->GetConstantBuffer();
 	cb.color = m_color;
 
 	//テクスチャをピクセルシェーダーに渡す
@@ -171,11 +168,17 @@ inline void RenderNode::Draw()
 void RenderNode::SetTexture(const wchar_t* _texPath)
 {
 	TextureAssets::pLoadTexture(m_pTextureView, _texPath);
+#ifdef DEBUG_TRUE
+	texPath = wstring_to_string(_texPath);
+#endif
 }
 
 void RenderNode::SetTexture(const std::string& _filePath)
 {
 	TextureAssets::StbiLoad(m_pTextureView, _filePath);
+#ifdef DEBUG_TRUE
+	texPath = _filePath;
+#endif
 }
 
 void RenderNode::Delete(LAYER _nodeLayer)
@@ -217,7 +220,7 @@ inline void RenderNode::DeleteList()
 
 inline void UVRenderNode::Draw()
 {
-	auto& cb = m_object->GetContantBuffer();
+	auto& cb = m_object->GetConstantBuffer();
 	cb.color = m_color;
 
 	//テクスチャをピクセルシェーダーに渡す

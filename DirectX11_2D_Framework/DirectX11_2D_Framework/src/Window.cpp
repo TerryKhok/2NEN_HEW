@@ -156,9 +156,6 @@ int windowHeight;
 
 bool pauseGame = false;
 
-void SetWindowMovable(HWND hwnd, bool movable);
-
-
 HWND Window::WindowSubCreate(std::string _objName, std::string _windowName, int _width, int _height, Vector2 _pos)
 {
 	HWND hWnd = CreateWindowEx(
@@ -342,7 +339,7 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 #ifndef BOX2D_UPDATE_MULTITHREAD
 			Box2D::WorldManager::WorldUpdate();
 #endif
-			TRY_CATCH_LOG(Box2D::WorldManager::ExcuteSensorEvent());
+			TRY_CATCH_LOG(Box2D::WorldManager::ExecuteSensorEvent());
 
 #ifdef DEBUG_TRUE
 			worldFpsounter++;
@@ -365,7 +362,7 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 
 			TRY_CATCH_LOG(ObjectManager::UpdateObjectComponent());
 
-			Box2DBodyManager::ExcuteMoveFunction();
+			Box2DBodyManager::ExecuteMoveFunction();
 
 			//カメラ関連行列セット
 			CameraManager::SetCameraMatrix();
@@ -440,7 +437,7 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 #ifndef BOX2D_UPDATE_MULTITHREAD
 				Box2D::WorldManager::WorldUpdate();
 #endif
-				TRY_CATCH_LOG(Box2D::WorldManager::ExcuteSensorEvent());
+				TRY_CATCH_LOG(Box2D::WorldManager::ExecuteSensorEvent());
 
 #ifdef DEBUG_TRUE
 				worldFpsounter++;
@@ -463,7 +460,7 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 
 				TRY_CATCH_LOG(ObjectManager::UpdateObjectComponent());
 
-				Box2DBodyManager::ExcuteMoveFunction();
+				Box2DBodyManager::ExecuteMoveFunction();
 
 				//カメラ関連行列セット
 				CameraManager::SetCameraMatrix();
@@ -526,7 +523,7 @@ int Window::WindowEnd()
 	Box2D::WorldManager::StopWorldUpdate();
 #endif 
 	//オブジェクトの破棄
-	ObjectManager::Uninit();
+	ObjectManager::UnInit();
 
 	//オブジェクトを削除する(念入りに)
 	ObjectManager::CleanAllObjectList();
@@ -535,10 +532,10 @@ int Window::WindowEnd()
 	Box2D::WorldManager::DeleteAllWorld();
 
 	//シーンの破棄
-	SceneManager::Uninit();
+	SceneManager::UnInit();
 
 #ifdef DEBUG_TRUE
-	ImGuiApp::Uninit();
+	ImGuiApp::UnInit();
 #endif
 
 	//DirectXかたずけ
@@ -598,10 +595,14 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		long long pauseOldCount = pauseNowCount;
 		long long pauseFrameCount = frequency / 30;
 
+		Vector2 oldMousePos;
+
 		for (auto hwnd : m_hwndObjNames)
 		{
 			SetWindowMovable(hwnd.first, false);
 		}
+
+		SetWindowPos(mainHwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 
 		pauseGame = true;
 		while (pauseGame)
@@ -627,6 +628,30 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				{
 					pauseOldCount = pauseNowCount;
 
+					Input::Get().Update();
+
+					if (Input::Get().MouseRightTrigger())
+					{
+						oldMousePos = Input::Get().MousePoint();
+					}
+
+					if (Input::Get().MouseRightPress())
+					{
+						Vector2 dis = Input::Get().MousePoint() - oldMousePos;
+						oldMousePos = Input::Get().MousePoint();
+						dis *= -1.0f;
+						RenderManager::renderOffset += dis;
+					}
+
+					if (Input::Get().MouseWheelDelta() > 0)
+					{
+						RenderManager::renderZoom += 0.01f;
+					}
+					else if (Input::Get().MouseWheelDelta() < 0)
+					{
+						RenderManager::renderZoom -= 0.01f;
+					}
+
 					//カメラ関連行列セット
 					CameraManager::SetCameraMatrix();
 
@@ -650,6 +675,10 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		for (auto hwnd : m_hwndObjNames)
 		{
 			SetWindowMovable(hwnd.first, true);
+
+#ifdef SUBWINDOW_IS_TOP
+			SetWindowPos(hwnd.first, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+#endif
 		}
 	}
 	break;
@@ -661,6 +690,9 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		nowCount = liWork.QuadPart;
 		worldOldCount = nowCount;
 		updateOldCount = nowCount;
+
+		RenderManager::renderOffset = { 0,0 };
+		RenderManager::renderZoom = { 1.0f,1.0f };
 		break;
 
 #ifdef SUBWINDOW_IS_TOP
@@ -676,13 +708,11 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	break;
 	case WM_ADJUST_Z_ORDER:
 	{
-		RECT rect;
+		if (pauseGame) break;
+
 		for (auto hwnd : m_hwndObjNames)
 		{
-			GetWindowRect(hwnd.first, &rect);
-			int width = rect.right - rect.left;
-			int height = rect.bottom - rect.top;
-			SetWindowPos(hwnd.first, HWND_TOP, rect.left, rect.top, width, height, SWP_NOSIZE);
+			SetWindowPos(hwnd.first, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 		}
 	}
 	break;
@@ -1057,42 +1087,6 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 #endif
 
 		DirectX11::D3D_FinishRender();
-
-		//RECT* rect = reinterpret_cast<RECT*>(lParam);
-
-		//// Calculate the window width and height
-		//int width = rect->right - rect->left;
-		//int height = rect->bottom - rect->top;
-
-		//// Adjust position to keep within the left boundary
-		//if (rect->left < leftBoundary)
-		//{
-		//	rect->left = leftBoundary;
-		//	rect->right = leftBoundary + width;
-		//}
-
-		//// Adjust position to keep within the right boundary
-		//if (rect->right > rightBoundary)
-		//{
-		//	rect->right = rightBoundary;
-		//	rect->left = rightBoundary - width;
-		//}
-
-		//// Adjust position to keep within the top boundary
-		//if (rect->top < topBoundary)
-		//{
-		//	rect->top = topBoundary;
-		//	rect->bottom = topBoundary + height;
-		//}
-
-		//// Adjust position to keep within the bottom boundary
-		//if (rect->bottom > bottomBoundary)
-		//{
-		//	rect->bottom = bottomBoundary;
-		//	rect->top = bottomBoundary - height;
-		//}
-
-		//return TRUE;  // Indicate that we've modified the window position
 	}
 	break;
 
@@ -1115,6 +1109,10 @@ Vector2 GetWindowPosition(HWND _hWnd)
 		static_cast<float>(rect.top + rect.bottom) / -2 + Window::MONITER_HALF_HEIGHT
 	};
 
+//#ifdef CAMERA_ON_WINDOW
+//	pos += RenderManager::renderOffset;
+//#endif
+
 	return pos;
 }
 
@@ -1122,17 +1120,22 @@ void SetWindowPosition(HWND _hWnd, Vector2 pos)
 {
 	RECT rect;
 	GetWindowRect(_hWnd, &rect);
+
+//#ifdef CAMERA_ON_WINDOW
+//	pos -= RenderManager::renderOffset;
+//#endif
+
 	int x = static_cast<int>(pos.x) + Window::MONITER_HALF_WIDTH - (rect.right - rect.left) / 2;
 	int y = -static_cast<int>(pos.y) + Window::MONITER_HALF_HEIGHT - (rect.bottom - rect.top) / 2;
 	SetWindowPos(_hWnd, nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 }
 
-void SetWindowMovable(HWND hwnd, bool movable) {
+void Window::SetWindowMovable(HWND hwnd, bool movable) {
 	LONG style = GetWindowLong(hwnd, GWL_STYLE);
 
 	if (movable) {
 		// Add the title bar and resize border back
-		style |= (WS_CAPTION | WS_THICKFRAME);
+		style |= (WS_CAPTION /*| WS_THICKFRAME*/);
 	}
 	else {
 		// Remove the title bar and resize border
@@ -1140,6 +1143,28 @@ void SetWindowMovable(HWND hwnd, bool movable) {
 	}
 
 	SetWindowLong(hwnd, GWL_STYLE, style);
-	//SetWindowPos(hwnd, nullptr, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_FRAMECHANGED);
+
+//	auto iter = m_hwndObjNames.find(hwnd);
+//	if (iter != m_hwndObjNames.end())
+//	{
+//		auto object = ObjectManager::Find(iter->second);
+//		if (object != nullptr)
+//		{
+//			RECT rect;
+//			GetWindowRect(hwnd, &rect);
+//			Vector2 pos = object->transform.position;
+//#ifdef CAMERA_ON_WINDOW
+//			pos -= RenderManager::renderOffset;
+//#endif
+//			int x = static_cast<int>(pos.x) + Window::MONITER_HALF_WIDTH - (rect.right - rect.left) / 2;
+//			int y = -static_cast<int>(pos.y) + Window::MONITER_HALF_HEIGHT - (rect.bottom - rect.top) / 2;
+//
+//			Vector2 size = object->transform.scale;
+//			int width = static_cast<int>(size.x * DEFAULT_OBJECT_SIZE * RenderManager::renderZoom.x);
+//			int height = static_cast<int>(size.y * DEFAULT_OBJECT_SIZE * RenderManager::renderZoom.y);
+//
+//			SetWindowPos(hwnd, nullptr, x, y, width, height, /*SWP_NOMOVE |*/ /*SWP_NOSIZE | */SWP_FRAMECHANGED);
+//		}
+//	}
 }
 

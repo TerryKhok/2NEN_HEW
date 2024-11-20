@@ -1,76 +1,64 @@
-#pragma once
+#include "cereal/types/memory.hpp"
+#include "cereal/types/list.hpp"
+#include "cereal/types/polymorphic.hpp"
+#include "cereal/archives/json.hpp"
 
-#include<nlohmann/json.hpp>
-#include<boost/pfr.hpp>
+#define REGISTER_TYPE_WITH_CEREAL(base, derived)         \
+    CEREAL_REGISTER_TYPE(derived);                       \
+    CEREAL_REGISTER_POLYMORPHIC_RELATION(base, derived)
 
-// Factory for dynamic component creation, serialization, and deserialization
-class ComponentFactory {
-public:
-    using CreateFunction = std::function<Component*()>;
-    using SerializeFunction = std::function<void(nlohmann::json&, const Component&)>;
-    using DeserializeFunction = std::function<void(const nlohmann::json&, Component&)>;
+#define REGISTER_COMPONENT(derived)                     \
+    CEREAL_REGISTER_TYPE(derived);                      \
+    CEREAL_REGISTER_POLYMORPHIC_RELATION(Component, derived)
 
-    static ComponentFactory& getInstance() {
-        static ComponentFactory instance;
-        return instance;
-    }
+#define COUNT_ARGS_IMPL( \
+     _1,  _2,  _3,  _4,  _5,  _6,  _7,  _8,  _9, _10, \
+    _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, \
+    _21, _22, _23, _24, _25, _26, _27, _28, _29, _30, \
+    _31, _32, _33, _34, _35, _36, _37, _38, _39, _40, \
+    _41, _42, _43, _44, _45, _46, _47, _48, _49, _50, \
+    N, ...) N
+#define COUNT_ARGS(...) EXPAND(COUNT_ARGS_IMPL(__VA_ARGS__, \
+    50, 49, 48, 47, 46, 45, 44, 43, 42, 41, \
+    40, 39, 38, 37, 36, 35, 34, 33, 32, 31, \
+    30, 29, 28, 27, 26, 25, 24, 23, 22, 21, \
+    20, 19, 18, 17, 16, 15, 14, 13, 12, 11, \
+    10,  9,  8,  7,  6,  5,  4,  3,  2,  1, 0))
 
-    void registerType(const std::string& type, CreateFunction createFunc,
-        SerializeFunction serializeFunc, DeserializeFunction deserializeFunc) {
-        creators[type] = std::move(createFunc);
-        serializers[type] = std::move(serializeFunc);
-        deserializers[type] = std::move(deserializeFunc);
-    }
+// Handle empty argument lists correctly
+#define HAS_ARGS(...) EXPAND(COUNT_ARGS(__VA_ARGS__, dummy)) // 'dummy' ensures we can distinguish empty from one-arg case
+#define COUNT(...) (HAS_ARGS(__VA_ARGS__) == 2 ? 0 : COUNT_ARGS(__VA_ARGS__))
 
-    std::unique_ptr<Component, void(*)(Component*)> create(const std::string& type) const {
-        auto it = creators.find(type);
-        if (it != creators.end()) {
-            return std::unique_ptr<Component, void(*)(Component*)>((it->second)(), [](Component* p) {delete p; });
-        }
-        return std::unique_ptr<Component, void(*)(Component*)>(nullptr, [](Component* p) {delete p; });
-    }
 
-    void serialize(const std::unique_ptr<Component, void(*)(Component*)>& component, nlohmann::json& j) const {
-        auto it = serializers.find(component->getType());
-        if (it != serializers.end()) {
-            it->second(j, *component);
-        }
-    }
+// Helper macros to expand and wrap each argument
+#define EXPAND(x) x
+#define CEREAL_WRAP(arg) CEREAL_NVP(arg)
 
-    void deserialize(const std::string& type, const nlohmann::json& j, std::unique_ptr<Component, void(*)(Component*)>& component) const {
-        component = create(type);
-        if (!component) throw std::runtime_error("Unknown component type: " + type);
+// Recursive macro to process each argument
+#define SERIALIZE_ARGS_1(arg1) CEREAL_WRAP(arg1)
+#define SERIALIZE_ARGS_2(arg1, arg2) CEREAL_WRAP(arg1), SERIALIZE_ARGS_1(arg2)
+#define SERIALIZE_ARGS_3(arg1, arg2, arg3) CEREAL_WRAP(arg1), SERIALIZE_ARGS_2(arg2, arg3)
+#define SERIALIZE_ARGS_4(arg1, arg2, arg3, arg4) CEREAL_WRAP(arg1), SERIALIZE_ARGS_3(arg2, arg3, arg4)
+#define SERIALIZE_ARGS_5(arg1, arg2, arg3, arg4, arg5) CEREAL_WRAP(arg1), SERIALIZE_ARGS_4(arg2, arg3, arg4, arg5)
+#define SERIALIZE_ARGS_6(arg1, arg2, arg3, arg4, arg5, arg6) CEREAL_WRAP(arg1), SERIALIZE_ARGS_5(arg2, arg3, arg4, arg5, arg6)
+#define SERIALIZE_ARGS_7(arg1, arg2, arg3, arg4, arg5, arg6, arg7) CEREAL_WRAP(arg1), SERIALIZE_ARGS_6(arg2, arg3, arg4, arg5, arg6, arg7)
+// Extend as needed for more arguments
 
-        auto it = deserializers.find(type);
-        if (it != deserializers.end()) {
-            it->second(j, *component);
-        }
-    }
+// Dispatcher macro to choose the correct expansion
+#define GET_SERIALIZE_ARGS_MACRO(_1, _2, _3, _4, _5, _6, _7, NAME, ...) NAME
+#define SERIALIZE_ARGS(...) EXPAND(GET_SERIALIZE_ARGS_MACRO(__VA_ARGS__, SERIALIZE_ARGS_7, SERIALIZE_ARGS_6, SERIALIZE_ARGS_5, SERIALIZE_ARGS_4, SERIALIZE_ARGS_3, SERIALIZE_ARGS_2, SERIALIZE_ARGS_1)(__VA_ARGS__))
 
-private:
-    std::unordered_map<std::string, CreateFunction> creators;
-    std::unordered_map<std::string, SerializeFunction> serializers;
-    std::unordered_map<std::string, DeserializeFunction> deserializers;
-};
+// Define the GENERATE_SERIALIZE macro
+#define GENERATE_SERIALIZE(...)                             \
+friend class cereal::access;                                \
+template <class Archive>                                    \
+void serialize(Archive& ar) {                               \
+    if constexpr (COUNT_ARGS( __VA_ARGS__ ) <= 7) {         \
+        ar(SERIALIZE_ARGS(__VA_ARGS__));                    \
+    } else {                                                \
+        ar(__VA_ARGS__);                                    \
+    }                                                       \
+}
 
-// Register macro for components to avoid manual registration
-#define REGISTER_COMPONENT_TYPE(TYPE) \
-    static bool reg_##TYPE = []() { \
-        ComponentFactory::getInstance().registerType(#TYPE, \
-            []() { return new TYPE(); }, \
-            [](nlohmann::json& j, const Component& comp) { \
-                const auto& derived = static_cast<const TYPE&>(comp); \
-                j["type"] = derived.getType(); \
-                boost::pfr::for_each_field(derived, [&](const auto& field, auto index) { \
-                    j["field" + std::to_string(index)] = field; \
-                }); \
-            }, \
-            [](const nlohmann::json& j, Component& comp) { \
-                auto& derived = static_cast<TYPE&>(comp); \
-                boost::pfr::for_each_field(derived, [&](auto& field, auto index) { \
-                    field = j.at("field" + std::to_string(index)).get<decltype(field)>(); \
-                }); \
-            } \
-        ); \
-        return true; \
-    }();
+
+

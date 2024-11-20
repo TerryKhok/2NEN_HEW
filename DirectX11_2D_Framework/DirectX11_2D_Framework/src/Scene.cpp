@@ -60,7 +60,7 @@ void SceneManager::Init()
     m_currentScene->Init();
 }
 
-void SceneManager::Uninit()
+void SceneManager::UnInit()
 {
     m_currentScene.reset();
     m_nextScene.reset();
@@ -69,10 +69,10 @@ void SceneManager::Uninit()
 void SceneManager::NextScene()
 {
     //シーンのかたずけ
-    TRY_CATCH_LOG(m_currentScene->Uninit());
+    TRY_CATCH_LOG(m_currentScene->UnInit());
 
     //古いオブジェクトの移動情報を一応消しておく
-    Box2DBodyManager::moveFunctions.clear();
+    Box2DBodyManager::m_moveBodyObjects.clear();
 
     //レンダーカメラ設定初期化
     RenderManager::renderZoom = { 1.0f,1.0f };

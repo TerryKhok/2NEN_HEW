@@ -78,6 +78,7 @@
 
 
 #include "../../DirectX11_2D_Framework/math/Math.h"
+#include "../../DirectX11_2D_Framework/inc/Prefab.h"
 #include "../../DirectX11_2D_Framework/math/Vector.h"
 #include "../../DirectX11_2D_Framework/math/Angle.h"
 #include "../../DirectX11_2D_Framework/inc/Utility.h"
@@ -93,7 +94,6 @@
 #include "../../DirectX11_2D_Framework/inc/Component.h"
 #include "../../DirectX11_2D_Framework/inc/Animator.h"
 #include "../../DirectX11_2D_Framework/inc/Object.h"
-#include "../../DirectX11_2D_Framework/inc/Prefab.h"
 #include "../../DirectX11_2D_Framework/inc/Renderer.h"
 #include "../../DirectX11_2D_Framework/inc/SFText.h"
 #include "../../DirectX11_2D_Framework/inc/Scene.h"

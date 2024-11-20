@@ -3,6 +3,9 @@
 class Angle {
 private:
 	double radians = 0.0f;
+private:
+	GENERATE_SERIALIZE(radians)
+
 public:
 	Angle() {}
 	explicit Angle(double _rad) :radians(_rad) {}
@@ -81,4 +84,7 @@ struct Angle3D
 	{
 		return{ x,y,z };
 	}
+
+private:
+	GENERATE_SERIALIZE(x, y, z)
 };

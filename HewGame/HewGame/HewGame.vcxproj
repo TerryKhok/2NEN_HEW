@@ -153,6 +153,7 @@
     <ClInclude Include="SeigoTestScene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="AntiGravity.h" />
+    <ClInclude Include="TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />

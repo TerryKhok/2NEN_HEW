@@ -7,75 +7,93 @@ class SampleScene_Animation : public Scene
 	SAFE_POINTER(Animator,anim)
 	SAFE_POINTER(GameObject,object)
 
+	//Sound sound;
+
 	void Load()
 	{
-		object = Instantiate("Character", L"asset/pic/rzqLOX.png");
+		//sound.LoadWavFile("asset/sound/se/ƒWƒƒƒ“ƒv_1.wav");
+
+		object = Instantiate("Character");
 		//rend = object->AddComponent<Renderer>(L"asset/pic/rzqLOX.png");
 		//rend->SetTexcode(8, 9, 0, 0);
-		object->transform.position.x = 100.0f;
+		//object->transform.position.x = 100.0f;
 		anim = object->AddComponent<Animator>();
 
-		auto obj = Instantiate();
+		/*auto obj = Instantiate();
 		obj->transform.scale.x = 8;
 		auto rend = obj->AddComponent<Renderer>();
 		rend->SetColor({ 0, 0, 1, 1 });
 		auto text = obj->AddComponent<SFText>("aaaaa‚ ‚„‚Ó‚Ÿ\n‚¦‚ ‚¦‚Ó‚Ÿ‚¦‚†");
-		text->offset = { 0,10 };
+		text->offset = { 0,10 };*/
 
-		/*wchar_t* texPath;
-		float scaleX = 0.5f;
-		float scaleY = 0.5f;
-		int frameX = 0;
-		int frameY = 0;
-		long long waitCount = 0;*/
 
-		float scaleX = 1.0f / 8;
-		float scaleY = 1.0f / 9;
+		float scaleX = 1.0f / 6;
+		float scaleY = 1.0f / 1;
 
 		std::vector<AnimationFrame> frames =
 		{
 			{
-			L"asset/pic/rzqLOX.png",
+			L"asset/pic/spritesheet.png",
 			scaleX,
 			scaleY,
 			0,
 			0,
-			10000000
+			4000000
 			},
 			{
-			L"asset/pic/rzqLOX.png",
+			L"asset/pic/spritesheet.png",
 			scaleX,
 			scaleY,
 			1,
 			0,
-			10000000
+			4000000
 			},
 			{
-			L"asset/pic/rzqLOX.png",
+			L"asset/pic/spritesheet.png",
 			scaleX,
 			scaleY,
+			2,
 			0,
-			1,
-			10000000
+			4000000
 			},
 			{
-			L"asset/pic/rzqLOX.png",
+			L"asset/pic/spritesheet.png",
 			scaleX,
 			scaleY,
-			1,
-			1,
-			10000000
+			3,
+			0,
+			4000000
+			},
+			{
+			L"asset/pic/spritesheet.png",
+			scaleX,
+			scaleY,
+			4,
+			0,
+			4000000
+			},
+			{
+			L"asset/pic/spritesheet.png",
+			scaleX,
+			scaleY,
+			5,
+			0,
+			4000000
 			},
 		};
 
-		anim->AddClip("Idle", frames);
-		anim->Play("Idle");
+		anim->AddClip("Walk", frames);
+		anim->Play("Walk");
 	}
 
 	Vector2 oldMousePos;
 
 	void Update()
 	{
+		/*if (Input::Get().KeyTrigger(VK_SPACE))
+		{
+			sound.SoundPlay(0.1f, false);
+		}*/
 
 		if (Input::Get().KeyTrigger(VK_P))
 		{

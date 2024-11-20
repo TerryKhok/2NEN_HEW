@@ -22,6 +22,11 @@ public:
 		Window::WindowSubRelease(m_hWnd);
 	}
 
+	void SetActive(bool _active) override
+	{
+		_active ? ShowWindow(m_hWnd, SW_SHOW) : ShowWindow(m_hWnd, SW_HIDE);
+	}
+
 	void OnWindowMove(HWND _hWnd, RECT* _rect) override
 	{
 		m_this->transform.position = GetWindowPosition(_hWnd);

@@ -132,5 +132,6 @@ private:
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	//サブウィンドウ用コールバック関数
 	static LRESULT CALLBACK WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-
+	//ウィンドウを動かせるかを設定する
+	static void SetWindowMovable(HWND hwnd, bool movable);
 };

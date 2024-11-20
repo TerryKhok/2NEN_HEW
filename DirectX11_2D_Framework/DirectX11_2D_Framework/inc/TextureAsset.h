@@ -15,7 +15,7 @@ private:
 	}
 
 	static HRESULT Init();
-	static void Uninit();
+	static void UnInit();
 	
 	static HRESULT WICLoad(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName);
 	static HRESULT Void(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName);

@@ -96,10 +96,16 @@ public:
 	void Play(const std::string& _clipName);
 	void Pause();
 	void Resume();
+
+	void DrawImGui() override;
+	
 private:
 	AnimationClip::functionPointer pUpdate = &AnimationClip::Update;
 private:
 	std::unordered_map<std::string, std::shared_ptr<AnimationClip>> m_clip;
+#ifdef DEBUG_TRUE
+	std::string m_currentClipName;
+#endif
 	std::shared_ptr<AnimationClip> m_currentClip;
 	UVRenderNode* m_uvNode = nullptr;
 };

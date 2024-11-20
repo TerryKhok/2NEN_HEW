@@ -13,7 +13,7 @@ HRESULT TextureAssets::Init()
 	return hr;
 }
 
-void TextureAssets::Uninit()
+void TextureAssets::UnInit()
 {
 	CoUninitialize();
 }

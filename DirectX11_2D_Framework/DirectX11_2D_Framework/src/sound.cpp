@@ -15,7 +15,7 @@ Sound::Sound() : pXAudio2(nullptr), pMasterVoice(nullptr), pSourceVoice(nullptr)
 Sound::~Sound()
 {
     Cleanup();
-    CoUninitialize();
+    //CoUninitialize();
 }
 
 
@@ -26,7 +26,7 @@ bool Sound::Init()
         std::cerr << "XAudio2の初期化に失敗しました。" << std::endl;
         return false;
     }
-    if (FAILED(pXAudio2->CreateMasteringVoice(&pMasterVoice))) 
+    if (FAILED(pXAudio2->CreateMasteringVoice(&pMasterVoice)))
     {
         std::cerr << "マスターボイスの作成に失敗しました。" << std::endl;
         return false;
@@ -168,97 +168,4 @@ void Sound::Cleanup()
         waveData.data = nullptr;
     }
 }
-// WAVファイルを読み込む関数
-//bool LoadWaveFile(const char* filename, WaveData& waveData) 
-//{
-//    std::ifstream file(filename, std::ios::binary);
-//    if (!file) 
-//    {
-//        std::cerr << "ファイルを開けませんでした: " << filename << std::endl;
-//        return false;
-//    }
-//
-//    // RIFFチャンクやWAVEヘッダーを読み込み
-//    char chunkId[4];
-//    file.read(chunkId, 4);
-//    if (std::memcmp(chunkId, "RIFF", 4) != 0) 
-//    {
-//        std::cerr << "無効なファイルフォーマットです" << std::endl;
-//        return false;
-//    }
-//
-//    file.seekg(20, std::ios::beg);
-//    file.read(reinterpret_cast<char*>(&waveData.wfex), sizeof(WAVEFORMATEX));
-//
-//    // データチャンクを探し、データを取得
-//    while (true) 
-//    {
-//        file.read(chunkId, 4);
-//        if (std::memcmp(chunkId, "data", 4) == 0) {
-//            file.read(reinterpret_cast<char*>(&waveData.dataSize), sizeof(DWORD));
-//            waveData.data = new BYTE[waveData.dataSize];
-//            file.read(reinterpret_cast<char*>(waveData.data), waveData.dataSize);
-//            break;
-//        }
-//        else 
-//        {
-//            file.seekg(sizeof(DWORD), std::ios::cur);
-//        }
-//    }
-//
-//    file.close();
-//    return true;
-//}
-//
-//// 音声を再生する関数（音量調整付き）
-//void PlaySound(const char* filename, float volume) 
-//{
-//    // 初期化
-//    CoInitializeEx(nullptr, COINIT_MULTITHREADED);
-//
-//    IXAudio2* pXAudio2 = nullptr;
-//    XAudio2Create(&pXAudio2, 0);
-//
-//    IXAudio2MasteringVoice* pMasterVoice = nullptr;
-//    pXAudio2->CreateMasteringVoice(&pMasterVoice);
-//
-//    // WAVファイルの読み込み
-//    WaveData waveData;
-//    if (!LoadWaveFile(filename, waveData)) 
-//    {
-//        return;
-//    }
-//
-//    // ソースボイスの作成
-//    IXAudio2SourceVoice* pSourceVoice;
-//    pXAudio2->CreateSourceVoice(&pSourceVoice, &waveData.wfex);
-//
-//    // 音量の設定（0.0f = 無音、1.0f = 最大音量）
-//    volume = std::max(0.0f, std::min(volume, 1.0f)); // 範囲を0.0～1.0に制限
-//    pSourceVoice->SetVolume(volume);
-//
-//    // バッファの設定
-//    XAUDIO2_BUFFER buffer = { 0 };
-//    buffer.AudioBytes = waveData.dataSize;
-//    buffer.pAudioData = waveData.data;
-//    buffer.Flags = XAUDIO2_END_OF_STREAM;
-//
-//    // 音声をバッファにセットして再生開始
-//    pSourceVoice->SubmitSourceBuffer(&buffer);
-//    pSourceVoice->Start(0);
-//
-//    // 音声が再生し終わるまで待機
-//    XAUDIO2_VOICE_STATE state;
-//    while (pSourceVoice->GetState(&state), state.BuffersQueued > 0) 
-//    {
-//        Sleep(100);
-//    }
-//
-//    // クリーンアップ
-//    pSourceVoice->DestroyVoice();
-//    pMasterVoice->DestroyVoice();
-//    pXAudio2->Release();
-//    CoUninitialize();
-//
-//    delete[] waveData.data;
-//}
+

@@ -7,7 +7,6 @@ class Component
 	friend class GameObject;
 	friend class Box2D::WorldManager;
 	friend class ImGuiApp;
-	friend class ComponentFactory;
 
 protected:
 	//生成禁止
@@ -27,15 +26,15 @@ protected:
 	void DeleteObject(GameObject* _object);
 	//オブジェクトの削除(名前指定)
 	inline void DeleteObject(std::string _name);
+	// Get the type name of the derived class
+	std::string getType() const {
+		return demangle(typeid(*this).name());
+	}
 private:
 	//アクティブを変更
 	virtual void SetActive(bool _active) {}
 	//コンポーネント削除処理
 	virtual void Delete() {}
-	// Get the type name of the derived class
-	std::string getType() const {
-		return demangle(typeid(*this).name());
-	}
 	// Optional: Demangling function for nicer output on some compilers
 	static std::string demangle(const char* name) {
 #ifdef __GNUG__
@@ -75,9 +74,14 @@ private:
 	virtual void OnWindowMove(HWND _target, RECT* _rect) {}
 private:
 	//============================================
-	// imguiで描画する
+	// imGuiで描画する
 	//============================================
 	virtual void DrawImGui(){
 		ImGui::Text(" not override DrawImGui function!");
 	}
+private:
+	friend class cereal::access;
+
+	template <class Archive>
+	void serialize(Archive& ar) {}
 };

@@ -1,0 +1,29 @@
+{
+    "*selectedObject": {
+        "name": "Player",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 141.2268524169922,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true
+    }
+}

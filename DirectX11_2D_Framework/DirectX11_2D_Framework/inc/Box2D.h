@@ -52,13 +52,13 @@ namespace Box2D
 		friend class SceneManager;
 
 	public:
-		//StartからEndまでbox2dBodyがあるか
+		//StartからEndまでBox2dBodyがあるか
 		static bool RayCast(Vector2 _start, Vector2 _end);
-		//StartからEndまでbox2dBodyがあるか(outputに衝突位置を代入)
+		//StartからEndまでBox2dBodyがあるか(outputに衝突位置を代入)
 		static bool RayCast(Vector2 _start, Vector2 _end, Vector2& _output);
-		//StartからEndまでbox2dBodyがあるか(filter指定)
+		//StartからEndまでBox2dBodyがあるか(filter指定)
 		static bool RayCast(Vector2 _start, Vector2 _end, FILTER _filter);
-		//StartからEndまでbox2dBodyがあるか(outputに衝突位置を代入,filter指定)
+		//StartからEndまでBox2dBodyがあるか(outputに衝突位置を代入,filter指定)
 		static bool RayCast(Vector2 _start, Vector2 _end, Vector2& _output, FILTER _filter);
 
 		static bool RayCastAll(Vector2 _start, Vector2 _end, std::vector<Vector2>& _output);
@@ -70,7 +70,7 @@ namespace Box2D
 		//シュミレーションワールドの作成
 		static void CreateWorld();
 		//bodyの作成
-		static void GenerataeBody(b2BodyId& _bodyId, const b2BodyDef* _bodyDef = &bodyDef);
+		static void GenerateBody(b2BodyId& _bodyId, const b2BodyDef* _bodyDef = &bodyDef);
 #ifdef BOX2D_UPDATE_MULTITHREAD
 		//ワールドの更新
 		static void WorldUpdate();
@@ -93,11 +93,11 @@ namespace Box2D
 		static void WorldUpdate();
 #endif
 		//センサーイベントの確認と実行
-		static void ExcuteSensorEvent();
+		static void ExecuteSensorEvent();
 		//ワールドのかたずけ
 		static void DeleteAllWorld();
 		//次のワールドにする
-		static void ChengeNextWorld();
+		static void ChangeNextWorld();
 		//次のワールドに繋げる
 		static void LinkNextWorld();
 		//古いワールドを削除する

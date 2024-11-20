@@ -30,7 +30,7 @@ private:
 	//毎フレーム呼び出す
 	virtual void Update() {}
 	//かたずけ処理
-	virtual void Uninit() {}
+	virtual void UnInit() {}
 };
 
 
@@ -46,7 +46,7 @@ private:
 	//最初のシーンの読み込み
 	static void Init();
 	//シーンの破棄
-	static void Uninit();
+	static void UnInit();
 	//次へのシーンの切り替え
 	static void NextScene();
 	//同期シーン切り替え
@@ -55,7 +55,7 @@ private:
 		//非同期にシーンをロードしている場合
 		if (async)
 		{
-			LOG("no loding %s,other scene loding now", _sceneName.substr(6).c_str());
+			LOG("no loading %s,other scene loading now", _sceneName.substr(6).c_str());
 		}
 
 		//シーンが登録済みかどうか
@@ -95,7 +95,7 @@ public:
 		//非同期にシーンをロードしている場合
 		if (async)
 		{
-			LOG("no loding %s,other scene loding now", sceneName.substr(6).c_str());
+			LOG("no loading %s,other scene loading now", sceneName.substr(6).c_str());
 		}
 
 		//シーンが登録済みかどうか
@@ -155,7 +155,7 @@ public:
 			std::future<void> sceneFuture = std::async(std::launch::async, [&]()
 				{
 					//追加先を新しく変更する
-					Box2D::WorldManager::ChengeNextWorld();
+					Box2D::WorldManager::ChangeNextWorld();
 					RenderManager::ChangeNextRenderList();
 					ObjectManager::ChangeNextObjectList();
 					//生成するウィンドウを表示しない

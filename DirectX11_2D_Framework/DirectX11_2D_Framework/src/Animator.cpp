@@ -1,4 +1,5 @@
 
+
 std::shared_ptr<AnimationClip> AnimatorManager::m_commonClip;
 long long AnimatorManager::deltaCount;
 
@@ -101,6 +102,10 @@ void Animator::Play(const std::string& _clipName)
 		return;
 	}
 
+#ifdef DEBUG_TRUE
+	m_currentClipName = _clipName;
+#endif
+
 	m_currentClip =iter->second;
 	m_currentClip->Awake(m_uvNode);
 }
@@ -114,3 +119,31 @@ void Animator::Resume()
 {
 	pUpdate = &AnimationClip::Update;
 }
+
+
+void Animator::DrawImGui()
+{
+#ifdef DEBUG_TRUE
+	ImGui::Text("currentClip : %s", m_currentClipName.c_str());
+
+	if (ImGui::Button("Pause"))
+	{
+		Pause();
+	}
+	if (ImGui::Button("Resume"))
+	{
+		Resume();
+	}
+
+	ImGui::SeparatorText("clips");
+	for (auto clip : m_clip)
+	{
+		bool selected = clip.first == m_currentClipName;
+		if (ImGui::Selectable(clip.first.c_str(),&selected))
+		{
+			Play(clip.first);
+		}
+	}
+#endif
+}
+

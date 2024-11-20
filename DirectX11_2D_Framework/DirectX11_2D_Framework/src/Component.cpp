@@ -30,13 +30,22 @@ void Component::DeleteObject(std::string _name)
     auto iter = list->find(_name);
     if (iter != list->end())
     {
-        auto& b2bodyMoveList = Box2DBodyManager::moveFunctions;
-        auto it = b2bodyMoveList.find(_name); 
+        if (m_this->ExistComponent<Box2DBody>())
+        {
+            auto& bodyList = Box2DBodyManager::m_moveBodyObjects;
+            auto it = bodyList.find(m_this);
+            if (it != bodyList.end())
+            {
+                bodyList.erase(it);
+            }
+        }
+       
+      /*  auto it = b2bodyMoveList.find(_name); 
         if (it != b2bodyMoveList.end())
         {
             it->second();
             b2bodyMoveList.erase(it);
-        }
+        }*/
 
 #ifdef DEBUG_TRUE
         PointerRegistryManager::deletePointer(iter->second.get());

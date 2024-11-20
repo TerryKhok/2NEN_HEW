@@ -10,25 +10,25 @@ class Renderer : public Component
 {
 	friend class GameObject;
 	friend class Animator;
+	
+	
 private:
 	//生成禁止
+	Renderer(){}
 	Renderer(GameObject* _pObject);
 	Renderer(GameObject* _pObject,const wchar_t* _texpath);
 	Renderer(GameObject* _pObject,Animator* _animator);
 	//削除禁止
-	~Renderer() = default;
+	//~Renderer() = default;
 	//アクティブ変更
 	void SetActive(bool _active);
 	//対応したノードの削除
 	void Delete();
-	//Debug用のポインター取得
-	Renderer* GetDevide(){
-		return this;
-	}
 	//UVRenderNodeへ切り替える
 	void SetUVRenderNode(Animator* _animator);
-	//imguiの描画
+	//imGuiの描画
 	void DrawImGui() override;
+
 public:
 	//レイヤーの変更
 	void SetLayer(const LAYER _layer);
@@ -38,17 +38,49 @@ public:
 	//色の変更
 	void SetColor(XMFLOAT4 _color);
 	//uv座標の変更(ちょっと重い)
-	void SetTexcode(int _splitX, int _splitY, int _frameX, int _frameY);
+	void SetUV(int _splitX, int _splitY, int _frameX, int _frameY);
 private:
 	//対応したノード
 	std::shared_ptr<RenderNode> m_node;
+	
 	//描画する順番
 	LAYER m_layer = LAYER::LAYER_01;
-#ifdef DEBUG_TRUE
-	//テクスチャパス
-	std::string texPath = "not texture path";
-#endif
+private:
+	friend class cereal::access;
+	//Restrict access to the serialize function
+	template <class Archive>
+	void serialize(Archive& ar) {
+		//ar(CEREAL_NVP(id), CEREAL_NVP(name));
+	}
 };
+
+namespace cereal {
+    namespace detail {
+        template <> struct binding_name<Renderer> {
+            static constexpr char const* name() {
+                return "Renderer";
+            }
+        };
+    }
+} namespace cereal {
+    namespace detail {
+        template<> struct init_binding<Renderer> {
+            static inline bind_to_archives<Renderer> const& b = ::cereal::detail::StaticObject< bind_to_archives<Renderer> >::getInstance().bind(); static void unused() {
+                (void)b;
+            }
+        };
+    }
+}; 
+namespace cereal {
+    namespace detail {
+        template <> struct PolymorphicRelation<Component, Renderer> {
+            static void bind() {
+                RegisterPolymorphicCaster<Component, Renderer>::bind();
+            }
+        };
+    }
+};
+
 
 //双方向リストノード
 class RenderNode
@@ -65,7 +97,7 @@ protected:
 	//アクティブを切り替える
 	virtual void Active(bool _active);
 	//描画関数の実行
-	virtual void Excute() { (this->*pDrawFunc)(); }
+	virtual void Execute() { (this->*pDrawFunc)(); }
 	//描画して次につなぐ
 	virtual inline void Draw();
 	//なにもせずに次につなぐ
@@ -82,6 +114,11 @@ protected:
 	XMFLOAT4 m_color = { 1.0f,1.0f,1.0f,1.0f };
 	ComPtr<ID3D11ShaderResourceView> m_pTextureView = nullptr;
 
+#ifdef DEBUG_TRUE
+	//テクスチャパス
+	std::string texPath = "not texture path";
+#endif
+
 	//リスト関連
 protected:
 	//関数ポインターの実行
@@ -91,7 +128,7 @@ protected:
 	//リストの終わりを設定する
 	void NextEnd() { pFunc = &RenderNode::End; }
 	//次のノードの描画をする
-	void Continue() { next->Excute(); }
+	void Continue() { next->Execute(); }
 	//ノードの切れ端
 	void End() {}
 	//リストからこのインスタンスを削除する
@@ -104,6 +141,16 @@ private:
 	//リストポインタ
 	std::shared_ptr<RenderNode> back = nullptr;
 	std::shared_ptr<RenderNode> next = nullptr;
+
+private:
+	// Restrict access to the serialize function
+	template <class Archive>
+	void serialize(Archive& ar) {
+		//ar(CEREAL_NVP(id), CEREAL_NVP(name));
+	}
+
+	// Declare Cereal archive types as friends
+	friend class cereal::access;
 };
 
 class UVRenderNode : public RenderNode
@@ -187,7 +234,7 @@ private:
 	static bool drawRay;
 	//rayを描画するための線の頂点
 	static ComPtr<ID3D11Buffer> m_lineVertexBuffer;
-	//共通のrayを描画するための線のインデックス
+	//共通のRayを描画するための線のインデックス
 	static ComPtr<ID3D11Buffer> m_lineIndexBuffer;
 	//rayを描画するための要素
 	static std::vector<DrawRayNode> m_drawRayNode;
