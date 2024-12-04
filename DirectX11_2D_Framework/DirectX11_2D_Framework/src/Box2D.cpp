@@ -532,6 +532,23 @@ void Box2D::WorldManager::DeleteAllWorld()
 	DeleteOldWorld();
 }
 
+//============================================
+// 非同期にも対応できるように一回Updateをとめる
+//============================================
+void Box2D::WorldManager::GenerateNewWorld()
+{
+	b2DestroyWorld(worldId);
+	//ワールド定義、初期化
+	b2WorldDef worldDef = b2DefaultWorldDef();
+	//重力の設定
+	worldDef.gravity = { 0.0f, GRAVITY };
+	//ワールドオブジェクト作成
+	worldId = b2CreateWorld(&worldDef);
+
+	//ワールドを次のワールドにする
+	currentWorldId = &worldId;
+}
+
 void Box2D::WorldManager::ChangeNextWorld()
 {
 	//ワールド定義、初期化

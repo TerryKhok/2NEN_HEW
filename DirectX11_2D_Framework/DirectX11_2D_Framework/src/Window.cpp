@@ -336,6 +336,7 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 		if(worldLag >= worldFrameCount)
 		{
 			worldLag -= worldFrameCount;
+
 #ifndef BOX2D_UPDATE_MULTITHREAD
 			Box2D::WorldManager::WorldUpdate();
 #endif

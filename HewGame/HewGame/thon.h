@@ -1,6 +1,5 @@
 #pragma once
 
-
 class Thon : public Component
 {
 private:

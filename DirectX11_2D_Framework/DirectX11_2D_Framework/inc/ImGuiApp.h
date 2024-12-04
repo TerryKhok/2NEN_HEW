@@ -42,6 +42,8 @@ private:
 	static void DrawInspectorGui();
 	
 	static void UnInit();
+public:
+	static void InvalidSelectedObject();
 private:
 	static int worldFpsCounter;
 	static int updateFpsCounter;

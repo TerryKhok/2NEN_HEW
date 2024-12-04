@@ -73,6 +73,7 @@ class Animator : public Component
 	friend class Renderer;
 
 	Animator(GameObject* _gameObject);
+	~Animator() = default;
 	void Update() override;
 
 	void SetActive(bool _active);

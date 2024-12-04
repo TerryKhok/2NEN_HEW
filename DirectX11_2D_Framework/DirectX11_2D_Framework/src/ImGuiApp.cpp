@@ -660,6 +660,10 @@ void ImGuiApp::DrawInspectorGui()
 	ImGui::End();
 }
 
+void ImGuiApp::InvalidSelectedObject()
+{
+	selectedObject = nullptr;
+}
 
 void ImGuiApp::UnInit()
 {

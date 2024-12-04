@@ -596,6 +596,20 @@ void Box2DBody::SetMass(float _mass)
 #endif
 }
 
+void Box2DBody::SetBullet(bool _isBullet)
+{
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	b2BodyId id = m_bodyId;
+	Box2D::WorldManager::AddWorldTask(std::move([id, _isBullet]()
+		{
+			b2Body_SetBullet(id, _isBullet);
+		})
+	);
+#else
+	b2Body_SetBullet(m_bodyId, _isBullet);
+#endif
+}
+
 void Box2DBody::SetRestitution(float _restitution)
 {
 	for (auto shape : m_shapeList)

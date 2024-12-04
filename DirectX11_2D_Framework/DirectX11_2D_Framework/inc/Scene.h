@@ -66,9 +66,12 @@ private:
 			Box2D::WorldManager::DisableWorldUpdate();
 			Box2D::WorldManager::PauseWorldUpdate();
 #endif
+
+#ifdef DEBUG_TRUE
+			ImGuiApp::InvalidSelectedObject();
+#endif
 			//新しいリストに変える
 			RenderManager::GenerateList();
-
 			ObjectManager::GenerateList();
 			//対応したシーンのロード処理
 			it->second();
@@ -105,6 +108,10 @@ public:
 #ifdef BOX2D_UPDATE_MULTITHREAD
 			Box2D::WorldManager::DisableWorldUpdate();
 			Box2D::WorldManager::PauseWorldUpdate();
+#endif
+
+#ifdef DEBUG_TRUE
+			ImGuiApp::InvalidSelectedObject();
 #endif
 			//新しいリストに変える
 			RenderManager::GenerateList();
@@ -183,6 +190,9 @@ public:
 		//非同期でロードが終わっている場合
 		if (async && !loading)
 		{
+#ifdef DEBUG_TRUE
+			ImGuiApp::InvalidSelectedObject();
+#endif
 			//シーンの切り替え
 			NextScene();
 
@@ -268,6 +278,10 @@ public:
 		//シーンが登録済みかどうか
 		auto it = m_sceneList.find(typeid(*m_currentScene.get()).name());
 		if (it != m_sceneList.end()) {
+
+#ifdef DEBUG_TRUE
+			ImGuiApp::InvalidSelectedObject();
+#endif
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 			Box2D::WorldManager::DisableWorldUpdate();

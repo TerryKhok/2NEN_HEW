@@ -8,7 +8,10 @@ class MovePlayer : public Component
 	{
 		if (!m_this->TryGetComponent<Box2DBody>(&rb))
 		{
-			rb = m_this->AddComponent<Box2DBody>();
+			b2BodyDef bodyDef = b2DefaultBodyDef();
+			bodyDef.type = b2_dynamicBody;
+			bodyDef.isBullet = true;
+			rb = m_this->AddComponent<Box2DBody>(&bodyDef);
 		}
 
 		rb->SetFilter(F_PLAYER);

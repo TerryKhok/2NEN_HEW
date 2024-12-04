@@ -38,7 +38,7 @@ class Scene_ProtoType :public Scene
 		object = Instantiate("UntiGravityWindow");
 		object->transform.scale = { 30.0f,20.0f };
 		bodyDef2 = b2DefaultBodyDef();
-		//bodyDef2.type = b2_kinematicBody;
+		bodyDef2.type = b2_kinematicBody;
 		box2d = object->AddComponent<Box2DBody>(&bodyDef2);
 		box2d->SetFilter(F_WINDOW);
 		box2d->CreateBoxShape(true);

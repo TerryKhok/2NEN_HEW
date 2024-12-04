@@ -84,6 +84,8 @@ public:
 	float GetMass();
 	//重さを変更
 	void SetMass(float _mass);
+	//速いオブジェクトどうかを設定する
+	void SetBullet(bool _isBullet);
 	//弾みの設定
 	void SetRestitution(float _restitution);
 	//回転を止める設定

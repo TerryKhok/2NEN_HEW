@@ -96,6 +96,8 @@ namespace Box2D
 		static void ExecuteSensorEvent();
 		//ワールドのかたずけ
 		static void DeleteAllWorld();
+		//新しいワールドを生成して変更する
+		static void GenerateNewWorld();
 		//次のワールドにする
 		static void ChangeNextWorld();
 		//次のワールドに繋げる
