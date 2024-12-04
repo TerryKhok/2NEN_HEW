@@ -2,7 +2,7 @@
 #include "Scene_ProtoType.h"
 #include "SeigoTestScene.h"
 #include "TitleScene.h"
-
+#include "Scene_Gimmick.h"
 
 //シーンの登録、レイヤーの設定
 //============================================================
@@ -10,7 +10,7 @@ void MainInit()
 {	
 	//一番上のシーンが初めにロードされる
 	//SceneManager::RegisterScene<AnimationBulider_Scene>();
-	
+	SceneManager::RegisterScene<SceneGimmick>();
 	SceneManager::RegisterScene<TitleScene>();
 	SceneManager::RegisterScene<SeigoTestScene>();
 	SceneManager::RegisterScene<Scene_ProtoType>();

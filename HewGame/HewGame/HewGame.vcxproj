@@ -147,6 +147,7 @@
     <ClInclude Include="LowGravity.h" />
     <ClInclude Include="MovePlayer.h" />
     <ClInclude Include="Permeation.h" />
+    <ClInclude Include="Scene_Gimmick.h" />
     <ClInclude Include="Scene_ProtoType.h" />
     <ClInclude Include="Sample_Animation.h" />
     <ClInclude Include="Sample_Box2D.h" />
@@ -154,6 +155,7 @@
     <ClInclude Include="SeigoTestScene.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="AntiGravity.h" />
+    <ClInclude Include="thon.h" />
     <ClInclude Include="TitleScene.h" />
   </ItemGroup>
   <ItemGroup>

@@ -57,6 +57,12 @@
     <ClInclude Include="Bounce.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="Scene_Gimmick.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="thon.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
