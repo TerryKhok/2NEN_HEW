@@ -76,6 +76,10 @@ public:
 	void AddForce(b2Vec2 _force);
 	//力をぱっと加える
 	void AddForceImpule(b2Vec2 _force);
+	//bodyの種類を変更する
+	void SetType(b2BodyType _type);
+	//bodyの種類を取得する
+	b2BodyType GetType();
 	//重力の大きさ取得
 	float GetGravityScale() const;
 	//重力を大きさ変更
@@ -86,6 +90,8 @@ public:
 	void SetMass(float _mass);
 	//速いオブジェクトどうかを設定する
 	void SetBullet(bool _isBullet);
+	//速いオブジェクトかを取得する
+	bool IsBullet();
 	//弾みの設定
 	void SetRestitution(float _restitution);
 	//回転を止める設定

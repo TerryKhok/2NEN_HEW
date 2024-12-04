@@ -8,16 +8,14 @@ class MovePlayer : public Component
 	{
 		if (!m_this->TryGetComponent<Box2DBody>(&rb))
 		{
-			b2BodyDef bodyDef = b2DefaultBodyDef();
-			bodyDef.type = b2_dynamicBody;
-			bodyDef.isBullet = true;
-			rb = m_this->AddComponent<Box2DBody>(&bodyDef);
+			rb = m_this->AddComponent<Box2DBody>();
 		}
 
 		rb->SetFilter(F_PLAYER);
 		rb->SetFixedRotation(true);
 		rb->CreateCapsuleShape();
 		rb->SetGravityScale(10.0f);
+		rb->SetBullet(true);
 	}
 
 	bool jumping = false;

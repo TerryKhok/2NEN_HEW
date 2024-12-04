@@ -22,6 +22,12 @@ class Permeation : public Component
 			rb = m_this->AddComponent<Box2DBody>();
 		}
 
+		if (!rb->IsBullet())
+			rb->SetBullet(true);
+
+		if (rb->GetType() != b2_kinematicBody)
+			rb->SetType(b2_kinematicBody);
+
 		CreateObstacleSegment();
 
 		std::unordered_map<GameObject*, b2ShapeId> exitObjects;

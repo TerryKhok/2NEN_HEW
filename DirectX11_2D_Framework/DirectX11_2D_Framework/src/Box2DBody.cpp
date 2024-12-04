@@ -554,6 +554,25 @@ void Box2DBody::AddForceImpule(b2Vec2 _force)
 	b2Body_ApplyLinearImpulseToCenter(m_bodyId, _force, true);
 }
 
+void Box2DBody::SetType(b2BodyType _type)
+{
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	b2BodyId id = m_bodyId;
+	Box2D::WorldManager::AddWorldTask(std::move([id, _type]()
+		{
+			b2Body_SetType(id, _type);
+		})
+	);
+#else
+	b2Body_SetType(m_bodyId, _type);
+#endif
+}
+
+b2BodyType Box2DBody::GetType()
+{
+	return b2Body_GetType(m_bodyId);
+}
+
 float  Box2DBody::GetGravityScale() const
 {
 	return b2Body_GetGravityScale(m_bodyId);
@@ -608,6 +627,11 @@ void Box2DBody::SetBullet(bool _isBullet)
 #else
 	b2Body_SetBullet(m_bodyId, _isBullet);
 #endif
+}
+
+bool Box2DBody::IsBullet()
+{
+	return b2Body_IsBullet(m_bodyId);
 }
 
 void Box2DBody::SetRestitution(float _restitution)

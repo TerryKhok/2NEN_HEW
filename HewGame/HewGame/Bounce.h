@@ -21,6 +21,12 @@ class Bounce : public Component
 		{
 			rb = m_this->AddComponent<Box2DBody>();
 		}
+
+		if (!rb->IsBullet())
+			rb->SetBullet(true);
+
+		if (rb->GetType() != b2_kinematicBody)
+			rb->SetType(b2_kinematicBody);
 	}
 
 	std::unordered_set<GameObject*> enters;
