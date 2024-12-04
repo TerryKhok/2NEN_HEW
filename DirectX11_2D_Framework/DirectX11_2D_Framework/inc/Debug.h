@@ -1,10 +1,5 @@
 #pragma once
 
-//デバッグフラグ
-//================================================================
-#define DEBUG_TRUE
-//================================================================
-
 
 const char* relativePath(const char* _fullPath);
 void setConsoleTextColor(unsigned int _color);
@@ -35,9 +30,14 @@ template <typename T> class SafePointer;
 //セーフポインタの作成
 #define SAFE_POINTER(type,var) SafePointer<type> var = SafePointer<type>(nullptr, #var);
 
+#define SAFE_TYPE(type) SafePointer<type>
+
 #else
 #define SAFE_POINTER(type,var) type* var;
+
+#define SAFE_TYPE(type) type*
 #endif
+
 
 #ifdef DEBUG_TRUE
 
@@ -66,7 +66,7 @@ public:
     //ポインタの無効化（SafePointer<T>で実装予定）
     virtual void invalidate() = 0;
 
-    //レジスタで比較するためにvoid*の生ポインタを取得
+    //レジスタで比較するためにVoid*の生ポインタを取得
     virtual void* getRawPointer() const = 0;
 };
 
@@ -122,7 +122,7 @@ private:
         return registry;
     }
 
-    //レジスタに受け取ったポインタをvoid*に変換して通知を送る
+    //レジスタに受け取ったポインタをVoid*に変換して通知を送る
     template <typename T>
     static void deletePointer(T* _ptr) {
         getRegistry().notifyDeletion(static_cast<void*>(_ptr));
@@ -135,6 +135,8 @@ template <typename T>
 class SafePointer : public SafePointerBase{
  
 public:
+    void* operator new(size_t) = delete;
+
     SafePointer(T* _p = nullptr, const std::string& _name = typeid(T).name(), PointerRegistry& _reg = PointerRegistryManager::getRegistry())
         : ptr(_p), ptrName(_name), registry(_reg) {
         registry.registerPointer(this);
@@ -157,7 +159,7 @@ public:
         return *this;
     }
     //T*型への変換
-    operator T* ()const
+    operator const T* () const
     {
         if (ptr == nullptr) {
             std::string log = "Dereferencing a deleted pointer : " + ptrName;
@@ -201,7 +203,7 @@ private:
     void invalidate() override {
         ptr = nullptr;
     }
-    //比較用のvoid*の生ポインタ取得
+    //比較用のVoid*の生ポインタ取得
     void* getRawPointer() const override {
         return static_cast<void*>(ptr);
     }

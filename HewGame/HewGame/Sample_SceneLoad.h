@@ -22,6 +22,7 @@ class SampleScene_Title : public Scene
 	{
 		//オブジェクト生成(名前、テクスチャ指定)
 		auto object = Instantiate("HartR", L"asset/pic/hartR.png");
+
 	}
 
 	//更新処理(オーバライド)

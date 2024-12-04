@@ -1,6 +1,5 @@
 #pragma once
 
-
 class TextureAssets final
 {
 	friend class Window;

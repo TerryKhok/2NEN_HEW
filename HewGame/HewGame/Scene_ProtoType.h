@@ -20,6 +20,9 @@ class Scene_ProtoType :public Scene
 		};
 		auto object = Instantiate("StaticBox_Map");
 		b2BodyDef bodyDef2 = b2DefaultBodyDef();
+		bodyDef2.type = b2_dynamicBody;
+		bodyDef2.gravityScale = 0.0f;
+
 		auto box2d = object->AddComponent<Box2DBody>(&bodyDef2);
 		box2d->SetFilter(F_TERRAIN);
 		box2d->CreateChain(points);
@@ -35,7 +38,7 @@ class Scene_ProtoType :public Scene
 		object = Instantiate("UntiGravityWindow");
 		object->transform.scale = { 30.0f,20.0f };
 		bodyDef2 = b2DefaultBodyDef();
-		bodyDef2.type = b2_kinematicBody;
+		//bodyDef2.type = b2_kinematicBody;
 		box2d = object->AddComponent<Box2DBody>(&bodyDef2);
 		box2d->SetFilter(F_WINDOW);
 		box2d->CreateBoxShape(true);
@@ -54,6 +57,17 @@ class Scene_ProtoType :public Scene
 		object->AddComponent<WindowRect>("LowGravity");
 		object->AddComponent<LowGravity>();
 
+		object = Instantiate("BounceWindow");
+		object->transform.scale = { 30.0f,20.0f };
+		bodyDef2 = b2DefaultBodyDef();
+		bodyDef2.type = b2_kinematicBody;
+		box2d = object->AddComponent<Box2DBody>(&bodyDef2);
+		box2d->SetFilter(F_WINDOW);
+		box2d->CreateBoxShape(true);
+		object->AddComponent<Renderer>();
+		object->AddComponent<WindowRect>("Bounce");
+		object->AddComponent<Bounce>();
+
 		object = Instantiate("PermeationWindow");
 		object->transform.scale = { 30.0f,20.0f };
 		bodyDef2 = b2DefaultBodyDef();
@@ -64,18 +78,6 @@ class Scene_ProtoType :public Scene
 		object->AddComponent<Renderer>();
 		object->AddComponent<WindowRect>("Permeation");
 		object->AddComponent<Permeation>();
-
-		object = Instantiate("BounceWindow");
-		object->transform.scale = { 30.0f,20.0f };
-		bodyDef2 = b2DefaultBodyDef();
-		bodyDef2.type = b2_kinematicBody;
-		box2d = object->AddComponent<Box2DBody>(&bodyDef2);
-		box2d->SetFilter(F_PERWINDOW);
-		box2d->CreateBoxShape({ 28.0f,18.0f }, { 0.0f,0.0f }, 0.0f, true);
-		object->AddComponent<Renderer>();
-		object->AddComponent<WindowRect>("Bounce");
-		object->AddComponent<Bounce>();
-
 
 		object = Instantiate("StaticBox_Ground_Polygon");
 		object->transform.position = { 200.0f,0.0f };

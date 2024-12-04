@@ -15,6 +15,7 @@ class TitleScene : public Scene
 		button->SetEvent([&](){
 			//SceneManager::LoadScene<Scene_ProtoType>();
 			//sound.SoundPlay(1.0f, false);
+			LOG("Press");
 			});
 	}
 };

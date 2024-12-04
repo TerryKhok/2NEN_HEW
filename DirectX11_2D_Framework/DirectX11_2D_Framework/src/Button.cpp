@@ -21,8 +21,8 @@ void Button::MouseTrigger()
 {
 	if (Input::Get().MouseLeftTrigger())
 	{
-		Vector2 mousePos = Input::Get().MousePoint();
-		Vector2 pos = m_this->transform.position;
+		const Vector2& mousePos = Input::Get().MousePoint();
+		const Vector2& pos = m_this->transform.position;
 		Vector2 scale = m_this->transform.scale;
 		scale *= HALF_OBJECT_SIZE;
 		if ((pos.x - scale.x) < mousePos.x &&
@@ -39,8 +39,8 @@ void Button::MousePress()
 {
 	if (Input::Get().MouseLeftPress())
 	{
-		Vector2 mousePos = Input::Get().MousePoint();
-		Vector2 pos = m_this->transform.position;
+		const Vector2& mousePos = Input::Get().MousePoint();
+		const Vector2& pos = m_this->transform.position;
 		Vector2 scale = m_this->transform.scale;
 		scale *= HALF_OBJECT_SIZE;
 		if ((pos.x - scale.x) < mousePos.x &&
@@ -57,8 +57,8 @@ void Button::MouseRelease()
 {
 	if (Input::Get().MouseLeftRelease())
 	{
-		Vector2 mousePos = Input::Get().MousePoint();
-		Vector2 pos = m_this->transform.position;
+		const Vector2& mousePos = Input::Get().MousePoint();
+		const Vector2& pos = m_this->transform.position;
 		Vector2 scale = m_this->transform.scale;
 		scale *= HALF_OBJECT_SIZE;
 		if ((pos.x - scale.x) < mousePos.x &&

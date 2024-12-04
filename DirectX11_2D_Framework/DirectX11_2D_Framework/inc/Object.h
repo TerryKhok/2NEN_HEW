@@ -28,18 +28,18 @@ private:
 class GameObject final
 {
 	friend class Window;
+	friend class Scene;
+	friend class ImGuiApp;
+	friend class Component;
+	friend class ObjectManager;
+	friend class CameraManager;
 	friend class RenderNode;
 	friend class UVRenderNode;
 	friend class Box2D::WorldManager;
 	friend class Box2DBoxRenderNode;
 	friend class Box2DCircleRenderNode;
 	friend class Box2DCapsuleRenderNode;
-	friend class Box2DMeshRenderNode;
-	friend class ObjectManager;
-	friend class Scene;
-	friend class Component;
-	friend class CameraManager;
-	friend class ImGuiApp;
+	friend class Box2DMeshRenderNode;	
 
 	using functionPointer = void (GameObject::*)();
 private:
@@ -79,7 +79,7 @@ public:
 	}
 	//コンポーネント追加
 	template<typename T>
-	T* AddComponent(void)
+	SAFE_TYPE(T) AddComponent(void)
 	{
 		if (ExistComponent<T>()) return GetComponent<T>();
 
@@ -103,7 +103,7 @@ public:
 	}
 	//コンポーネント追加(引数あり)
 	template<typename T,typename Arg>
-	T* AddComponent(Arg _arg)
+	SAFE_TYPE(T) AddComponent(Arg _arg)
 	{
 		if (ExistComponent<T>()) return GetComponent<T>();
 
@@ -128,27 +128,27 @@ public:
 
 	//RenderComponent完全特殊化
 	template<>
-	Renderer* AddComponent<Renderer>();
+	SAFE_TYPE(Renderer) AddComponent<Renderer>();
 	//テクスチャ指定
 	template<>
-	Renderer* AddComponent<Renderer, const wchar_t*>(const wchar_t* _texPath);
+	SAFE_TYPE(Renderer) AddComponent<Renderer, const wchar_t*>(const wchar_t* _texPath);
 	//アニメーター指定
 	template<>
-	Renderer* AddComponent<Renderer,Animator*>(Animator* _animator);
+	SAFE_TYPE(Renderer) AddComponent<Renderer,Animator*>(Animator* _animator);
 	//Animator完全特殊化
 	template<>
-	Animator* AddComponent<Animator>();
+	SAFE_TYPE(Animator) AddComponent<Animator>();
 	//Box2DBodyComponent完全特殊化
 	template<>
-	Box2DBody* AddComponent<Box2DBody>();
+	SAFE_TYPE(Box2DBody) AddComponent<Box2DBody>();
 	//bodyDef指定
 	template<>
-	Box2DBody* AddComponent<Box2DBody,b2BodyDef*>(b2BodyDef* _bodyDef);
+	SAFE_TYPE(Box2DBody) AddComponent<Box2DBody,b2BodyDef*>(b2BodyDef* _bodyDef);
 	template<>
-	WindowRect* AddComponent<WindowRect>();
+	SAFE_TYPE(WindowRect) AddComponent<WindowRect>();
 	//bodyDef指定
 	template<>
-	WindowRect* AddComponent<WindowRect, const char*>(const char* _windowName);
+	SAFE_TYPE(WindowRect) AddComponent<WindowRect, const char*>(const char* _windowName);
 	//コンポーネント削除
 	template<typename T>
 	void RemoveComponent()
@@ -168,7 +168,7 @@ public:
 	void RemoveComponent<Renderer>();
 
 	template<typename T>
-	T* GetComponent()
+	SAFE_TYPE(T) GetComponent()
 	{
 		auto iter = m_componentList.find(typeid(T).name());
 		if (iter != m_componentList.end())
@@ -186,7 +186,7 @@ public:
 	}
 	//transformComponent完全特殊化
 	template<>
-	Transform* GetComponent(void);
+	SAFE_TYPE(Transform) GetComponent(void);
 
 	template<typename T>
 	bool TryGetComponent(T** _output)

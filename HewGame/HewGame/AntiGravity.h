@@ -3,9 +3,9 @@
 class AntiGravity : public Component
 {
 	SAFE_POINTER(Renderer, rend)
-		SAFE_POINTER(Box2DBody, rb)
+	SAFE_POINTER(Box2DBody, rb)
 
-		int inCount = 0;
+	int inCount = 0;
 
 	const XMFLOAT4 enterColor = { 1.0f,0.0f,1.0f,0.5f };
 	const XMFLOAT4 exitColor = { 1.0f,0.0f,1.0f,0.2f };

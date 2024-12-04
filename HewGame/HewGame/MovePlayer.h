@@ -4,7 +4,7 @@ class MovePlayer : public Component
 {
 	SAFE_POINTER(Box2DBody, rb)
 
-		void Start()
+	void Start()
 	{
 		if (!m_this->TryGetComponent<Box2DBody>(&rb))
 		{
@@ -30,7 +30,7 @@ class MovePlayer : public Component
 		bool isGround = false;
 		Vector2 rayEnd = m_this->transform.position;
 		rayEnd.y -= 50.0f;
-		if (Box2D::WorldManager::RayCast(m_this->transform.position, rayEnd))
+		if (Box2D::WorldManager::RayCast(m_this->transform.position, rayEnd,F_PLAYER_RAY))
 		{
 			isGround = true;
 		}

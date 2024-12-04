@@ -2,8 +2,8 @@
 
 #include "../font/msGothic.c"
 
-std::vector<SFTextManager::StringNode> SFTextManager::m_stringNode;
-std::vector<SFTextManager::StringNode> SFTextManager::m_oldStringNode;
+std::list<SFTextManager::StringNode> SFTextManager::m_stringNode;
+std::list<SFTextManager::StringNode> SFTextManager::m_oldStringNode;
 DirectX::XMMATRIX SFTextManager::worldMatrix;
 std::unique_ptr<SpriteBatch> SFTextManager::spriteBatch;
 std::unique_ptr<SpriteFont> SFTextManager::spriteFont;
@@ -58,6 +58,10 @@ void SFText::SetString(std::string _str)
 	m_str = StringToWString(_str);
 
 	m_origin = DirectX::XMFLOAT2(size * 4, 0);
+
+#ifdef DEBUG_TRUE
+	text = _str;
+#endif
 }
 
 void SFTextManager::Init()
@@ -71,7 +75,7 @@ void SFTextManager::Init()
 	worldMatrix *= DirectX::XMMatrixTranslation(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0.5f);
 }
 
-void SFTextManager::ExcuteDrawString()
+void SFTextManager::ExecuteDrawString()
 {
 	try
 	{
@@ -117,7 +121,7 @@ void SFTextManager::ExcuteDrawString()
 	}
 }
 
-void SFTextManager::KeepExcuteDrawString()
+void SFTextManager::KeepExecuteDrawString()
 {
 	try
 	{

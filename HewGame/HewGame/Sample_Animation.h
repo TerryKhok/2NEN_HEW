@@ -18,6 +18,7 @@ class SampleScene_Animation : public Scene
 		//rend->SetTexcode(8, 9, 0, 0);
 		//object->transform.position.x = 100.0f;
 		anim = object->AddComponent<Animator>();
+		delete anim;
 
 		/*auto obj = Instantiate();
 		obj->transform.scale.x = 8;

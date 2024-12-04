@@ -385,7 +385,7 @@ HRESULT DirectX11::D3D_Create(HWND mainHwnd)
 	m_pDevice->CreateBlendState(&BlendStateDesc, m_pBlendState.GetAddressOf());
 	if (FAILED(hr)) return hr;
 
-	//深度テストを無効にする
+	//深度テストのステートを設定する
 	D3D11_DEPTH_STENCIL_DESC dsDesc;
 	ZeroMemory(&dsDesc, sizeof(dsDesc));
 	dsDesc.DepthEnable = FALSE;//

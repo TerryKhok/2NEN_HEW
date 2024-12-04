@@ -1,6 +1,7 @@
 #include"../../DirectX11_2D_Framework/img/icon_sheet_32x32.c"
 
 #ifdef DEBUG_TRUE
+//#include "../font/VL-Gothic-Regular.c"
 
 int ImGuiApp::worldFpsCounter;
 int ImGuiApp::updateFpsCounter = 0;
@@ -134,10 +135,20 @@ HRESULT ImGuiApp::Init(HINSTANCE hInstance)
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 
+		
+			
+
 		m_hWndContexts.insert(std::make_pair(hWnd, context[type]));
 
 		ImGui_ImplWin32_Init(m_hWnd[type]); // hWnd is your main window handle
 		ImGui_ImplDX11_Init(DirectX11::m_pDevice.Get(), DirectX11::m_pDeviceContext.Get());
+
+		//if (type == INSPECTER)
+		/*{
+			io.Fonts->AddFontFromMemoryTTF((void*)_acVL_Gothic_Regular, sizeof(_acVL_Gothic_Regular), 15.0f, NULL, io.Fonts->GetGlyphRangesJapanese());
+			io.Fonts->Build();
+			ImGui_ImplDX11_CreateDeviceObjects();
+		}*/
 
 		ImGuiSetKeyMap(context[type]);
 	}
@@ -459,7 +470,7 @@ void ImGuiApp::DrawOptionGui()
 		ImGui::Begin("Filter Table", &showFilterTable);
 		//const int numFilter = static_cast<int>(filterNames.size());
 		bool dummy = false;
-		if (ImGui::BeginTable("fitler table", numFilter + 1, table_flags))
+		if (ImGui::BeginTable("filter table", numFilter + 1, table_flags))
 		{
 			ImGui::TableSetupColumn("FILTER", ImGuiTableColumnFlags_NoHide | ImGuiTableColumnFlags_NoReorder);
 			for (int n = numFilter - 1; n >= 0; n--)

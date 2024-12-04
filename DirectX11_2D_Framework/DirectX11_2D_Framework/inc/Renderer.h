@@ -11,15 +11,11 @@ class Renderer : public Component
 	friend class GameObject;
 	friend class Animator;
 	
-	
 private:
 	//生成禁止
-	Renderer(){}
 	Renderer(GameObject* _pObject);
 	Renderer(GameObject* _pObject,const wchar_t* _texpath);
 	Renderer(GameObject* _pObject,Animator* _animator);
-	//削除禁止
-	//~Renderer() = default;
 	//アクティブ変更
 	void SetActive(bool _active);
 	//対応したノードの削除
@@ -52,35 +48,16 @@ private:
 	void serialize(Archive& ar) {
 		//ar(CEREAL_NVP(id), CEREAL_NVP(name));
 	}
+
+	// Static method for load_and_construct
+	template <class Archive>
+	static void load_and_construct(Archive& ar, cereal::construct<Renderer>& construct) {
+		GameObject* object;
+		construct(object);           // Construct the Texture object
+	}
 };
 
-namespace cereal {
-    namespace detail {
-        template <> struct binding_name<Renderer> {
-            static constexpr char const* name() {
-                return "Renderer";
-            }
-        };
-    }
-} namespace cereal {
-    namespace detail {
-        template<> struct init_binding<Renderer> {
-            static inline bind_to_archives<Renderer> const& b = ::cereal::detail::StaticObject< bind_to_archives<Renderer> >::getInstance().bind(); static void unused() {
-                (void)b;
-            }
-        };
-    }
-}; 
-namespace cereal {
-    namespace detail {
-        template <> struct PolymorphicRelation<Component, Renderer> {
-            static void bind() {
-                RegisterPolymorphicCaster<Component, Renderer>::bind();
-            }
-        };
-    }
-};
-
+REGISTER_COMPONENT(Renderer)
 
 //双方向リストノード
 class RenderNode
@@ -141,16 +118,6 @@ private:
 	//リストポインタ
 	std::shared_ptr<RenderNode> back = nullptr;
 	std::shared_ptr<RenderNode> next = nullptr;
-
-private:
-	// Restrict access to the serialize function
-	template <class Archive>
-	void serialize(Archive& ar) {
-		//ar(CEREAL_NVP(id), CEREAL_NVP(name));
-	}
-
-	// Declare Cereal archive types as friends
-	friend class cereal::access;
 };
 
 class UVRenderNode : public RenderNode

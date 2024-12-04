@@ -17,7 +17,7 @@ GameObject::~GameObject()
 	for (auto& component : m_componentList)
 	{
 #ifdef DEBUG_TRUE
-		//コンポーネントのSafePointerをnullptrにする
+		//コンポーネントのSafePointerをNullptrにする
 		PointerRegistryManager::deletePointer(component.second.get());
 #endif 
 		component.second->Delete();
@@ -76,7 +76,7 @@ const std::string GameObject::GetName() const
 }
 
 template<>
-Renderer* GameObject::AddComponent<Renderer>()
+SAFE_TYPE(Renderer) GameObject::AddComponent<Renderer>()
 {
 	if (ExistComponent<Renderer>()) return GetComponent<Renderer>();
 
@@ -91,7 +91,7 @@ Renderer* GameObject::AddComponent<Renderer>()
 	Renderer* render = dynamic_cast<Renderer*>(component);
 	if (render == nullptr)
 	{
-		LOG_WARNING("%s component down_cast faild", typeid(Renderer).name());
+		LOG_WARNING("%s component down_cast failed", typeid(Renderer).name());
 	}
 
 	return render;
@@ -99,7 +99,7 @@ Renderer* GameObject::AddComponent<Renderer>()
 
 
 template<>
-Renderer* GameObject::AddComponent<Renderer>(const wchar_t* _texPath)
+SAFE_TYPE(Renderer) GameObject::AddComponent<Renderer>(const wchar_t* _texPath)
 {
 	if (ExistComponent<Renderer>()) return GetComponent<Renderer>();
 
@@ -114,14 +114,14 @@ Renderer* GameObject::AddComponent<Renderer>(const wchar_t* _texPath)
 	Renderer* render = dynamic_cast<Renderer*>(component);
 	if (render == nullptr)
 	{
-		LOG_WARNING("%s component down_cast faild", typeid(Renderer).name());
+		LOG_WARNING("%s component down_cast failed", typeid(Renderer).name());
 	}
 
 	return render;
 }
 
 template<>
-Renderer* GameObject::AddComponent(Animator* _animator)
+SAFE_TYPE(Renderer) GameObject::AddComponent(Animator* _animator)
 {
 	if (ExistComponent<Renderer>()) return GetComponent<Renderer>();
 
@@ -136,14 +136,14 @@ Renderer* GameObject::AddComponent(Animator* _animator)
 	Renderer* render = dynamic_cast<Renderer*>(component);
 	if (render == nullptr)
 	{
-		LOG_WARNING("%s component down_cast faild", typeid(Renderer).name());
+		LOG_WARNING("%s component down_cast failed", typeid(Renderer).name());
 	}
 
 	return render;
 }
 
 template<>
-Animator* GameObject::AddComponent<Animator>()
+SAFE_TYPE(Animator) GameObject::AddComponent<Animator>()
 {
 	if (ExistComponent<Animator>()) return GetComponent<Animator>();
 
@@ -158,14 +158,14 @@ Animator* GameObject::AddComponent<Animator>()
 	Animator* animator = dynamic_cast<Animator*>(component);
 	if (animator == nullptr)
 	{
-		LOG_WARNING("%s component down_cast faild", typeid(Animator).name());
+		LOG_WARNING("%s component down_cast failed", typeid(Animator).name());
 	}
 
 	return animator;
 }
 
 template<>
-Box2DBody* GameObject::AddComponent<Box2DBody>()
+SAFE_TYPE(Box2DBody) GameObject::AddComponent<Box2DBody>()
 {
 	if (ExistComponent<Box2DBody>()) return GetComponent<Box2DBody>();
 
@@ -180,14 +180,14 @@ Box2DBody* GameObject::AddComponent<Box2DBody>()
 	Box2DBody* render = dynamic_cast<Box2DBody*>(component);
 	if (render == nullptr)
 	{
-		LOG_WARNING("%s component down_cast faild", typeid(Box2DBody).name());
+		LOG_WARNING("%s component down_cast failed", typeid(Box2DBody).name());
 	}
 
 	return render;
 }
 
 template<>
-Box2DBody* GameObject::AddComponent(b2BodyDef* _bodyDef)
+SAFE_TYPE(Box2DBody) GameObject::AddComponent(b2BodyDef* _bodyDef)
 {
 	if (ExistComponent<Box2DBody>()) return GetComponent<Box2DBody>();
 
@@ -202,14 +202,14 @@ Box2DBody* GameObject::AddComponent(b2BodyDef* _bodyDef)
 	Box2DBody* render = dynamic_cast<Box2DBody*>(component);
 	if (render == nullptr)
 	{
-		LOG_WARNING("%s component down_cast faild", typeid(Box2DBody).name());
+		LOG_WARNING("%s component down_cast failed", typeid(Box2DBody).name());
 	}
 
 	return render;
 }
 
 template<>
-WindowRect* GameObject::AddComponent<WindowRect>()
+SAFE_TYPE(WindowRect) GameObject::AddComponent<WindowRect>()
 {
 	if (ExistComponent<WindowRect>()) return GetComponent<WindowRect>();
 
@@ -224,14 +224,14 @@ WindowRect* GameObject::AddComponent<WindowRect>()
 	WindowRect* render = dynamic_cast<WindowRect*>(component);
 	if (render == nullptr)
 	{
-		LOG_WARNING("%s component down_cast faild", typeid(WindowRect).name());
+		LOG_WARNING("%s component down_cast failed", typeid(WindowRect).name());
 	}
 
 	return render;
 }
 
 template<>
-WindowRect* GameObject::AddComponent(const char* _windowName)
+SAFE_TYPE(WindowRect) GameObject::AddComponent(const char* _windowName)
 {
 	if (ExistComponent<WindowRect>()) return GetComponent<WindowRect>();
 
@@ -246,7 +246,7 @@ WindowRect* GameObject::AddComponent(const char* _windowName)
 	WindowRect* render = dynamic_cast<WindowRect*>(component);
 	if (render == nullptr)
 	{
-		LOG_WARNING("%s component down_cast faild", typeid(WindowRect).name());
+		LOG_WARNING("%s component down_cast failed", typeid(WindowRect).name());
 	}
 
 	return render;
@@ -261,7 +261,7 @@ void GameObject::RemoveComponent<Renderer>()
 	if (iter != m_componentList.end())
 	{
 #ifdef DEBUG_TRUE
-		//コンポーネントのSafePointerをnullptrにする
+		//コンポーネントのSafePointerをNullptrにする
 		PointerRegistryManager::deletePointer(iter->second.get());
 #endif 
 		iter->second->Delete();
@@ -270,7 +270,7 @@ void GameObject::RemoveComponent<Renderer>()
 }
 
 template<>
-Transform* GameObject::GetComponent()
+SAFE_TYPE(Transform) GameObject::GetComponent()
 {
 	return &transform;
 }
@@ -335,7 +335,6 @@ GameObject* ObjectManager::AddObject(GameObject* _gameObject)
 		LOG("%s name existed, so we changed %s.", name.c_str(), uniqueName.c_str());
 	}
 #endif
-
 	name = uniqueName;
 
 	//デストラクタと一緒にスマートポインタに登録

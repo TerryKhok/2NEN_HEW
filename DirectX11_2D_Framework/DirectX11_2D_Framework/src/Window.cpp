@@ -372,7 +372,7 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 			RenderManager::Draw();
 
 #ifdef SFTEXT_TRUE
-			SFTextManager::ExcuteDrawString();
+			SFTextManager::ExecuteDrawString();
 #endif
 
 #ifdef DEBUG_TRUE
@@ -470,7 +470,7 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 				RenderManager::Draw();
 
 #ifdef SFTEXT_TRUE
-				SFTextManager::ExcuteDrawString();
+				SFTextManager::ExecuteDrawString();
 #endif
 
 #ifdef DEBUG_TRUE
@@ -660,7 +660,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					RenderManager::Draw();
 
 #ifdef SFTEXT_TRUE
-					SFTextManager::KeepExcuteDrawString();
+					SFTextManager::KeepExecuteDrawString();
 #endif
 
 #ifdef DEBUG_TRUE
@@ -850,7 +850,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		RenderManager::Draw();
 
 #ifdef SFTEXT_TRUE
-		SFTextManager::KeepExcuteDrawString();
+		SFTextManager::KeepExecuteDrawString();
 #endif
 
 #ifdef DEBUG_TRUE
@@ -861,11 +861,11 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 	break;
 
-	case WM_KEYDOWN: //キー入力があったメッセージ
-		if (LOWORD(wParam) == VK_ESCAPE) { //入力されたキーがESCAPEなら
-			PostMessage(hWnd, WM_CLOSE, wParam, lParam);//「WM_CLOSE」を送る
-		}
-		break;
+	//case WM_KEYDOWN: //キー入力があったメッセージ
+	//	if (LOWORD(wParam) == VK_ESCAPE) { //入力されたキーがESCAPEなら
+	//		PostMessage(hWnd, WM_CLOSE, wParam, lParam);//「WM_CLOSE」を送る
+	//	}
+	//	break;
 
 	case WM_MOUSEMOVE:
 	{
@@ -918,7 +918,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		RenderManager::Draw();
 
 #ifdef SFTEXT_TRUE
-		SFTextManager::KeepExcuteDrawString();
+		SFTextManager::KeepExecuteDrawString();
 #endif
 
 #ifdef DEBUG_TRUE
@@ -1079,7 +1079,7 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		RenderManager::Draw();
 
 #ifdef SFTEXT_TRUE
-		SFTextManager::KeepExcuteDrawString();
+		SFTextManager::KeepExecuteDrawString();
 #endif
 
 #ifdef DEBUG_TRUE

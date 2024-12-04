@@ -15,7 +15,7 @@ enum FILTER
 {
 	FILTER_01		= 1 << 0,
 	FILTER_02		= 1 << 1,
-	FILTER_03		= 1 << 2,
+	F_PLAYER_RAY	= 1 << 2,
 	F_PLAYER		= 1 << 3,
 	F_TERRAIN		= 1 << 4,
 	F_OBSTACLE		= 1 << 5,

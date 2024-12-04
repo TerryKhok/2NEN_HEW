@@ -173,6 +173,14 @@ public:
 		xmv = DirectX::XMVector2Normalize(xmv);
 		DirectX::XMStoreFloat2(&vec, xmv);
 	}
+	/// <summary>
+	/// データの先頭ポインタ取得
+	/// </summary>
+	/// <returns></returns>
+	float* data()
+	{
+		return v;
+	}
 };
 /// <summary>
 /// 3次元ベクトル。

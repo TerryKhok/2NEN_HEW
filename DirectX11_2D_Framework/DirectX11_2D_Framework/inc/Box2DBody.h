@@ -19,7 +19,7 @@ private:
 public:
 	//bodyIdの取得
 	const b2BodyId GetBodyId() { return m_bodyId; }
-	//フィルターの変更
+	// フィルターの変更
 	void SetFilter(const FILTER _layer);
 	//フィルターの取得
 	const FILTER GetFilter() const
