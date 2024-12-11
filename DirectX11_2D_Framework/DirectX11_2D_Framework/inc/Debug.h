@@ -167,6 +167,17 @@ public:
 
         return ptr;
     }
+
+    //T*Œ^‚Ö‚Ì•ÏŠ·
+    operator T* () const
+    {
+        if (ptr == nullptr) {
+            std::string log = "Dereferencing a deleted pointer : " + ptrName;
+            throw std::runtime_error(log.c_str());
+        }
+
+        return ptr;
+    }
   
     T** operator&() {
         return &ptr;

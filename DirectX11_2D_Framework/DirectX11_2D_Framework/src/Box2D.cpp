@@ -506,6 +506,7 @@ void Box2D::WorldManager::ExecuteSensorEvent()
 		}
 	}
 
+
 	for (int i = 0; i < contactEvents.endCount; i++)
 	{
 		b2ContactEndTouchEvent event = contactEvents.endEvents[i];
