@@ -4,6 +4,7 @@ enum LAYER
 {
 	LAYER_01,
 	LAYER_02,
+	LAYER_FOG,
 #ifdef DEBUG_TRUE
 	LAYER_BOX2D_DEBUG,
 #endif
