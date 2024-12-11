@@ -35,7 +35,7 @@ class Scene_ProtoType :public Scene
 		box2d->SetFilter(F_OBSTACLE);
 		box2d->CreateBoxShape();
 
-		object = Instantiate("UntiGravityWindow");
+		object = Instantiate("AntiGravityWindow");
 		object->transform.scale = { 30.0f,20.0f };
 		bodyDef2 = b2DefaultBodyDef();
 		bodyDef2.type = b2_kinematicBody;
@@ -43,7 +43,7 @@ class Scene_ProtoType :public Scene
 		box2d->SetFilter(F_WINDOW);
 		box2d->CreateBoxShape(true);
 		object->AddComponent<Renderer>();
-		object->AddComponent<WindowRect>("UntiGravity");
+		object->AddComponent<SubWindow>("AntiGravity");
 		object->AddComponent<AntiGravity>();
 
 		object = Instantiate("LowGravityWindow");
@@ -54,7 +54,7 @@ class Scene_ProtoType :public Scene
 		box2d->SetFilter(F_WINDOW);
 		box2d->CreateBoxShape(true);
 		object->AddComponent<Renderer>();
-		object->AddComponent<WindowRect>("LowGravity");
+		object->AddComponent<SubWindow>("LowGravity");
 		object->AddComponent<LowGravity>();
 
 		object = Instantiate("BounceWindow");
@@ -65,7 +65,7 @@ class Scene_ProtoType :public Scene
 		box2d->SetFilter(F_WINDOW);
 		box2d->CreateBoxShape(true);
 		object->AddComponent<Renderer>();
-		object->AddComponent<WindowRect>("Bounce");
+		object->AddComponent<SubWindow>("Bounce");
 		object->AddComponent<Bounce>();
 
 		object = Instantiate("PermeationWindow");
@@ -76,7 +76,7 @@ class Scene_ProtoType :public Scene
 		box2d->SetFilter(F_PERWINDOW);
 		box2d->CreateBoxShape({ 28.0f,18.0f }, { 0.0f,0.0f }, 0.0f, true);
 		object->AddComponent<Renderer>();
-		object->AddComponent<WindowRect>("Permeation");
+		object->AddComponent<SubWindow>("Permeation");
 		object->AddComponent<Permeation>();
 
 		object = Instantiate("StaticBox_Ground_Polygon");

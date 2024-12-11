@@ -1,13 +1,14 @@
 #pragma once
 
 //Scale = 1.0f のときの大きさ
-//===========================================================
-const float DEFAULT_OBJECT_SIZE = 10.0f;
-const float HALF_OBJECT_SIZE = DEFAULT_OBJECT_SIZE / 2.0f;
-//===========================================================
+//================================================================
+constexpr float DEFAULT_OBJECT_SIZE = 10.0f;
+constexpr float HALF_OBJECT_SIZE = DEFAULT_OBJECT_SIZE / 2.0f;
+constexpr float QUARTER_OBJECT_SIZE = DEFAULT_OBJECT_SIZE / 4.0f;
+//================================================================
 
 class Renderer;
-class WindowRect;
+class SubWindow;
 
 struct Transform final
 {
@@ -145,10 +146,10 @@ public:
 	template<>
 	SAFE_TYPE(Box2DBody) AddComponent<Box2DBody,b2BodyDef*>(b2BodyDef* _bodyDef);
 	template<>
-	SAFE_TYPE(WindowRect) AddComponent<WindowRect>();
+	SAFE_TYPE(SubWindow) AddComponent<SubWindow>();
 	//bodyDef指定
 	template<>
-	SAFE_TYPE(WindowRect) AddComponent<WindowRect, const char*>(const char* _windowName);
+	SAFE_TYPE(SubWindow) AddComponent<SubWindow, const char*>(const char* _windowName);
 	//コンポーネント削除
 	template<typename T>
 	void RemoveComponent()
@@ -217,6 +218,18 @@ private:
 	bool active = true;
 	static VSObjectConstantBuffer m_cb;
 	std::unordered_map<const char*, std::unique_ptr<Component, void(*)(Component*)>> m_componentList;
+
+#ifdef DEBUG_TRUE
+	enum SELECT_TYPE
+	{
+		SELECT_NONE,
+		SELECTED,
+		ON_MOUSE,
+	};
+
+	SELECT_TYPE isSelected = SELECT_NONE;
+	size_t selectedNum = 0;
+#endif
 	
 private:
 		template <class Archive>

@@ -169,6 +169,8 @@ private:
 	static void ChangeNextRenderList();
 	//次のノードリストに繋ぐ
 	static void LinkNextRenderList();
+	//メインカメラの行列変換をセットする
+	static void SetMainCameraMatrix();
 public:
 	//ウィンドウ全体の位置
 	static Vector2 renderOffset;
@@ -180,9 +182,9 @@ private:
 	//リストをロックする
 	static std::mutex listMutex;
 	//ノードリスト(レイヤーの数だけ増える)
-	static RenderList m_rendererList[LAYER::LATER_MAX];
+	static RenderList m_rendererList[LAYER::LAYER_MAX];
 	//次のレンダーリスト（後に上のリストにコピーする）
-	static RenderList m_nextRendererList[LAYER::LATER_MAX];
+	static RenderList m_nextRendererList[LAYER::LAYER_MAX];
 	//共通の頂点バッファー
 	static ComPtr<ID3D11Buffer> m_vertexBuffer;
 	//共通のインデックスバッファー

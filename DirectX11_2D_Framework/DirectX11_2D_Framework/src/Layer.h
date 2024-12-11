@@ -8,7 +8,7 @@ enum LAYER
 	LAYER_BOX2D_DEBUG,
 #endif
 	LAYER_UI,
-	LATER_MAX
+	LAYER_MAX
 };
 
 enum FILTER

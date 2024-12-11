@@ -78,4 +78,7 @@
       <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="OutlineShader.hlsl" />
+  </ItemGroup>
 </Project>

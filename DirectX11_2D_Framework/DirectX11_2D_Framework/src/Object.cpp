@@ -209,44 +209,44 @@ SAFE_TYPE(Box2DBody) GameObject::AddComponent(b2BodyDef* _bodyDef)
 }
 
 template<>
-SAFE_TYPE(WindowRect) GameObject::AddComponent<WindowRect>()
+SAFE_TYPE(SubWindow) GameObject::AddComponent<SubWindow>()
 {
-	if (ExistComponent<WindowRect>()) return GetComponent<WindowRect>();
+	if (ExistComponent<SubWindow>()) return GetComponent<SubWindow>();
 
 	Component* component = nullptr;
-	component = new WindowRect(this);
+	component = new SubWindow(this);
 	component->m_this = this;
 
 	//リストに追加(デストラクタ登録)
-	m_componentList.emplace(typeid(WindowRect).name(),
+	m_componentList.emplace(typeid(SubWindow).name(),
 		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
 
-	WindowRect* render = dynamic_cast<WindowRect*>(component);
+	SubWindow* render = dynamic_cast<SubWindow*>(component);
 	if (render == nullptr)
 	{
-		LOG_WARNING("%s component down_cast failed", typeid(WindowRect).name());
+		LOG_WARNING("%s component down_cast failed", typeid(SubWindow).name());
 	}
 
 	return render;
 }
 
 template<>
-SAFE_TYPE(WindowRect) GameObject::AddComponent(const char* _windowName)
+SAFE_TYPE(SubWindow) GameObject::AddComponent(const char* _windowName)
 {
-	if (ExistComponent<WindowRect>()) return GetComponent<WindowRect>();
+	if (ExistComponent<SubWindow>()) return GetComponent<SubWindow>();
 
 	Component* component = nullptr;
-	component = new WindowRect(this, _windowName);
+	component = new SubWindow(this, _windowName);
 	component->m_this = this;
 
 	//リストに追加(デストラクタ登録)
-	m_componentList.emplace(typeid(WindowRect).name(),
+	m_componentList.emplace(typeid(SubWindow).name(),
 		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
 
-	WindowRect* render = dynamic_cast<WindowRect*>(component);
+	SubWindow* render = dynamic_cast<SubWindow*>(component);
 	if (render == nullptr)
 	{
-		LOG_WARNING("%s component down_cast failed", typeid(WindowRect).name());
+		LOG_WARNING("%s component down_cast failed", typeid(SubWindow).name());
 	}
 
 	return render;
@@ -338,10 +338,10 @@ GameObject* ObjectManager::AddObject(GameObject* _gameObject)
 	name = uniqueName;
 
 	//デストラクタと一緒にスマートポインタに登録
-	m_currentList->emplace(name, std::unique_ptr<GameObject, void(*)(GameObject*)>
-		(_gameObject, [](GameObject* p) {delete p; }));
+	auto iter = m_currentList->emplace(name, std::unique_ptr<GameObject, void(*)(GameObject*)>
+		(_gameObject, [](GameObject* p) {delete p; })).first;
 	
-	return m_currentList->find(name)->second.get();
+	return iter->second.get();
 }
 
 void ObjectManager::ChangeNextObjectList()

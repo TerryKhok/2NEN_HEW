@@ -9,7 +9,7 @@ ComPtr<ID3D11DeviceContext> DirectX11::m_pDeviceContext = nullptr;
 // スワップチェイン＝ダブルバッファ機能
 std::unordered_map<HWND, ComPtr<IDXGISwapChain>> DirectX11::m_pSwapChainList;
 // レンダーターゲット＝描画先を表す機能
-std::unordered_map<HWND, ComPtr<ID3D11RenderTargetView>> DirectX11::m_pRenderTargetViewList;
+std::unordered_map<HWND, std::pair<ComPtr<ID3D11RenderTargetView>, std::vector<LAYER>>> DirectX11::m_pRenderTargetViewList;
 //デプスステート
 ComPtr<ID3D11DepthStencilState> DirectX11::m_pDSState;
 // デプスバッファ
@@ -261,13 +261,25 @@ HRESULT DirectX11::D3D_Create(HWND mainHwnd)
 		&m_pDeviceContext);
 	if (FAILED(hr)) return hr; // 上の関数呼び出しが失敗してないかifでチェック
 
-	m_pRenderTargetViewList.insert(std::make_pair(mainHwnd, nullptr));
+	std::vector<LAYER> drawLayers;
+	for (int i = 0; i < LAYER_MAX; i++)
+	{
+		LAYER layer = (LAYER)i;
+		if (layer != LAYER_UI
+#ifdef DEBUG_TRUE
+			&& layer != LAYER_BOX2D_DEBUG
+#endif
+			)
+			drawLayers.push_back(layer);
+	}
+
+	m_pRenderTargetViewList.insert(std::make_pair(mainHwnd, std::make_pair(nullptr, std::move(drawLayers))));
 
 	// レンダーターゲットビュー作成
 	ID3D11Texture2D* renderTarget;
 	hr = swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&renderTarget);
 	if (FAILED(hr)) return hr;
-	hr = m_pDevice->CreateRenderTargetView(renderTarget, NULL, m_pRenderTargetViewList.find(mainHwnd)->second.GetAddressOf());
+	hr = m_pDevice->CreateRenderTargetView(renderTarget, NULL, m_pRenderTargetViewList.find(mainHwnd)->second.first.GetAddressOf());
 	renderTarget->Release();
 	if (FAILED(hr)) return hr;
 
@@ -331,6 +343,7 @@ HRESULT DirectX11::D3D_Create(HWND mainHwnd)
 	
 	// ピクセルシェーダーオブジェクトを生成
 	hr = CreatePixelShader(UNLIT_TEXTURE_PS, sizeof(UNLIT_TEXTURE_PS), m_pPixelShader.GetAddressOf());
+	//hr = CreatePixelShader("OutlineShader.hlsl", "ps_main", "ps_5_0", m_pPixelShader.GetAddressOf());
 	if (FAILED(hr)) {
 		MessageBoxA(NULL, "CreatePixelShader error", "error", MB_OK);
 		return E_FAIL;
@@ -457,7 +470,7 @@ void DirectX11::D3D_StartRender()
 	for (auto& targetView : m_pRenderTargetViewList)
 	{
 		// 描画先キャンバスを塗りつぶす
-		m_pDeviceContext->ClearRenderTargetView(targetView.second.Get(), clearColor);
+		m_pDeviceContext->ClearRenderTargetView(targetView.second.first.Get(), clearColor);
 		//colorIndex = (colorIndex + 1) % 4;
 	}
 
@@ -521,7 +534,7 @@ void DirectX11::CreateOnePixelTexture(ID3D11ShaderResourceView** _resourceView)
 	}
 }
 
-HRESULT DirectX11::CreateWindowSwapchain(HWND hWnd)
+HRESULT DirectX11::CreateWindowSwapChain(HWND hWnd)
 {
 	// Describe the swap chain
 	DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
@@ -554,8 +567,20 @@ HRESULT DirectX11::CreateWindowSwapchain(HWND hWnd)
 	renderTarget->Release();
 	if (FAILED(hr)) return hr;
 
+	std::vector<LAYER> drawLayers;
+	for (int i = 0; i < LAYER_MAX; i++)
+	{
+		LAYER layer = (LAYER)i;
+		if (layer != LAYER_UI 
+#ifdef DEBUG_TRUE
+			&& layer != LAYER_BOX2D_DEBUG
+#endif
+			)
+			drawLayers.push_back(layer);
+	}
+
 	m_pSwapChainList.insert(std::make_pair(hWnd, swapChain));
-	m_pRenderTargetViewList.insert(std::make_pair(hWnd, renderTargetView));
+	m_pRenderTargetViewList.insert(std::make_pair(hWnd, std::make_pair(renderTargetView, std::move(drawLayers))));
 
 	return S_OK;
 }

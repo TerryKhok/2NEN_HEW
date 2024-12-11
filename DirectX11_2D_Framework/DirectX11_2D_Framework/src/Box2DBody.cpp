@@ -135,13 +135,18 @@ void Box2DBody::DrawImGui()
 	ImGui::Text(" Mass       : %.3f", mass);
 	float gravity = b2Body_GetGravityScale(m_bodyId);
 	ImGui::Text(" Gravity    : %.3f", gravity);
+	bool isBullet = b2Body_IsBullet(m_bodyId);
+	if (ImGui::Checkbox("Bullet", &isBullet))
+	{
+		b2Body_SetBullet(m_bodyId, isBullet);
+	}
 
 	if (!m_shapeList.empty())
 	{
 		
 		if (ImGui::TreeNode("Shape"))
 		{
-			ImGui::BeginDisabled(true); // Disable interaction
+			//ImGui::BeginDisabled(true); // Disable interaction
 			for (auto& shape : m_shapeList)
 			{
 				b2ShapeType type = b2Shape_GetType(shape);
@@ -164,13 +169,22 @@ void Box2DBody::DrawImGui()
 					break;
 				}
 				bool sensor = b2Shape_IsSensor(shape);
-				ImGui::Checkbox(" sensor", &sensor);
+				if (ImGui::Checkbox(" sensor", &sensor))
+				{
+					//sensorを変更する
+				}
 				float friction = b2Shape_GetFriction(shape);
-				ImGui::Text(" friction  : %.3f", friction);
+				if (ImGui::InputFloat(" friction", &friction))
+				{
+					b2Shape_SetFriction(shape, friction);
+				}
 				float density = b2Shape_GetDensity(shape);
-				ImGui::Text(" density   : %.3f", density);
+				if (ImGui::InputFloat(" density", &density))
+				{
+					b2Shape_SetDensity(shape, density);
+				}
 			}
-			ImGui::EndDisabled(); // Re-enable interaction
+			//ImGui::EndDisabled(); // Re-enable interaction
 			ImGui::TreePop();
 		}
 	}
@@ -983,7 +997,18 @@ void Box2DBoxRenderNode::Draw()
 	/*cb.view = objectCb.view;
 	cb.projection = objectCb.projection;*/
 
-	SetDebugBodyColor(m_bodyId, cb.color);
+	switch (m_object->isSelected)
+	{
+	case GameObject::SELECT_NONE:
+		SetDebugBodyColor(m_bodyId, cb.color);
+		break;
+	case GameObject::SELECTED:
+		cb.color = Box2D::b2_colorSelected;
+		break;
+	case GameObject::ON_MOUSE:
+		cb.color = Box2D::b2_colorOnMouse;
+		break;
+	}
 
 	//行列をシェーダーに渡す
 	DirectX11::m_pDeviceContext->UpdateSubresource(
@@ -1023,7 +1048,18 @@ inline void Box2DCircleRenderNode::Draw()
 	//cb.view = objectCb.view;
 	//cb.projection = objectCb.projection;
 
-	SetDebugBodyColor(m_bodyId, cb.color);
+	switch (m_object->isSelected)
+	{
+	case GameObject::SELECT_NONE:
+		SetDebugBodyColor(m_bodyId, cb.color);
+		break;
+	case GameObject::SELECTED:
+		cb.color = Box2D::b2_colorSelected;
+		break;
+	case GameObject::ON_MOUSE:
+		cb.color = Box2D::b2_colorOnMouse;
+		break;
+	}
 
 	//行列をシェーダーに渡す
 	DirectX11::m_pDeviceContext->UpdateSubresource(
@@ -1070,7 +1106,18 @@ inline void Box2DCapsuleRenderNode::Draw()
 	/*cb.view = objectCb.view;
 	cb.projection = objectCb.projection;*/
 
-	SetDebugBodyColor(m_bodyId, cb.color);
+	switch (m_object->isSelected)
+	{
+	case GameObject::SELECT_NONE:
+		SetDebugBodyColor(m_bodyId, cb.color);
+		break;
+	case GameObject::SELECTED:
+		cb.color = Box2D::b2_colorSelected;
+		break;
+	case GameObject::ON_MOUSE:
+		cb.color = Box2D::b2_colorOnMouse;
+		break;
+	}
 
 	//行列をシェーダーに渡す
 	DirectX11::m_pDeviceContext->UpdateSubresource(
@@ -1174,7 +1221,7 @@ inline void Box2DMeshRenderNode::Draw()
 	static VSObjectConstantBuffer cb;
 
 	const auto& transform = m_object->transform;
-	const auto& objectCb = m_object->GetConstantBuffer();
+	//const auto& objectCb = m_object->GetConstantBuffer();
 
 	auto rad = static_cast<float>(transform.angle.z.Get());
 
@@ -1187,7 +1234,18 @@ inline void Box2DMeshRenderNode::Draw()
 	/*cb.view = objectCb.view;
 	cb.projection = objectCb.projection;*/
 
-	SetDebugBodyColor(m_bodyId, cb.color);
+	switch (m_object->isSelected)
+	{
+	case GameObject::SELECT_NONE:
+		SetDebugBodyColor(m_bodyId, cb.color);
+		break;
+	case GameObject::SELECTED:
+		cb.color = Box2D::b2_colorSelected;
+		break;
+	case GameObject::ON_MOUSE:
+		cb.color = Box2D::b2_colorOnMouse;
+		break;
+	}
 
 	//行列をシェーダーに渡す
 	DirectX11::m_pDeviceContext->UpdateSubresource(

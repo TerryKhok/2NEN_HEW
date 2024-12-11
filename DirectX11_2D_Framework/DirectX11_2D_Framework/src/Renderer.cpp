@@ -5,8 +5,8 @@ std::mutex RenderManager::listMutex;
 Vector2 RenderManager::renderOffset = { 0.0f,0.0f };
 Vector2 RenderManager::renderZoom = { 1.0f,1.0f };
 
-RenderManager::RenderList RenderManager::m_rendererList[LAYER::LATER_MAX];
-RenderManager::RenderList RenderManager::m_nextRendererList[LAYER::LATER_MAX];
+RenderManager::RenderList RenderManager::m_rendererList[LAYER::LAYER_MAX];
+RenderManager::RenderList RenderManager::m_nextRendererList[LAYER::LAYER_MAX];
 ComPtr<ID3D11Buffer> RenderManager::m_vertexBuffer = nullptr;
 ComPtr<ID3D11Buffer> RenderManager::m_indexBuffer = nullptr;
 
@@ -400,18 +400,24 @@ void RenderManager::Draw()
 #endif
 
 		// 描画先のキャンバスと使用する深度バッファを指定する
-		DirectX11::m_pDeviceContext->OMSetRenderTargets(1, view.second.GetAddressOf(), DirectX11::m_pDepthStencilView.Get());
+		DirectX11::m_pDeviceContext->OMSetRenderTargets(1, view.second.first.GetAddressOf(), DirectX11::m_pDepthStencilView.Get());
 
 #ifndef DEBUG_TRUE
-		for (int i = 0; i < LAYER::LAYER_UI; i++)
+		for (const auto layer : view.second.second)
 		{
-			auto& node = m_rendererList[i];
+			auto& node = m_rendererList[layer];
 			node.first->NextFunc();
 		}
 #else
-		for (int i = 0; i < LAYER::LAYER_BOX2D_DEBUG; i++)
+		/*for (int i = 0; i < LAYER::LAYER_BOX2D_DEBUG; i++)
 		{
 			auto& node = m_rendererList[i];
+			node.first->NextFunc();
+		}*/
+
+		for (const auto layer : view.second.second)
+		{
+			auto& node = m_rendererList[layer];
 			node.first->NextFunc();
 		}
 
@@ -465,7 +471,7 @@ void RenderManager::Draw()
 
 	// 描画先のキャンバスと使用する深度バッファを指定する
 	DirectX11::m_pDeviceContext->OMSetRenderTargets(1,
-		DirectX11::m_pRenderTargetViewList[Window::GetMainHwnd()].GetAddressOf(), DirectX11::m_pDepthStencilView.Get());
+		DirectX11::m_pRenderTargetViewList[Window::GetMainHwnd()].first.GetAddressOf(), DirectX11::m_pDepthStencilView.Get());
 
 	static VSCameraConstantBuffer cb = {
 			XMMatrixIdentity(),
@@ -500,7 +506,7 @@ void RenderManager::ChangeNextRenderList()
 void RenderManager::LinkNextRenderList()
 {
 	//リストのコピー
-	for (int i = 0; i < LATER_MAX; i++)
+	for (int i = 0; i < LAYER_MAX; i++)
 	{
 		m_rendererList[i] = m_nextRendererList[i];
 	}
@@ -512,5 +518,27 @@ void RenderManager::LinkNextRenderList()
 		node.first = std::shared_ptr<RenderNode>(renderNode);
 		node.second = node.first;
 	}
+}
+
+void RenderManager::SetMainCameraMatrix()
+{
+	RECT rect;
+	if (GetWindowRect(Window::GetMainHwnd(), &rect))
+	{
+		CameraManager::cameraPosition = {
+			(static_cast<float>(rect.left + rect.right) / 2 - Window::MONITER_HALF_WIDTH) / renderZoom.x + renderOffset.x,
+			(static_cast<float>(rect.top + rect.bottom) / -2 + Window::MONITER_HALF_HEIGHT) / renderZoom.y + renderOffset.y
+		};
+	}
+
+	if (GetClientRect(Window::GetMainHwnd(), &rect))
+	{
+		rect.right = max(rect.right, 1);
+		rect.bottom = max(rect.bottom, 1);
+		CameraManager::cameraZoom.x = PROJECTION_WIDTH / static_cast<float>(rect.right) * renderZoom.x;
+		CameraManager::cameraZoom.y = PROJECTION_HEIGHT / static_cast<float>(rect.bottom) * renderZoom.y;
+	}
+
+	CameraManager::SetCameraMatrix();
 }
 

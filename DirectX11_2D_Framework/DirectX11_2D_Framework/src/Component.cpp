@@ -47,12 +47,14 @@ void Component::DeleteObject(std::string _name)
             b2bodyMoveList.erase(it);
         }*/
 
+        std::string objName = m_this->GetName();
+
 #ifdef DEBUG_TRUE
         PointerRegistryManager::deletePointer(iter->second.get());
 #endif
         list->erase(iter);
 
-        if (m_this->GetName() == _name)
+        if (objName == _name)
         {
             throw "";
         }

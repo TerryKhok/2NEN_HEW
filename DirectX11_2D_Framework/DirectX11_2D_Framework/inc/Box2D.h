@@ -40,8 +40,8 @@ namespace Box2D
 
 	//ワールド更新ステップ
 	//======================================
-	const float timeStep = 1.0f / WORLD_FPS;
-	const int subStepCount = 4;
+	constexpr float timeStep = 1.0f / WORLD_FPS;
+	constexpr int subStepCount = 4;
 	//======================================
 
 	class WorldManager
@@ -134,14 +134,16 @@ namespace Box2D
 
 	//デバッグ表示のα値
 	//========================================================
-	const float b2_colorAlpha = 1.0f;
+	constexpr float b2_colorAlpha = 1.0f;
 	//========================================================
 
-	const XMFLOAT4 b2_colorRed =	{ 1.0f,0.0f,0.0f,b2_colorAlpha };
-	const XMFLOAT4 b2_colorGreen =	{ 0.0f,1.0f,0.0f,b2_colorAlpha };
-	const XMFLOAT4 b2_colorBlue =	{ 0.4f,0.4f,1.0f,b2_colorAlpha };
-	const XMFLOAT4 b2_colorGray =	{ 0.6f,0.6f,0.6f,b2_colorAlpha };
-	const XMFLOAT4 b2_colorPink =	{ 1.0f,0.4f,0.4f,b2_colorAlpha };
+	constexpr XMFLOAT4 b2_colorRed =		{ 1.0f,0.0f,0.0f,b2_colorAlpha };
+	constexpr XMFLOAT4 b2_colorGreen =		{ 0.0f,1.0f,0.0f,b2_colorAlpha };
+	constexpr XMFLOAT4 b2_colorBlue =		{ 0.4f,0.4f,1.0f,b2_colorAlpha };
+	constexpr XMFLOAT4 b2_colorGray =		{ 0.6f,0.6f,0.6f,b2_colorAlpha };
+	constexpr XMFLOAT4 b2_colorPink =		{ 1.0f,0.4f,0.4f,b2_colorAlpha };
+	constexpr XMFLOAT4 b2_colorSelected =	{ 0.0f,1.0f,1.0f,b2_colorAlpha };
+	constexpr XMFLOAT4 b2_colorOnMouse =	{ 0.0f,0.2f,1.0f,b2_colorAlpha };
 };
 
 

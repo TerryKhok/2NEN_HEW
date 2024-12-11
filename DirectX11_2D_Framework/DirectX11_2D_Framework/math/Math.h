@@ -2,6 +2,10 @@
 
 class Math {
 public:
+	//‰~ü—¦l•ª‚Ìˆê
+	static constexpr float qPI = 3.14159265358979323846f / 4.0f;
+	//‰~ü—¦”¼•ª
+	static constexpr float hPI = 3.14159265358979323846f / 2.0f;
 	//‰~ü—¦
 	static constexpr float PI = 3.14159265358979323846f;
 	//‰~ü—¦‚Ì‚Qæ

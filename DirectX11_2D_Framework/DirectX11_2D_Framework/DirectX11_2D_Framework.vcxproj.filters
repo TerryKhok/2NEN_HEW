@@ -200,7 +200,7 @@
     <ClInclude Include="inc\ImGuiApp.h">
       <Filter>Inc</Filter>
     </ClInclude>
-    <ClInclude Include="inc\WindowRect.h">
+    <ClInclude Include="inc\SubWindow.h">
       <Filter>Inc</Filter>
     </ClInclude>
     <ClInclude Include="inc\Utility.h">

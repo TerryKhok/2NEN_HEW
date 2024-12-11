@@ -198,7 +198,7 @@ HWND Window::WindowSubCreate(std::string _objName, std::string _windowName, int 
 	// ウィンドウの状態を直ちに反映(ウィンドウのクライアント領域を更新)
 	UpdateWindow(hWnd);
 
-	DirectX11::CreateWindowSwapchain(hWnd);
+	DirectX11::CreateWindowSwapChain(hWnd);
 
 	m_hwndObjNames.insert(std::make_pair(hWnd, _objName));
 
@@ -375,7 +375,6 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 #ifdef SFTEXT_TRUE
 			SFTextManager::ExecuteDrawString();
 #endif
-
 #ifdef DEBUG_TRUE
 			ImGuiApp::Draw();
 #endif
@@ -473,11 +472,9 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 #ifdef SFTEXT_TRUE
 				SFTextManager::ExecuteDrawString();
 #endif
-
 #ifdef DEBUG_TRUE
 				ImGuiApp::Draw();
 #endif
-
 				DirectX11::D3D_FinishRender();
 
 #ifdef DEBUG_TRUE
@@ -594,13 +591,13 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		QueryPerformanceCounter(&liWork);
 		long long pauseNowCount = liWork.QuadPart;
 		long long pauseOldCount = pauseNowCount;
-		long long pauseFrameCount = frequency / 30;
+		long long pauseFrameCount = frequency / 60;
 
 		Vector2 oldMousePos;
 
-		for (auto hwnd : m_hwndObjNames)
+		for (auto hWnd : m_hwndObjNames)
 		{
-			SetWindowMovable(hwnd.first, false);
+			SetWindowMovable(hWnd.first, false);
 		}
 
 		SetWindowPos(mainHwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
@@ -631,27 +628,118 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 					Input::Get().Update();
 
+#ifdef DEBUG_TRUE
+					Vector2 mousePos = Input::Get().MousePoint();
+
+					Vector2 targetPos = mousePos;
+					targetPos.x = targetPos.x * DISPALY_ASPECT_WIDTH / RenderManager::renderZoom.x + RenderManager::renderOffset.x;
+					targetPos.y = targetPos.y * DISPALY_ASPECT_HEIGHT / RenderManager::renderZoom.y + RenderManager::renderOffset.y;				
+
+					bool handleHit = ImGuiApp::UpdateHandleUI(targetPos);
+				
+					{
+						std::list<GameObject*> targetObjects;
+						
+
+						for (auto& object : *ObjectManager::m_objectList.get())
+						{
+							const Vector2& pos = object.second->transform.position;
+							Vector2 scale = object.second->transform.scale;
+							scale *= HALF_OBJECT_SIZE;
+							if ((pos.x - scale.x) < targetPos.x &&
+								(pos.x + scale.x) > targetPos.x &&
+								(pos.y - scale.y) < targetPos.y &&
+								(pos.y + scale.y) > targetPos.y)
+							{
+								targetObjects.push_back(object.second.get());
+							}
+						}
+						static GameObject* target = nullptr;
+						if ((target != nullptr && target->isSelected != GameObject::SELECTED) || 
+							(handleHit && target->isSelected != GameObject::SELECTED))
+							target->isSelected = GameObject::SELECT_NONE;
+
+						if (!handleHit)
+						{
+
+							if (targetObjects.empty())
+							{
+								if (Input::Get().MouseLeftTrigger())
+								{
+									ImGuiApp::InvalidSelectedObject();
+								}
+							}
+							else
+							{
+								targetObjects.sort([&](const GameObject* a, const GameObject* b)
+									{return a->selectedNum > b->selectedNum; });
+
+								target = targetObjects.front();
+								if (target != nullptr && target->isSelected != GameObject::SELECTED)
+									target->isSelected = GameObject::ON_MOUSE;
+
+								if (Input::Get().MouseLeftTrigger())
+								{
+									ImGuiApp::InvalidSelectedObject();
+									if (target != nullptr)target->selectedNum = 0;
+									ImGuiApp::SetSelectedObject(target);
+									targetObjects.pop_front();
+									for (auto& object : targetObjects)
+									{
+										object->selectedNum++;
+									}
+								}
+							}
+						}
+					}
+
+					if (Input::Get().KeyPress(VK_CONTROL) && Input::Get().KeyTrigger(VK_Z))
+					{
+						ImGuiApp::RewindChange();
+					}
+
+					if (Input::Get().KeyTrigger(VK_W))
+					{
+						ImGuiApp::handleUi.handleMode = ImGuiApp::HandleUI::POSITION;
+						ImGuiApp::handleUi.moveMode = ImGuiApp::HandleUI::NONE;
+					}
+					else if (Input::Get().KeyTrigger(VK_E))
+					{
+						ImGuiApp::handleUi.handleMode = ImGuiApp::HandleUI::ROTATION;
+						ImGuiApp::handleUi.moveMode = ImGuiApp::HandleUI::NONE;
+					}
+					else if (Input::Get().KeyTrigger(VK_R))
+					{
+						ImGuiApp::handleUi.handleMode = ImGuiApp::HandleUI::SCALE;
+						ImGuiApp::handleUi.moveMode = ImGuiApp::HandleUI::NONE;
+					}
+
 					if (Input::Get().MouseRightTrigger())
 					{
-						oldMousePos = Input::Get().MousePoint();
+						oldMousePos = mousePos;
 					}
 
 					if (Input::Get().MouseRightPress())
 					{
-						Vector2 dis = Input::Get().MousePoint() - oldMousePos;
-						oldMousePos = Input::Get().MousePoint();
+						Vector2 dis = mousePos - oldMousePos;
+						oldMousePos = mousePos;
 						dis *= -1.0f;
-						RenderManager::renderOffset += dis;
+						float rad = -Math::DegToRad(CameraManager::cameraRotation);
+						Vector2 offset;
+						offset.x = dis.x * cos(rad) - dis.y * sin(rad);
+						offset.y = dis.x * sin(rad) + dis.y * cos(rad);
+						RenderManager::renderOffset += offset / RenderManager::renderZoom;
 					}
 
 					if (Input::Get().MouseWheelDelta() > 0)
 					{
-						RenderManager::renderZoom += 0.01f;
+						RenderManager::renderZoom += RenderManager::renderZoom / 100;
 					}
 					else if (Input::Get().MouseWheelDelta() < 0)
 					{
-						RenderManager::renderZoom -= 0.01f;
+						RenderManager::renderZoom -= RenderManager::renderZoom / 100;
 					}
+#endif
 
 					//カメラ関連行列セット
 					CameraManager::SetCameraMatrix();
@@ -659,15 +747,15 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					DirectX11::D3D_StartRender();
 
 					RenderManager::Draw();
-
+#ifdef DEBUG_TRUE
+					ImGuiApp::DrawHandleUI(targetPos);
+#endif
 #ifdef SFTEXT_TRUE
 					SFTextManager::KeepExecuteDrawString();
 #endif
-
 #ifdef DEBUG_TRUE
 					ImGuiApp::Draw();
 #endif
-
 					DirectX11::D3D_FinishRender();
 				}
 			}
@@ -751,7 +839,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		// ウィンドウの状態を直ちに反映(ウィンドウのクライアント領域を更新)
 		UpdateWindow(hWnd);
 
-		DirectX11::CreateWindowSwapchain(hWnd);
+		DirectX11::CreateWindowSwapChain(hWnd);
 
 		m_hwndObjNames.insert(std::make_pair(hWnd, objectName));
 
@@ -764,20 +852,20 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_DELETE_WINDOW:
 	{
 		HWND hTargetWnd = (HWND)wParam;
-		auto& swaplist = DirectX11::m_pSwapChainList;
-		auto swapiter = swaplist.find(hTargetWnd);
-		if (swapiter != swaplist.end())
+		auto& swapList = DirectX11::m_pSwapChainList;
+		auto swapIter = swapList.find(hTargetWnd);
+		if (swapIter != swapList.end())
 		{
-			swapiter->second.Get()->Release();
-			swaplist.erase(swapiter);
+			swapIter->second.Get()->Release();
+			swapList.erase(swapIter);
 		}
 
-		auto& viewlist = DirectX11::m_pRenderTargetViewList;
-		auto viewiter = viewlist.find(hTargetWnd);
-		if (viewiter != viewlist.end())
+		auto& viewList = DirectX11::m_pRenderTargetViewList;
+		auto viewIter = viewList.find(hTargetWnd);
+		if (viewIter != viewList.end())
 		{
-			viewiter->second.Get()->Release();
-			viewlist.erase(viewiter);
+			viewIter->second.first.Get()->Release();
+			viewList.erase(viewIter);
 		}
 
 		auto objIter = m_hwndObjNames.find(hTargetWnd);
@@ -944,20 +1032,20 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_CLOSE:  // 「x」ボタンが押されたら
 	{
-		auto& swaplist = DirectX11::m_pSwapChainList;
-		auto swapiter = swaplist.find(hWnd);
-		if (swapiter != swaplist.end())
+		auto& swapList = DirectX11::m_pSwapChainList;
+		auto swapIter = swapList.find(hWnd);
+		if (swapIter != swapList.end())
 		{
-			swapiter->second.Get()->Release();
-			swaplist.erase(swapiter);
+			swapIter->second.Get()->Release();
+			swapList.erase(swapIter);
 		}
 
-		auto& viewlist = DirectX11::m_pRenderTargetViewList;
-		auto viewiter = viewlist.find(hWnd);
-		if (viewiter != viewlist.end())
+		auto& viewList = DirectX11::m_pRenderTargetViewList;
+		auto viewIter = viewList.find(hWnd);
+		if (viewIter != viewList.end())
 		{
-			viewiter->second.Get()->Release();
-			viewlist.erase(viewiter);
+			viewIter->second.first.Get()->Release();
+			viewList.erase(viewIter);
 		}
 
 		auto objIter = m_hwndObjNames.find(hWnd);
@@ -1128,7 +1216,7 @@ void SetWindowPosition(HWND _hWnd, Vector2 pos)
 
 	int x = static_cast<int>(pos.x) + Window::MONITER_HALF_WIDTH - (rect.right - rect.left) / 2;
 	int y = -static_cast<int>(pos.y) + Window::MONITER_HALF_HEIGHT - (rect.bottom - rect.top) / 2;
-	SetWindowPos(_hWnd, nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+	SetWindowPos(_hWnd, nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 }
 
 void Window::SetWindowMovable(HWND hwnd, bool movable) {

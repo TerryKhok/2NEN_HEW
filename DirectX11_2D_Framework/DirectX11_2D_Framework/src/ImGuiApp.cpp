@@ -16,6 +16,11 @@ ComPtr<ID3D11RenderTargetView> ImGuiApp::m_pRenderTargetView[TYPE_MAX];
 ComPtr<ID3D11ShaderResourceView> ImGuiApp::m_pIconTexture;
 ImTextureID ImGuiApp::m_imIconTexture;
 void(*ImGuiApp::pDrawImGui[ImGuiApp::TYPE_MAX])() = {};
+std::stack<std::function<void()>> ImGuiApp::changes;
+std::unordered_map<std::string, std::array<int, ImGuiApp::VALUE_TYPE_MAX>> ImGuiApp::updateValues;
+std::stack<std::unique_ptr<GameObject, void(*)(GameObject*)>> ImGuiApp::willDeleteObjects;
+
+ImGuiApp::HandleUI ImGuiApp::handleUi;
 
 void ImGuiSetKeyMap(ImGuiContext* _imguiContext);
 
@@ -171,6 +176,8 @@ HRESULT ImGuiApp::Init(HINSTANCE hInstance)
 		DirectX11::m_pDevice.Get(), _acicon_sheet_32x32, sizeof(_acicon_sheet_32x32) / sizeof(_acicon_sheet_32x32[0]), NULL, m_pIconTexture.GetAddressOf());
 
 	m_imIconTexture = (ImTextureID)m_pIconTexture.Get();
+
+	handleUi.Init();
 
 	return HRESULT();
 }
@@ -342,6 +349,8 @@ void RenderDirectoryTree(const fs::path& root_path) {
 	}
 }
 
+GameObject* selectedObject = nullptr;
+
 // 画面塗りつぶし色
 static float clearColor[4] = { 0.0f, 0.25f, 0.25f, 1.0f };
 
@@ -371,19 +380,31 @@ void ImGuiApp::Draw()
 	}
 }
 
-GameObject* selectedObject = nullptr;
-
 void ImGuiApp::DrawOptionGui()
 {
-	if (selectedObject != nullptr && ImGui::IsKeyPressed(ImGuiKey_Delete))
+	//オブジェクトを削除する
+	if (selectedObject != nullptr && Input::Get().KeyTrigger(VK_DELETE)/*ImGui::IsKeyPressed(ImGuiKey_Delete)*/)
 	{
 		auto& list = ObjectManager::m_currentList;
 		auto iter = list->find(selectedObject->name);
 		if (iter != list->end())
 		{
-			PointerRegistryManager::deletePointer(iter->second.get());
+			willDeleteObjects.push(std::move(iter->second));
+			willDeleteObjects.top()->SetActive(false);
+			//PointerRegistryManager::deletePointer(iter->second.get());
 			list->erase(iter);
 			selectedObject = nullptr;
+
+			changes.emplace([]() {
+				if (!willDeleteObjects.empty())
+				{
+					auto& object = willDeleteObjects.top();
+					selectedObject = object.get();
+					object->SetActive(true);
+					ObjectManager::m_currentList->emplace(std::make_pair(object->GetName(),std::move(object)));
+					willDeleteObjects.pop();
+				}
+				});
 		}
 	}
 
@@ -413,9 +434,35 @@ void ImGuiApp::DrawOptionGui()
 				{
 					if (pauseGame){
 						PostMessage(Window::GetMainHwnd(), WM_PAUSE_GAME, 0, 0);
+						float color[4] = { 0.1f,0.1f,0.1f,1.0f };
+						memcpy(clearColor, color, sizeof(color));
 					}
 					else{
 						PostMessage(Window::GetMainHwnd(), WM_RESUME_GAME, 0, 0);
+						float color[4] = { 0.0f,0.25f,0.25f,1.0f };
+						memcpy(clearColor, color, sizeof(color));
+
+						for (auto pair : updateValues)
+						{
+							auto object = ObjectManager::Find(pair.first);
+							if (object == nullptr) continue;
+
+							if (pair.second[BOX2D_POSITION] > 0)
+							{
+								object->GetComponent<Box2DBody>()->SetPosition(object->transform.position);
+							}
+							if (pair.second[BOX2D_ROTATION] > 0)
+							{
+								object->GetComponent<Box2DBody>()->SetAngle(object->transform.angle.z);
+							}
+							if (pair.second[WINDOW_POSITION] > 0)
+							{
+								auto windowRect = object->GetComponent<SubWindow>();
+								SetWindowPosition(windowRect->m_hWnd, object->transform.position);
+							}
+						}
+
+						updateValues.clear();
 					}
 
 					pauseGame = !pauseGame;
@@ -426,7 +473,7 @@ void ImGuiApp::DrawOptionGui()
 				if (ImGui::ImageButton("ReloadGame", m_imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
 				{
 					SceneManager::ReloadCurrentScene();
-					
+					updateValues.clear();
 				}
 				ImGui::PopStyleVar();
 				ImGui::ColorEdit3("clear color", clearColor); // Edit 3 floats representing a color
@@ -451,6 +498,13 @@ void ImGuiApp::DrawOptionGui()
 				ImGui::Checkbox("HitBox", &RenderManager::drawHitBox);
 				ImGui::Checkbox("Ray", &RenderManager::drawRay);
 				ImGui::Checkbox("Filter Table", &showFilterTable);
+				ImGui::EndTabItem();
+			}
+			if (ImGui::BeginTabItem("Camera"))
+			{
+				ImGui::InputFloat2("offset", RenderManager::renderOffset.data());
+				ImGui::InputFloat2("zoom", RenderManager::renderZoom.data());
+				ImGui::InputFloat("angle",&CameraManager::cameraRotation);
 				ImGui::EndTabItem();
 			}
 			ImGui::EndTabBar();
@@ -526,14 +580,24 @@ void ImGuiApp::DrawOptionGui()
 			if (ImGui::BeginTabItem("ObjectList"))
 			{
 				for (auto& object : *ObjectManager::m_currentList) {
-					bool selected = object.second.get() == selectedObject;
 					if (!object.second->active)
 					{
 						ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 0.4f)); // Set text color to red
 					}
-					if (ImGui::Selectable(object.second->GetName().c_str(), selected)) {
-						// Handle selection, e.g., highlighting the object or showing more details
-						selectedObject = object.second.get();
+					bool selected = object.second->isSelected == GameObject::SELECTED;
+					if (ImGui::Selectable(object.second->GetName().c_str(),selected))
+					{
+						if (selected)
+						{
+							InvalidSelectedObject();
+						}
+						else
+						{
+							// Handle selection, e.g., highlighting the object or showing more details
+							if (selectedObject != nullptr) selectedObject->isSelected = GameObject::SELECT_NONE;
+							selectedObject = object.second.get();
+							if (selectedObject != nullptr) selectedObject->isSelected = GameObject::SELECTED;
+						}
 					}
 					if (!object.second->active)
 					{
@@ -561,6 +625,7 @@ void ImGuiApp::DrawOptionGui()
 					if (ImGui::Selectable(scene.first.substr(5).c_str(), &current))
 					{
 						SceneManager::LoadScene(scene.first);
+						updateValues.clear();
 					}
 				}
 
@@ -600,6 +665,11 @@ void ImGuiApp::DrawInspectorGui()
 					{
 						auto box2d = selectedObject->GetComponent<Box2DBody>();
 						box2d->SetPosition(selectedObject->transform.position);
+					}
+					if (selectedObject->ExistComponent<SubWindow>())
+					{
+						auto windowRect = selectedObject->GetComponent<SubWindow>();
+						SetWindowPosition(windowRect->m_hWnd, selectedObject->transform.position);
 					}
 				}
 				ImGui::InputFloat3("Scale", selectedObject->transform.scale.data(), "%.1f");
@@ -660,8 +730,34 @@ void ImGuiApp::DrawInspectorGui()
 	ImGui::End();
 }
 
+
+void ImGuiApp::SetSelectedObject(GameObject* _object)
+{
+	selectedObject = _object;
+	if (selectedObject != nullptr)selectedObject->isSelected = GameObject::SELECTED;
+}
+
+void ImGuiApp::RewindChange()
+{
+	if (changes.empty()) return;
+
+	changes.top()();
+	changes.pop();
+}
+
+bool ImGuiApp::UpdateHandleUI(Vector2 _targetPos)
+{
+	return handleUi.Update(_targetPos);
+}
+
+void ImGuiApp::DrawHandleUI(const Vector2& _targetPos)
+{
+	handleUi.Draw(selectedObject, _targetPos);
+}
+
 void ImGuiApp::InvalidSelectedObject()
 {
+	if (selectedObject != nullptr)selectedObject->isSelected = GameObject::SELECT_NONE;
 	selectedObject = nullptr;
 }
 
@@ -738,6 +834,602 @@ LRESULT ImGuiApp::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	// Pass any unhandled messages to the default window procedure
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
+}
+
+ComPtr<ID3D11Buffer> ImGuiApp::HandleUI::m_arrowVertexBuffer;
+ComPtr<ID3D11Buffer> ImGuiApp::HandleUI::m_arrowIndexBuffer;
+
+HRESULT ImGuiApp::HandleUI::Init()
+{
+	if (m_arrowVertexBuffer.Get() != nullptr) return S_OK;
+
+	HRESULT  hr;
+
+	const auto dos = DEFAULT_OBJECT_SIZE;
+	const auto qDos = QUARTER_OBJECT_SIZE;
+
+	Vertex vertexList[] =
+	{
+		{ 0.0f,	  0.0f,			0.5f,	1.0f,1.0f,1.0f,1.0f,	0.0f,0.0f},
+		{ 0.0f,	  dos,			0.5f,	1.0f,1.0f,1.0f,1.0f,	1.0f,0.0f},
+		{-qDos,	  dos,			0.5f,	1.0f,1.0f,1.0f,1.0f,	0.0f,1.0f},
+		{ 0.0f,	  dos + qDos,	0.5f,	1.0f,1.0f,1.0f,1.0f,	1.0f,1.0f},
+		{ qDos,	  dos,			0.5f,	1.0f,1.0f,1.0f,1.0f,	1.0f,1.0f}
+	};
+
+	D3D11_BUFFER_DESC bufferDesc;
+	bufferDesc.ByteWidth = sizeof(vertexList);// 確保するバッファサイズを指定
+	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;// 頂点バッファ作成を指定
+	bufferDesc.CPUAccessFlags = 0;
+	bufferDesc.MiscFlags = 0;
+	bufferDesc.StructureByteStride = 0;
+
+	D3D11_SUBRESOURCE_DATA subResourceData;
+	subResourceData.pSysMem = vertexList;// VRAMに送るデータを指定
+	subResourceData.SysMemPitch = 0;
+	subResourceData.SysMemSlicePitch = 0;
+
+	hr = DirectX11::m_pDevice->CreateBuffer(&bufferDesc, &subResourceData, m_arrowVertexBuffer.GetAddressOf());
+	if (FAILED(hr))
+	{
+		MessageBoxA(NULL, "頂点バッファー作成失敗", "エラー", MB_ICONERROR | MB_OK);
+		return hr;
+	}
+
+	WORD indexList[]{
+		0,1,1,2,2,3,3,4,4,1
+	};
+
+	D3D11_BUFFER_DESC ibDesc;
+	ibDesc.ByteWidth = sizeof(indexList);
+	ibDesc.Usage = D3D11_USAGE_DEFAULT;
+	ibDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	ibDesc.CPUAccessFlags = 0;
+	ibDesc.MiscFlags = 0;
+	ibDesc.StructureByteStride = 0;
+
+	D3D11_SUBRESOURCE_DATA irData;
+	irData.pSysMem = indexList;
+	irData.SysMemPitch = 0;
+	irData.SysMemSlicePitch = 0;
+
+	hr = DirectX11::m_pDevice->CreateBuffer(&ibDesc, &irData, m_arrowIndexBuffer.GetAddressOf());
+	if (FAILED(hr))
+	{
+		MessageBoxA(NULL, "インデックスバッファー作成失敗", "エラー", MB_ICONERROR | MB_OK);
+
+		return hr;
+	}
+
+	return S_OK;
+}
+
+// Function to calculate the squared distance between two points
+float squaredDistance(const Vector2& p1, const Vector2& p2) {
+	return (p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y);
+}
+
+// Function to project a point onto a line segment and return the closest point
+Vector2 closestPointOnSegment(const Vector2& p, const Vector2& a, const Vector2& b) {
+	Vector2 ab = { b.x - a.x, b.y - a.y };
+	Vector2 ap = { p.x - a.x, p.y - a.y };
+
+	float abSquared = ab.x * ab.x + ab.y * ab.y;
+	float projection = (ap.x * ab.x + ap.y * ab.y) / abSquared;
+
+	// Clamp the projection to the [0, 1] range
+	projection = (std::max)(0.0f, (std::min)(1.0f, projection));
+
+	return { a.x + projection * ab.x, a.y + projection * ab.y };
+}
+
+// Function to find the closest intersection
+Vector2 closestIntersection(const Vector2& p, const Vector2 quad[4]) {
+	float minDist = (std::numeric_limits<float>::max)();
+	Vector2 closestPoint;
+
+	// Iterate through each edge of the quadrilateral
+	for (int i = 0; i < 4; ++i) {
+		Vector2 a = quad[i];
+		Vector2 b = quad[(i + 1) % 4]; // Wrap around to the first vertex
+
+		// Find the closest point on the edge
+		Vector2 candidate = closestPointOnSegment(p, a, b);
+
+		// Update the closest point if the distance is smaller
+		float dist = squaredDistance(p, candidate);
+		if (dist < minDist) {
+			minDist = dist;
+			closestPoint = candidate;
+		}
+	}
+
+	return closestPoint;
+}
+
+float moveScaleRad;
+
+bool ImGuiApp::HandleUI::Update(Vector2 _targetPos)
+{
+	if (selectedObject == nullptr) return false;
+
+	const float scaleX = HALF_OBJECT_SIZE / RenderManager::renderZoom.x;
+	const float scaleY = HALF_OBJECT_SIZE / RenderManager::renderZoom.y;
+	const float sizeX = QUARTER_OBJECT_SIZE * scaleX;
+	const float sizeY = QUARTER_OBJECT_SIZE * scaleY;
+
+	switch (handleMode)
+	{
+	case POSITION:
+	{
+		static Vector2 offset;
+		static Vector2 beforePos;
+
+		switch (moveMode)
+		{
+		case NONE:
+		case VERTICAL_POS_ON_MOUSE:
+		case HORIZON_POS_ON_MOUSE:
+		case MOVE_POS_ON_MOUSE:
+		{
+			Vector2 objectPos = selectedObject->transform.position;
+			objectPos.y += DEFAULT_OBJECT_SIZE * scaleY;
+
+			if ((objectPos.x - sizeX) < _targetPos.x &&
+				(objectPos.x + sizeX) > _targetPos.x &&
+				(objectPos.y - sizeY) < _targetPos.y &&
+				(objectPos.y + sizeY) > _targetPos.y)
+			{
+				moveMode = VERTICAL_POS_ON_MOUSE;
+				if (Input::Get().MouseLeftTrigger())
+				{
+					moveMode = VERTICAL_POS;
+					beforePos = selectedObject->transform.position;
+					offset = (Vector2)selectedObject->transform.position - _targetPos;
+				}
+				return true;
+			}
+			objectPos.y = selectedObject->transform.position.y;
+			objectPos.x += DEFAULT_OBJECT_SIZE * scaleX;
+
+			if ((objectPos.x - sizeX) < _targetPos.x &&
+				(objectPos.x + sizeX) > _targetPos.x &&
+				(objectPos.y - sizeY) < _targetPos.y &&
+				(objectPos.y + sizeY) > _targetPos.y)
+			{
+				moveMode = HORIZON_POS_ON_MOUSE;
+				if (Input::Get().MouseLeftTrigger())
+				{
+					moveMode = HORIZON_POS;
+					beforePos = selectedObject->transform.position;
+					offset = (Vector2)selectedObject->transform.position - _targetPos;
+				}
+				return true;
+			}
+			objectPos.x = selectedObject->transform.position.x;
+			objectPos.x += QUARTER_OBJECT_SIZE * scaleX;
+			objectPos.y += QUARTER_OBJECT_SIZE * scaleY;
+
+			if ((objectPos.x - sizeX) < _targetPos.x &&
+				(objectPos.x + sizeX) > _targetPos.x &&
+				(objectPos.y - sizeY) < _targetPos.y &&
+				(objectPos.y + sizeY) > _targetPos.y)
+			{
+				moveMode = MOVE_POS_ON_MOUSE;
+				if (Input::Get().MouseLeftTrigger())
+				{
+					moveMode = MOVE_POS;
+					beforePos = selectedObject->transform.position;
+					offset = (Vector2)selectedObject->transform.position - _targetPos;
+				}
+				return true;
+			}
+
+			moveMode = NONE;
+		}
+		break;
+		case VERTICAL_POS:
+		{
+			//if (selectedObject != nullptr)
+			{
+				selectedObject->transform.position.y = _targetPos.y + offset.y;
+			}
+			if (Input::Get().MouseLeftRelease())
+			{
+				changes.emplace(std::bind([](GameObject* obj, Vector2 pos,std::function<void()> func) {
+					if (obj != nullptr)
+					{
+						obj->transform.position = pos;
+						func();
+					}
+					}, selectedObject, beforePos,std::move(SetChangeValue(selectedObject, moveMode))));
+				moveMode = NONE;
+			}
+
+			return true;
+		}
+		break;
+		case HORIZON_POS:
+		{
+			//if (selectedObject != nullptr)
+			{
+				selectedObject->transform.position.x = _targetPos.x + offset.x;
+			}
+			if (Input::Get().MouseLeftRelease())
+			{
+				changes.emplace(std::bind([](GameObject* obj, Vector2 pos, std::function<void()> func) {
+					if (obj != nullptr)
+					{
+						obj->transform.position = pos;
+						func();
+					}
+					}, selectedObject, beforePos, std::move(SetChangeValue(selectedObject, moveMode))));
+				moveMode = NONE;
+			}
+
+			return true;
+		}
+		break;
+		case MOVE_POS:
+		{
+			//if (selectedObject != nullptr)
+			{
+				selectedObject->transform.position = _targetPos + offset;
+			}
+			if (Input::Get().MouseLeftRelease())
+			{
+				changes.emplace(std::bind([](GameObject* obj, Vector2 pos, std::function<void()> func) {
+					if (obj != nullptr)
+					{
+						obj->transform.position = pos;
+						func();
+					}
+					}, selectedObject, beforePos, std::move(SetChangeValue(selectedObject, moveMode))));
+				moveMode = NONE;
+			}
+
+			return true;
+		}
+		break;
+		}		
+	}
+	break;
+	case ROTATION:
+	{
+		static Vector2 oldPos;
+		static double beforeRad;
+
+		switch (moveMode)
+		{
+		case NONE:
+		case MOVE_ROTATION_ON_MOUSE:
+		{
+			const Vector2 center = selectedObject->transform.position;
+			Vector2 dis = _targetPos - center;
+			float length = 
+				sqrtf(powf(dis.x * RenderManager::renderZoom.x, 2) + powf(dis.y * RenderManager::renderZoom.y, 2));
+			const float radiusX = HALF_OBJECT_SIZE * HALF_OBJECT_SIZE;
+			if(length > radiusX * 1.5 && length < radiusX * 2.5)
+			{
+				moveMode = MOVE_ROTATION_ON_MOUSE;
+				if (Input::Get().MouseLeftTrigger())
+				{
+					moveMode = MOVE_ROTATION;
+					oldPos = _targetPos;
+					beforeRad = selectedObject->transform.angle.z.Get();
+				}
+
+				return true;
+			}
+			moveMode = NONE;
+		}
+		break;
+		case MOVE_ROTATION:
+		{
+			//if (selectedObject != nullptr)
+			{
+				Vector2 dis = _targetPos - oldPos;
+				const auto& center = selectedObject->transform.position;
+				float rad = atan2f(_targetPos.y - center.y, _targetPos.x - center.x); // Calculate angle in radians
+				selectedObject->transform.angle.z += 
+					dis.x * -sin(rad) * RenderManager::renderZoom.x + dis.y * cos(rad) * RenderManager::renderZoom.y;
+				oldPos = _targetPos;
+			}
+			if (Input::Get().MouseLeftRelease())
+			{
+				changes.emplace(std::bind([](GameObject* obj, double rad, std::function<void()> func) {
+					if (obj != nullptr)
+					{
+						obj->transform.angle.z.Set(rad);
+						func();
+					}
+					}, selectedObject, beforeRad, std::move(SetChangeValue(selectedObject, moveMode))));
+				moveMode = NONE;
+			}
+
+			return true;
+		}
+		break;
+		}
+	}
+	break;
+	case SCALE:
+	{
+		static Vector2 oldPos;
+		static Vector2 beforeScale;
+
+		switch (moveMode)
+		{
+		case NONE:
+		case MOVE_SCALE_ON_MOUSE:
+		{
+			const auto& center = selectedObject->transform.position;
+			Vector2 size = selectedObject->transform.scale * HALF_OBJECT_SIZE * 1.5f;
+			size.x /= RenderManager::renderZoom.x;
+			size.y /= RenderManager::renderZoom.y;
+			Vector2 quad[4] =
+			{
+				{center.x - size.x,center.y + size.y},
+				{center.x + size.x,center.y + size.y},
+				{center.x + size.x,center.y - size.y},
+				{center.x - size.x,center.y - size.y}
+			};
+			Vector2 closePos = closestIntersection(_targetPos, quad);
+			Vector2 dis = _targetPos - closePos;
+			float length = sqrtf(powf(dis.x * RenderManager::renderZoom.x, 2) + powf(dis.y * RenderManager::renderZoom.y, 2));
+			if (length < 10)
+			{
+				moveMode = MOVE_SCALE_ON_MOUSE;
+				moveScaleRad = atan2f(closePos.y / size.y - center.y / size.y, closePos.x / size.x - center.x / size.x);
+				moveScaleRad = fmod(Math::PI2 + moveScaleRad, Math::PI2);
+				moveScaleRad = (int)((moveScaleRad + Math::qPI / 2) / Math::qPI) * Math::qPI;
+				if (Input::Get().MouseLeftTrigger())
+				{
+					moveMode = MOVE_SCALE;
+					oldPos = _targetPos;
+					beforeScale = selectedObject->transform.scale;
+				}
+
+				return true;
+			}
+			moveMode = NONE;
+		}
+		break;
+		case MOVE_SCALE:
+		{
+			Vector2 dis = _targetPos - oldPos;
+			auto& scale = selectedObject->transform.scale;
+			scale.x += (dis.x * cos(moveScaleRad)) / (DEFAULT_OBJECT_SIZE/ RenderManager::renderZoom.x);
+			scale.y += (dis.y * sin(moveScaleRad)) / (DEFAULT_OBJECT_SIZE / RenderManager::renderZoom.y);
+			oldPos = _targetPos;
+
+			if (Input::Get().MouseLeftRelease())
+			{
+				changes.emplace(std::bind([](GameObject* obj, Vector2 scale, std::function<void()> func) {
+					if (obj != nullptr)
+					{
+						obj->transform.scale = scale;
+						func();
+					}
+					}, selectedObject, beforeScale, std::move(SetChangeValue(selectedObject, moveMode))));
+				moveMode = NONE;
+			}
+
+			return true;
+		}
+		break;
+		}
+	}
+	break;
+	}
+	return false;
+}
+
+void ImGuiApp::HandleUI::Draw(const GameObject* _target,const Vector2 _targetPos)
+{
+	if (_target == nullptr) return;
+
+	// 描画先のキャンバスと使用する深度バッファを指定する
+	DirectX11::m_pDeviceContext->OMSetRenderTargets(1,
+		DirectX11::m_pRenderTargetViewList[Window::GetMainHwnd()].first.GetAddressOf(), DirectX11::m_pDepthStencilView.Get());
+
+
+	RenderManager::SetMainCameraMatrix();
+
+	DirectX11::m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+
+	//テクスチャをピクセルシェーダーに渡す
+	DirectX11::m_pDeviceContext->PSSetShaderResources(0, 1, DirectX11::m_pTextureView.GetAddressOf());
+
+	UINT strides = sizeof(Vertex);
+	UINT offsets = 0;
+
+	static VSObjectConstantBuffer cb;
+
+	const auto& transform = _target->transform;
+
+	const float scaleX = HALF_OBJECT_SIZE / RenderManager::renderZoom.x;
+	const float scaleY = HALF_OBJECT_SIZE / RenderManager::renderZoom.y;
+
+	switch (handleMode)
+	{
+	case POSITION:
+	{
+		DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, m_arrowVertexBuffer.GetAddressOf(), &strides, &offsets);
+		DirectX11::m_pDeviceContext->IASetIndexBuffer(m_arrowIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+
+		//ワールド変換行列の作成
+		//ー＞オブジェクトの位置・大きさ・向きを指定
+		cb.world = DirectX::XMMatrixScaling(scaleX, scaleY, 1.0f);
+		cb.world *= DirectX::XMMatrixRotationZ(0.0f);
+		cb.world *= DirectX::XMMatrixTranslation(transform.position.x, transform.position.y, 0.0f);
+		cb.world = DirectX::XMMatrixTranspose(cb.world);
+		if (moveMode == VERTICAL_POS_ON_MOUSE || moveMode == VERTICAL_POS)
+			cb.color = XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f);
+		else
+			cb.color = XMFLOAT4(0.5f, 0.0f, 0.0f, 1.0f);
+	
+		//行列をシェーダーに渡す
+		DirectX11::m_pDeviceContext->UpdateSubresource(
+			DirectX11::m_pVSObjectConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
+
+		DirectX11::m_pDeviceContext->DrawIndexed(10, 0, 0);
+
+		//ワールド変換行列の作成
+		//ー＞オブジェクトの位置・大きさ・向きを指定
+		cb.world = DirectX::XMMatrixScaling(scaleY,scaleX,1.0f);
+		cb.world *= DirectX::XMMatrixRotationZ(-Math::PI / 2);
+		cb.world *= DirectX::XMMatrixTranslation(transform.position.x, transform.position.y, 0.0f);
+		cb.world = DirectX::XMMatrixTranspose(cb.world);
+		if (moveMode == HORIZON_POS_ON_MOUSE || moveMode == HORIZON_POS)
+			cb.color = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
+		else
+			cb.color = XMFLOAT4(0.0f, 0.5f, 0.0f, 1.0f);
+	
+		//行列をシェーダーに渡す
+		DirectX11::m_pDeviceContext->UpdateSubresource(
+			DirectX11::m_pVSObjectConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
+
+		DirectX11::m_pDeviceContext->DrawIndexed(10, 0, 0);
+
+		//設定戻す
+		//======================================================================================================================
+		DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_vertexBuffer.GetAddressOf(), &strides, &offsets);
+		DirectX11::m_pDeviceContext->IASetIndexBuffer(RenderManager::m_indexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+
+		DirectX11::m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		//======================================================================================================================
+
+		//ワールド変換行列の作成
+		//ー＞オブジェクトの位置・大きさ・向きを指定
+		cb.world = DirectX::XMMatrixScaling(scaleX / 2, scaleY / 2, 1.0f);
+		cb.world *= DirectX::XMMatrixRotationZ(0.0f);
+		cb.world *= DirectX::XMMatrixTranslation(transform.position.x + scaleX * 2.5f, transform.position.y + scaleY * 2.5f, 0.0f);
+		cb.world = DirectX::XMMatrixTranspose(cb.world);
+		if (moveMode == MOVE_POS_ON_MOUSE || moveMode == MOVE_POS)
+			cb.color = XMFLOAT4(1.0f, 1.0f, 0.0f, 0.75f);
+		else
+			cb.color = XMFLOAT4(0.5f, 0.5f, 0.0f, 0.75f);
+
+		//行列をシェーダーに渡す
+		DirectX11::m_pDeviceContext->UpdateSubresource(
+			DirectX11::m_pVSObjectConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
+
+		DirectX11::m_pDeviceContext->DrawIndexed(6, 0, 0);
+	}
+	break;
+	case ROTATION:
+	{
+		DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, Box2DBodyManager::m_circleVertexBuffer.GetAddressOf(), &strides, &offsets);
+		DirectX11::m_pDeviceContext->IASetIndexBuffer(Box2DBodyManager::m_circleIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+
+		//ワールド変換行列の作成
+		//ー＞オブジェクトの位置・大きさ・向きを指定
+		cb.world = DirectX::XMMatrixScaling(scaleX * 2, scaleY* 2, 1.0f);
+		cb.world *= DirectX::XMMatrixRotationZ(0.0f);
+		cb.world *= DirectX::XMMatrixTranslation(transform.position.x, transform.position.y, 0.0f);
+		cb.world = DirectX::XMMatrixTranspose(cb.world);
+		if (moveMode == MOVE_ROTATION_ON_MOUSE || moveMode == MOVE_ROTATION)
+			cb.color = XMFLOAT4(1.0f, 0.0f, 1.0f, 0.75f);
+		else
+			cb.color = XMFLOAT4(0.5f, 0.0f, 0.5f, 0.75f);
+
+		//行列をシェーダーに渡す
+		DirectX11::m_pDeviceContext->UpdateSubresource(
+			DirectX11::m_pVSObjectConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
+
+		DirectX11::m_pDeviceContext->DrawIndexed(Box2DBodyManager::numSegments * 2, 0, 0);
+	}
+	break;
+	case SCALE:
+	{
+		DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_vertexBuffer.GetAddressOf(), &strides, &offsets);
+		DirectX11::m_pDeviceContext->IASetIndexBuffer(Box2DBodyManager::m_boxIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+
+		//ワールド変換行列の作成
+		//ー＞オブジェクトの位置・大きさ・向きを指定
+		cb.world = DirectX::XMMatrixScaling(_target->transform.scale.x * 1.5f / RenderManager::renderZoom.x, 
+			_target->transform.scale.y * 1.5f / RenderManager::renderZoom.y, 1.0f);
+		cb.world *= DirectX::XMMatrixRotationZ(0.0f);
+		cb.world *= DirectX::XMMatrixTranslation(transform.position.x, transform.position.y, 0.0f);
+		cb.world = DirectX::XMMatrixTranspose(cb.world);
+		bool pick = moveMode == MOVE_SCALE_ON_MOUSE || moveMode == MOVE_SCALE;
+		if (pick)
+			cb.color = XMFLOAT4(1.0f, 0.56f, 0.0f, 0.75f);
+		else
+			cb.color = XMFLOAT4(0.54f, 0.27f, 0.07f, 0.75f);
+
+		//行列をシェーダーに渡す
+		DirectX11::m_pDeviceContext->UpdateSubresource(
+			DirectX11::m_pVSObjectConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
+
+		DirectX11::m_pDeviceContext->DrawIndexed(8, 0, 0);
+
+		if (pick)
+		{
+			DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, m_arrowVertexBuffer.GetAddressOf(), &strides, &offsets);
+			DirectX11::m_pDeviceContext->IASetIndexBuffer(m_arrowIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+
+			//ワールド変換行列の作成
+			//ー＞オブジェクトの位置・大きさ・向きを指定
+			cb.world = DirectX::XMMatrixScaling(scaleX / 2, scaleY / 2, 1.0f);
+			cb.world *= DirectX::XMMatrixRotationZ(moveScaleRad - Math::hPI);
+			cb.world *= DirectX::XMMatrixTranslation(_targetPos.x, _targetPos.y, 0.0f);
+			cb.world = DirectX::XMMatrixTranspose(cb.world);
+			cb.color = XMFLOAT4(1.0f, 0.56f, 0.0f, 0.75f);
+	
+			//行列をシェーダーに渡す
+			DirectX11::m_pDeviceContext->UpdateSubresource(
+				DirectX11::m_pVSObjectConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
+
+			DirectX11::m_pDeviceContext->DrawIndexed(10, 0, 0);
+		}
+	}
+	break;
+	}
+
+	
+}
+
+std::function<void()> ImGuiApp::HandleUI::SetChangeValue(GameObject* _object, MOVE_MODE _moveMode)
+{
+	std::vector<UPDATE_VALUE_TYPE> types;
+	switch (_moveMode)
+	{
+	case VERTICAL_POS:
+	case HORIZON_POS:
+	case MOVE_POS:
+		if (_object->ExistComponent<Box2DBody>())
+			types.emplace_back(BOX2D_POSITION);
+		if (_object->ExistComponent<SubWindow>())
+			types.emplace_back(WINDOW_POSITION);
+		break;
+	case MOVE_ROTATION:
+		if (_object->ExistComponent<Box2DBody>())
+			types.emplace_back(BOX2D_ROTATION);
+		break;
+	}
+
+	decltype(updateValues)::iterator iter = updateValues.find(_object->GetName());
+	if (iter == updateValues.end())
+	{
+		iter = updateValues.emplace(std::make_pair(_object->GetName(), std::array<int, VALUE_TYPE_MAX>{})).first;
+	}
+
+	for (auto& type : types)
+	{
+		iter->second[type]++;
+	}
+	
+	return std::move(std::bind([](std::string _name, std::vector<UPDATE_VALUE_TYPE> _types) {
+		auto it = updateValues.find(_name);
+		if (it != updateValues.end())
+			for (auto& type : _types)
+			{
+				it->second[type]--;
+			}
+		}, _object->GetName(), std::move(types)));
 }
 
 void ImGuiSetKeyMap(ImGuiContext* _imguiContext)

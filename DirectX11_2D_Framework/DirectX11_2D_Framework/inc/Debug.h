@@ -1,6 +1,5 @@
 #pragma once
 
-
 const char* relativePath(const char* _fullPath);
 void setConsoleTextColor(unsigned int _color);
 

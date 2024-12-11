@@ -42,7 +42,7 @@ public:
 		box2d->SetFilter(F_WINDOW);
 		box2d->CreateBoxShape(true);
 		object->AddComponent<Renderer>();
-		object->AddComponent<WindowRect>("UntiGravity");
+		object->AddComponent<SubWindow>("UntiGravity");
 		object->AddComponent<AntiGravity>();
 
 		object = Instantiate("StaticBox_Ground_Polygon");

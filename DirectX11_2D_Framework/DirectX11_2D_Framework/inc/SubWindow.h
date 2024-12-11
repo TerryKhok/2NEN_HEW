@@ -1,16 +1,34 @@
 #pragma once
 
-class WindowRect : public Component
+class SubWindow : public Component
 {
+	friend class GameObject;
+	friend class ImGuiApp;
+
 public:
-	WindowRect(GameObject* _object){
+	void DisableDrawLayer(LAYER _layer)
+	{
+		auto& viewList = DirectX11::m_pRenderTargetViewList;
+		auto iter = viewList.find(m_hWnd);
+		if (iter != viewList.end())
+		{
+			auto& layerList = iter->second.second;
+			auto it = std::find(layerList.begin(), layerList.end(), _layer);
+			if (it != layerList.end())
+			{
+				layerList.erase(it);
+			}
+		}
+	}
+private:
+	SubWindow(GameObject* _object){
 		Vector2 size = _object->transform.scale;
 		int width = static_cast<int>(size.x * DEFAULT_OBJECT_SIZE);
 		int height = static_cast<int>(size.y * DEFAULT_OBJECT_SIZE);
 		m_hWnd = Window::pWindowSubCreate(_object->GetName(), _object->GetName(), width, height, _object->transform.position);
 	}
 
-	WindowRect(GameObject* _object,const char* _windowName) {
+	SubWindow(GameObject* _object,const char* _windowName) {
 		Vector2 size = _object->transform.scale;
 		int width = static_cast<int>(size.x * DEFAULT_OBJECT_SIZE);
 		int height = static_cast<int>(size.y * DEFAULT_OBJECT_SIZE);

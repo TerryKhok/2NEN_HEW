@@ -23,12 +23,19 @@ class ImGuiApp
 {
 	friend class Window;
 
-
 	enum WINDOW_TYPE
 	{
 		OPTIONS,
 		INSPECTER,
 		TYPE_MAX
+	};
+
+	enum UPDATE_VALUE_TYPE
+	{
+		BOX2D_POSITION,
+		BOX2D_ROTATION,
+		WINDOW_POSITION,
+		VALUE_TYPE_MAX
 	};
 
 private:
@@ -40,6 +47,13 @@ private:
 
 	static void DrawOptionGui();
 	static void DrawInspectorGui();
+	
+	static void SetSelectedObject(GameObject* _object);
+
+	static void RewindChange();
+
+	static bool UpdateHandleUI(Vector2 _targetPos);
+	static void DrawHandleUI(const Vector2& _targetPos);
 	
 	static void UnInit();
 public:
@@ -61,6 +75,53 @@ private:
 	static ComPtr<ID3D11ShaderResourceView> m_pIconTexture;
 	static ImTextureID m_imIconTexture;
 	static void(*pDrawImGui[TYPE_MAX])();
+	static std::stack<std::function<void()>> changes;
+	static std::unordered_map<std::string, std::array<int, VALUE_TYPE_MAX>> updateValues;
+	static std::stack<std::unique_ptr<GameObject, void(*)(GameObject*)>> willDeleteObjects;
+private:
+	class HandleUI
+	{
+		friend class Window;
+
+		enum HANDLE_MODE
+		{
+			POSITION,
+			ROTATION,
+			SCALE,
+			HANDLE_MODE_MAX
+		};
+
+		enum MOVE_MODE
+		{
+			NONE,
+			VERTICAL_POS,
+			VERTICAL_POS_ON_MOUSE,
+			HORIZON_POS,
+			HORIZON_POS_ON_MOUSE,
+			MOVE_POS,
+			MOVE_POS_ON_MOUSE,
+			MOVE_ROTATION,
+			MOVE_ROTATION_ON_MOUSE,
+			MOVE_SCALE,
+			MOVE_SCALE_ON_MOUSE,
+			MODE_MODE_MAX
+		};
+
+		friend class ImGuiApp;
+
+		HandleUI() = default;
+		HRESULT Init();
+		bool Update(Vector2 _targetPos);
+		void Draw(const GameObject* _target,const Vector2 _targetPos);
+		std::function<void()> SetChangeValue(GameObject* _object, MOVE_MODE _moveMode);
+
+		static ComPtr<ID3D11Buffer> m_arrowVertexBuffer;
+		static ComPtr<ID3D11Buffer> m_arrowIndexBuffer;
+		HANDLE_MODE handleMode = POSITION;
+		MOVE_MODE moveMode = NONE;
+	};
+
+	static HandleUI handleUi;
 };
 
 

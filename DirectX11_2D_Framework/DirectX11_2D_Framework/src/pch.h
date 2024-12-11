@@ -16,6 +16,8 @@
 #include <dxgi.h>
 #include<DirectXMath.h>
 
+#define NOMINMAX
+
 #include<windows.h>
 #include <wincodec.h>
 #include <d3dcompiler.h>
@@ -80,6 +82,7 @@
 #include <fstream>
 #include <filesystem>
 #include <exception>
+#include <limits>
 
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
@@ -93,12 +96,12 @@
 #include "../../DirectX11_2D_Framework/inc/Utility.h"
 #include "../../DirectX11_2D_Framework/inc/sound.h"
 #include "../../DirectX11_2D_Framework/inc/Debug.h"
+#include "../../DirectX11_2D_Framework/src/Layer.h"
 #include "../../DirectX11_2D_Framework/inc/Window.h"
 #include "../../DirectX11_2D_Framework/inc/directX3D.h"
 #include "../../DirectX11_2D_Framework/inc/ImGuiApp.h"
 #include "../../DirectX11_2D_Framework/inc/Input.h"
 #include "../../DirectX11_2D_Framework/inc/TextureAsset.h"
-#include "../../DirectX11_2D_Framework/src/Layer.h"
 #include "../../DirectX11_2D_Framework/inc/Box2D.h"
 #include "../../DirectX11_2D_Framework/inc/Component.h"
 #include "../../DirectX11_2D_Framework/inc/Animator.h"
@@ -108,7 +111,7 @@
 #include "../../DirectX11_2D_Framework/inc/Scene.h"
 #include "../../DirectX11_2D_Framework/inc/Box2DBody.h"
 #include "../../DirectX11_2D_Framework/inc/Camera.h"
-#include "../../DirectX11_2D_Framework/inc/WindowRect.h"
+#include "../../DirectX11_2D_Framework/inc/SubWindow.h"
 #include "../../DirectX11_2D_Framework/inc/Button.h"
 #endif
 

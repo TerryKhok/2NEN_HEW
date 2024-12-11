@@ -58,6 +58,7 @@ class DirectX11 final
 {
 	friend class Window;
 	friend class ImGuiApp;
+	friend class SubWindow;
 	friend class DWTextManager;
 	friend class TextureAssets;
 	friend class RenderNode;
@@ -95,7 +96,7 @@ private:
 	//1pixelのテクスチャ作成
 	static void CreateOnePixelTexture(ID3D11ShaderResourceView** _resourceView);
 	//ウィンドウに対応した新しいスワップチェイン作成
-	static HRESULT CreateWindowSwapchain(HWND hWnd);
+	static HRESULT CreateWindowSwapChain(HWND hWnd);
 	//テクスチャの解像度を取得する
 	static void GetTextureDpi(ID3D11ShaderResourceView* _view, UINT& _width, UINT& _height);
 
@@ -109,7 +110,7 @@ private:
 	// スワップチェイン＝ダブルバッファ機能
 	static std::unordered_map<HWND, ComPtr<IDXGISwapChain>> m_pSwapChainList;
 	// レンダーターゲット＝描画先を表す機能
-	static std::unordered_map<HWND, ComPtr<ID3D11RenderTargetView>> m_pRenderTargetViewList;
+	static std::unordered_map<HWND, std::pair<ComPtr<ID3D11RenderTargetView>, std::vector<LAYER>>> m_pRenderTargetViewList;
 	//デプスステート
 	static ComPtr<ID3D11DepthStencilState> m_pDSState;
 	// デプスバッファ

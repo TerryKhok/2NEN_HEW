@@ -30,7 +30,7 @@
 #define PROJECTION_HEIGHT (480)
 //================================================================
 
-	//画面の大きさと座標の大きさの比
+//画面の大きさと座標の大きさの比
 constexpr float DISPALY_ASPECT_WIDTH = static_cast<float>(SCREEN_WIDTH) / PROJECTION_WIDTH;
 constexpr float DISPALY_ASPECT_HEIGHT = static_cast<float>(SCREEN_HEIGHT) / PROJECTION_HEIGHT;
 
@@ -64,7 +64,6 @@ void SetWindowPosition(HWND _hWnd, Vector2 pos);
 class Window final
 {
 public:
-
 	//モニターの解像度所得
 	static int MONITER_HALF_WIDTH;
 	static int MONITER_HALF_HEIGHT;
