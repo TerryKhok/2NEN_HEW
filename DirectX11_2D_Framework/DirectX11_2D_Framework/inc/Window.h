@@ -110,6 +110,7 @@ public:
 	static void WindowSubLoadingEnd();
 	//現在のウィンドウを保持しているオブジェクトを破棄する
 	static void WindowSubHide();
+	static void WindowSubHide(HWND _hWnd);
 
 	//ウィンドウ初期化(シーンの初期化を渡す)
 	static LRESULT WindowInit(void(*p_mainInitFunc)(void));

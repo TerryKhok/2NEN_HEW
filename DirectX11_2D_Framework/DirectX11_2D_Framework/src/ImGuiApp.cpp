@@ -382,32 +382,6 @@ void ImGuiApp::Draw()
 
 void ImGuiApp::DrawOptionGui()
 {
-	//オブジェクトを削除する
-	if (selectedObject != nullptr && Input::Get().KeyTrigger(VK_DELETE)/*ImGui::IsKeyPressed(ImGuiKey_Delete)*/)
-	{
-		auto& list = ObjectManager::m_currentList;
-		auto iter = list->find(selectedObject->name);
-		if (iter != list->end())
-		{
-			willDeleteObjects.push(std::move(iter->second));
-			willDeleteObjects.top()->SetActive(false);
-			//PointerRegistryManager::deletePointer(iter->second.get());
-			list->erase(iter);
-			selectedObject = nullptr;
-
-			changes.emplace([]() {
-				if (!willDeleteObjects.empty())
-				{
-					auto& object = willDeleteObjects.top();
-					selectedObject = object.get();
-					object->SetActive(true);
-					ObjectManager::m_currentList->emplace(std::make_pair(object->GetName(),std::move(object)));
-					willDeleteObjects.pop();
-				}
-				});
-		}
-	}
-
 	if (ImGui::Begin("Status"))
 	{
 		ImGui::Text("world average %.3f ms/frame (%d FPS)", 1000.0f / worldFpsCounter, worldFpsCounter);
@@ -735,6 +709,42 @@ void ImGuiApp::SetSelectedObject(GameObject* _object)
 {
 	selectedObject = _object;
 	if (selectedObject != nullptr)selectedObject->isSelected = GameObject::SELECTED;
+}
+
+void ImGuiApp::DeleteSelectedObject(bool _pause)
+{
+	//オブジェクトを削除する
+	if (selectedObject != nullptr /* && ImGui::IsKeyPressed(ImGuiKey_Delete)*/)
+	{
+		auto& list = ObjectManager::m_currentList;
+		auto iter = list->find(selectedObject->name);
+		if (iter != list->end())
+		{
+			if (_pause)
+			{
+				willDeleteObjects.push(std::move(iter->second));
+				willDeleteObjects.top()->SetActive(false);
+
+				changes.emplace([]() {
+					if (!willDeleteObjects.empty())
+					{
+						auto& object = willDeleteObjects.top();
+						selectedObject = object.get();
+						object->SetActive(true);
+						ObjectManager::m_currentList->emplace(std::make_pair(object->GetName(), std::move(object)));
+						willDeleteObjects.pop();
+					}
+					});
+			}
+			else
+			{
+				PointerRegistryManager::deletePointer(iter->second.get());
+			}
+			list->erase(iter);
+			selectedObject = nullptr;
+
+		}
+	}
 }
 
 void ImGuiApp::RewindChange()

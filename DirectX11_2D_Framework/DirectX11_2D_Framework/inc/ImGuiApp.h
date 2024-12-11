@@ -49,6 +49,7 @@ private:
 	static void DrawInspectorGui();
 	
 	static void SetSelectedObject(GameObject* _object);
+	static void DeleteSelectedObject(bool _pause);
 
 	static void RewindChange();
 

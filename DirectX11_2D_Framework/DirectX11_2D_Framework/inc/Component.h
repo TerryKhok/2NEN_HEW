@@ -66,6 +66,10 @@ private:
 	virtual void OnColliderEnter(GameObject* _ohter) {}
 	//オブジェクトのセンサーから出た時
 	virtual void OnColliderExit(GameObject* _other) {}
+	//オブジェクトのセンサーに侵入したとき
+	virtual void OnCollisionEnter(GameObject* _ohter) {}
+	//オブジェクトのセンサーから出た時
+	virtual void OnCollisionExit(GameObject* _other) {}
 	//ウィンドウを触った時
 	virtual void OnWindowEnter(HWND _target) {}
 	//ウィンドウを離した時

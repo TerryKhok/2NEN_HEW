@@ -159,7 +159,7 @@ bool pauseGame = false;
 HWND Window::WindowSubCreate(std::string _objName, std::string _windowName, int _width, int _height, Vector2 _pos)
 {
 	HWND hWnd = CreateWindowEx(
-		0,										// 拡張ウィンドウスタイル
+		WS_EX_NOACTIVATE,							// 拡張ウィンドウスタイル
 		"SUB_WINDOW",								// ウィンドウクラスの名前
 		_windowName.c_str(),							// ウィンドウの名前
 		WS_OVERLAPPED | WS_CAPTION /*| WS_SYSMENU*/,// ウィンドウスタイル
@@ -203,7 +203,12 @@ HWND Window::WindowSubCreate(std::string _objName, std::string _windowName, int 
 	m_hwndObjNames.insert(std::make_pair(hWnd, _objName));
 
 #ifdef DEBUG_TRUE
-	if (pauseGame) SetWindowMovable(hWnd, false);
+	if (pauseGame)
+	{
+		SetWindowMovable(hWnd, false);
+		SetWindowPos(hWnd, HWND_BOTTOM, 0, 0, 0, 0,
+			SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+	}
 #endif
 
 	return hWnd;
@@ -270,6 +275,15 @@ void Window::WindowSubHide()
 	{
 		ShowWindow(node.first, SW_HIDE);
 	}
+}
+
+void Window::WindowSubHide(HWND _hWnd)
+{
+	ShowWindow(_hWnd, SW_HIDE);
+#ifdef DEBUG_TRUE
+	if (pauseGame)
+		SetWindowPos(_hWnd, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+#endif
 }
 
 LRESULT Window::WindowInit(void(*p_mainInitFunc)(void))
@@ -691,6 +705,11 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 								}
 							}
 						}
+					}
+
+					if (Input::Get().KeyTrigger(VK_DELETE))
+					{
+						ImGuiApp::DeleteSelectedObject(true);
 					}
 
 					if (Input::Get().KeyPress(VK_CONTROL) && Input::Get().KeyTrigger(VK_Z))
