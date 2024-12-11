@@ -506,20 +506,20 @@ void Box2D::WorldManager::ExecuteSensorEvent()
 		}
 	}
 
-	for (int i = 0; i < sensorEvents.endCount; i++)
+	for (int i = 0; i < contactEvents.endCount; i++)
 	{
-		b2SensorEndTouchEvent event = sensorEvents.endEvents[i];
-		auto iter = Box2DBodyManager::m_bodyObjectName.find(b2Shape_GetBody(event.sensorShapeId).index1);
+		b2ContactEndTouchEvent event = contactEvents.endEvents[i];
+		auto iter = Box2DBodyManager::m_bodyObjectName.find(b2Shape_GetBody(event.shapeIdA).index1);
 		if (iter != Box2DBodyManager::m_bodyObjectName.end())
 		{
-			GameObject* sensorObject = ObjectManager::Find(iter->second);
-			auto it = Box2DBodyManager::m_bodyObjectName.find(b2Shape_GetBody(event.visitorShapeId).index1);
+			GameObject* contactObjectA = ObjectManager::Find(iter->second);
+			auto it = Box2DBodyManager::m_bodyObjectName.find(b2Shape_GetBody(event.shapeIdB).index1);
 			if (it != Box2DBodyManager::m_bodyObjectName.end())
 			{
-				GameObject* visitorObject = ObjectManager::Find(it->second);
-				for (auto& component : sensorObject->m_componentList)
+				GameObject* contactObjectB = ObjectManager::Find(it->second);
+				for (auto& component : contactObjectA->m_componentList)
 				{
-					component.second->OnColliderExit(visitorObject);
+					component.second->OnCollisionExit(contactObjectB);
 				}
 			}
 		}
