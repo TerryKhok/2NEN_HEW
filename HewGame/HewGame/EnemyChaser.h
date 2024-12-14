@@ -44,7 +44,7 @@ class EnemyChaser : public Component
 		}
 	}
 
-	void DrawImGui() override
+	void DrawImGui(ImGuiApp::HandleUI& _handle) override
 	{
 		ImGui::InputFloat("speed", &speed);
 		ImGui::InputFloat("radius", &radius);

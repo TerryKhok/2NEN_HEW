@@ -14,6 +14,7 @@ class SampleScene_Animation : public Scene
 		//sound.LoadWavFile("asset/sound/se/ƒWƒƒƒ“ƒv_1.wav");
 
 		object = Instantiate("Character");
+		object->transform.scale = { 50.0f,50.0f };
 		//rend = object->AddComponent<Renderer>(L"asset/pic/rzqLOX.png");
 		//rend->SetTexcode(8, 9, 0, 0);
 		//object->transform.position.x = 100.0f;
@@ -30,7 +31,7 @@ class SampleScene_Animation : public Scene
 		float scaleX = 1.0f / 6;
 		float scaleY = 1.0f / 1;
 
-		std::vector<AnimationFrame> frames =
+		std::vector<AnimationFrameData> frames =
 		{
 			{
 			L"asset/pic/spritesheet.png",
@@ -120,27 +121,32 @@ class SampleScene_Animation : public Scene
 			SceneManager::LoadScene<SampleScene_Title>();
 		}
 
+
+		Vector2 mousePos = Input::Get().MousePoint();
 		if (Input::Get().MouseRightTrigger())
 		{
-			oldMousePos = Input::Get().MousePoint();
-			//cameraPos = CameraManager::cameraPosition;
+			oldMousePos = mousePos;
 		}
 
 		if (Input::Get().MouseRightPress())
 		{
-			Vector2 dis = Input::Get().MousePoint() - oldMousePos;
-			oldMousePos = Input::Get().MousePoint();
+			Vector2 dis = mousePos - oldMousePos;
+			oldMousePos = mousePos;
 			dis *= -1.0f;
-			RenderManager::renderOffset += dis;
+			float rad = -Math::DegToRad(CameraManager::cameraRotation);
+			Vector2 offset;
+			offset.x = dis.x * cos(rad) - dis.y * sin(rad);
+			offset.y = dis.x * sin(rad) + dis.y * cos(rad);
+			RenderManager::renderOffset += offset / RenderManager::renderZoom;
 		}
 
 		if (Input::Get().MouseWheelDelta() > 0)
 		{
-			RenderManager::renderZoom += 0.01f;
+			RenderManager::renderZoom += RenderManager::renderZoom / 50;
 		}
 		else if (Input::Get().MouseWheelDelta() < 0)
 		{
-			RenderManager::renderZoom -= 0.01f;
+			RenderManager::renderZoom -= RenderManager::renderZoom / 50;
 		}
 	}
 };

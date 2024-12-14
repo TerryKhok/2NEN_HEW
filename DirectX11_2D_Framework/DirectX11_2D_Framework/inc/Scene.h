@@ -70,6 +70,8 @@ private:
 #ifdef DEBUG_TRUE
 			ImGuiApp::InvalidSelectedObject();
 #endif
+			TextureAssets::ChangeNextTextureLib();
+
 			//新しいリストに変える
 			RenderManager::GenerateList();
 			ObjectManager::GenerateList();
@@ -79,6 +81,8 @@ private:
 			NextScene();
 			//シーン初期化
 			TRY_CATCH_LOG(m_currentScene->Init());
+
+			TextureAssets::LinkNextTextureLib();
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 			Box2D::WorldManager::EnableWorldUpdate();
@@ -113,6 +117,8 @@ public:
 #ifdef DEBUG_TRUE
 			ImGuiApp::InvalidSelectedObject();
 #endif
+			TextureAssets::ChangeNextTextureLib();
+
 			//新しいリストに変える
 			RenderManager::GenerateList();
 			ObjectManager::GenerateList();
@@ -122,6 +128,8 @@ public:
 			NextScene();
 			//シーン初期化
 			TRY_CATCH_LOG(m_currentScene->Init());
+
+			TextureAssets::LinkNextTextureLib();
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 			Box2D::WorldManager::EnableWorldUpdate();
@@ -161,6 +169,8 @@ public:
 			//スレッドを立てる
 			std::future<void> sceneFuture = std::async(std::launch::async, [&]()
 				{
+					TextureAssets::ChangeNextTextureLib();
+
 					//追加先を新しく変更する
 					Box2D::WorldManager::ChangeNextWorld();
 					RenderManager::ChangeNextRenderList();
@@ -208,6 +218,8 @@ public:
 #endif
 			ObjectManager::LinkNextObjectList();
 			Box2D::WorldManager::LinkNextWorld();
+
+			TextureAssets::LinkNextTextureLib();
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 			//ワールドの更新を再開

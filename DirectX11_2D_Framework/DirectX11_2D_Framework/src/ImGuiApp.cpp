@@ -6,29 +6,56 @@
 int ImGuiApp::worldFpsCounter;
 int ImGuiApp::updateFpsCounter = 0;
 
-
 //window関連
 HWND ImGuiApp::m_hWnd[TYPE_MAX];
 ImGuiContext* ImGuiApp::context[TYPE_MAX];
 std::unordered_map<HWND, ImGuiContext*> ImGuiApp::m_hWndContexts;
 ComPtr<IDXGISwapChain> ImGuiApp::m_pSwapChain[TYPE_MAX];
 ComPtr<ID3D11RenderTargetView> ImGuiApp::m_pRenderTargetView[TYPE_MAX];
-ComPtr<ID3D11ShaderResourceView> ImGuiApp::m_pIconTexture;
-ImTextureID ImGuiApp::m_imIconTexture;
 void(*ImGuiApp::pDrawImGui[ImGuiApp::TYPE_MAX])() = {};
-std::stack<std::function<void()>> ImGuiApp::changes;
 std::unordered_map<std::string, std::array<int, ImGuiApp::VALUE_TYPE_MAX>> ImGuiApp::updateValues;
-std::stack<std::unique_ptr<GameObject, void(*)(GameObject*)>> ImGuiApp::willDeleteObjects;
-
+bool ImGuiApp::showMainEditor = false;
 ImGuiApp::HandleUI ImGuiApp::handleUi;
 
-void ImGuiSetKeyMap(ImGuiContext* _imguiContext);
-
+ComPtr<ID3D11ShaderResourceView> pIconTexture;
+ImTextureID imIconTexture;
+std::stack<std::function<void()>> changes;
+std::stack<std::pair<std::string,std::unique_ptr<GameObject, void(*)(GameObject*)>>> willDeleteObjects;
+std::stack<std::pair<const char*, std::unique_ptr<Component, void(*)(Component*)>>> willRemoveComponents;
 std::vector<const char*> filterNames;
-
 constexpr long long numFilter = magic_enum::enum_count<FILTER>() - 1;
-
 ImVec4 windowBgCol;
+
+std::map<std::filesystem::path, std::pair<ComPtr<ID3D11ShaderResourceView>, ImTextureID>> textureSource;
+std::map<std::filesystem::path, std::set<int>> textureCutNode;
+
+struct ImTextureData
+{
+	ImTextureID id;
+	ImVec2 uv0;
+	ImVec2 uv1;
+};
+
+ImTextureData currentImTexture;
+
+struct ImAnimationFrame
+{
+	std::filesystem::path path;
+	int splitX = 1;
+	int splitY = 1;
+	int uvX = 0;
+	int uvY = 0;
+	float waitTime = 1.0f;
+};
+
+std::vector<ImAnimationFrame> willPushFrames;
+std::vector<ImAnimationFrame> imAniFrames;
+
+constexpr int maxTexSplit[2] = { 100,100 };
+
+GameObject* selectedObject = nullptr;
+
+float iconTexScale = 1.0f / 20;
 
 HRESULT ImGuiApp::Init(HINSTANCE hInstance)
 {
@@ -53,11 +80,11 @@ HRESULT ImGuiApp::Init(HINSTANCE hInstance)
 	RegisterClassEx(&wc);
 
 	Vector2 windowPos[TYPE_MAX];
-	windowPos[OPTIONS] = { Window::MONITER_HALF_WIDTH / -1.35f,0 };
-	windowPos[INSPECTER] = { Window::MONITER_HALF_WIDTH / 1.35f,0 };
+	windowPos[OPTIONS] = { Window::MONITER_HALF_WIDTH / -1.35f - 8.0f,0 };
+	windowPos[INSPECTER] = { Window::MONITER_HALF_WIDTH / 1.35f + 8.0f,0 };
 
 	// Use std::fill to set all elements to the same function
-	std::fill(std::begin(pDrawImGui), std::end(pDrawImGui), []() {});
+	std::fill(std::begin(pDrawImGui), std::end(pDrawImGui),[](){});
 	pDrawImGui[OPTIONS] = DrawOptionGui;
 	pDrawImGui[INSPECTER] = DrawInspectorGui;
 
@@ -140,9 +167,6 @@ HRESULT ImGuiApp::Init(HINSTANCE hInstance)
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 
-		
-			
-
 		m_hWndContexts.insert(std::make_pair(hWnd, context[type]));
 
 		ImGui_ImplWin32_Init(m_hWnd[type]); // hWnd is your main window handle
@@ -173,9 +197,15 @@ HRESULT ImGuiApp::Init(HINSTANCE hInstance)
 	//texture追加の処理をする
 	HRESULT  hr;
 	hr = DirectX::CreateWICTextureFromMemory(
-		DirectX11::m_pDevice.Get(), _acicon_sheet_32x32, sizeof(_acicon_sheet_32x32) / sizeof(_acicon_sheet_32x32[0]), NULL, m_pIconTexture.GetAddressOf());
+		DirectX11::m_pDevice.Get(), _acicon_sheet_32x32, sizeof(_acicon_sheet_32x32) / sizeof(_acicon_sheet_32x32[0]), NULL, pIconTexture.GetAddressOf());
 
-	m_imIconTexture = (ImTextureID)m_pIconTexture.Get();
+	imIconTexture = (ImTextureID)pIconTexture.Get();
+
+	currentImTexture.id = imIconTexture;
+	int uvX = 12;
+	int uvY = 17;
+	currentImTexture.uv0 = ImVec2(iconTexScale * uvX, iconTexScale * uvY);
+	currentImTexture.uv1 = ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1));
 
 	handleUi.Init();
 
@@ -208,7 +238,7 @@ std::string OpenFileDialog() {
 namespace fs = std::filesystem;
 
 // Set of allowed extensions
-std::set<std::string> allowed_extensions = { ".txt",".png",".jpg",".json"}; // Add the extensions you want to display
+std::set<std::string> allowed_extensions = { ".txt",".png",".jpg",".json",".wav"}; // Add the extensions you want to display
 
 // Set of unallowed folder
 std::set<std::string> unallowed_folders = {"x64"};
@@ -349,8 +379,6 @@ void RenderDirectoryTree(const fs::path& root_path) {
 	}
 }
 
-GameObject* selectedObject = nullptr;
-
 // 画面塗りつぶし色
 static float clearColor[4] = { 0.0f, 0.25f, 0.25f, 1.0f };
 
@@ -382,75 +410,138 @@ void ImGuiApp::Draw()
 
 void ImGuiApp::DrawOptionGui()
 {
-	if (ImGui::Begin("Status"))
+	ImGui::SetNextWindowPos(ImVec2(0, 0));  // Start at the end of game viewport
+	ImGui::SetNextWindowSize(ImVec2(IMGUI_WINDOW_WIDTH, 100)); // Cover the remaining area
+	if (ImGui::Begin("Status",nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 	{
-		ImGui::Text("world average %.3f ms/frame (%d FPS)", 1000.0f / worldFpsCounter, worldFpsCounter);
-		ImGui::Text("update average %.3f ms/frame (%d FPS)", 1000.0f / updateFpsCounter, updateFpsCounter);
+		ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
+		if (ImGui::BeginTabBar("StatusTabBar", tab_bar_flags))
+		{
+			if (ImGui::BeginTabItem("Performance"))
+			{
+				ImGui::Text("world average %.3f ms/frame (%d FPS)", 1000.0f / worldFpsCounter, worldFpsCounter);
+				ImGui::Text("update average %.3f ms/frame (%d FPS)", 1000.0f / updateFpsCounter, updateFpsCounter);
+				ImGui::EndTabItem();
+			}
+			if (ImGui::BeginTabItem("Input"))
+			{
+				Vector2 mousePos = Input::Get().MousePoint();
+				ImGui::Text("mousePos x : %.3f, y : %.3f", mousePos.x, mousePos.y);
+				Vector2 worldPos = mousePos;
+				worldPos.x = worldPos.x * DISPALY_ASPECT_WIDTH / RenderManager::renderZoom.x + RenderManager::renderOffset.x;
+				worldPos.y = worldPos.y * DISPALY_ASPECT_HEIGHT / RenderManager::renderZoom.y + RenderManager::renderOffset.y;
+				ImGui::Text("worldMousePos x : %.3f, y : %.3f", worldPos.x, worldPos.y);
+				ImGui::EndTabItem();
+			}
+			ImGui::EndTabBar();
+		}
+		ImGui::Separator();
 	}
 	ImGui::End();
 
 	static bool showFilterTable = false;
 
-	static float iconTexScale = 1.0f / 20;
-
-	if (ImGui::Begin("Menu")) {
+	ImGui::SetNextWindowPos(ImVec2(0,100));  // Start at the end of game viewport
+	ImGui::SetNextWindowSize(ImVec2(IMGUI_WINDOW_WIDTH, 180)); // Cover the remaining area
+	if (ImGui::Begin("Menu",nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove)) {
 		ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
 		if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
 		{
-			if (ImGui::BeginTabItem("Tool"))
+			if (ImGui::BeginTabItem("Game"))
 			{
 				static bool pauseGame = true;
 				//ImVec4 b2col = playGame ? ImVec4(0.5f, 0.5f, 0.5f, 1.0f) : ImVec4(1, 1, 1, 1);
-				int uvX = pauseGame ? 6 : 12;
-				int uvY = pauseGame ? 4 : 1;
+				int uvX = pauseGame ? 13 : 16;
+				int uvY = 13;
 				ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
-				if(ImGui::ImageButton("PauseGame",m_imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)),windowBgCol))
+				if(ImGui::ImageButton("PauseGame",imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)),windowBgCol))
 				{
 					if (pauseGame){
-						PostMessage(Window::GetMainHwnd(), WM_PAUSE_GAME, 0, 0);
+						PostMessage(Window::GetMainHWnd(), WM_PAUSE_GAME, 0, 0);
+						//float color[4] = { 0.1f,0.1f,0.1f,1.0f };
 						float color[4] = { 0.1f,0.1f,0.1f,1.0f };
-						memcpy(clearColor, color, sizeof(color));
+						memcpy(DirectX11::clearColor, color, sizeof(color));
 					}
 					else{
-						PostMessage(Window::GetMainHwnd(), WM_RESUME_GAME, 0, 0);
-						float color[4] = { 0.0f,0.25f,0.25f,1.0f };
-						memcpy(clearColor, color, sizeof(color));
+						PostMessage(Window::GetMainHWnd(), WM_RESUME_GAME, 0, 0);
+						//float color[4] = { 0.0f,0.25f,0.25f,1.0f };
+						float color[4] = { 0.0f,0.5f,0.5f,1.0f };
+						memcpy(DirectX11::clearColor, color, sizeof(color));
 
 						for (auto pair : updateValues)
 						{
 							auto object = ObjectManager::Find(pair.first);
 							if (object == nullptr) continue;
 
-							if (pair.second[BOX2D_POSITION] > 0)
-							{
-								object->GetComponent<Box2DBody>()->SetPosition(object->transform.position);
+							try {
+								if (pair.second[BOX2D_POSITION] > 0)
+								{
+									object->GetComponent<Box2DBody>()->SetPosition(object->transform.position);
+								}
+								if (pair.second[BOX2D_ROTATION] > 0)
+								{
+									object->GetComponent<Box2DBody>()->SetAngle(object->transform.angle.z);
+								}
+								if (pair.second[WINDOW_POSITION] > 0)
+								{
+									auto windowRect = object->GetComponent<SubWindow>();
+									SetWindowPosition(windowRect->m_hWnd, object->transform.position);
+								}
 							}
-							if (pair.second[BOX2D_ROTATION] > 0)
-							{
-								object->GetComponent<Box2DBody>()->SetAngle(object->transform.angle.z);
+							catch (const std::exception& e) {
+									LOG_ERROR(e.what());
 							}
-							if (pair.second[WINDOW_POSITION] > 0)
-							{
-								auto windowRect = object->GetComponent<SubWindow>();
-								SetWindowPosition(windowRect->m_hWnd, object->transform.position);
-							}
+							catch (...) {}
 						}
 
-						updateValues.clear();
+						ImGuiApp::ClearStack();
 					}
 
 					pauseGame = !pauseGame;
 				}
+				ImGui::SetItemTooltip(pauseGame ? "pause" : "play");
+
 				uvX = 19;
 				uvY = 1;
 				ImGui::SameLine();
-				if (ImGui::ImageButton("ReloadGame", m_imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
+				if (ImGui::ImageButton("ReloadGame", imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
 				{
 					SceneManager::ReloadCurrentScene();
-					updateValues.clear();
+					ImGuiApp::ClearStack();
 				}
+				ImGui::SetItemTooltip("reload");
+				
+				uvX = showMainEditor ? 15 : 13;
+				uvY = 18;
+				ImGui::SameLine();
+				if (ImGui::ImageButton("mainEditor",imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
+				{
+					showMainEditor = !showMainEditor;
+					CRect rect;
+					::GetClientRect(Window::GetMainHWnd(), &rect);
+					// ビューポートを作成（→画面分割などに使う、描画領域の指定のこと）
+					D3D11_VIEWPORT viewport;
+					if (showMainEditor)
+					{
+						viewport.TopLeftX = rect.Width() / 4.0f;
+						viewport.Width = (FLOAT)rect.Width() / 2.0f;
+						viewport.Height = (FLOAT)rect.Height() / 2.0f;
+					}
+					else
+					{
+						viewport.TopLeftX = 0;
+						viewport.Width = (FLOAT)rect.Width();
+						viewport.Height = (FLOAT)rect.Height();
+					}
+					viewport.TopLeftY = 0;
+					viewport.MinDepth = 0.0f;
+					viewport.MaxDepth = 1.0f;
+					DirectX11::m_pDeviceContext->RSSetViewports(1, &viewport);
+				}
+				ImGui::SetItemTooltip(showMainEditor ? "close editor" : "show editor");
 				ImGui::PopStyleVar();
-				ImGui::ColorEdit3("clear color", clearColor); // Edit 3 floats representing a color
+
+				ImGui::ColorEdit3("clear color", DirectX11::clearColor); // Edit 3 floats representing a color
 				if (ImGui::Button("Button"))
 				{
 					OpenFileDialog();
@@ -547,7 +638,9 @@ void ImGuiApp::DrawOptionGui()
 		ImGui::End();
 	}
 
-	if (ImGui::Begin("Hierarchy", nullptr, ImGuiWindowFlags_None))
+	ImGui::SetNextWindowPos(ImVec2(0, 280));  // Start at the end of game viewport
+	ImGui::SetNextWindowSize(ImVec2(IMGUI_WINDOW_WIDTH, 440)); // Cover the remaining area
+	if (ImGui::Begin("Hierarchy", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 	{
 		if (ImGui::BeginTabBar("hierarchyTab"))
 		{
@@ -585,9 +678,50 @@ void ImGuiApp::DrawOptionGui()
 			{
 				static fs::path currentPath = fs::current_path();
 
-				RenderDirectoryTree(currentPath);
+				std::string upFileType = "\n<<< UPLOAD FILE HERE\n<<< " + handleUi.uploadStr;
+				for (auto& extension : handleUi.extensions)
+				{
+					upFileType += " << " + extension;
+				}
+				//ImGui::Button("drop here");
+				int uvX = 18;
+				int uvY = 6;
+				ImGui::BeginGroup();
+				{
+					ImGui::Image(imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY),
+						ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)));
+					ImGui::SameLine();
+					ImGui::Text(upFileType.c_str());
+					ImGui::EndGroup();
+				}
 
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("FILE_DRAG"))
+					{
+						IM_UNUSED(payload);
+						ImGui::SetMouseCursor(ImGuiMouseCursor_NotAllowed);
+						fs::path path(std::string(static_cast<const char*>(payload->Data), payload->DataSize));
+						//bool same = path.extension().string().compare(handleUi.extension);
+						std::string extension = path.extension().string();
+						bool same = false;
+						for (auto& ex : handleUi.extensions)
+						{
+							same = std::equal(ex.begin(), ex.end(), extension.c_str());
+							if (same) break;
+						}
+						if (same)
+							handleUi.linkFunc(selectedObject, fs::relative(path, currentPath));
+						//src_folder = fs::relative(path, currentPath).string();
+					}
+					ImGui::EndDragDropTarget();
+				}
+				
 				ImGui::EndTabItem();
+
+				ImGui::BeginChild("FileWindow", ImGui::GetContentRegionAvail(), ImGuiChildFlags_None, 0);
+				RenderDirectoryTree(currentPath);
+				ImGui::EndChild();
 			}
 
 			if (ImGui::BeginTabItem("SceneList"))
@@ -599,7 +733,7 @@ void ImGuiApp::DrawOptionGui()
 					if (ImGui::Selectable(scene.first.substr(5).c_str(), &current))
 					{
 						SceneManager::LoadScene(scene.first);
-						updateValues.clear();
+						ImGuiApp::ClearStack();
 					}
 				}
 
@@ -614,7 +748,9 @@ void ImGuiApp::DrawOptionGui()
 
 void ImGuiApp::DrawInspectorGui()
 {
-	if (ImGui::Begin("Inspector", nullptr, ImGuiWindowFlags_None))
+	ImGui::SetNextWindowPos(ImVec2(0, 0));  // Start at the end of game viewport
+	ImGui::SetNextWindowSize(ImVec2(IMGUI_WINDOW_WIDTH, IMGUI_WINDOW_HEIGHT)); // Cover the remaining area
+	if (ImGui::Begin("Inspector", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 	{
 		if (selectedObject != nullptr)
 		{
@@ -624,27 +760,38 @@ void ImGuiApp::DrawInspectorGui()
 			bool active = selectedObject->active;
 			ImGui::SameLine();
 			ImGui::Checkbox(" ", &active);
+			ImGui::SetItemTooltip("active");
 			if (active != selectedObject->active)
 			{
 				selectedObject->SetActive(active);
 			}
 
 			ImGui::SeparatorText("Component");
-
+			
+			ImGui::Button("/");
+			ImGui::SetItemTooltip("not remove transform");
+			ImGui::SameLine();
 			if (ImGui::CollapsingHeader("Transform", ImGuiTreeNodeFlags_None))
 			{
 				if (ImGui::InputFloat3("Position", selectedObject->transform.position.data(), "%.1f"))
 				{
-					if (selectedObject->ExistComponent<Box2DBody>())
+					try
 					{
-						auto box2d = selectedObject->GetComponent<Box2DBody>();
-						box2d->SetPosition(selectedObject->transform.position);
+						if (selectedObject->ExistComponent<Box2DBody>())
+						{
+							auto box2d = selectedObject->GetComponent<Box2DBody>();
+							box2d->SetPosition(selectedObject->transform.position);
+						}
+						if (selectedObject->ExistComponent<SubWindow>())
+						{
+							auto windowRect = selectedObject->GetComponent<SubWindow>();
+							SetWindowPosition(windowRect->m_hWnd, selectedObject->transform.position);
+						}
 					}
-					if (selectedObject->ExistComponent<SubWindow>())
-					{
-						auto windowRect = selectedObject->GetComponent<SubWindow>();
-						SetWindowPosition(windowRect->m_hWnd, selectedObject->transform.position);
+					catch (const std::exception& e) {
+						LOG_ERROR(e.what());
 					}
+					catch (...) {}
 				}
 				ImGui::InputFloat3("Scale", selectedObject->transform.scale.data(), "%.1f");
 				auto& angle = selectedObject->transform.angle;
@@ -673,14 +820,83 @@ void ImGuiApp::DrawInspectorGui()
 				//ImGui::TreePop();
 			}
 
+			std::vector<const char*> eraseComponents;
 			for (auto& component : selectedObject->m_componentList)
 			{
 				std::string componentName = component.first;
 
+				ImGui::PushID(componentName.c_str());
+				if (ImGui::Button("-"))
+				{
+					eraseComponents.push_back(component.first);
+				}
+				ImGui::SetItemTooltip("remove");
+				ImGui::PopID();
+				ImGui::SameLine();
 				if (ImGui::CollapsingHeader(componentName.substr(6).c_str(), ImGuiTreeNodeFlags_None))
 				{
-					component.second->DrawImGui();
-					//ImGui::TreePop();
+					component.second->DrawImGui(handleUi);
+				}
+			}
+
+			for (auto name : eraseComponents)
+			{
+				auto& list = selectedObject->m_componentList;
+				auto iter = list.find(name);
+				if (iter != list.end())
+				{
+					if (Window::IsPause())
+					{
+						iter->second->SetActive(false);
+						willRemoveComponents.push(std::move(*iter));
+						list.erase(iter);
+
+						changes.emplace(std::bind([](GameObject* obj) {
+							willRemoveComponents.top().second->SetActive(true);
+							obj->m_componentList.insert(std::move(willRemoveComponents.top()));
+							willRemoveComponents.pop();
+							}, selectedObject));
+
+						if (name == typeid(Renderer).name())
+						{
+							auto it = list.find(typeid(Animator).name());
+							if (it != list.end())
+							{
+								it->second->SetActive(false);
+								willRemoveComponents.push(std::move(*it));
+								list.erase(it);
+
+								changes.emplace(std::bind([](GameObject* obj) {
+									willRemoveComponents.top().second->SetActive(true);
+									obj->m_componentList.insert(std::move(willRemoveComponents.top()));
+									willRemoveComponents.pop();
+									}, selectedObject));
+							}
+						}
+					}
+					else
+					{
+#ifdef DEBUG_TRUE
+						//コンポーネントのSafePointerをNullptrにする
+						PointerRegistryManager::deletePointer(iter->second.get());
+#endif 
+						iter->second->Delete();
+						list.erase(iter);
+
+						if (name == typeid(Renderer).name())
+						{
+							auto it = list.find(typeid(Animator).name());
+							if (it != list.end())
+							{
+#ifdef DEBUG_TRUE
+								//コンポーネントのSafePointerをNullptrにする
+								PointerRegistryManager::deletePointer(it->second.get());
+#endif 
+								it->second->Delete();
+								list.erase(it);
+							}
+						}
+					}
 				}
 			}
 
@@ -705,13 +921,368 @@ void ImGuiApp::DrawInspectorGui()
 }
 
 
+void ImGuiApp::DrawMainGui(ImGuiContext* _mainContext)
+{
+	static fs::path selectPath;
+
+	if (showMainEditor)
+	{
+		ImGui::SetCurrentContext(_mainContext);
+
+		ImGui_ImplWin32_NewFrame();
+		ImGui_ImplDX11_NewFrame();
+		ImGui::NewFrame();
+
+		const float windowWidth = SCREEN_WIDTH / 4;
+		const float windowHeight = SCREEN_HEIGHT / 2;
+
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+
+		ImGui::SetNextWindowPos(ImVec2(0, 0));  // Start at the end of game viewport
+		ImGui::SetNextWindowSize(ImVec2(windowWidth, windowHeight)); // Cover the remaining area
+		if (ImGui::Begin("Pipe", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+		{
+			ImGui::BeginGroup();
+			ImGui::SeparatorText("Control");
+
+			int uvX = 12;
+			int uvY = 1;
+			if (ImGui::ImageButton("PlayAnimation", imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
+			{
+			}
+
+			ImGui::SameLine();
+			uvX = 9;
+			uvY = 14;
+			if (ImGui::ImageButton("writeAnimation", imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
+			{
+			}
+
+			ImGui::SameLine();
+			uvX = 10;
+			uvY = 14;
+			if (ImGui::ImageButton("OverwriteAnimation", imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
+			{
+			}	
+
+			ImGui::SeparatorText("frame");
+			if (ImGui::BeginChild("frameList"))
+			{
+				int count = 0;
+				for (auto& frame : imAniFrames)
+				{
+					ImGui::PushID(count);
+					ImGui::BeginGroup();
+					{
+						ImGui::Text("%s x : %d y : %d", frame.path.filename().string().c_str(), frame.uvX, frame.uvY);
+						ImGui::DragFloat("time", &frame.waitTime, 0.01f, 0.0f, 5.0f);
+					}
+					ImGui::EndGroup();
+					ImGui::PopID();
+					count++;
+				}
+				ImGui::EndChild();
+			}
+
+			ImGui::EndGroup();
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("CUT_TEXTURE_DRAG"))
+				{
+					IM_UNUSED(payload);
+					ImGui::SetMouseCursor(ImGuiMouseCursor_NotAllowed);
+
+					imAniFrames.insert(imAniFrames.end(), std::make_move_iterator(willPushFrames.begin()), std::make_move_iterator(willPushFrames.end()));
+					willPushFrames.clear(); // vec2 is now empty (optional, since moved-from state is valid but unspecified)
+				}
+				ImGui::EndDragDropTarget();
+			}
+		}
+		ImGui::End();
+
+		ImGui::SetNextWindowPos(ImVec2(SCREEN_WIDTH - windowWidth, 0));  // Start at the end of game viewport
+		ImGui::SetNextWindowSize(ImVec2(windowWidth, windowHeight)); // Cover the remaining area
+		if (ImGui::Begin("Source", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+		{
+			ImGui::SeparatorText("Link");
+
+			int uvX = 14;
+			int uvY = 6;
+			if (ImGui::ImageButton("LoadSource", imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
+			{
+				handleUi.SetUploadFile("texture", [](GameObject* _obj,fs::path _path)
+					{
+						auto iter = textureSource.find(_path);
+						if (iter != textureSource.end()) return;
+
+						ComPtr<ID3D11ShaderResourceView> texture;
+						TextureAssets::pLoadTexture(texture, _path.wstring().c_str());
+						ImTextureID texId = (ImTextureID)texture.Get();
+						textureSource.emplace(
+							std::make_pair(_path, std::make_pair(texture, texId)));
+					}, 
+					{ ".png",".jpg" });
+			}
+			ImGui::SetItemTooltip("load texture");
+
+			ImGui::SameLine();
+			uvX = 15;
+			uvY = 6;
+			if (ImGui::ImageButton("LoadClip", imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
+			{
+			}
+
+			ImGui::SameLine();
+			uvX = 9;
+			uvY = 15;
+			ImGui::Image(imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)));
+			if (ImGui::BeginDragDropTarget())
+			{
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TEXTURE_SOURCE_DRAG"))
+				{
+					IM_UNUSED(payload);
+					ImGui::SetMouseCursor(ImGuiMouseCursor_NotAllowed);
+					fs::path path(std::string(static_cast<const char*>(payload->Data), payload->DataSize));
+					auto iter = textureSource.find(path);
+					if (iter != textureSource.end())
+					{
+						textureSource.erase(iter);
+					}
+					auto it = textureCutNode.find(path);
+					if (it != textureCutNode.end())
+					{
+						textureCutNode.erase(it);
+					}
+					if (selectPath == path) selectPath = "";
+				}
+				ImGui::EndDragDropTarget();
+			}
+			ImGui::SetItemTooltip("death texture");
+
+			ImGui::SeparatorText("Files");
+
+			ImGui::BeginChild("textures");
+			{
+				bool endl = false;
+				for (auto& sourceTex : textureSource)
+				{
+					if (endl) ImGui::SameLine();
+
+					std::string path_str = sourceTex.first.string();
+					if (ImGui::ImageButton(path_str.c_str(), sourceTex.second.second, ImVec2(100, 100), { 0,0 }, { 1,1 }, windowBgCol))
+					{
+						currentImTexture.id = sourceTex.second.second;
+						currentImTexture.uv0 = { 0,0 };
+						currentImTexture.uv1 = { 1,1 };
+					}
+					ImGui::SetItemTooltip(path_str.c_str());
+					if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+					{
+						ImGui::SetDragDropPayload("TEXTURE_SOURCE_DRAG", path_str.c_str(), path_str.size());
+						ImGui::Text("%s", path_str.c_str());
+						ImGui::EndDragDropSource();
+					}
+					endl = !endl;
+				}
+		
+			}
+			ImGui::EndChild();
+
+		}
+		ImGui::End();
+
+		ImGui::SetNextWindowPos(ImVec2(0, windowHeight));  // Start at the end of game viewport
+		ImGui::SetNextWindowSize(ImVec2(SCREEN_WIDTH, windowHeight)); // Cover the remaining area
+		if (ImGui::Begin("Work", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+		{
+			if (ImGui::BeginTabBar("hierarchyTab"))
+			{
+				if (ImGui::BeginTabItem("Animation"))
+				{
+					static int split[2] = {1,1};
+
+					ImGui::BeginChild("AnimationFrameList", ImVec2(ImGui::GetContentRegionAvail().x * 0.7f, ImGui::GetContentRegionAvail().y));
+					{
+						ImGui::SeparatorText("Cut Node");
+
+						int uvX = 0;
+						int uvY = 0;
+						std::vector<fs::path> eraseNodes;
+						for (auto& node : textureCutNode)
+						{
+							auto iter = textureSource.find(node.first);
+							if (iter == textureSource.end()) continue;
+
+							if (ImGui::TreeNodeEx(node.first.string().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+							{
+								std::string filename = node.first.filename().string();
+
+								std::vector<int> eraseIndex;
+								ImTextureID texId = iter->second.second;
+								int cutCount = 0;
+								for (auto& cuts : node.second)
+								{
+									int splitX = cuts % maxTexSplit[0];
+									int splitY = cuts / maxTexSplit[0];
+									float texScaleX = 1.0f / splitX;
+									float texScaleY = 1.0f / splitY;
+									int count = 0;
+									ImGui::BulletText("%d : %d", splitX, splitY);
+									ImGui::SameLine();
+									std::string splitId = filename + std::to_string(splitX + splitY * maxTexSplit[0]);
+									ImGui::PushID(splitId.c_str());
+									if (ImGui::Button(" erase "))
+									{
+										eraseIndex.push_back(cuts);
+									}
+									ImGui::PopID();
+
+									for (int x = 0; x < splitX; x++)
+										for (int y = 0; y < splitY; y++)
+										{
+											if (count % 11 != 0) ImGui::SameLine();
+											count++;
+											std::string id = filename + std::to_string(cutCount) + std::to_string(x + y * maxTexSplit[0]);
+											ImGui::PushID(id.c_str());
+											if (ImGui::ImageButton("cutTexButton", texId, ImVec2(50, 50), ImVec2(texScaleX * x, texScaleY * y), ImVec2(texScaleX * (x + 1), texScaleY * (y + 1)), windowBgCol))
+											{
+												currentImTexture.id = texId;
+												currentImTexture.uv0 = ImVec2(texScaleX * x, texScaleY * y);
+												currentImTexture.uv1 = ImVec2(texScaleX * (x + 1), texScaleY * (y + 1));
+											}
+											ImGui::SetItemTooltip("%s x : %d y :%d", filename.c_str(), x + 1, y + 1);
+											if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+											{
+												willPushFrames.clear();
+												willPushFrames.push_back(
+													{
+														node.first,
+														splitX,
+														splitY,
+														x,
+														y
+													}
+													);
+												ImGui::SetDragDropPayload("CUT_TEXTURE_DRAG", id.c_str(), id.size());
+												ImGui::Text("%s", filename.c_str());
+												ImGui::EndDragDropSource();
+											}
+											ImGui::PopID();
+										}
+									cutCount++;
+								}
+
+								for (auto& i : eraseIndex)
+								{
+									auto it = node.second.find(i);
+									if (it != node.second.end())
+									{
+										node.second.erase(it);
+										if (node.second.empty())
+											eraseNodes.push_back(node.first);
+									}
+								}
+
+								ImGui::TreePop();
+							}	
+						}
+						for (auto& path : eraseNodes)
+						{
+							auto iter = textureCutNode.find(path);
+							if (iter != textureCutNode.end())
+							{
+								textureCutNode.erase(iter);
+							}
+						}
+					}
+					ImGui::EndChild();
+					ImGui::SameLine();
+					ImGui::BeginChild("Capture", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y));
+					{
+						ImGui::SeparatorText("tool");
+						ImGui::BeginGroup();
+						{
+							int uvX = 8;
+							int uvY = 14;
+							if (ImGui::ImageButton("cutTexButton", imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
+							{
+								if (selectPath != "")
+								{
+									int splitIndex = split[1] * maxTexSplit[0] + split[0];
+									auto iter = textureCutNode.find(selectPath);
+									if (iter != textureCutNode.end())
+									{
+										auto it = iter->second.find(splitIndex);
+										if (it == iter->second.end())
+										{
+											iter->second.insert(splitIndex);
+										}
+									}
+									else
+									{
+										std::set<int> cuts;
+										cuts.emplace(splitIndex);
+										textureCutNode.insert(std::make_pair(selectPath, std::move(cuts)));
+									}
+								}
+
+							}
+							ImGui::SetItemTooltip("cut texture");
+							ImGui::SameLine();
+							ImGui::BeginGroup();
+							{
+								ImGui::Text("split : %s", selectPath.filename().string().c_str());
+								ImGui::DragInt("x", split, 1, 1, maxTexSplit[0]);
+								ImGui::DragInt("y", split + 1, 1, 1, maxTexSplit[1]);
+							}
+							ImGui::EndGroup();
+
+							//ImGui::SeparatorText("view");
+							ImGui::Image(currentImTexture.id, ImVec2(240, 240), currentImTexture.uv0, currentImTexture.uv1);
+						}
+						ImGui::EndGroup();
+						if (ImGui::BeginDragDropTarget())
+						{
+							if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TEXTURE_SOURCE_DRAG"))
+							{
+								IM_UNUSED(payload);
+								ImGui::SetMouseCursor(ImGuiMouseCursor_NotAllowed);
+								fs::path path(std::string(static_cast<const char*>(payload->Data), payload->DataSize));
+								auto iter = textureSource.find(path);
+								if (iter != textureSource.end())
+								{
+									currentImTexture.id = iter->second.second;
+									currentImTexture.uv0 = { 0,0 };
+									currentImTexture.uv1 = { 1,1 };
+								}
+								selectPath = std::move(path);
+							}
+							ImGui::EndDragDropTarget();
+						}
+					}
+					ImGui::EndChild();
+					ImGui::EndTabItem();
+				}
+				ImGui::EndTabBar();
+			}
+			ImGui::Separator();
+		}
+		ImGui::End();
+
+		ImGui::PopStyleVar();
+
+		ImGui::Render();
+		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+	}
+}
+
 void ImGuiApp::SetSelectedObject(GameObject* _object)
 {
 	selectedObject = _object;
 	if (selectedObject != nullptr)selectedObject->isSelected = GameObject::SELECTED;
 }
 
-void ImGuiApp::DeleteSelectedObject(bool _pause)
+void ImGuiApp::DeleteSelectedObject()
 {
 	//オブジェクトを削除する
 	if (selectedObject != nullptr /* && ImGui::IsKeyPressed(ImGuiKey_Delete)*/)
@@ -720,18 +1291,23 @@ void ImGuiApp::DeleteSelectedObject(bool _pause)
 		auto iter = list->find(selectedObject->name);
 		if (iter != list->end())
 		{
-			if (_pause)
+			if (Window::IsPause())
 			{
-				willDeleteObjects.push(std::move(iter->second));
-				willDeleteObjects.top()->SetActive(false);
+				willDeleteObjects.push(std::move(*iter));
+				willDeleteObjects.top().second->SetActive(false);
 
 				changes.emplace([]() {
 					if (!willDeleteObjects.empty())
 					{
 						auto& object = willDeleteObjects.top();
-						selectedObject = object.get();
-						object->SetActive(true);
-						ObjectManager::m_currentList->emplace(std::make_pair(object->GetName(), std::move(object)));
+						if (selectedObject != nullptr)
+						{
+							selectedObject->isSelected = GameObject::SELECT_NONE;
+						}
+						selectedObject = object.second.get();
+						object.second->isSelected = GameObject::SELECTED;
+						object.second->SetActive(true);
+						ObjectManager::m_currentList->emplace(std::move(willDeleteObjects.top()));
 						willDeleteObjects.pop();
 					}
 					});
@@ -742,8 +1318,28 @@ void ImGuiApp::DeleteSelectedObject(bool _pause)
 			}
 			list->erase(iter);
 			selectedObject = nullptr;
-
+			
 		}
+	}
+}
+
+void ImGuiApp::ClearStack()
+{
+	updateValues.clear();
+	while (!willRemoveComponents.empty())
+	{
+#ifdef DEBUG_TRUE
+		PointerRegistryManager::deletePointer(willRemoveComponents.top().second.get());
+#endif
+		willRemoveComponents.pop();
+	}
+
+	while (!willDeleteObjects.empty())
+	{
+#ifdef DEBUG_TRUE
+		PointerRegistryManager::deletePointer(willDeleteObjects.top().second.get());
+#endif
+		willDeleteObjects.pop();
 	}
 }
 
@@ -769,10 +1365,13 @@ void ImGuiApp::InvalidSelectedObject()
 {
 	if (selectedObject != nullptr)selectedObject->isSelected = GameObject::SELECT_NONE;
 	selectedObject = nullptr;
+	handleUi.SetUploadFile("", {}, {""});
 }
 
 void ImGuiApp::UnInit()
 {
+	ClearStack();
+
 	for (int type = 0; type < TYPE_MAX; type++)
 	{
 		ImGui::SetCurrentContext(context[type]);
@@ -1175,9 +1774,9 @@ bool ImGuiApp::HandleUI::Update(Vector2 _targetPos)
 		case MOVE_SCALE_ON_MOUSE:
 		{
 			const auto& center = selectedObject->transform.position;
-			Vector2 size = selectedObject->transform.scale * HALF_OBJECT_SIZE * 1.5f;
-			size.x /= RenderManager::renderZoom.x;
-			size.y /= RenderManager::renderZoom.y;
+			Vector2 size = selectedObject->transform.scale * HALF_OBJECT_SIZE * 1.2f;
+		/*	size.x /= RenderManager::renderZoom.x;
+			size.y /= RenderManager::renderZoom.y;*/
 			Vector2 quad[4] =
 			{
 				{center.x - size.x,center.y + size.y},
@@ -1210,8 +1809,8 @@ bool ImGuiApp::HandleUI::Update(Vector2 _targetPos)
 		{
 			Vector2 dis = _targetPos - oldPos;
 			auto& scale = selectedObject->transform.scale;
-			scale.x += (dis.x * cos(moveScaleRad)) / (DEFAULT_OBJECT_SIZE/ RenderManager::renderZoom.x);
-			scale.y += (dis.y * sin(moveScaleRad)) / (DEFAULT_OBJECT_SIZE / RenderManager::renderZoom.y);
+			scale.x += (dis.x * cos(moveScaleRad)) / (HALF_OBJECT_SIZE/*/ RenderManager::renderZoom.x*/);
+			scale.y += (dis.y * sin(moveScaleRad)) / (HALF_OBJECT_SIZE /*/ RenderManager::renderZoom.y*/);
 			oldPos = _targetPos;
 
 			if (Input::Get().MouseLeftRelease())
@@ -1236,13 +1835,13 @@ bool ImGuiApp::HandleUI::Update(Vector2 _targetPos)
 	return false;
 }
 
-void ImGuiApp::HandleUI::Draw(const GameObject* _target,const Vector2 _targetPos)
+void ImGuiApp::HandleUI::Draw(GameObject* _target,const Vector2 _targetPos)
 {
 	if (_target == nullptr) return;
 
 	// 描画先のキャンバスと使用する深度バッファを指定する
 	DirectX11::m_pDeviceContext->OMSetRenderTargets(1,
-		DirectX11::m_pRenderTargetViewList[Window::GetMainHwnd()].first.GetAddressOf(), DirectX11::m_pDepthStencilView.Get());
+		DirectX11::m_pRenderTargetViewList[Window::GetMainHWnd()].first.GetAddressOf(), DirectX11::m_pDepthStencilView.Get());
 
 
 	RenderManager::SetMainCameraMatrix();
@@ -1307,7 +1906,6 @@ void ImGuiApp::HandleUI::Draw(const GameObject* _target,const Vector2 _targetPos
 		//======================================================================================================================
 		DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_vertexBuffer.GetAddressOf(), &strides, &offsets);
 		DirectX11::m_pDeviceContext->IASetIndexBuffer(RenderManager::m_indexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
-
 		DirectX11::m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		//======================================================================================================================
 
@@ -1327,6 +1925,9 @@ void ImGuiApp::HandleUI::Draw(const GameObject* _target,const Vector2 _targetPos
 			DirectX11::m_pVSObjectConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
 
 		DirectX11::m_pDeviceContext->DrawIndexed(6, 0, 0);
+
+
+		
 	}
 	break;
 	case ROTATION:
@@ -1359,8 +1960,8 @@ void ImGuiApp::HandleUI::Draw(const GameObject* _target,const Vector2 _targetPos
 
 		//ワールド変換行列の作成
 		//ー＞オブジェクトの位置・大きさ・向きを指定
-		cb.world = DirectX::XMMatrixScaling(_target->transform.scale.x * 1.5f / RenderManager::renderZoom.x, 
-			_target->transform.scale.y * 1.5f / RenderManager::renderZoom.y, 1.0f);
+		cb.world = DirectX::XMMatrixScaling(_target->transform.scale.x * 1.2f, 
+			_target->transform.scale.y * 1.2f, 1.0f);
 		cb.world *= DirectX::XMMatrixRotationZ(0.0f);
 		cb.world *= DirectX::XMMatrixTranslation(transform.position.x, transform.position.y, 0.0f);
 		cb.world = DirectX::XMMatrixTranspose(cb.world);
@@ -1442,7 +2043,14 @@ std::function<void()> ImGuiApp::HandleUI::SetChangeValue(GameObject* _object, MO
 		}, _object->GetName(), std::move(types)));
 }
 
-void ImGuiSetKeyMap(ImGuiContext* _imguiContext)
+void ImGuiApp::HandleUI::SetUploadFile(std::string _uploadStr, std::function<void(GameObject*, fs::path)>&& _func, std::vector<std::string>&& _extensions)
+{
+	uploadStr = _uploadStr;
+	linkFunc = _func;
+	extensions = _extensions;
+}
+
+void ImGuiApp::ImGuiSetKeyMap(ImGuiContext* _imguiContext)
 {
 	ImGui::SetCurrentContext(_imguiContext);
 	ImGuiIO& io = ImGui::GetIO();
@@ -1492,6 +2100,5 @@ void ImGuiSetKeyMap(ImGuiContext* _imguiContext)
 	io.KeyMap[ImGuiKey_Z] = 'Z';                  // Map the 'Z' key (for Ctrl+Z, etc.)
 #endif
 }
-
 
 #endif

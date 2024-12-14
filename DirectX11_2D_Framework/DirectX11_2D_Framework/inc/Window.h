@@ -49,7 +49,6 @@ constexpr float DISPALY_ASPECT_HEIGHT = static_cast<float>(SCREEN_HEIGHT) / PROJ
 #define CAMERA_ON_WINDOW
 //================================================================
 
-
 #define WM_CREATE_NEW_WINDOW (WM_USER + 1)
 #define WM_DELETE_WINDOW (WM_USER + 2)
 #define WM_ADJUST_Z_ORDER (WM_USER + 3)
@@ -70,23 +69,6 @@ public:
 
 private:
 	Window() = delete;
-
-	static HINSTANCE m_hInstance;
-	static int m_nCmdShow;
-	static HWND mainHwnd;
-	static MSG msg;
-	static RECT windowSize;
-	static LARGE_INTEGER liWork; 
-	static long long frequency;
-	static long long worldOldCount;
-	static long long updateOldCount;
-	static long long worldLag;
-	static long long updateLag;
-	static int worldFpsounter;	//FPS計測変数
-	static int updateFpsCounter;		//FPS計測変数
-	static long long oldTick;	//前回計測時
-	static long long nowTick;	//今回計測時
-	static long long nowCount;
 
 #ifdef MAINLOOP__MALUTITHREAD
 	//メイン処理の終わりフラグ
@@ -121,7 +103,8 @@ public:
 	//ウィンドウかたずけ
 	static int WindowEnd();
 	//メインのウィンドウハンドル取得
-	static const HWND& GetMainHwnd(){return mainHwnd;}
+	static const HWND& GetMainHWnd();
+	static const bool IsPause();
 public:
 	static thread_local HWND(*pWindowSubCreate)(std::string, std::string, int, int, Vector2);
 private:	

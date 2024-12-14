@@ -62,6 +62,10 @@ void GameObject::SetActive(bool _active)
 	}
 	//更新関数ポインターを設定
 	pUpdate = _active ? &GameObject::UpdateComponent : &GameObject::Void;
+
+#ifdef DEBUG_TRUE
+	if (!active)isSelected = SELECT_NONE;
+#endif
 }
 
 void GameObject::SetName(const std::string _name)

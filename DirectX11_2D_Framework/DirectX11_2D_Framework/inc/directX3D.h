@@ -133,4 +133,6 @@ private:
 	static ComPtr<ID3D11RasterizerState> m_pWireframeRasterState;
 	//whitePixelテクスチャビュー
 	static ComPtr<ID3D11ShaderResourceView> m_pTextureView;
+	//画面塗りつぶしカラー
+	static float clearColor[4];
 };

@@ -1,11 +1,6 @@
 #pragma once
 
 
-//テクスチャの指定がなかった時の代用テクスチャ
-//============================================================================
-#define DEFUALT_TEXTURE_FILEPATH L"asset/pic/noTextureImg.png"
-//============================================================================
-
 class Renderer : public Component
 {
 	friend class GameObject;
@@ -23,7 +18,7 @@ private:
 	//UVRenderNodeへ切り替える
 	void SetUVRenderNode(Animator* _animator);
 	//imGuiの描画
-	void DrawImGui() override;
+	void DrawImGui(ImGuiApp::HandleUI& _handle) override;
 
 public:
 	//レイヤーの変更
@@ -41,23 +36,7 @@ private:
 	
 	//描画する順番
 	LAYER m_layer = LAYER::LAYER_01;
-private:
-	friend class cereal::access;
-	//Restrict access to the serialize function
-	template <class Archive>
-	void serialize(Archive& ar) {
-		//ar(CEREAL_NVP(id), CEREAL_NVP(name));
-	}
-
-	// Static method for load_and_construct
-	template <class Archive>
-	static void load_and_construct(Archive& ar, cereal::construct<Renderer>& construct) {
-		GameObject* object;
-		construct(object);           // Construct the Texture object
-	}
 };
-
-REGISTER_COMPONENT(Renderer)
 
 //双方向リストノード
 class RenderNode

@@ -3,7 +3,7 @@
 class Box2DBody : public Component
 {
 	friend class GameObject;
-
+	friend class RenderNode;
 private:
 	Box2DBody(GameObject* _object);
 	Box2DBody(GameObject* _object, b2BodyDef* _bodyDef);
@@ -15,7 +15,7 @@ private:
 	//アクティブ設定
 	void SetActive(bool _active) override;
 	//imGuiの描画
-	void DrawImGui()override;
+	void DrawImGui(ImGuiApp::HandleUI& _handle)override;
 public:
 	//bodyIdの取得
 	const b2BodyId GetBodyId() { return m_bodyId; }
@@ -131,6 +131,7 @@ class Box2DBodyManager
 	friend class Box2DCircleRenderNode;
 	friend class Box2DCapsuleRenderNode;
 	friend class ImGuiApp;
+	friend class RenderNode;
 
 public:
 	//指定したフィルターが衝突しない設定にする

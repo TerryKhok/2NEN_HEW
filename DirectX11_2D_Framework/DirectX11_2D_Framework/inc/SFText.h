@@ -31,7 +31,7 @@ private:
 #ifdef DEBUG_TRUE
 	std::string text;
 
-	void DrawImGui() override
+	void DrawImGui(ImGuiApp::HandleUI& _handle) override
 	{
 		ImGui::Text("text : %s", text.c_str());
 		static char input_buffer[256] = "";

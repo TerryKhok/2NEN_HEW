@@ -47,9 +47,12 @@ private:
 
 	static void DrawOptionGui();
 	static void DrawInspectorGui();
+	static void DrawMainGui(ImGuiContext* _mainContext);
 	
 	static void SetSelectedObject(GameObject* _object);
-	static void DeleteSelectedObject(bool _pause);
+	static void DeleteSelectedObject();
+
+	static void ClearStack();
 
 	static void RewindChange();
 
@@ -57,6 +60,8 @@ private:
 	static void DrawHandleUI(const Vector2& _targetPos);
 	
 	static void UnInit();
+
+	static void ImGuiSetKeyMap(ImGuiContext* _imguiContext);
 public:
 	static void InvalidSelectedObject();
 private:
@@ -73,13 +78,10 @@ private:
 	static std::unordered_map<HWND, ImGuiContext*> m_hWndContexts;
 	static ComPtr<IDXGISwapChain> m_pSwapChain[TYPE_MAX];
 	static ComPtr<ID3D11RenderTargetView> m_pRenderTargetView[TYPE_MAX];
-	static ComPtr<ID3D11ShaderResourceView> m_pIconTexture;
-	static ImTextureID m_imIconTexture;
 	static void(*pDrawImGui[TYPE_MAX])();
-	static std::stack<std::function<void()>> changes;
 	static std::unordered_map<std::string, std::array<int, VALUE_TYPE_MAX>> updateValues;
-	static std::stack<std::unique_ptr<GameObject, void(*)(GameObject*)>> willDeleteObjects;
-private:
+	static bool showMainEditor;
+public:
 	class HandleUI
 	{
 		friend class Window;
@@ -113,17 +115,31 @@ private:
 		HandleUI() = default;
 		HRESULT Init();
 		bool Update(Vector2 _targetPos);
-		void Draw(const GameObject* _target,const Vector2 _targetPos);
+		void Draw(GameObject* _target,const Vector2 _targetPos);
 		std::function<void()> SetChangeValue(GameObject* _object, MOVE_MODE _moveMode);
-
+	public:
+		//functionの引数であるGameObject*を使用する場合はnullptrかチェックする必要がある
+		void SetUploadFile(std::string _uploadStr, std::function<void(GameObject*, std::filesystem::path)>&& _func, std::vector<std::string>&& _extensions);
+	private:
 		static ComPtr<ID3D11Buffer> m_arrowVertexBuffer;
 		static ComPtr<ID3D11Buffer> m_arrowIndexBuffer;
 		HANDLE_MODE handleMode = POSITION;
 		MOVE_MODE moveMode = NONE;
+		std::string uploadStr = {};
+		std::vector<std::string> extensions;
+		std::function<void(GameObject*, std::filesystem::path)> linkFunc = {};
 	};
-
+private:
 	static HandleUI handleUi;
 };
 
+#else
+class ImGuiApp
+{
+public:
+	class HandleUI
+	{
 
+	};
+};
 #endif

@@ -32,6 +32,8 @@ ComPtr<ID3D11BlendState> DirectX11::m_pBlendState = nullptr;
 ComPtr<ID3D11RasterizerState> DirectX11::m_pWireframeRasterState;
 //whitePixelテクスチャビュー
 ComPtr<ID3D11ShaderResourceView> DirectX11::m_pTextureView;
+//画面塗りつぶしカラー
+float DirectX11::clearColor[4] = { 0.0f, 0.5f, 0.5f, 1.0f };
 
 //--------------------------------------------------------------------------------------
 // シェーダーをファイル拡張子に合わせてコンパイル
@@ -462,9 +464,6 @@ void DirectX11::D3D_StartRender()
 	//定数バッファを頂点シェーダーにセットする
 	m_pDeviceContext->VSSetConstantBuffers(0, 1, m_pVSObjectConstantBuffer.GetAddressOf());
 	//===========================================================================================
-
-	// 画面塗りつぶし色
-	static const float clearColor[4] = { 0.0f, 0.5f, 0.5f, 1.0f };
 
 	int colorIndex = 0;
 	for (auto& targetView : m_pRenderTargetViewList)

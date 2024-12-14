@@ -42,14 +42,7 @@ private:
 
 	void SetActive(bool _active) override
 	{
-		if (_active)
-		{
-			ShowWindow(m_hWnd, SW_SHOW);
-		}
-		else
-		{
-			ShowWindow(m_hWnd, SW_HIDE);
-		}
+		_active ? ShowWindow(m_hWnd, SW_SHOW) : ShowWindow(m_hWnd, SW_HIDE);
 	}
 
 	void OnWindowMove(HWND _hWnd, RECT* _rect) override

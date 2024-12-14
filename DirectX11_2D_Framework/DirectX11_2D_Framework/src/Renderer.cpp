@@ -82,12 +82,27 @@ void Renderer::SetUVRenderNode(Animator* _animator)
 	_animator->m_uvNode = node;
 }
 
-void Renderer::DrawImGui()
+void Renderer::DrawImGui(ImGuiApp::HandleUI& _handle)
 {
 #ifdef DEBUG_TRUE
 	ImGui::Text(" Layer : %s", magic_enum::enum_name(m_layer).data());
 
 	ImGui::Text(" path  : %s", m_node->texPath.c_str());
+	ImGui::SameLine();
+	if (ImGui::Button("Link"))
+	{
+		std::string str = m_this->GetName() + "Texture";
+		_handle.SetUploadFile(str, [&](GameObject* obj, std::filesystem::path path)
+			{
+				if (obj == nullptr || obj != m_this) return;
+
+				auto render = obj->GetComponent<Renderer>();
+				if (render != nullptr)
+				{
+					render->SetTexture(path.wstring().c_str());
+				}
+			}, { ".png" ,".jpg"});
+	}
 	ImGui::ColorEdit4("color", &m_node->m_color.x);
 	ImVec4 color(m_node->m_color.x, m_node->m_color.y, m_node->m_color.z, m_node->m_color.w);
 	ImGui::Image((ImTextureID)(m_node->m_pTextureView.Get()), ImVec2(50, 50), ImVec2(0, 0), ImVec2(1, 1), color);
@@ -160,6 +175,52 @@ inline void RenderNode::Draw()
 		DirectX11::m_pVSObjectConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
 
 	DirectX11::m_pDeviceContext->DrawIndexed(6, 0, 0);
+
+#ifdef DEBUG_TRUE
+	bool flg = true;
+	if (m_object->isSelected != GameObject::SELECT_NONE)
+	{
+		Box2DBody* rb = nullptr;
+		flg = m_object->TryGetComponent(&rb);
+		if (flg)
+		{
+			flg = !rb->m_shapeList.empty();
+		}
+	}
+	if (!flg)
+	{
+		UINT strides = sizeof(Vertex);
+		UINT offsets = 0;
+
+		DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_vertexBuffer.GetAddressOf(), &strides, &offsets);
+		DirectX11::m_pDeviceContext->IASetIndexBuffer(Box2DBodyManager::m_boxIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+		DirectX11::m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+
+		//テクスチャをピクセルシェーダーに渡す
+		DirectX11::m_pDeviceContext->PSSetShaderResources(0, 1, DirectX11::m_pTextureView.GetAddressOf());
+
+		//ワールド変換行列の作成
+		//ー＞オブジェクトの位置・大きさ・向きを指定
+		cb.world = DirectX::XMMatrixScaling(m_object->transform.scale.x + 1.0f, m_object->transform.scale.y + 1.0f, 1.0f);
+		cb.world *= DirectX::XMMatrixRotationZ(m_object->transform.angle.z.Get());
+		cb.world *= DirectX::XMMatrixTranslation(m_object->transform.position.x, m_object->transform.position.y, 0.0f);
+		cb.world = DirectX::XMMatrixTranspose(cb.world);
+		if (m_object->isSelected == GameObject::SELECTED)
+			cb.color = Box2D::b2_colorSelected;
+		else if (m_object->isSelected == GameObject::ON_MOUSE)
+			cb.color = Box2D::b2_colorOnMouse;
+
+		//行列をシェーダーに渡す
+		DirectX11::m_pDeviceContext->UpdateSubresource(
+			DirectX11::m_pVSObjectConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
+
+		DirectX11::m_pDeviceContext->DrawIndexed(8, 0, 0);
+
+		DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_vertexBuffer.GetAddressOf(), &strides, &offsets);
+		DirectX11::m_pDeviceContext->IASetIndexBuffer(RenderManager::m_indexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+		DirectX11::m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	}
+#endif
 
 	//次のポインタにつなぐ
 	NextFunc();
@@ -471,7 +532,7 @@ void RenderManager::Draw()
 
 	// 描画先のキャンバスと使用する深度バッファを指定する
 	DirectX11::m_pDeviceContext->OMSetRenderTargets(1,
-		DirectX11::m_pRenderTargetViewList[Window::GetMainHwnd()].first.GetAddressOf(), DirectX11::m_pDepthStencilView.Get());
+		DirectX11::m_pRenderTargetViewList[Window::GetMainHWnd()].first.GetAddressOf(), DirectX11::m_pDepthStencilView.Get());
 
 	static VSCameraConstantBuffer cb = {
 			XMMatrixIdentity(),
@@ -523,7 +584,7 @@ void RenderManager::LinkNextRenderList()
 void RenderManager::SetMainCameraMatrix()
 {
 	RECT rect;
-	if (GetWindowRect(Window::GetMainHwnd(), &rect))
+	if (GetWindowRect(Window::GetMainHWnd(), &rect))
 	{
 		CameraManager::cameraPosition = {
 			(static_cast<float>(rect.left + rect.right) / 2 - Window::MONITER_HALF_WIDTH) / renderZoom.x + renderOffset.x,
@@ -531,7 +592,7 @@ void RenderManager::SetMainCameraMatrix()
 		};
 	}
 
-	if (GetClientRect(Window::GetMainHwnd(), &rect))
+	if (GetClientRect(Window::GetMainHWnd(), &rect))
 	{
 		rect.right = max(rect.right, 1);
 		rect.bottom = max(rect.bottom, 1);

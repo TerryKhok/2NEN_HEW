@@ -36,7 +36,7 @@ private:
 private:
 	std::function<void(void)> m_event;
 private:
-	void DrawImGui() override
+	void DrawImGui(ImGuiApp::HandleUI& _handle) override
 	{
 		std::string str = m_event.target_type().name();
 		const char* action = 

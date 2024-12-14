@@ -6,7 +6,10 @@ long long AnimatorManager::deltaCount;
 void AnimationClip::SetUVRenderNode(UVRenderNode* _renderNode)
 {
 	auto& frame = frames[frameIndex];
-	_renderNode->SetTexture(frame.texPath);
+	_renderNode->m_pTextureView = textureList[frame.texIndex];
+#ifdef DEBUG_TRUE
+	_renderNode->texPath = wstring_to_string(frame.texPath);
+#endif
 	_renderNode->m_frameX = frame.frameX;
 	_renderNode->m_frameY = frame.frameY;
 	_renderNode->m_scaleX = frame.scaleX;
@@ -121,7 +124,7 @@ void Animator::Resume()
 }
 
 
-void Animator::DrawImGui()
+void Animator::DrawImGui(ImGuiApp::HandleUI& _handle)
 {
 #ifdef DEBUG_TRUE
 	ImGui::Text("currentClip : %s", m_currentClipName.c_str());
@@ -130,12 +133,14 @@ void Animator::DrawImGui()
 	{
 		Pause();
 	}
+	ImGui::SameLine();
 	if (ImGui::Button("Resume"))
 	{
 		Resume();
 	}
-
+	
 	ImGui::SeparatorText("clips");
+	ImGui::Button("+ Add Clip");
 	for (auto clip : m_clip)
 	{
 		bool selected = clip.first == m_currentClipName;
@@ -143,6 +148,8 @@ void Animator::DrawImGui()
 		{
 			Play(clip.first);
 		}
+		ImGui::SameLine();
+		ImGui::Button("Edit");
 	}
 #endif
 }

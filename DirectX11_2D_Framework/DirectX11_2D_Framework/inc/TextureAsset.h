@@ -3,8 +3,11 @@
 class TextureAssets final
 {
 	friend class Window;
+	friend class SceneManager;
 	friend class RenderNode;
 	friend class RenderManager;
+	friend class AnimationClip;
+	friend class ImGuiApp;
 	
 private:
 	TextureAssets() = delete;
@@ -16,17 +19,22 @@ private:
 	static HRESULT Init();
 	static void UnInit();
 	
-	static HRESULT WICLoad(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName);
-	static HRESULT Void(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName);
+	static HRESULT WICLoad(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texPath);
+	static HRESULT WICLoadNext(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texPath);
+	static HRESULT Void(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texPath);
 
 	static HRESULT StbiLoad(ComPtr<ID3D11ShaderResourceView>& _textureView, std::string _filePath);
 	static HRESULT StbiLoad(ComPtr<ID3D11ShaderResourceView>& _textureView, std::string _filePath, int* _width, int* _height);
+
+	static void ChangeNextTextureLib();
+	static void LinkNextTextureLib();
+
 	static void LoadEnd();
 private:
 	//テクスチャ読み込み関数ポインタ
-	static HRESULT(* pLoadTexture)(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName);
+	static thread_local HRESULT(* pLoadTexture)(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texPath);
 private:
 	static ComPtr<IWICImagingFactory> m_pWICFactory;
 	static std::unordered_map<const wchar_t*, ComPtr<ID3D11ShaderResourceView>> m_textureLib;
-	
+	static std::unordered_map<const wchar_t*, ComPtr<ID3D11ShaderResourceView>> m_nextTextureLib;
 };

@@ -1,5 +1,4 @@
 
-
 void CreateConsoleWindow() {
 	// Allocates a new console for the calling process
 	AllocConsole();
@@ -29,22 +28,22 @@ int Window::MONITER_HALF_WIDTH = GetSystemMetrics(SM_CXSCREEN) / 2;
 int Window::MONITER_HALF_HEIGHT = GetSystemMetrics(SM_CYSCREEN) / 2;
 
 
-HINSTANCE Window::m_hInstance;
-int Window::m_nCmdShow;
-HWND  Window::mainHwnd;
-MSG Window::msg;
-RECT Window::windowSize;
-LARGE_INTEGER Window::liWork;
-long long Window::frequency;
-long long Window::worldOldCount;
-long long Window::updateOldCount;
-long long Window::worldLag = 0;
-long long Window::updateLag = 0;
-int Window::worldFpsounter = 0;		//FPS計測変数
-int Window::updateFpsCounter = 0;						//FPS計測変数
-long long Window::oldTick = GetTickCount64();	//前回計測時
-long long Window::nowTick = oldTick;				//今回計測時
-long long Window::nowCount = worldOldCount;
+HINSTANCE m_hInstance;
+int m_nCmdShow;
+HWND  mainHwnd;
+MSG msg;
+RECT windowSize;
+LARGE_INTEGER liWork;
+long long frequency;
+long long worldOldCount;
+long long updateOldCount;
+long long worldLag = 0;
+long long updateLag = 0;
+int worldFpsounter = 0;		//FPS計測変数
+int updateFpsCounter = 0;						//FPS計測変数
+long long oldTick = GetTickCount64();	//前回計測時
+long long nowTick = oldTick;				//今回計測時
+long long nowCount = worldOldCount;
 
 std::atomic<bool> Window::terminateFlag(false);
 
@@ -52,6 +51,8 @@ thread_local HWND(*Window::pWindowSubCreate)(std::string, std::string, int, int,
 
 //ウィンドウのハンドルに対応したオブジェクトの名前
 std::unordered_map<HWND, std::string> Window::m_hwndObjNames;
+
+ImGuiContext* mainContext;
 
 LRESULT Window::WindowMainCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
@@ -141,6 +142,18 @@ LRESULT Window::WindowMainCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, L
 
 #ifdef DEBUG_TRUE
 	ImGuiApp::Init(hInstance);
+
+	mainContext = ImGui::CreateContext();
+	ImGui::SetCurrentContext(mainContext);
+
+	ImGuiIO& io = ImGui::GetIO(); (void)io;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+
+	ImGui_ImplWin32_Init(mainHwnd); // hWnd is your main window handle
+	ImGui_ImplDX11_Init(DirectX11::m_pDevice.Get(), DirectX11::m_pDeviceContext.Get());
+
+	ImGuiApp::ImGuiSetKeyMap(mainContext);
 #endif
 
 	m_hInstance = hInstance;
@@ -390,6 +403,8 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 			SFTextManager::ExecuteDrawString();
 #endif
 #ifdef DEBUG_TRUE
+			ImGuiApp::DrawMainGui(mainContext);
+
 			ImGuiApp::Draw();
 #endif
 
@@ -487,6 +502,8 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 				SFTextManager::ExecuteDrawString();
 #endif
 #ifdef DEBUG_TRUE
+				ImGuiApp::DrawMainGui(mainContext);
+
 				ImGuiApp::Draw();
 #endif
 				DirectX11::D3D_FinishRender();
@@ -540,15 +557,21 @@ int Window::WindowEnd()
 	//オブジェクトを削除する(念入りに)
 	ObjectManager::CleanAllObjectList();
 	
+#ifdef DEBUG_TRUE
+	ImGuiApp::UnInit();
+
+	ImGui::SetCurrentContext(mainContext);
+
+	ImGui_ImplDX11_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
+#endif
+
 	//すべてのワールドを削除する
 	Box2D::WorldManager::DeleteAllWorld();
 
 	//シーンの破棄
 	SceneManager::UnInit();
-
-#ifdef DEBUG_TRUE
-	ImGuiApp::UnInit();
-#endif
 
 	//DirectXかたずけ
 	DirectX11::D3D_Release();
@@ -568,12 +591,79 @@ int Window::WindowEnd()
 
 	return (int)msg.wParam;
 }
+
+const HWND& Window::GetMainHWnd()
+{
+	return mainHwnd;
+}
+
+const bool Window::IsPause()
+{
+	return pauseGame;
+}
 // Declare isDragging as a static or global variable
 bool isDragging = false;
 
 
 LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+#ifdef DEBUG_TRUE
+	if (mainContext != nullptr)
+	{
+		ImGui::SetCurrentContext(mainContext);
+		ImGuiIO& io = ImGui::GetIO();
+
+		switch (uMsg) {
+			// Mouse button down
+		case WM_LBUTTONDOWN:
+			io.MouseDown[0] = true;  // Left mouse button
+			break;
+		case WM_RBUTTONDOWN:
+			io.MouseDown[1] = true;  // Right mouse button
+			break;
+		case WM_MBUTTONDOWN:
+			io.MouseDown[2] = true;  // Middle mouse button
+			break;
+
+			// Mouse button up
+		case WM_LBUTTONUP:
+			io.MouseDown[0] = false;
+			break;
+		case WM_RBUTTONUP:
+			io.MouseDown[1] = false;
+			break;
+		case WM_MBUTTONUP:
+			io.MouseDown[2] = false;
+			break;
+
+			// Mouse movement
+		case WM_MOUSEMOVE:
+			io.MousePos.x = (float)GET_X_LPARAM(lParam);
+			io.MousePos.y = (float)GET_Y_LPARAM(lParam);
+			break;
+
+			// Mouse wheel
+		case WM_MOUSEWHEEL:
+			io.MouseWheel += GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? +1.0f : -1.0f;
+			break;
+
+			// Keyboard events
+		case WM_KEYDOWN:
+			if (wParam < 256)
+				io.KeysDown[wParam] = 1;
+			break;
+		case WM_KEYUP:
+			if (wParam < 256)
+				io.KeysDown[wParam] = 0;
+			break;
+		case WM_CHAR:
+			if (wParam > 0 && wParam < 0x10000)
+				io.AddInputCharacter((unsigned short)wParam);
+			break;
+		}
+	}
+#endif
+
 	static float screenWindowAspectWidth = 1.0f;
 	static float screenWindowAspectHeight = 1.0f;
 
@@ -645,25 +735,30 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 #ifdef DEBUG_TRUE
 					Vector2 mousePos = Input::Get().MousePoint();
 
-					Vector2 targetPos = mousePos;
-					targetPos.x = targetPos.x * DISPALY_ASPECT_WIDTH / RenderManager::renderZoom.x + RenderManager::renderOffset.x;
-					targetPos.y = targetPos.y * DISPALY_ASPECT_HEIGHT / RenderManager::renderZoom.y + RenderManager::renderOffset.y;				
+					Vector2 worldPos = mousePos;
+					worldPos.x = worldPos.x * DISPALY_ASPECT_WIDTH / RenderManager::renderZoom.x + RenderManager::renderOffset.x;
+					worldPos.y = worldPos.y * DISPALY_ASPECT_HEIGHT / RenderManager::renderZoom.y + RenderManager::renderOffset.y;				
 
-					bool handleHit = ImGuiApp::UpdateHandleUI(targetPos);
+					bool handleHit = ImGuiApp::UpdateHandleUI(worldPos);
 				
+
+					bool inGameScreen = abs(mousePos.x) <= PROJECTION_WIDTH / 2 && abs(mousePos.y) <= PROJECTION_HEIGHT / 2;
+					//if(abs(mousePos.x) <= PROJECTION_WIDTH / 2 && abs(mousePos.y) <= PROJECTION_HEIGHT / 2)
 					{
 						std::list<GameObject*> targetObjects;
 						
 
 						for (auto& object : *ObjectManager::m_objectList.get())
 						{
+							if (!object.second->active) continue;
+
 							const Vector2& pos = object.second->transform.position;
 							Vector2 scale = object.second->transform.scale;
 							scale *= HALF_OBJECT_SIZE;
-							if ((pos.x - scale.x) < targetPos.x &&
-								(pos.x + scale.x) > targetPos.x &&
-								(pos.y - scale.y) < targetPos.y &&
-								(pos.y + scale.y) > targetPos.y)
+							if ((pos.x - scale.x) < worldPos.x &&
+								(pos.x + scale.x) > worldPos.x &&
+								(pos.y - scale.y) < worldPos.y &&
+								(pos.y + scale.y) > worldPos.y)
 							{
 								targetObjects.push_back(object.second.get());
 							}
@@ -673,7 +768,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 							(handleHit && target->isSelected != GameObject::SELECTED))
 							target->isSelected = GameObject::SELECT_NONE;
 
-						if (!handleHit)
+						if (!handleHit && inGameScreen)
 						{
 
 							if (targetObjects.empty())
@@ -709,7 +804,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 					if (Input::Get().KeyTrigger(VK_DELETE))
 					{
-						ImGuiApp::DeleteSelectedObject(true);
+						ImGuiApp::DeleteSelectedObject();
 					}
 
 					if (Input::Get().KeyPress(VK_CONTROL) && Input::Get().KeyTrigger(VK_Z))
@@ -733,30 +828,34 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 						ImGuiApp::handleUi.moveMode = ImGuiApp::HandleUI::NONE;
 					}
 
-					if (Input::Get().MouseRightTrigger())
+					
+					if (inGameScreen)
 					{
-						oldMousePos = mousePos;
-					}
+						if (Input::Get().MouseRightTrigger())
+						{
+							oldMousePos = mousePos;
+						}
 
-					if (Input::Get().MouseRightPress())
-					{
-						Vector2 dis = mousePos - oldMousePos;
-						oldMousePos = mousePos;
-						dis *= -1.0f;
-						float rad = -Math::DegToRad(CameraManager::cameraRotation);
-						Vector2 offset;
-						offset.x = dis.x * cos(rad) - dis.y * sin(rad);
-						offset.y = dis.x * sin(rad) + dis.y * cos(rad);
-						RenderManager::renderOffset += offset / RenderManager::renderZoom;
-					}
+						if (Input::Get().MouseRightPress())
+						{
+							Vector2 dis = mousePos - oldMousePos;
+							oldMousePos = mousePos;
+							dis *= -1.0f;
+							float rad = -Math::DegToRad(CameraManager::cameraRotation);
+							Vector2 offset;
+							offset.x = dis.x * cos(rad) - dis.y * sin(rad);
+							offset.y = dis.x * sin(rad) + dis.y * cos(rad);
+							RenderManager::renderOffset += offset / RenderManager::renderZoom;
+						}
 
-					if (Input::Get().MouseWheelDelta() > 0)
-					{
-						RenderManager::renderZoom += RenderManager::renderZoom / 100;
-					}
-					else if (Input::Get().MouseWheelDelta() < 0)
-					{
-						RenderManager::renderZoom -= RenderManager::renderZoom / 100;
+						if (Input::Get().MouseWheelDelta() > 0)
+						{
+							RenderManager::renderZoom += RenderManager::renderZoom / 100;
+						}
+						else if (Input::Get().MouseWheelDelta() < 0)
+						{
+							RenderManager::renderZoom -= RenderManager::renderZoom / 100;
+						}
 					}
 #endif
 
@@ -767,12 +866,14 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 					RenderManager::Draw();
 #ifdef DEBUG_TRUE
-					ImGuiApp::DrawHandleUI(targetPos);
+					ImGuiApp::DrawHandleUI(worldPos);
 #endif
 #ifdef SFTEXT_TRUE
 					SFTextManager::KeepExecuteDrawString();
 #endif
 #ifdef DEBUG_TRUE
+					ImGuiApp::DrawMainGui(mainContext);
+
 					ImGuiApp::Draw();
 #endif
 					DirectX11::D3D_FinishRender();
@@ -962,6 +1063,8 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 #endif
 
 #ifdef DEBUG_TRUE
+		ImGuiApp::DrawMainGui(mainContext);
+
 		ImGuiApp::Draw();
 #endif
 
@@ -981,8 +1084,21 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		ScreenToClient(hWnd, &Input::mousePoint);
 		static const LONG HALF_SCREEN_WIDTH = PROJECTION_WIDTH / 2;
 		static const LONG HALF_SCREEN_HEIGHT = PROJECTION_HEIGHT / 2;
+#ifdef DEBUG_TRUE
+		if (ImGuiApp::showMainEditor)
+		{
+			Input::mousePoint.x = static_cast<LONG>(Input::mousePoint.x * screenWindowAspectWidth * 2) - HALF_SCREEN_WIDTH * 2;
+			Input::mousePoint.y = static_cast<LONG>(Input::mousePoint.y * screenWindowAspectHeight * 2) - HALF_SCREEN_HEIGHT;
+		}
+		else
+		{
+			Input::mousePoint.x = static_cast<LONG>(Input::mousePoint.x * screenWindowAspectWidth) - HALF_SCREEN_WIDTH;
+			Input::mousePoint.y = static_cast<LONG>(Input::mousePoint.y * screenWindowAspectHeight) - HALF_SCREEN_HEIGHT;
+		}
+#else
 		Input::mousePoint.x = static_cast<LONG>(Input::mousePoint.x * screenWindowAspectWidth) - HALF_SCREEN_WIDTH;
 		Input::mousePoint.y = static_cast<LONG>(Input::mousePoint.y * screenWindowAspectHeight) - HALF_SCREEN_HEIGHT;
+#endif
 		Input::mousePoint.y *= -1;
 	}
 	break;
@@ -1030,6 +1146,8 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 #endif
 
 #ifdef DEBUG_TRUE
+		ImGuiApp::DrawMainGui(mainContext);
+
 		ImGuiApp::Draw();
 #endif
 
@@ -1191,6 +1309,8 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 #endif
 
 #ifdef DEBUG_TRUE
+		ImGuiApp::DrawMainGui(mainContext);
+
 		ImGuiApp::Draw();
 #endif
 

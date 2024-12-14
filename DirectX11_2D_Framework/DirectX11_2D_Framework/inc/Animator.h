@@ -2,12 +2,28 @@
 
 class RenderNode;
 
-struct AnimationFrame
+struct AnimationFrameData
 {
 	//メモリ確保禁止
 	void* operator new(size_t) = delete;
 
 	const wchar_t* texPath;
+	float scaleX = 0.5f;
+	float scaleY = 0.5f;
+	int frameX = 0;
+	int frameY = 0;
+	long long waitCount = 0;
+};
+
+struct AnimationFrame
+{
+	//メモリ確保禁止
+	void* operator new(size_t) = delete;
+
+	int texIndex = 0;
+#ifdef DEBUG_TRUE
+	const wchar_t* texPath;
+#endif
 	float scaleX = 0.5f;
 	float scaleY = 0.5f;
 	int frameX = 0;
@@ -27,8 +43,30 @@ protected:
 		pUpdate = &AnimationClip::UpdateCount;
 	}
 	//フレームを追加
-	void AddFrame(AnimationFrame _frame) {
-		frames.push_back(_frame);
+	void AddFrame(const AnimationFrameData& _frame) {
+		AnimationFrame frame;
+		ComPtr<ID3D11ShaderResourceView> texture;
+		TextureAssets::pLoadTexture(texture, _frame.texPath);
+		auto iter = std::find(textureList.begin(), textureList.end(), texture);
+		if (iter != textureList.end())
+		{
+			frame.texIndex = (int)std::distance(textureList.begin(), iter);
+		}
+		else
+		{
+			textureList.push_back(texture);
+			frame.texIndex = (int)textureList.size() - 1;
+		}
+#ifdef DEBUG_TRUE
+		frame.texPath = _frame.texPath;
+#endif
+		frame.frameX = _frame.frameX;
+		frame.frameY = _frame.frameY;
+		frame.scaleX = _frame.scaleX;
+		frame.scaleY = _frame.scaleY;
+		frame.waitCount = _frame.waitCount;
+
+		frames.push_back(std::move(frame));
 	}
 	//現在のframeIndexに更新
 	void SetUVRenderNode(UVRenderNode* _renderNode);
@@ -48,6 +86,7 @@ private:
 protected:
 	//アニメーションのコマを格納
 	std::vector<AnimationFrame> frames;
+	std::vector<ComPtr<ID3D11ShaderResourceView>> textureList;
 	//フレームの番号
 	int frameIndex = 0;
 	//現在のカウント
@@ -80,10 +119,10 @@ class Animator : public Component
 public:
 	//デバッグ用
 	//============================================================================
-	void AddClip(std::string _name, std::vector<AnimationFrame>& _frames,bool _loop = true)
+	void AddClip(std::string _name, std::vector<AnimationFrameData>& _frames, bool _loop = true)
 	{
 		AnimationClip* clip = _loop ? new AnimationClipLoop() : new AnimationClip();
-		
+
 		for (auto& frame : _frames)
 		{
 			clip->AddFrame(frame);
@@ -96,7 +135,7 @@ public:
 	void Pause();
 	void Resume();
 
-	void DrawImGui() override;
+	void DrawImGui(ImGuiApp::HandleUI& _handle) override;
 	
 private:
 	AnimationClip::functionPointer pUpdate = &AnimationClip::Update;

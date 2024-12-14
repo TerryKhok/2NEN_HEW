@@ -125,7 +125,7 @@ void Box2DBody::SetActive(bool _active)
 #endif
 }
 
-void Box2DBody::DrawImGui()
+void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 {
 	auto vec = b2Body_GetLinearVelocity(m_bodyId);
 	ImGui::Text(" LinerVelocity\n  <x: %.2f   y:%.2f>", vec.x, vec.y);

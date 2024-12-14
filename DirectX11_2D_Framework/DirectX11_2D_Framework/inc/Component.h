@@ -80,12 +80,7 @@ private:
 	//============================================
 	// imGui‚Å•`‰æ‚·‚é
 	//============================================
-	virtual void DrawImGui(){
+	virtual void DrawImGui(ImGuiApp::HandleUI& _handle){
 		ImGui::Text(" not override DrawImGui function!");
 	}
-private:
-	friend class cereal::access;
-
-	template <class Archive>
-	void serialize(Archive& ar) {}
 };
