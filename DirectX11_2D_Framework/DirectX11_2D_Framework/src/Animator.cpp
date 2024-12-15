@@ -93,6 +93,67 @@ void Animator::SetActive(bool _active)
 	m_uvNode->Active(_active);
 }
 
+void Animator::AddClip(std::string _name, std::string _path, bool _loop)
+{
+	if (m_clip.find(_name) != m_clip.end()) return;
+
+	//読み込みファイルを開く
+	std::ifstream fin;
+	fin.open(_path, std::ios::in | std::ios::binary);
+
+	bool open = fin.is_open();
+	//読み込み失敗
+	if (open)
+	{
+		AnimationClip* clip = _loop ? new AnimationClipLoop() : new AnimationClip();
+
+		//プレイヤーの数を読み込む
+		int size = 0;
+		fin.read((char*)&size, sizeof(size));
+
+		for (int i = 0; i < size; i++)
+		{
+			//パスの大きさを読み込み
+			int nameSize = 0;
+			fin.read((char*)&nameSize, sizeof(nameSize));
+
+			AnimationFrameData frame;
+
+			//パスを読み込み
+			std::string path;
+			path.resize(nameSize);
+			fin.read((char*)path.c_str(), nameSize);
+			std::filesystem::path texPath(path);
+			frame.texPath = texPath.wstring();
+			//splitX
+			int splitX;
+			fin.read((char*)&splitX, sizeof(splitX));
+			frame.scaleX = 1.0f / splitX;
+			//splitY
+			int splitY;
+			fin.read((char*)&splitY, sizeof(splitY));
+			frame.scaleY = 1.0f / splitY;
+			//uvX
+			fin.read((char*)&frame.frameX, sizeof(frame.frameX));
+			//uvY
+			fin.read((char*)&frame.frameY, sizeof(frame.frameY));
+			//waitCout
+			fin.read((char*)&frame.waitCount, sizeof(frame.waitCount));
+
+			clip->AddFrame(frame);
+		}
+
+		//読み込みファイルを閉じる
+		fin.close();
+
+		m_clip.insert(std::make_pair(_name, clip));
+	}
+	else
+	{
+		LOG_ERROR("アニメーションクリップ読み込み失敗");
+	}
+}
+
 void Animator::Play(const std::string& _clipName)
 {
 	//再開開始
@@ -127,7 +188,30 @@ void Animator::Resume()
 void Animator::DrawImGui(ImGuiApp::HandleUI& _handle)
 {
 #ifdef DEBUG_TRUE
-	ImGui::Text("currentClip : %s", m_currentClipName.c_str());
+	ImGui::SeparatorText("editor");
+
+	ImGui::Text("clip path : %s", currentClipPath.filename().string().c_str());
+	ImGui::SameLine();
+	if (ImGui::Button("LinkAnim"))
+	{
+		_handle.SetUploadFile("animation clip file",
+			[&](GameObject* _obj, std::filesystem::path _path)
+			{
+				currentClipPath = _path;
+			}
+		, { ANIM_CLIP_EXTENSION_DOT });
+	}
+
+	static char buf[256] = {};
+	ImGui::InputText("clipName", buf, sizeof(buf) / sizeof(char));
+	static bool loop = true;
+	ImGui::Checkbox("loop", &loop);
+	if (ImGui::Button("+Add Clip"))
+	{
+		AddClip(buf, currentClipPath.string(), loop);
+	}
+
+	ImGui::SeparatorText("clipList");
 
 	if (ImGui::Button("Pause"))
 	{
@@ -138,19 +222,22 @@ void Animator::DrawImGui(ImGuiApp::HandleUI& _handle)
 	{
 		Resume();
 	}
-	
-	ImGui::SeparatorText("clips");
-	ImGui::Button("+ Add Clip");
-	for (auto clip : m_clip)
+	ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
+	float windowSize = (std::min)(5, (int)m_clip.size()) * 15.0f + 20.0f;
+	ImGui::BeginChild("ChildR", ImVec2(0, windowSize), ImGuiChildFlags_Borders);
 	{
-		bool selected = clip.first == m_currentClipName;
-		if (ImGui::Selectable(clip.first.c_str(),&selected))
+		for (auto clip : m_clip)
 		{
-			Play(clip.first);
+			bool selected = clip.first == m_currentClipName;
+			if (ImGui::Selectable(clip.first.c_str(), &selected))
+			{
+				Play(clip.first);
+			}
 		}
-		ImGui::SameLine();
-		ImGui::Button("Edit");
+		ImGui::EndChild();
 	}
+	ImGui::PopStyleVar();
+
 #endif
 }
 

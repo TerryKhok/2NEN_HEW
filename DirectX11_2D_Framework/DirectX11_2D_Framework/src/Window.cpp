@@ -336,6 +336,9 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 	const long long worldFrameCount = frequency / WORLD_FPS;
 	const long long updateFrameCount = frequency / UPDATE_FPS;
 
+	//Animator用のカウント更新
+	AnimatorManager::deltaCount = updateFrameCount;
+
 	// ゲームループ
 	while(true)
 	{
@@ -436,6 +439,9 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 	// Example main loop with a loading screen
 	bool loadingComplete = false;
 
+	//Animator用のカウント更新
+	AnimatorManager::deltaCount = updateFrameCount;
+
 	// ゲームループ
 	while (!loadingComplete && !terminateFlag)
 	{
@@ -480,8 +486,6 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 			if (updateLag >= updateFrameCount)
 			{
 				updateLag -= updateFrameCount;
-				//Animator用のカウント更新
-				AnimatorManager::deltaCount = nowCount - worldOldCount;
 
 				Input::Get().Update();
 
@@ -696,6 +700,9 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		long long pauseNowCount = liWork.QuadPart;
 		long long pauseOldCount = pauseNowCount;
 		long long pauseFrameCount = frequency / 60;
+
+		//Animator用のカウント更新
+		AnimatorManager::deltaCount = pauseFrameCount;
 
 		Vector2 oldMousePos;
 

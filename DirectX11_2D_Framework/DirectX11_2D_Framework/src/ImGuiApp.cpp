@@ -212,33 +212,16 @@ HRESULT ImGuiApp::Init(HINSTANCE hInstance)
 	return HRESULT();
 }
 
-
-// Open File Dialog to select PNG
-std::string OpenFileDialog() {
-	OPENFILENAME ofn;
-	char szFile[260];
-	ZeroMemory(&ofn, sizeof(ofn));
-	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = NULL;
-	ofn.lpstrFile = szFile;
-	ofn.lpstrFile[0] = '\0';
-	ofn.lpstrFilter = "PNG Files (*.png)\0*.png\0";//All Files (*.*)\0*.*\0;
-	ofn.nMaxFile = sizeof(szFile);
-	ofn.lpstrTitle = "Select a PNG file";
-	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
-
-	if (GetOpenFileName(&ofn)) {
-		std::string str = szFile;
-		return str;
-	}
-
-	return " ";
-}
-
 namespace fs = std::filesystem;
 
+
+void SaveAnimationClipFile(const std::string& _path);
+void SaveAnimationClipFileDialog();
+void ReadAnimationClipFile(fs::path _path);
+
+
 // Set of allowed extensions
-std::set<std::string> allowed_extensions = { ".txt",".png",".jpg",".json",".wav"}; // Add the extensions you want to display
+std::set<std::string> allowed_extensions = { ".txt",".png",".jpg",".json",".wav",ANIM_CLIP_EXTENSION_DOT }; // Add the extensions you want to display
 
 // Set of unallowed folder
 std::set<std::string> unallowed_folders = {"x64"};
@@ -920,6 +903,20 @@ void ImGuiApp::DrawInspectorGui()
 	ImGui::End();
 }
 
+const float windowWidth = SCREEN_WIDTH / 4;
+const float windowHeight = SCREEN_HEIGHT / 2;
+
+// Horizontal resize constraint callback
+void HorizontalResizeConstraint(ImGuiSizeCallbackData* data) {
+	data->DesiredSize.y = data->CurrentSize.y; // Fix the height
+	// Optionally, set minimum or maximum horizontal sizes
+	if (data->DesiredSize.x < windowWidth) {
+		data->DesiredSize.x = windowWidth; // Minimum width
+	}
+	if (data->DesiredSize.x > windowWidth * 1.5f) {
+		data->DesiredSize.x = windowWidth * 1.5f; // Maximum width
+	}
+}
 
 void ImGuiApp::DrawMainGui(ImGuiContext* _mainContext)
 {
@@ -933,55 +930,225 @@ void ImGuiApp::DrawMainGui(ImGuiContext* _mainContext)
 		ImGui_ImplDX11_NewFrame();
 		ImGui::NewFrame();
 
-		const float windowWidth = SCREEN_WIDTH / 4;
-		const float windowHeight = SCREEN_HEIGHT / 2;
+		static bool aniPlay = false;
+		static long long deltaCount = 0;
+		static long long waitCount = 0;
+		static int curFrameIndex = 0;
+		static fs::path clipPath = " ";
+		static bool openAnimDialog = false;
 
 		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
 
 		ImGui::SetNextWindowPos(ImVec2(0, 0));  // Start at the end of game viewport
-		ImGui::SetNextWindowSize(ImVec2(windowWidth, windowHeight)); // Cover the remaining area
-		if (ImGui::Begin("Pipe", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+		//ImGui::SetNextWindowSize(ImVec2(windowWidth, windowHeight)); // Cover the remaining area
+		// Set the constraints before rendering the window
+		ImGui::SetNextWindowSizeConstraints(
+			ImVec2(windowWidth, windowHeight),  // Minimum size
+			ImVec2(FLT_MAX, 200.0f), // Maximum size (height is fixed at 200)
+			HorizontalResizeConstraint  // Constraint callback
+		);
+		if (ImGui::Begin("Pipe", nullptr, /*ImGuiWindowFlags_NoResize | */ImGuiWindowFlags_NoMove))
 		{
 			ImGui::BeginGroup();
 			ImGui::SeparatorText("Control");
 
-			int uvX = 12;
-			int uvY = 1;
+			int uvX = aniPlay ? 12 : 17;
+			int uvY = aniPlay ? 14 : 14;
 			if (ImGui::ImageButton("PlayAnimation", imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
 			{
+				aniPlay = !aniPlay;
+				if (aniPlay)
+				{
+					curFrameIndex = 0;
+					deltaCount = 0;
+					if (!imAniFrames.empty())
+					{
+						auto& frame = imAniFrames[curFrameIndex];
+						waitCount = static_cast<long long>(frame.waitTime * 10000000);
+						auto iter = textureSource.find(frame.path);
+						if (iter != textureSource.end())
+						{
+							currentImTexture.id = iter->second.second;
+							float scaleX = 1.0f / frame.splitX;
+							float scaleY = 1.0f / frame.splitY;
+							currentImTexture.uv0 = ImVec2(scaleX * frame.uvX, scaleY * frame.uvY);
+							currentImTexture.uv1 = ImVec2(scaleX * (frame.uvX + 1), scaleY * (frame.uvY + 1));
+						}
+					}
+				}
 			}
+			ImGui::SetItemTooltip(aniPlay ? "stop" : "play");
 
 			ImGui::SameLine();
+			
+			ImGui::BeginGroup();
+			ImGui::Text(clipPath.filename().string().c_str());
 			uvX = 9;
 			uvY = 14;
-			if (ImGui::ImageButton("writeAnimation", imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
+			if (ImGui::ImageButton("writeAnimation", imIconTexture, ImVec2(25, 25), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
 			{
+				if (clipPath != " ")
+				{
+					ImGui::SetMouseCursor(ImGuiMouseCursor_NotAllowed);
+					SaveAnimationClipFile(clipPath.string());
+				}
+				else
+					openAnimDialog = true;
 			}
+			ImGui::SetItemTooltip("save");
 
 			ImGui::SameLine();
 			uvX = 10;
 			uvY = 14;
-			if (ImGui::ImageButton("OverwriteAnimation", imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
+			if (ImGui::ImageButton("OverwriteAnimation", imIconTexture, ImVec2(25, 25), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
 			{
-			}	
+				openAnimDialog = true;
+			}
+			ImGui::SetItemTooltip("over save");
 
+			ImGui::SameLine();
+			uvX = 16;
+			uvY = 14;
+			if (ImGui::ImageButton("quickAnimation", imIconTexture, ImVec2(25, 25), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
+			{
+				if (!imAniFrames.empty())
+				{
+					ImGui::SetMouseCursor(ImGuiMouseCursor_NotAllowed);
+					if (curFrameIndex >= 0 && curFrameIndex < (int)imAniFrames.size())
+					{
+						float& t = imAniFrames[curFrameIndex].waitTime;
+						for (auto& frame : imAniFrames)
+						{
+							frame.waitTime = t;
+						}
+					}
+				}
+			}
+			ImGui::SetItemTooltip("all change");
+
+			ImGui::SameLine();
+			uvX = 1;
+			uvY = 15;
+			if (ImGui::ImageButton("DeleteAnimation", imIconTexture, ImVec2(25, 25), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
+			{
+				if (!aniPlay)
+				{
+					imAniFrames.clear();
+				}
+			}
+			ImGui::SetItemTooltip("delete");
+
+			ImGui::SameLine();
+			uvX = 0;
+			uvY = 17;
+			if (ImGui::ImageButton("SortAnimation", imIconTexture, ImVec2(25, 25), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
+			{
+				if (!imAniFrames.empty())
+				{
+					ImGui::SetMouseCursor(ImGuiMouseCursor_NotAllowed);
+					std::sort(imAniFrames.begin(), imAniFrames.end(),
+						[](const ImAnimationFrame& a, const ImAnimationFrame& b) {
+							return (a.uvX + a.uvY * maxTexSplit[0]) < (b.uvX + b.uvY * maxTexSplit[0]);
+						});
+				}
+			}
+			ImGui::SetItemTooltip("sort");
+			ImGui::EndGroup();
+
+
+			if (!imAniFrames.empty())
+				ImGui::DragFloat("time", &imAniFrames[curFrameIndex].waitTime, 0.01f, 0.0f, 5.0f);
+			else
+			{
+				float dummy = 1.0f;
+				ImGui::DragFloat("time", &dummy, 0.01f, 0.0f, 5.0f);
+			}
 			ImGui::SeparatorText("frame");
 			if (ImGui::BeginChild("frameList"))
 			{
-				int count = 0;
-				for (auto& frame : imAniFrames)
+				int eraseNum = -1;
+				for (int num = 0;num < (int)imAniFrames.size();num++)
 				{
-					ImGui::PushID(count);
+					auto& frame = imAniFrames[num];
+
+					ImGui::PushID(num);
+
 					ImGui::BeginGroup();
+					
+					if (ImGui::Button("-") && !aniPlay)
 					{
-						ImGui::Text("%s x : %d y : %d", frame.path.filename().string().c_str(), frame.uvX, frame.uvY);
-						ImGui::DragFloat("time", &frame.waitTime, 0.01f, 0.0f, 5.0f);
+						eraseNum = num;
+					}
+					ImGui::SetItemTooltip("erase");
+					ImGui::SameLine();
+					ImGui::Text("%d.", num);
+					ImGui::SameLine();
+					std::string str = frame.path.filename().string() + " x :" + std::to_string(frame.uvX + 1) + " y : " + std::to_string(frame.uvY + 1);
+					if (ImGui::Selectable(str.c_str(), num == curFrameIndex))
+					{
+						auto it = textureSource.find(frame.path);
+						if (it != textureSource.end())
+						{
+							curFrameIndex = num;
+							currentImTexture.id = it->second.second;
+							float scaleX = 1.0f / frame.splitX;
+							float scaleY = 1.0f / frame.splitY;
+							currentImTexture.uv0 = ImVec2(scaleX * frame.uvX, scaleY * frame.uvY);
+							currentImTexture.uv1 = ImVec2(scaleX * (frame.uvX + 1), scaleY * (frame.uvY + 1));
+						}
+					}
+					// Source: Dragging starts here
+					if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
+						ImGui::SetDragDropPayload("DND_LIST_ITEM", &num, sizeof(int)); // Pass the index
+						ImGui::Text("%s", str.c_str());
+						ImGui::EndDragDropSource();
 					}
 					ImGui::EndGroup();
+					// Target: Dropping ends here
+					if (ImGui::BeginDragDropTarget()) {
+						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DND_LIST_ITEM")) {
+							size_t dragged_index = *(const size_t*)payload->Data;
+							if (dragged_index != num) {
+								// Move the dragged item to the target index
+								curFrameIndex = num;
+								auto dragged_item = imAniFrames[dragged_index];
+								imAniFrames.erase(imAniFrames.begin() + dragged_index);
+								imAniFrames.insert(imAniFrames.begin() + num, dragged_item);
+							}
+						}
+						ImGui::EndDragDropTarget();
+					}
+
 					ImGui::PopID();
-					count++;
 				}
+				if (eraseNum >= 0 && eraseNum < (int)imAniFrames.size())
+				{
+					imAniFrames.erase(imAniFrames.begin() + eraseNum);
+				}
+
 				ImGui::EndChild();
+
+				if (aniPlay && !imAniFrames.empty())
+				{
+					deltaCount += AnimatorManager::deltaCount;
+					if (deltaCount > waitCount)
+					{
+						deltaCount -= waitCount;
+						curFrameIndex++;
+						curFrameIndex %= (int)imAniFrames.size();
+						auto& frame = imAniFrames[curFrameIndex];
+						waitCount = static_cast<long long>(frame.waitTime * 10000000);
+						auto iter = textureSource.find(frame.path);
+						if (iter != textureSource.end())
+						{
+							currentImTexture.id = iter->second.second;
+							float scaleX = 1.0f / frame.splitX;
+							float scaleY = 1.0f / frame.splitY;
+							currentImTexture.uv0 = ImVec2(scaleX * frame.uvX, scaleY * frame.uvY);
+							currentImTexture.uv1 = ImVec2(scaleX * (frame.uvX + 1), scaleY * (frame.uvY + 1));
+						}
+					}
+				}
 			}
 
 			ImGui::EndGroup();
@@ -1030,7 +1197,43 @@ void ImGuiApp::DrawMainGui(ImGuiContext* _mainContext)
 			uvY = 6;
 			if (ImGui::ImageButton("LoadClip", imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
 			{
+				handleUi.SetUploadFile("animation clip",
+					[](GameObject* obj, fs::path _path)
+					{
+						ReadAnimationClipFile(_path);
+						clipPath = _path;
+						for (auto& frame : imAniFrames)
+						{
+							auto iterator = textureSource.find(frame.path);
+							if (iterator == textureSource.end())
+							{
+								ComPtr<ID3D11ShaderResourceView> texture;
+								TextureAssets::pLoadTexture(texture, frame.path.wstring().c_str());
+								ImTextureID texId = (ImTextureID)texture.Get();
+								textureSource.emplace(
+									std::make_pair(frame.path, std::make_pair(texture, texId)));
+							}
+
+							int splitIndex = frame.splitY * maxTexSplit[0] + frame.splitX;
+							auto iter = textureCutNode.find(frame.path);
+							if (iter != textureCutNode.end())
+							{
+								auto it = iter->second.find(splitIndex);
+								if (it == iter->second.end())
+								{
+									iter->second.insert(splitIndex);
+								}
+							}
+							else
+							{
+								std::set<int> cuts;
+								cuts.emplace(splitIndex);
+								textureCutNode.insert(std::make_pair(frame.path, std::move(cuts)));
+							}
+						}
+					}, { ANIM_CLIP_EXTENSION_DOT});
 			}
+			ImGui::SetItemTooltip("load clip");
 
 			ImGui::SameLine();
 			uvX = 9;
@@ -1127,49 +1330,100 @@ void ImGuiApp::DrawMainGui(ImGuiContext* _mainContext)
 									float texScaleX = 1.0f / splitX;
 									float texScaleY = 1.0f / splitY;
 									int count = 0;
-									ImGui::BulletText("%d : %d", splitX, splitY);
-									ImGui::SameLine();
-									std::string splitId = filename + std::to_string(splitX + splitY * maxTexSplit[0]);
-									ImGui::PushID(splitId.c_str());
-									if (ImGui::Button(" erase "))
+									std::string label = std::to_string(splitX) + " : " + std::to_string(splitY);
+									//ImGui::BulletText("%d : %d", splitX, splitY);
+									bool treeOpen = ImGui::TreeNodeEx(label.c_str(), ImGuiTreeNodeFlags_DefaultOpen);
+									if (treeOpen)
 									{
-										eraseIndex.push_back(cuts);
-									}
-									ImGui::PopID();
+										ImGui::SameLine();
+										std::string splitId = filename + std::to_string(splitX + splitY * maxTexSplit[0]);
+										ImGui::PushID(splitId.c_str());
+										if (ImGui::Button(" erase "))
+										{
+											eraseIndex.push_back(cuts);
+										}
+										ImGui::PopID();
 
-									for (int x = 0; x < splitX; x++)
 										for (int y = 0; y < splitY; y++)
 										{
-											if (count % 11 != 0) ImGui::SameLine();
-											count++;
-											std::string id = filename + std::to_string(cutCount) + std::to_string(x + y * maxTexSplit[0]);
-											ImGui::PushID(id.c_str());
-											if (ImGui::ImageButton("cutTexButton", texId, ImVec2(50, 50), ImVec2(texScaleX * x, texScaleY * y), ImVec2(texScaleX * (x + 1), texScaleY * (y + 1)), windowBgCol))
-											{
-												currentImTexture.id = texId;
-												currentImTexture.uv0 = ImVec2(texScaleX * x, texScaleY * y);
-												currentImTexture.uv1 = ImVec2(texScaleX * (x + 1), texScaleY * (y + 1));
-											}
-											ImGui::SetItemTooltip("%s x : %d y :%d", filename.c_str(), x + 1, y + 1);
+											ImGui::BulletText("%d", y);
 											if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
 											{
 												willPushFrames.clear();
-												willPushFrames.push_back(
-													{
-														node.first,
-														splitX,
-														splitY,
-														x,
-														y
-													}
+												for (int x = 0; x < splitX; x++)
+												{
+													willPushFrames.push_back(
+														{
+															node.first,splitX,splitY,x,y
+														}
 													);
-												ImGui::SetDragDropPayload("CUT_TEXTURE_DRAG", id.c_str(), id.size());
-												ImGui::Text("%s", filename.c_str());
+												}
+
+												ImGui::SetDragDropPayload("CUT_TEXTURE_DRAG", filename.c_str(), filename.size());
+												ImGui::Text("x : %d y : %d", filename.c_str(), splitX, splitY);
 												ImGui::EndDragDropSource();
 											}
-											ImGui::PopID();
+											count = 0;
+											for (int x = 0; x < splitX; x++)
+											{
+												if (count % 11 != 0) ImGui::SameLine();
+												count++;
+												std::string id = filename + std::to_string(cutCount) + std::to_string(x + y * maxTexSplit[0]);
+												ImGui::PushID(id.c_str());
+												if (ImGui::ImageButton("cutTexButton", texId, ImVec2(50, 50), ImVec2(texScaleX * x, texScaleY * y), ImVec2(texScaleX * (x + 1), texScaleY * (y + 1)), windowBgCol))
+												{
+													currentImTexture.id = texId;
+													currentImTexture.uv0 = ImVec2(texScaleX * x, texScaleY * y);
+													currentImTexture.uv1 = ImVec2(texScaleX * (x + 1), texScaleY * (y + 1));
+												}
+												ImGui::SetItemTooltip("%s x : %d y :%d", filename.c_str(), x + 1, y + 1);
+												if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+												{
+													willPushFrames.clear();
+													willPushFrames.push_back(
+														{ node.first,splitX,splitY,x,y
+														}
+													);
+													ImGui::SetDragDropPayload("CUT_TEXTURE_DRAG", id.c_str(), id.size());
+													ImGui::Text("%s", filename.c_str());
+													ImGui::EndDragDropSource();
+												}
+												ImGui::PopID();
+											}
+											cutCount++;
 										}
-									cutCount++;
+										ImGui::TreePop();
+									}
+									if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+									{
+										willPushFrames.clear();
+										for (int x = 0; x < splitX; x++)
+										{
+											for (int y = 0; y < splitY; y++)
+											{
+												willPushFrames.push_back(
+													{
+														node.first,splitX,splitY,x,y
+													}
+												);
+											}
+										}
+
+										ImGui::SetDragDropPayload("CUT_TEXTURE_DRAG", filename.c_str(), filename.size());
+										ImGui::Text("x : %d y : %d", filename.c_str(), splitX, splitY);
+										ImGui::EndDragDropSource();
+									}
+									if (!treeOpen)
+									{
+										ImGui::SameLine();
+										std::string splitId = filename + std::to_string(splitX + splitY * maxTexSplit[0]);
+										ImGui::PushID(splitId.c_str());
+										if (ImGui::Button(" erase "))
+										{
+											eraseIndex.push_back(cuts);
+										}
+										ImGui::PopID();
+									}
 								}
 
 								for (auto& i : eraseIndex)
@@ -1232,8 +1486,8 @@ void ImGuiApp::DrawMainGui(ImGuiContext* _mainContext)
 							ImGui::BeginGroup();
 							{
 								ImGui::Text("split : %s", selectPath.filename().string().c_str());
-								ImGui::DragInt("x", split, 1, 1, maxTexSplit[0]);
-								ImGui::DragInt("y", split + 1, 1, 1, maxTexSplit[1]);
+								ImGui::DragInt("x", split, 0.5f, 1, maxTexSplit[0]);
+								ImGui::DragInt("y", split + 1, 0.5f, 1, maxTexSplit[1]);
 							}
 							ImGui::EndGroup();
 
@@ -1273,6 +1527,16 @@ void ImGuiApp::DrawMainGui(ImGuiContext* _mainContext)
 
 		ImGui::Render();
 		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+		if (openAnimDialog)
+		{
+			if (!imAniFrames.empty())
+			{
+				ImGui::SetMouseCursor(ImGuiMouseCursor_NotAllowed);
+				SaveAnimationClipFileDialog();
+			}
+			openAnimDialog = false;
+		}
 	}
 }
 
@@ -1443,6 +1707,131 @@ LRESULT ImGuiApp::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	// Pass any unhandled messages to the default window procedure
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
+}
+
+void SaveAnimationClipFile(const std::string& _path)
+{
+	//書き込みファイルを開く
+	std::ofstream fout;
+	fout.open(_path, std::ios::out | std::ios::binary);
+	assert(fout.is_open() && "アニメーションファイル書き込みに失敗しました");
+
+	//要素の数を書き込み
+	int listSize = static_cast<int>(imAniFrames.size());
+	fout.write((char*)&listSize, sizeof(listSize));
+
+	for (auto& frame : imAniFrames)
+	{
+		std::string path = frame.path.string();
+		//パスの大きさ
+		int pathSize = static_cast<int>(path.size());
+		fout.write((char*)&pathSize, sizeof(pathSize));
+		//パス本体
+		fout.write((char*)path.c_str(), pathSize);
+		//splitX
+		fout.write((char*)&frame.splitX, sizeof(frame.splitX));
+		//splitY
+		fout.write((char*)&frame.splitY, sizeof(frame.splitY));
+		//uvX
+		fout.write((char*)&frame.uvX, sizeof(frame.uvX));
+		//uvY
+		fout.write((char*)&frame.uvY, sizeof(frame.uvY));
+		//waitCout
+		long long waitCount = static_cast<long long>(frame.waitTime * 10000000);
+		fout.write((char*)&waitCount, sizeof(waitCount));
+	}
+
+	//ファイルを閉じる
+	fout.close();
+}
+
+void SaveAnimationClipFileDialog() {
+	// Initialize the OPENFILENAME structure
+	OPENFILENAME ofn;
+	char szFile[MAX_PATH] = ""; // Buffer for the file name
+	ZeroMemory(&ofn, sizeof(ofn));
+
+	// Set up the OPENFILENAME structure
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = Window::GetMainHWnd();
+	ofn.lpstrFile = szFile;
+	ofn.nMaxFile = sizeof(szFile);
+	ofn.lpstrFilter = "AnimationClip Files(*." ANIM_CLIP_EXTENSION ")\0*." ANIM_CLIP_EXTENSION "\0";//\0All Files (*.*)\0*.*\0";
+	ofn.lpstrDefExt = ANIM_CLIP_EXTENSION; // Default file extension
+	ofn.lpstrTitle = "Save AnimationClip";
+	ofn.Flags = OFN_OVERWRITEPROMPT; // Prompt to overwrite existing files
+
+	// 現在のカレントディレクトリを保存
+	auto originalPath = std::filesystem::current_path();
+
+	// Show the Save File dialog
+	if (GetSaveFileName(&ofn)) {
+		std::string filePath = szFile;
+		SaveAnimationClipFile(filePath);
+	}
+	else {
+		std::cerr << "No file selected or operation canceled." << std::endl;
+	}
+
+	// カレントディレクトリを元に戻す
+	std::filesystem::current_path(originalPath);
+}
+
+void ReadAnimationClipFile(fs::path _path)
+{
+	//読み込みファイルを開く
+	std::ifstream fin;
+	std::string filePath = _path.string();
+	fin.open(filePath, std::ios::in | std::ios::binary);
+
+	bool open = fin.is_open();
+	//読み込み失敗
+	if (open)
+	{
+		//リストをクリアする
+		imAniFrames.clear();
+
+		//プレイヤーの数を読み込む
+		int size = 0;
+		fin.read((char*)&size, sizeof(size));
+
+		for (int i = 0; i < size; i++)
+		{
+			//パスの大きさを読み込み
+			int nameSize = 0;
+			fin.read((char*)&nameSize, sizeof(nameSize));
+
+			ImAnimationFrame frame;
+
+			//パスを読み込み
+			std::string path;
+			path.resize(nameSize);
+			fin.read((char*)path.c_str(), nameSize);
+			fs::path texPath(path);
+			frame.path = std::move(texPath);
+			//splitX
+			fin.read((char*)&frame.splitX, sizeof(frame.splitX));
+			//splitY
+			fin.read((char*)&frame.splitY, sizeof(frame.splitY));
+			//uvX
+			fin.read((char*)&frame.uvX, sizeof(frame.uvX));
+			//uvY
+			fin.read((char*)&frame.uvY, sizeof(frame.uvY));
+			//waitCout
+			long long waitCount;
+			fin.read((char*)&waitCount, sizeof(waitCount));
+			frame.waitTime = static_cast<float>(static_cast<double>(waitCount) / 10000000);
+
+			imAniFrames.emplace_back(frame);
+		}
+
+		//読み込みファイルを閉じる
+		fin.close();
+	}
+	else
+	{
+		std::cerr << "アニメーションクリップ読み込み失敗" << std::endl;
+	}
 }
 
 ComPtr<ID3D11Buffer> ImGuiApp::HandleUI::m_arrowVertexBuffer;

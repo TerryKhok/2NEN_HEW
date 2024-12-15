@@ -27,63 +27,7 @@ class SampleScene_Animation : public Scene
 		auto text = obj->AddComponent<SFText>("aaaaa‚ ‚„‚Ó‚Ÿ\n‚¦‚ ‚¦‚Ó‚Ÿ‚¦‚†");
 		text->offset = { 0,10 };*/
 
-
-		float scaleX = 1.0f / 6;
-		float scaleY = 1.0f / 1;
-
-		std::vector<AnimationFrameData> frames =
-		{
-			{
-			L"asset/pic/spritesheet.png",
-			scaleX,
-			scaleY,
-			0,
-			0,
-			4000000
-			},
-			{
-			L"asset/pic/spritesheet.png",
-			scaleX,
-			scaleY,
-			1,
-			0,
-			4000000
-			},
-			{
-			L"asset/pic/spritesheet.png",
-			scaleX,
-			scaleY,
-			2,
-			0,
-			4000000
-			},
-			{
-			L"asset/pic/spritesheet.png",
-			scaleX,
-			scaleY,
-			3,
-			0,
-			4000000
-			},
-			{
-			L"asset/pic/spritesheet.png",
-			scaleX,
-			scaleY,
-			4,
-			0,
-			4000000
-			},
-			{
-			L"asset/pic/spritesheet.png",
-			scaleX,
-			scaleY,
-			5,
-			0,
-			4000000
-			},
-		};
-
-		anim->AddClip("Walk", frames);
+		anim->AddClip("Walk","asset/animationClip/character.amcp");
 		anim->Play("Walk");
 	}
 
@@ -109,11 +53,6 @@ class SampleScene_Animation : public Scene
 				anim->Pause();
 				pause = true;
 			}
-		}
-
-		if (Input::Get().KeyTrigger(VK_E))
-		{
-			object->RemoveComponent<Animator>();
 		}
 
 		if (Input::Get().KeyTrigger(VK_SPACE))

@@ -1,5 +1,7 @@
 #pragma once
 
+
+
 class RenderNode;
 
 struct AnimationFrameData
@@ -7,7 +9,7 @@ struct AnimationFrameData
 	//ÉÅÉÇÉäämï€ã÷é~
 	void* operator new(size_t) = delete;
 
-	const wchar_t* texPath;
+	std::wstring texPath;
 	float scaleX = 0.5f;
 	float scaleY = 0.5f;
 	int frameX = 0;
@@ -22,7 +24,7 @@ struct AnimationFrame
 
 	int texIndex = 0;
 #ifdef DEBUG_TRUE
-	const wchar_t* texPath;
+	std::wstring texPath = L"";
 #endif
 	float scaleX = 0.5f;
 	float scaleY = 0.5f;
@@ -46,7 +48,7 @@ protected:
 	void AddFrame(const AnimationFrameData& _frame) {
 		AnimationFrame frame;
 		ComPtr<ID3D11ShaderResourceView> texture;
-		TextureAssets::pLoadTexture(texture, _frame.texPath);
+		TextureAssets::pLoadTexture(texture, _frame.texPath.c_str());
 		auto iter = std::find(textureList.begin(), textureList.end(), texture);
 		if (iter != textureList.end())
 		{
@@ -121,6 +123,8 @@ public:
 	//============================================================================
 	void AddClip(std::string _name, std::vector<AnimationFrameData>& _frames, bool _loop = true)
 	{
+		if (m_clip.find(_name) != m_clip.end()) return;
+
 		AnimationClip* clip = _loop ? new AnimationClipLoop() : new AnimationClip();
 
 		for (auto& frame : _frames)
@@ -130,6 +134,8 @@ public:
 		m_clip.insert(std::make_pair(_name, clip));
 	}
 	//============================================================================
+
+	void AddClip(std::string _name,std::string _path, bool _loop = true);
 
 	void Play(const std::string& _clipName);
 	void Pause();
@@ -143,6 +149,7 @@ private:
 	std::unordered_map<std::string, std::shared_ptr<AnimationClip>> m_clip;
 #ifdef DEBUG_TRUE
 	std::string m_currentClipName;
+	std::filesystem::path currentClipPath;
 #endif
 	std::shared_ptr<AnimationClip> m_currentClip;
 	UVRenderNode* m_uvNode = nullptr;
@@ -153,6 +160,7 @@ class AnimatorManager
 {
 	friend class Animator;
 	friend class Window;
+	friend class ImGuiApp;
 
 	AnimatorManager() = delete;
 private:

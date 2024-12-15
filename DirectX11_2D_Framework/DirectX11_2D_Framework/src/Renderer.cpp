@@ -89,7 +89,7 @@ void Renderer::DrawImGui(ImGuiApp::HandleUI& _handle)
 
 	ImGui::Text(" path  : %s", m_node->texPath.c_str());
 	ImGui::SameLine();
-	if (ImGui::Button("Link"))
+	if (ImGui::Button("LinkTex"))
 	{
 		std::string str = m_this->GetName() + "Texture";
 		_handle.SetUploadFile(str, [&](GameObject* obj, std::filesystem::path path)
@@ -202,7 +202,7 @@ inline void RenderNode::Draw()
 		//ワールド変換行列の作成
 		//ー＞オブジェクトの位置・大きさ・向きを指定
 		cb.world = DirectX::XMMatrixScaling(m_object->transform.scale.x + 1.0f, m_object->transform.scale.y + 1.0f, 1.0f);
-		cb.world *= DirectX::XMMatrixRotationZ(m_object->transform.angle.z.Get());
+		cb.world *= DirectX::XMMatrixRotationZ(static_cast<float>(m_object->transform.angle.z.Get()));
 		cb.world *= DirectX::XMMatrixTranslation(m_object->transform.position.x, m_object->transform.position.y, 0.0f);
 		cb.world = DirectX::XMMatrixTranspose(cb.world);
 		if (m_object->isSelected == GameObject::SELECTED)

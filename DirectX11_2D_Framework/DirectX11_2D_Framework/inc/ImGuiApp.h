@@ -19,6 +19,9 @@
 #define IMGUI_WINDOW_WIDTH (480)
 #define IMGUI_WINDOW_HEIGHT (720)
 
+#define ANIM_CLIP_EXTENSION "amcp"
+#define ANIM_CLIP_EXTENSION_DOT "." ANIM_CLIP_EXTENSION
+
 class ImGuiApp
 {
 	friend class Window;
