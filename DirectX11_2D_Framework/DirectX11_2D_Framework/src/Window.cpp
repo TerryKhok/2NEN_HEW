@@ -14,6 +14,23 @@ void CreateConsoleWindow() {
 	std::cout << "Debugging Console Initialized!" << std::endl;
 }
 
+void SetConsoleWindowPositionAndSize(int x, int y, int width, int height) {
+	// コンソールウィンドウのハンドルを取得
+	HWND consoleWindow = GetConsoleWindow();
+	if (!consoleWindow) {
+		std::cerr << "コンソールウィンドウの取得に失敗しました。" << std::endl;
+		return;
+	}
+
+	// バッファサイズの設定
+	HANDLE consoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
+	COORD bufferSize = { static_cast<SHORT>(width), static_cast<SHORT>(height) };
+	SetConsoleScreenBufferSize(consoleOutput, bufferSize);
+
+	// ウィンドウの位置とサイズを設定 (SetWindowPosでも可)
+	MoveWindow(consoleWindow, x, y, width * 10, height * 20, TRUE);
+}
+
 void CloseConsoleWindow() {
 	FreeConsole();
 }
@@ -66,6 +83,8 @@ LRESULT Window::WindowMainCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, L
 #ifdef DEBUG_TRUE
 	//コンソール画面起動
 	CreateConsoleWindow();
+
+	SetConsoleWindowPositionAndSize(0, 860, 192, 8);
 
 	//メモリリーク検知
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -180,7 +199,11 @@ HWND Window::WindowSubCreate(std::string _objName, std::string _windowName, int 
 		CW_USEDEFAULT,							// ウィンドウの左上Ｙ座標 
 		_width,							// ウィンドウの幅
 		_height,							// ウィンドウの高さ
-		NULL,									// 親ウィンドウのハンドル
+#ifdef DEBUG_TRUE
+		NULL,
+#else
+		mainHwnd,									// 親ウィンドウのハンドル
+#endif
 		NULL,									// メニューハンドルまたは子ウィンドウID
 		m_hInstance,								// インスタンスハンドル
 		NULL								// ウィンドウ作成データ
@@ -393,8 +416,6 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 
 			TRY_CATCH_LOG(ObjectManager::UpdateObjectComponent());
 
-			Box2DBodyManager::ExecuteMoveFunction();
-
 			//カメラ関連行列セット
 			CameraManager::SetCameraMatrix();
 
@@ -492,8 +513,6 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 				TRY_CATCH_LOG(SceneManager::m_currentScene->Update());
 
 				TRY_CATCH_LOG(ObjectManager::UpdateObjectComponent());
-
-				Box2DBodyManager::ExecuteMoveFunction();
 
 				//カメラ関連行列セット
 				CameraManager::SetCameraMatrix();
@@ -755,25 +774,30 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 						std::list<GameObject*> targetObjects;
 						
 
-						for (auto& object : *ObjectManager::m_objectList.get())
+						for (auto& object : ObjectManager::m_objectList->first)
 						{
-							if (!object.second->active) continue;
+							if (!object->active) continue;
 
-							const Vector2& pos = object.second->transform.position;
-							Vector2 scale = object.second->transform.scale;
+							const Vector2& pos = object->transform.position;
+							Vector2 scale = object->transform.scale;
 							scale *= HALF_OBJECT_SIZE;
 							if ((pos.x - scale.x) < worldPos.x &&
 								(pos.x + scale.x) > worldPos.x &&
 								(pos.y - scale.y) < worldPos.y &&
 								(pos.y + scale.y) > worldPos.y)
 							{
-								targetObjects.push_back(object.second.get());
+								targetObjects.push_back(object.get());
 							}
 						}
 						static GameObject* target = nullptr;
-						if ((target != nullptr && target->isSelected != GameObject::SELECTED) || 
-							(handleHit && target->isSelected != GameObject::SELECTED))
-							target->isSelected = GameObject::SELECT_NONE;
+						if (target != nullptr)
+						{
+							if (target->isSelected != GameObject::SELECTED ||
+								(handleHit && target->isSelected != GameObject::SELECTED))
+							{
+								target->isSelected = GameObject::SELECT_NONE;
+							}
+						}
 
 						if (!handleHit && inGameScreen)
 						{
@@ -945,7 +969,11 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			CW_USEDEFAULT,							// ウィンドウの左上Ｙ座標 
 			windowWidth,							// ウィンドウの幅
 			windowHeight,							// ウィンドウの高さ
-			NULL,									// 親ウィンドウのハンドル
+#ifdef DEBUG_TRUE
+			NULL,
+#else
+			mainHwnd,									// 親ウィンドウのハンドル
+#endif
 			NULL,									// メニューハンドルまたは子ウィンドウID
 			m_hInstance,								// インスタンスハンドル
 			NULL								// ウィンドウ作成データ
@@ -1204,11 +1232,22 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	case WM_NCLBUTTONDOWN:
 	{
+//#ifdef MAINWINDOW_LOCK
+//		if (wParam == HTCLOSE) {
+//			PostMessage(hWnd, WM_CLOSE, 0, 0);
+//			//return DefWindowProc(hWnd, uMsg, wParam, lParam);
+//			return 0;
+//		}
+//		else {
+//			return 0;
+//		}
+//#endif
+
 #ifdef BOX2D_UPDATE_MULTITHREAD
 		Box2D::WorldManager::pPauseWorldUpdate();
 #endif
 		isDragging = true;
-		SetTimer(hWnd, 1, 50, NULL);
+		SetTimer(hWnd, 1, 10, NULL);
 
 		auto iter = m_hwndObjNames.find(hWnd);
 		if (iter != m_hwndObjNames.end())
@@ -1217,9 +1256,9 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			if (gameObject != nullptr)
 			{
 				const auto& list = gameObject->m_componentList;
-				for (auto& component : list)
+				for (auto& component : list.first)
 				{
-					component.second->OnWindowEnter(hWnd);
+					component->OnWindowEnter(hWnd);
 				}
 			}
 		}
@@ -1248,13 +1287,14 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				if (gameObject != nullptr)
 				{
 					const auto& list = gameObject->m_componentList;
-					for (auto& component : list)
+					for (auto& component : list.first)
 					{
-						component.second->OnWindowExit(hWnd);
+						component->OnWindowExit(hWnd);
 					}
 				}
 			}
 		}
+
 		return 0;
 
 	case WM_EXITSIZEMOVE:
@@ -1277,9 +1317,9 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				if (gameObject != nullptr)
 				{
 					const auto& list = gameObject->m_componentList;
-					for (auto& component : list)
+					for (auto& component : list.first)
 					{
-						component.second->OnWindowExit(hWnd);
+						component->OnWindowExit(hWnd);
 					}
 				}
 			}
@@ -1297,9 +1337,9 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			if (gameObject != nullptr)
 			{
 				const auto& list = gameObject->m_componentList;
-				for (auto& component : list)
+				for (auto& component : list.first)
 				{
-					component.second->OnWindowMove(hWnd, rect);
+					component->OnWindowMove(hWnd, rect);
 				}
 			}
 		}

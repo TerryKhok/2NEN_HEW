@@ -41,8 +41,14 @@ class GameObject final
 	friend class Box2DCircleRenderNode;
 	friend class Box2DCapsuleRenderNode;
 	friend class Box2DMeshRenderNode;	
+	template<typename T>
+	friend bool CreateComponent(GameObject* obj, SERIALIZE_INPUT& ar);
 
 	using functionPointer = void (GameObject::*)();
+	
+	using ComponentListMap = std::unordered_map<std::string, size_t>;
+	using ComponentList = std::pair <std::vector<std::unique_ptr<Component, void(*)(Component*)>>, ComponentListMap>;
+
 private:
 	//コンストラクタ
 	GameObject() { transform.gameobject = this; }
@@ -70,8 +76,8 @@ public:
 	template<typename T>
 	bool ExistComponent()
 	{
-		auto iter = m_componentList.find(typeid(T).name());
-		if (iter != m_componentList.end())
+		auto iter = m_componentList.second.find(typeid(T).name());
+		if (iter != m_componentList.second.end())
 		{
 			return true;
 		}
@@ -91,8 +97,9 @@ public:
 		TRY_CATCH_LOG(component->Start());
 
 		//リストに追加(デストラクタ登録)
-		m_componentList.insert(std::make_pair(typeid(T).name(),
-			std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; })));
+		m_componentList.first.emplace_back(
+			std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
+		m_componentList.second[typeid(T).name()] = m_componentList.first.size() - 1;
 
 		T* downcast = dynamic_cast<T*>(component);
 		if (downcast == nullptr)
@@ -115,8 +122,9 @@ public:
 		TRY_CATCH_LOG(component->Start());
 
 		//リストに追加(デストラクタ登録)
-		m_componentList.insert(std::make_pair(typeid(T).name(),
-			std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; })));
+		m_componentList.first.emplace_back(
+			std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
+		m_componentList.second[typeid(T).name()] = m_componentList.first.size() - 1;
 
 		T* downcast = dynamic_cast<T*>(component);
 		if (downcast == nullptr)
@@ -150,19 +158,35 @@ public:
 	//bodyDef指定
 	template<>
 	SAFE_TYPE(SubWindow) AddComponent<SubWindow, const char*>(const char* _windowName);
+
 	//コンポーネント削除
 	template<typename T>
 	void RemoveComponent()
 	{
-		auto iter = m_componentList.find(typeid(T).name());
-		if (iter != m_componentList.end())
+		auto iter = m_componentList.second.find(typeid(T).name());
+		if (iter != m_componentList.second.end())
 		{
+			auto& component = m_componentList.first[iter->second];
 #ifdef DEBUG_TRUE
 			//コンポーネントのSafePointerをNullptrにする
-			PointerRegistryManager::deletePointer(iter->second.get());
+			PointerRegistryManager::deletePointer(component.get());
 #endif 
-			iter->second->Delete();
-			m_componentList.erase(iter);
+			auto& vector = m_componentList.first;
+			auto& map = m_componentList.second;
+
+			component->Delete();
+			size_t index = iter->second;
+			size_t lastIndex = vector.size() - 1;
+
+			// Move the last entity to the position of the entity to be removed
+			if (index != lastIndex) {
+				vector[index] = std::move(vector[lastIndex]);
+				map[vector[index]->getType().c_str()] = index; // Update map for the moved entity
+			}
+
+			// Remove the last element and update map
+			vector.pop_back();
+			map.erase(iter);
 		}
 	}
 	template<>
@@ -171,10 +195,10 @@ public:
 	template<typename T>
 	SAFE_TYPE(T) GetComponent()
 	{
-		auto iter = m_componentList.find(typeid(T).name());
-		if (iter != m_componentList.end())
+		auto iter = m_componentList.second.find(typeid(T).name());
+		if (iter != m_componentList.second.end())
 		{
-			T* downcast = dynamic_cast<T*>(iter->second.get());
+			T* downcast = dynamic_cast<T*>(m_componentList.first[iter->second].get());
 			if (downcast == nullptr)
 			{
 				LOG_ERROR("%s : %s component down_cast failed", name.c_str(), typeid(T).name());
@@ -192,19 +216,19 @@ public:
 	template<typename T>
 	bool TryGetComponent(T** _output)
 	{
-		auto iter = m_componentList.find(typeid(T).name());
-		if (iter != m_componentList.end())
+		auto iter = m_componentList.second.find(typeid(T).name());
+		if (iter != m_componentList.second.end())
 		{
-			T* downcast = dynamic_cast<T*>(iter->second.get());
+			T* downcast = dynamic_cast<T*>(m_componentList.first[iter->second].get());
 			if (downcast == nullptr)
 			{
 				LOG_ERROR("%s : %s component down_cast failed", name.c_str(), typeid(T).name());
+				return false;
 			}
 			*_output = downcast;
 			return true;
 		}
 
-		LOG_WARNING("%s : %s component not exist", name.c_str(), typeid(T).name());
 		*_output = nullptr;
 		return false;
 	}
@@ -217,7 +241,7 @@ private:
 	std::string name = "GameObject";
 	bool active = true;
 	static VSObjectConstantBuffer m_cb;
-	std::unordered_map<const char*, std::unique_ptr<Component, void(*)(Component*)>> m_componentList;
+	ComponentList m_componentList = {};
 
 #ifdef DEBUG_TRUE
 	enum SELECT_TYPE
@@ -232,13 +256,72 @@ private:
 #endif
 	
 private:
-		template <class Archive>
-		void serialize(Archive& ar) {
-			ar(CEREAL_NVP(name), CEREAL_NVP(transform), CEREAL_NVP(active)/*, CEREAL_NVP(m_componentList)*/);
+	template<typename T>
+	void LoadComponent(SERIALIZE_INPUT& ar)
+	{
+		if (ExistComponent<T>())  return;
+
+		Component* component = nullptr;
+		component = new T(this, ar);
+		component->m_this = this;
+
+		TRY_CATCH_LOG(component->Start());
+
+		//リストに追加(デストラクタ登録)
+		m_componentList.first.emplace_back(
+			std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
+		m_componentList.second[typeid(T).name()] = m_componentList.first.size() - 1;
+
+		return;
+	}
+
+	// Custom save function
+	template <class Archive>
+	void save(Archive& archive) const {
+		std::vector<std::string> comNames;
+		for (auto& com : m_componentList.second)
+		{
+			comNames.push_back(com.first);
 		}
-	
-		// Declare Cereal archive types as friends
-		friend class cereal::access;
+		archive(CEREAL_NVP(name), CEREAL_NVP(transform), CEREAL_NVP(active), CEREAL_NVP(comNames));
+		for (auto& com : m_componentList.first)
+		{
+			com->Serialize(archive);
+		}
+	}
+
+	// Custom load function
+	template <class Archive>
+	void load(Archive& archive) {
+		std::vector<std::string> comNames;
+		archive(CEREAL_NVP(name), CEREAL_NVP(transform), CEREAL_NVP(active), CEREAL_NVP(comNames));
+		int count = 1;
+		std::string uniqueName = name;
+		auto& list = ObjectManager::m_currentList;
+
+		while (list->second.find(uniqueName) != list->second.end()) {
+			uniqueName = name + "_" + std::to_string(count++);
+		}
+
+#ifdef DEBUG_TRUE
+		if (name != uniqueName)
+		{
+			LOG("%s name existed, so we changed %s.", name.c_str(), uniqueName.c_str());
+		}
+#endif
+		name = uniqueName;
+		for (auto& name : comNames)
+		{
+			AssemblyComponent::CreateComponent(name, this, archive);
+		}
+		for (auto& com : m_componentList.first)
+		{
+			com->Deserialize(archive);
+		}
+	}
+
+	// Declare Cereal archive types as friends
+	friend class cereal::access;
 };
 
 //==================================================
@@ -254,12 +337,16 @@ class ObjectManager final
 	friend class Scene;
 	friend class SceneManager;
 	friend void GameObject::SetName(const std::string);
+	template <class Archive>
+	friend void GameObject::load(Archive& archive);
 
-	using ObjectList = std::unordered_map<std::string, std::unique_ptr<GameObject, void(*)(GameObject*)>>;
+	using ObjectListMap = std::unordered_map < std::string, size_t>;
+
+	using ObjectList = std::pair<std::vector<std::unique_ptr<GameObject, void(*)(GameObject*)>>, ObjectListMap>;
 
 public:
 	//オブジェクト一覧から見つける アクセス速度n(1)なのではやい
-	static GameObject* Find(const std::string& _name);
+	static SAFE_TYPE(GameObject) Find(const std::string& _name);
 private:
 	//生成禁止
 	ObjectManager() = delete;
@@ -270,7 +357,13 @@ private:
 	//オブジェクトについたコンポーネント更新
 	static void UpdateObjectComponent();
 	//オブジェクトの追加・名前の重複禁止
-	static GameObject* AddObject(GameObject* _gameObject);
+	static void AddObject(GameObject* _gameObject);
+	//オブジェクトをファイルから読み込む
+	static void AddObject(std::filesystem::path& _path);
+	//オブジェクトの削除
+	static void DeleteObject(ObjectListMap::iterator& _iter);
+	static void DeleteObject(std::string _name);
+	static void DeleteObjectDelay(std::string _name);
 	//スレッドの現在のリストを次のリストに変更
 	static void ChangeNextObjectList();
 	//次のノードリストに繋ぐ
@@ -280,6 +373,8 @@ private:
 	//全てのリストを明示的に綺麗にする
 	static void CleanAllObjectList();
 private:
+	static thread_local void(*pDeleteObject)(std::string);
+private:
 	// スレッドごとの現在のリスト
 	static thread_local ObjectList* m_currentList;
 	//オブジェクトを格納
@@ -288,5 +383,7 @@ private:
 	static std::unique_ptr<ObjectList> m_nextObjectList;
 	//削除するオブジェクトを格納
 	static std::unique_ptr<ObjectList> m_eraseObjectList;
+	//削除を遅延しているオブジェクトを格納
+	static std::vector<std::string> m_delayEraseObjectName;
 };
 

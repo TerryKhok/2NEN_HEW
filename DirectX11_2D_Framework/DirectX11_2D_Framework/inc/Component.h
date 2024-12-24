@@ -22,10 +22,15 @@ protected:
 	GameObject* Instantiate(std::string _name);
 	//オブジェクト生成(名前,テクスチャ指定)
 	GameObject* Instantiate(std::string _name, const wchar_t* _texPath);
+
+	//Updateの中で削除できないように遅延する
+	//================================================================================
 	//オブジェクトの削除(ポインタ指定)
 	void DeleteObject(GameObject* _object);
 	//オブジェクトの削除(名前指定)
 	inline void DeleteObject(std::string _name);
+	//================================================================================
+	// 
 	// Get the type name of the derived class
 	std::string getType() const {
 		return demangle(typeid(*this).name());
@@ -35,7 +40,7 @@ private:
 	virtual void SetActive(bool _active) {}
 	//コンポーネント削除処理
 	virtual void Delete() {}
-	// Optional: Demangling function for nicer output on some compilers
+	//オプション： デマングリング関数により、コンパイラによってはより美しい出力が得られる。
 	static std::string demangle(const char* name) {
 #ifdef __GNUG__
 		int status = -1;
@@ -76,11 +81,60 @@ private:
 	virtual void OnWindowExit(HWND _target) {}
 	//ウィンドウを動かしたとき
 	virtual void OnWindowMove(HWND _target, RECT* _rect) {}
+	//シリアライズの際に呼び出す
+	virtual void Serialize(SERIALIZE_OUTPUT& ar){}
+	//デシリアライズの際に呼び出す
+	virtual void Deserialize(SERIALIZE_INPUT& ar) {}
 private:
 	//============================================
 	// imGuiで描画する
 	//============================================
 	virtual void DrawImGui(ImGuiApp::HandleUI& _handle){
 		ImGui::Text(" not override DrawImGui function!");
+	}
+};
+
+CEREAL_REGISTER_TYPE(Component)
+
+class AssemblyComponent final
+{
+	template<typename T>
+	friend class ReflectionComponent;
+
+	friend class Window;
+	friend class ImGuiApp;
+
+	class IReflection final
+	{
+	public:
+#ifndef DEBUG_TRUE
+		IReflection(std::function<bool(GameObject*, SERIALIZE_INPUT&)>&& _create)
+			:createComponent(_create)
+		{
+		};
+#endif
+		~IReflection() = default;
+
+		std::function<bool(GameObject*,SERIALIZE_INPUT&)> createComponent;
+
+#ifdef DEBUG_TRUE
+		IReflection(std::function<bool(GameObject*, SERIALIZE_INPUT&)>&& _create,std::function<void(GameObject*)>&& _add)
+			:createComponent(_create),addComponent(_add)
+		{};
+		
+		std::function<void(GameObject*)> addComponent;
+#endif
+	};
+private:
+	static inline std::map<std::string, IReflection> assemblies;
+
+public:
+	static void CreateComponent(const std::string& _comName, GameObject* _obj,SERIALIZE_INPUT& ar)
+	{
+		auto iter = assemblies.find(_comName);
+		if (iter != assemblies.end())
+		{
+			iter->second.createComponent(_obj, ar);
+		}
 	}
 };

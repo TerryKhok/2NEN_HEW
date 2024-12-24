@@ -27,7 +27,7 @@ class SampleScene_Animation : public Scene
 		auto text = obj->AddComponent<SFText>("aaaaa‚ ‚„‚Ó‚Ÿ\n‚¦‚ ‚¦‚Ó‚Ÿ‚¦‚†");
 		text->offset = { 0,10 };*/
 
-		anim->AddClip("Walk","asset/animationClip/character.amcp");
+		anim->AddClip("Walk","asset/animationClip/walkDXT5.amcp");
 		anim->Play("Walk");
 	}
 

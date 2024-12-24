@@ -1,6 +1,4 @@
 
-std::unordered_map<GameObject*, b2BodyId> Box2DBodyManager::m_moveBodyObjects;
-
 std::unordered_map<FILTER, unsigned int> Box2DBodyManager::m_layerFilterBit;
 
 //shapeIdに対応したオブジェクトの名前を格納
@@ -54,6 +52,89 @@ Box2DBody::Box2DBody(GameObject* _object, b2BodyDef* _bodyDef)
 #endif
 
 	Box2DBodyManager::m_bodyObjectName.insert(std::pair(m_bodyId.index1, _object->GetName()));
+}
+
+Box2DBody::Box2DBody(GameObject* _object, SERIALIZE_INPUT& ar)
+{
+	BodySaveData data;
+	std::vector<b2ShapeType> types;
+	ar(CEREAL_NVP(m_filter), CEREAL_NVP(data), CEREAL_NVP(types));
+
+	auto& position = _object->transform.position;
+	//ボディ定義とワールドIDを使ってグラウンド・ボディを作成する
+	b2BodyDef bodyDef = b2DefaultBodyDef();
+	bodyDef.type = data.type;
+	bodyDef.position = { position.x / DEFAULT_OBJECT_SIZE, position.y / DEFAULT_OBJECT_SIZE };
+	bodyDef.rotation = b2MakeRot(static_cast<float>(_object->transform.angle.z.Get()));
+	bodyDef.linearVelocity = data.lineVec;
+	bodyDef.angularVelocity = data.angleVec;
+	bodyDef.gravityScale = data.gravity;
+	bodyDef.automaticMass = data.mass;
+	bodyDef.isBullet = data.bullet;
+	bodyDef.fixedRotation = data.fixRot;
+	bodyDef.isAwake = data.awake;
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pPauseWorldUpdate();
+#endif
+	Box2D::WorldManager::GenerateBody(m_bodyId, &bodyDef);
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+
+	Box2DBodyManager::m_bodyObjectName.insert(std::pair(m_bodyId.index1, _object->GetName()));
+
+	for (auto& type : types)
+	{
+		ShapeSaveData shapeData;
+		ar(CEREAL_NVP(shapeData));
+		b2ShapeDef shapeDef = b2DefaultShapeDef();
+		shapeDef.isSensor = shapeData.sensor;
+		shapeDef.friction = shapeData.friction;
+		shapeDef.density = shapeData.density;
+		shapeDef.restitution = shapeData.restitution;
+		shapeDef.filter.categoryBits = m_filter;
+		shapeDef.filter.maskBits = Box2DBodyManager::GetMaskFilterBit(m_filter);
+
+		switch (type)
+		{
+		case b2_polygonShape:
+		{
+			b2Polygon polygon;
+			ar(CEREAL_NVP(polygon));
+			break;
+		}
+		case b2_circleShape:
+			b2Circle circle;
+			ar(CEREAL_NVP(circle));
+			break;
+		case b2_capsuleShape:
+		{
+			b2Capsule capsule;
+			ar(CEREAL_NVP(capsule));
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+			Box2D::WorldManager::pPauseWorldUpdate();
+#endif 
+			auto shape = b2CreateCapsuleShape(m_bodyId, &shapeDef, &capsule);
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+			Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+#ifdef DEBUG_TRUE
+
+#endif
+			m_shapeList.push_back(shape);
+			break;
+		}
+		case b2_segmentShape:
+
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 inline void Box2DBody::Update()
@@ -125,54 +206,332 @@ void Box2DBody::SetActive(bool _active)
 #endif
 }
 
+void Box2DBody::Serialize(SERIALIZE_OUTPUT& ar)
+{
+	BodySaveData data;
+	data.type = b2Body_GetType(m_bodyId);
+	data.lineVec = b2Body_GetLinearVelocity(m_bodyId);
+	data.angleVec = b2Body_GetAngularVelocity(m_bodyId);
+	data.gravity = b2Body_GetGravityScale(m_bodyId);
+	data.mass = b2Body_GetAutomaticMass(m_bodyId);
+	data.bullet = b2Body_IsBullet(m_bodyId);
+	data.fixRot = b2Body_IsFixedRotation(m_bodyId);
+	data.awake = b2Body_IsAwake(m_bodyId);
+
+	std::vector<b2ShapeType> types;
+	for (auto& shape : m_shapeList)
+	{
+		b2ShapeType type = b2Shape_GetType(shape);
+		types.push_back(type);
+	}
+
+	ar(CEREAL_NVP(m_filter),CEREAL_NVP(data),CEREAL_NVP(types));
+
+	for (auto& shape : m_shapeList)
+	{
+		ShapeSaveData shapeData;
+		shapeData.sensor = b2Shape_IsSensor(shape);
+		shapeData.friction = b2Shape_GetFriction(shape);
+		shapeData.density = b2Shape_GetDensity(shape);
+		shapeData.restitution = b2Shape_GetRestitution(shape);
+
+		ar(CEREAL_NVP(shapeData));
+
+		b2ShapeType type = b2Shape_GetType(shape);
+		switch (type)
+		{
+		case b2_polygonShape:
+		{
+			b2Polygon polygon = b2Shape_GetPolygon(shape);
+			ar(CEREAL_NVP(polygon));
+			break;
+		}
+		case b2_circleShape:
+			b2Circle circle = b2Shape_GetCircle(shape);
+			ar(CEREAL_NVP(circle));
+			break;
+		case b2_capsuleShape:
+			b2Capsule capsule = b2Shape_GetCapsule(shape);
+			ar(CEREAL_NVP(capsule));
+			break;
+		case b2_segmentShape:
+
+			break;
+		default:
+			break;
+		}
+	}
+}
+
+void Box2DBody::Deserialize(SERIALIZE_INPUT& ar)
+{
+	
+}
+
 void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 {
-	auto vec = b2Body_GetLinearVelocity(m_bodyId);
-	ImGui::Text(" LinerVelocity\n  <x: %.2f   y:%.2f>", vec.x, vec.y);
+#ifdef DEBUG_TRUE
+	if (ImGui::Button("<>##type"))
+	{
+		ImGui::OpenPopup("changeType");
+	}
+	ImGui::SetItemTooltip("change type");
+	ImGui::SameLine();
 
-	ImGui::Text(" Filter     : %s", magic_enum::enum_name(m_filter).data());
-	float mass = b2Body_GetMass(m_bodyId);
-	ImGui::Text(" Mass       : %.3f", mass);
+	b2BodyType bodyType = GetType();
+	ImGui::Text("type : %s", magic_enum::enum_name(bodyType).data());
+
+	if (ImGui::BeginPopup("changeType"))
+	{
+		for (int i = 0; i < b2_bodyTypeCount; i++)
+		{
+			b2BodyType type = (b2BodyType)i;
+			bool same = type == bodyType;
+			if (ImGui::Selectable(magic_enum::enum_name(type).data(), same))
+			{
+				if (!same)SetType(type);
+			}
+		}
+		ImGui::EndPopup();
+	}
+
+	if (ImGui::Button("<>##filter"))
+	{
+		ImGui::OpenPopup("changeFilter");
+	}
+	ImGui::SetItemTooltip("change filer");
+	ImGui::SameLine();
+	ImGui::Text("Filter : %s", magic_enum::enum_name(m_filter).data());
+
+	if (ImGui::BeginPopup("changeFilter"))
+	{
+		static long long numFilter = magic_enum::enum_count<FILTER>() - 1;
+		for (int i = 0; i < numFilter; i++)
+		{
+			FILTER filter = (FILTER)pow(2, i);
+			bool same = filter == m_filter;
+			if (ImGui::Selectable(magic_enum::enum_name(filter).data(), same))
+			{
+				if (!same)SetFilter(filter);
+			}
+		}
+		ImGui::EndPopup();
+	}
+
+	auto vec = b2Body_GetLinearVelocity(m_bodyId);
+	float velocity[2] = { vec.x,vec.y };
+	//ImGui::Text(" LinerVelocity\n  <x: %.2f   y:%.2f>", vec.x, vec.y);
+	if (ImGui::InputFloat2("Velocity", velocity))
+	{
+		b2Body_SetLinearVelocity(m_bodyId, { velocity[0],velocity[1] });
+	}
+	
+	auto massData = b2Body_GetMassData(m_bodyId);
+	if (ImGui::InputFloat("Mass", &massData.mass))
+	{
+		b2Body_SetMassData(m_bodyId, massData);
+	}
+
 	float gravity = b2Body_GetGravityScale(m_bodyId);
-	ImGui::Text(" Gravity    : %.3f", gravity);
+	if (ImGui::InputFloat(" Gravity", &gravity))
+	{
+		b2Body_SetGravityScale(m_bodyId, gravity);
+	}
+
 	bool isBullet = b2Body_IsBullet(m_bodyId);
 	if (ImGui::Checkbox("Bullet", &isBullet))
 	{
 		b2Body_SetBullet(m_bodyId, isBullet);
 	}
 
+	bool isFixRot = b2Body_IsFixedRotation(m_bodyId);
+	if (ImGui::Checkbox("FixedRotation", &isFixRot))
+	{
+		b2Body_SetFixedRotation(m_bodyId, isFixRot);
+	}
+
+	bool isAwake = b2Body_IsAwake(m_bodyId);
+	if (ImGui::Checkbox("Awake", &isAwake))
+	{
+		b2Body_SetAwake(m_bodyId, isAwake);
+	}
+
+	ImGui::SeparatorText("Create");
+	static const char* shapeTypes[] =
+	{
+		"Box",
+		"Circle",
+		"Capsule",
+		"Segment",
+		"Polygon",
+		"Chain"
+	};
+	static Box2DShapeType selectType = BOX;
+	if (ImGui::BeginListBox("##shapeType", ImVec2(100, 110)))
+	{
+		for (int i = 0; i < TYPE_MAX; i++)
+		{
+			if (ImGui::Selectable(magic_enum::enum_name((Box2DShapeType)i).data(), i == selectType))
+			{
+				selectType = (Box2DShapeType)i;
+			}
+		}
+		ImGui::EndListBox();
+	}
+	ImGui::SameLine();
+	ImGui::BeginChild("parameter", ImVec2(IMGUI_WINDOW_WIDTH - 100, 110));
+	bool create = false;
+	if (ImGui::Button("Create"))create = true;
+
+	static bool sensor = false;
+	ImGui::Checkbox("sensor", &sensor);
+	switch (selectType)
+	{
+	case BOX:
+	{
+		static Vector2 size = {5.0f,5.0f};
+		static Vector2 offset;
+		static float angle = 0.0f;
+		static bool decideSize = false;
+		static bool decideOffset = false;
+		static bool decideAngle = false;
+		ImGui::Checkbox("##size", &decideSize);
+		ImGui::SameLine();
+		if (!decideSize)ImGui::BeginDisabled();
+		ImGui::DragFloat2("size", size.data(),0.1f,0.0f,100.0f);
+		if (!decideSize)ImGui::EndDisabled();
+
+		ImGui::Checkbox("##offset", &decideOffset);
+		ImGui::SameLine();
+		if (!decideOffset)ImGui::BeginDisabled();
+		ImGui::InputFloat2("offset", offset.data());
+		if (!decideOffset)ImGui::EndDisabled();
+
+		ImGui::Checkbox("##angle", &decideAngle);
+		ImGui::SameLine();
+		if (!decideAngle)ImGui::BeginDisabled();
+		ImGui::DragFloat("angle", &angle,1.0f,-180.0f,180.0f);
+		if (!decideAngle)ImGui::EndDisabled();
+
+		if (create)
+		{
+			if (decideSize) CreateBoxShape(size, decideOffset ? offset : Vector2(0.0f, 0.0f), decideAngle ? angle : 0.0f);
+			else CreateBoxShape(decideOffset ? offset : Vector2(0.0f, 0.0f), decideAngle ? angle : 0.0f);
+		}
+		break;
+	}
+	case CIRCLE:
+	{
+		static float diameter = 1.0f;
+		static Vector2 offset = { 0.0f,0.0f };
+		static bool decideDiameter = false;
+		static bool decideOffset = false;
+
+		ImGui::Checkbox("##diameter", &decideDiameter);
+		ImGui::SameLine();
+		if (!decideDiameter)ImGui::BeginDisabled();
+		ImGui::InputFloat("diameter", &diameter);
+		if (!decideDiameter)ImGui::EndDisabled();
+
+		ImGui::Checkbox("##offset", &decideOffset);
+		ImGui::SameLine();
+		if (!decideOffset)ImGui::BeginDisabled();
+		ImGui::InputFloat2("offset", offset.data());
+		if (!decideOffset)ImGui::EndDisabled();
+
+		if (create)
+		{
+			if (decideDiameter)CreateCircleShape(diameter, decideOffset ? offset : Vector2(0.0f, 0.0f));
+			else CreateCircleShape(decideOffset ? offset : Vector2(0.0f, 0.0f));
+		}
+	}
+		break;
+	case CAPSULE :
+	{
+		static float diameter = 1.0f;
+		static float height = 1.0f;
+		static float angle = 0.0f;
+		static Vector2 offset = { 0.0f,0.0f };
+		static bool decideDiameter = false;
+		static bool decideHeight = false;
+		static bool decideAngle = false;
+		static bool decideOffset = false;
+
+		ImGui::Checkbox("##diameter", &decideDiameter);
+		ImGui::SameLine();
+		if (!decideDiameter)ImGui::BeginDisabled();
+		ImGui::InputFloat("diameter", &diameter);
+		if (!decideDiameter)ImGui::EndDisabled();
+
+		ImGui::Checkbox("##height", &decideHeight);
+		ImGui::SameLine();
+		if (!decideHeight)ImGui::BeginDisabled();
+		ImGui::DragFloat("height", &height,0.1f,0.0f,100.0f);
+		if (!decideHeight)ImGui::EndDisabled();
+
+		ImGui::Checkbox("##angle", &decideAngle);
+		ImGui::SameLine();
+		if (!decideAngle)ImGui::BeginDisabled();
+		ImGui::DragFloat("angle", &angle, 1.0f, -180.0f, 180.0f);
+		if (!decideAngle)ImGui::EndDisabled();
+
+		ImGui::Checkbox("##offset", &decideOffset);
+		ImGui::SameLine();
+		if (!decideOffset)ImGui::BeginDisabled();
+		ImGui::InputFloat2("offset", offset.data());
+		if (!decideOffset)ImGui::EndDisabled();
+
+		if (create)
+		{
+			if (decideDiameter && decideHeight)
+				CreateCapsuleShape(diameter, height, decideAngle ? angle : 0.0f, decideOffset ? offset : Vector2(0.0f, 0.0f));
+			else if (decideHeight)
+				CreateCapsuleShape(height, decideOffset ? offset : Vector2(0.0f, 0.0f), decideAngle ? angle : 0.0f);
+			else
+				CreateCapsuleShape(decideOffset ? offset : Vector2(0.0f, 0.0f), decideAngle ? angle : 0.0f);
+		}
+	}
+		break;
+	case SEGMENT:
+		break;
+	case POLYGON :
+		break;
+	case CHAIN:
+		break;
+	}
+	ImGui::EndChild();
+
 	if (!m_shapeList.empty())
 	{
-		
-		if (ImGui::TreeNode("Shape"))
+		if (ImGui::TreeNode("ShapeList"))
 		{
+			int count = 0;
 			//ImGui::BeginDisabled(true); // Disable interaction
-			for (auto& shape : m_shapeList)
+			//for (auto& shape : m_shapeList)
+			for(decltype(m_shapeList)::iterator i = m_shapeList.begin();i != m_shapeList.end();)
 			{
+				ImGui::PushID(count);
+				auto& shape = *i;
+				if(ImGui::Button("erase"))
+				{
+					b2DestroyShape(shape);
+					size_t index = std::distance(m_shapeList.begin(), i);
+					auto iter = m_nodeList.begin() + index;
+					iter->get()->Delete(LAYER_BOX2D_DEBUG);
+					m_nodeList.erase(iter);
+					i = m_shapeList.erase(i);
+
+					ImGui::PopID();
+					count++;
+					continue;
+				}
+
 				b2ShapeType type = b2Shape_GetType(shape);
-				switch (type)
-				{
-				case b2_polygonShape:
-					ImGui::Text("type : Polygon");
-					break;
-				case b2_circleShape:
-					ImGui::Text("type : Circle");
-					break;
-				case b2_capsuleShape:
-					ImGui::Text("type : Capsule");
-					break;
-				case b2_segmentShape:
-					ImGui::Text("type : Segment");
-					break;
-				default:
-					ImGui::Text("unkown shape type!");
-					break;
-				}
+				ImGui::Text("type : %s", magic_enum::enum_name(type).data());
+				
 				bool sensor = b2Shape_IsSensor(shape);
-				if (ImGui::Checkbox(" sensor", &sensor))
-				{
-					//sensorを変更する
-				}
+				ImGui::Text("sensor : %s", sensor ? "true" : "false");
+				
 				float friction = b2Shape_GetFriction(shape);
 				if (ImGui::InputFloat(" friction", &friction))
 				{
@@ -183,11 +542,22 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 				{
 					b2Shape_SetDensity(shape, density);
 				}
+				float restitution = b2Shape_GetRestitution(shape);
+				if (ImGui::InputFloat(" restitution", &restitution))
+				{
+					b2Shape_SetRestitution(shape, restitution);
+				}
+
+				++i;
+				ImGui::PopID();
+				count++;
 			}
+			
 			//ImGui::EndDisabled(); // Re-enable interaction
 			ImGui::TreePop();
 		}
 	}
+#endif
 }
 
 void Box2DBody::SetFilter(const FILTER _filter)
@@ -216,10 +586,10 @@ void Box2DBody::CreateBoxShape(bool _sensor)
 	CreateBoxShape({ scale.x, scale.y }, { 0.0f,0.0f }, 0.0f, _sensor);
 }
 
-void Box2DBody::CreateBoxShape(float _offsetX, float _offsetY, float _angle, bool _sensor)
+void Box2DBody::CreateBoxShape(Vector2 _offset, float _angle, bool _sensor)
 {
 	auto scale = m_this->transform.scale;
-	CreateBoxShape({ scale.x, scale.y }, { _offsetX ,_offsetY }, _angle, _sensor);
+	CreateBoxShape({ scale.x, scale.y }, _offset, _angle, _sensor);
 }
 
 void Box2DBody::CreateBoxShape(Vector2 _size, Vector2 _offset, float _angle,bool _sensor)
@@ -311,6 +681,14 @@ void Box2DBody::CreateCapsuleShape()
 	auto scale = transform.scale;
 	float diameter = (scale.x + scale.y) / 2;
 	CreateCapsuleShape(diameter, scale.y / 2);
+}
+
+void Box2DBody::CreateCapsuleShape(Vector2 _offset, float _angle)
+{
+	auto& transform = m_this->transform;
+	auto scale = transform.scale;
+	float diameter = (scale.x + scale.y) / 2;
+	CreateCapsuleShape(diameter, scale.y / 2,_angle, _offset);
 }
 
 void Box2DBody::CreateCapsuleShape(float _height, Vector2 _offset, float _angle)
@@ -561,7 +939,7 @@ void Box2DBody::AddForce(b2Vec2 _force)
 	b2Body_ApplyForceToCenter(m_bodyId, _force, true);
 }
 
-void Box2DBody::AddForceImpule(b2Vec2 _force)
+void Box2DBody::AddForceImpulse(b2Vec2 _force)
 {
 	_force.x *= DEFAULT_OBJECT_SIZE;
 	_force.y *= DEFAULT_OBJECT_SIZE;
@@ -935,26 +1313,6 @@ void Box2DBodyManager::Init()
 }
 #endif
 
-
-void Box2DBodyManager::ExecuteMoveFunction()
-{
-	/*for (const auto& func : moveFunctions) {
-		func.second();
-	}
-
-	moveFunctions.clear();*/
-
-	for (const auto& node : m_moveBodyObjects)
-	{
-		auto pos = b2Body_GetPosition(node.second);
-		pos *= DEFAULT_OBJECT_SIZE;
-		node.first->transform.position = Vector3(pos.x, pos.y, 0.5f);
-		auto rot = b2Rot_GetAngle(b2Body_GetRotation(node.second));
-		node.first->transform.angle.z.Set(rot);
-	}
-
-	m_moveBodyObjects.clear();
-}
 
 unsigned int Box2DBodyManager::GetMaskFilterBit(FILTER _filter)
 {

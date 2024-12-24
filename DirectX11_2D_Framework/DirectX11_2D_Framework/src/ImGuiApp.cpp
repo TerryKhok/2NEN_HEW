@@ -20,8 +20,8 @@ ImGuiApp::HandleUI ImGuiApp::handleUi;
 ComPtr<ID3D11ShaderResourceView> pIconTexture;
 ImTextureID imIconTexture;
 std::stack<std::function<void()>> changes;
-std::stack<std::pair<std::string,std::unique_ptr<GameObject, void(*)(GameObject*)>>> willDeleteObjects;
-std::stack<std::pair<const char*, std::unique_ptr<Component, void(*)(Component*)>>> willRemoveComponents;
+std::stack<std::pair<std::unique_ptr<GameObject, void(*)(GameObject*)>,std::pair<std::string,size_t>>> willDeleteObjects;
+std::stack<std::unique_ptr<Component, void(*)(Component*)>> willRemoveComponents;
 std::vector<const char*> filterNames;
 constexpr long long numFilter = magic_enum::enum_count<FILTER>() - 1;
 ImVec4 windowBgCol;
@@ -221,7 +221,7 @@ void ReadAnimationClipFile(fs::path _path);
 
 
 // Set of allowed extensions
-std::set<std::string> allowed_extensions = { ".txt",".png",".jpg",".json",".wav",ANIM_CLIP_EXTENSION_DOT }; // Add the extensions you want to display
+std::set<std::string> allowed_extensions = { ".txt",".png",".jpg",".dds",".json",".wav",ANIM_CLIP_EXTENSION_DOT }; // Add the extensions you want to display
 
 // Set of unallowed folder
 std::set<std::string> unallowed_folders = {"x64"};
@@ -535,8 +535,16 @@ void ImGuiApp::DrawOptionGui()
 					fs::path filePath = /*"asset/object/" + */selectedObject->GetName() + ".json";
 					//filePath /= ;
 					std::ofstream ofs(filePath);
-					cereal::JSONOutputArchive archive(ofs);
+					SERIALIZE_OUTPUT archive(ofs);
 					archive(CEREAL_NVP(*selectedObject));
+				}
+				if (ImGui::Button("Deserialize"))
+				{
+					handleUi.SetUploadFile("object file",
+						[](GameObject* obj, std::filesystem::path path)
+						{
+							ObjectManager::AddObject(path);
+						},{".json"});
 				}
 
 				ImGui::EndTabItem();
@@ -629,13 +637,14 @@ void ImGuiApp::DrawOptionGui()
 		{
 			if (ImGui::BeginTabItem("ObjectList"))
 			{
-				for (auto& object : *ObjectManager::m_currentList) {
-					if (!object.second->active)
+				ImGui::BeginChild("objectList");
+				for (auto& object : ObjectManager::m_currentList->first) {
+					if (!object->active)
 					{
 						ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 0.4f)); // Set text color to red
 					}
-					bool selected = object.second->isSelected == GameObject::SELECTED;
-					if (ImGui::Selectable(object.second->GetName().c_str(),selected))
+					bool selected = object->isSelected == GameObject::SELECTED;
+					if (ImGui::Selectable(object->GetName().c_str(),selected))
 					{
 						if (selected)
 						{
@@ -645,14 +654,56 @@ void ImGuiApp::DrawOptionGui()
 						{
 							// Handle selection, e.g., highlighting the object or showing more details
 							if (selectedObject != nullptr) selectedObject->isSelected = GameObject::SELECT_NONE;
-							selectedObject = object.second.get();
+							selectedObject = object.get();
 							if (selectedObject != nullptr) selectedObject->isSelected = GameObject::SELECTED;
 						}
 					}
-					if (!object.second->active)
+					if (!object->active)
 					{
 						ImGui::PopStyleColor();
 					}
+				}
+				ImGui::EndChild();
+				if (ImGui::BeginPopupContextItem())
+				{
+					static char buf[128];
+					ImGui::SeparatorText("Add Object");
+					ImGui::InputText("name",buf,sizeof(buf));
+
+					if (ImGui::MenuItem("+ Empty"))
+					{
+						GameObject* object = nullptr;
+						if (buf[0] != '\0') 
+							object = new GameObject(buf);
+						else 
+							object = new GameObject("empty");
+						ObjectManager::AddObject(object);
+						memset(buf, '\0', strlen(buf));
+					}
+					if (ImGui::MenuItem("+ Render"))
+					{
+						GameObject* object = nullptr;
+						if (buf[0] != '\0')
+							object = new GameObject(buf);
+						else
+							object = new GameObject("rend");
+						ObjectManager::AddObject(object);
+						object->AddComponent<Renderer>();
+						memset(buf, '\0', strlen(buf));
+					}
+					if (ImGui::MenuItem("+ Box2D"))
+					{
+						GameObject* object = nullptr;
+						if (buf[0] != '\0')
+							object = new GameObject(buf);
+						else
+							object = new GameObject("box2d");
+						ObjectManager::AddObject(object);
+						object->AddComponent<Box2DBody>();
+						memset(buf, '\0', strlen(buf));
+					}
+					
+					ImGui::EndPopup();
 				}
 				ImGui::EndTabItem();
 			}
@@ -738,16 +789,27 @@ void ImGuiApp::DrawInspectorGui()
 		if (selectedObject != nullptr)
 		{
 			ImGui::SeparatorText("General");
-
-			ImGui::Text("Selected : %s", selectedObject->name.c_str());
+			
 			bool active = selectedObject->active;
-			ImGui::SameLine();
 			ImGui::Checkbox(" ", &active);
 			ImGui::SetItemTooltip("active");
 			if (active != selectedObject->active)
 			{
 				selectedObject->SetActive(active);
 			}
+			ImGui::SameLine();
+
+			static char str[128] = {};
+			if (Window::IsPause())
+			{
+				memset(str, '\0', strlen(str));
+				memcpy(str, selectedObject->name.c_str(), selectedObject->name.size());
+				if (ImGui::InputText("Selected", str, sizeof(str), ImGuiInputTextFlags_EnterReturnsTrue) && str[0] != '\0')
+				{
+					selectedObject->SetName(str);
+				}
+			}
+			else ImGui::Text("%s : Selected", selectedObject->name.c_str());
 
 			ImGui::SeparatorText("Component");
 			
@@ -803,55 +865,97 @@ void ImGuiApp::DrawInspectorGui()
 				//ImGui::TreePop();
 			}
 
-			std::vector<const char*> eraseComponents;
-			for (auto& component : selectedObject->m_componentList)
+			std::vector<std::string> eraseComponents;
+			for (auto& component : selectedObject->m_componentList.first)
 			{
-				std::string componentName = component.first;
+				std::string componentName = component->getType();
 
 				ImGui::PushID(componentName.c_str());
 				if (ImGui::Button("-"))
 				{
-					eraseComponents.push_back(component.first);
+					eraseComponents.push_back(componentName);
 				}
 				ImGui::SetItemTooltip("remove");
 				ImGui::PopID();
 				ImGui::SameLine();
 				if (ImGui::CollapsingHeader(componentName.substr(6).c_str(), ImGuiTreeNodeFlags_None))
 				{
-					component.second->DrawImGui(handleUi);
+					component->DrawImGui(handleUi);
 				}
 			}
 
 			for (auto name : eraseComponents)
 			{
 				auto& list = selectedObject->m_componentList;
-				auto iter = list.find(name);
-				if (iter != list.end())
+				auto iter = list.second.find(name.c_str());
+				if (iter != list.second.end())
 				{
 					if (Window::IsPause())
 					{
-						iter->second->SetActive(false);
-						willRemoveComponents.push(std::move(*iter));
-						list.erase(iter);
+						auto& component = list.first[iter->second];
+
+						component->SetActive(false);
+						//component->Delete();
+
+						willRemoveComponents.push(std::move(component));
+
+						auto& vector = list.first;
+						auto& map = list.second;
+
+						size_t index = iter->second;
+						size_t lastIndex = vector.size() - 1;
+
+						// Move the last entity to the position of the entity to be removed
+						if (index != lastIndex) {
+							vector[index] = std::move(vector[lastIndex]);
+							map[vector[index]->getType().c_str()] = index; // Update map for the moved entity
+						}
+
+						// Remove the last element and update map
+						vector.pop_back();
+						map.erase(iter);
 
 						changes.emplace(std::bind([](GameObject* obj) {
-							willRemoveComponents.top().second->SetActive(true);
-							obj->m_componentList.insert(std::move(willRemoveComponents.top()));
+							willRemoveComponents.top()->SetActive(true);
+							auto& vec = obj->m_componentList.first;
+							vec.push_back(std::move(willRemoveComponents.top()));
+							obj->m_componentList.second.insert(std::make_pair(vec.back()->getType(),vec.size() - 1));
 							willRemoveComponents.pop();
 							}, selectedObject));
 
 						if (name == typeid(Renderer).name())
 						{
-							auto it = list.find(typeid(Animator).name());
-							if (it != list.end())
+							auto it = list.second.find(typeid(Animator).name());
+							if (it != list.second.end())
 							{
-								it->second->SetActive(false);
-								willRemoveComponents.push(std::move(*it));
-								list.erase(it);
+								auto& com = list.first[iter->second];
+
+								com->SetActive(false);
+								com->Delete();
+
+								willRemoveComponents.push(std::move(component));
+
+								auto& vector = list.first;
+								auto& map = list.second;
+								
+								size_t index = iter->second;
+								size_t lastIndex = vector.size() - 1;
+
+								// Move the last entity to the position of the entity to be removed
+								if (index != lastIndex) {
+									vector[index] = std::move(vector[lastIndex]);
+									map[vector[index]->getType().c_str()] = index; // Update map for the moved entity
+								}
+
+								// Remove the last element and update map
+								vector.pop_back();
+								map.erase(iter);
 
 								changes.emplace(std::bind([](GameObject* obj) {
-									willRemoveComponents.top().second->SetActive(true);
-									obj->m_componentList.insert(std::move(willRemoveComponents.top()));
+									willRemoveComponents.top()->SetActive(true);
+									auto& vec = obj->m_componentList.first;
+									vec.push_back(std::move(willRemoveComponents.top()));
+									obj->m_componentList.second.insert(std::make_pair(vec.back()->getType(), vec.size() - 1));
 									willRemoveComponents.pop();
 									}, selectedObject));
 							}
@@ -859,24 +963,56 @@ void ImGuiApp::DrawInspectorGui()
 					}
 					else
 					{
+						auto& component = list.first[iter->second];
 #ifdef DEBUG_TRUE
 						//コンポーネントのSafePointerをNullptrにする
-						PointerRegistryManager::deletePointer(iter->second.get());
+						PointerRegistryManager::deletePointer(component.get());
 #endif 
-						iter->second->Delete();
-						list.erase(iter);
+						component->Delete();
+
+						auto& vector = list.first;
+						auto& map = list.second;
+
+						size_t index = iter->second;
+						size_t lastIndex = vector.size() - 1;
+
+						// Move the last entity to the position of the entity to be removed
+						if (index != lastIndex) {
+							vector[index] = std::move(vector[lastIndex]);
+							map[vector[index]->getType().c_str()] = index; // Update map for the moved entity
+						}
+
+						// Remove the last element and update map
+						vector.pop_back();
+						map.erase(iter);
 
 						if (name == typeid(Renderer).name())
 						{
-							auto it = list.find(typeid(Animator).name());
-							if (it != list.end())
+							auto it = list.second.find(typeid(Animator).name());
+							if (it != list.second.end())
 							{
+								auto& com = list.first[it->second];
 #ifdef DEBUG_TRUE
 								//コンポーネントのSafePointerをNullptrにする
-								PointerRegistryManager::deletePointer(it->second.get());
+								PointerRegistryManager::deletePointer(com.get());
 #endif 
-								it->second->Delete();
-								list.erase(it);
+								com->Delete();
+
+								auto& vector = list.first;
+								auto& map = list.second;
+
+								size_t index = iter->second;
+								size_t lastIndex = vector.size() - 1;
+
+								// Move the last entity to the position of the entity to be removed
+								if (index != lastIndex) {
+									vector[index] = std::move(vector[lastIndex]);
+									map[vector[index]->getType().c_str()] = index; // Update map for the moved entity
+								}
+
+								// Remove the last element and update map
+								vector.pop_back();
+								map.erase(iter);
 							}
 						}
 					}
@@ -889,9 +1025,31 @@ void ImGuiApp::DrawInspectorGui()
 			ImGui::SetCursorScreenPos(buttonPos);
 			if (ImGui::Button("Add Component", ImVec2(300, 30)))
 			{
-			//==================================================
-			// コンポーネント追加gui
-			//==================================================
+				ImGui::OpenPopup("add component");
+			}
+
+			if(ImGui::BeginPopup("add component"))
+			{
+				char buf[64] = {};
+				ImGui::SeparatorText("Add Component");
+				ImGui::InputText("filter", buf, sizeof(buf));
+				ImGui::BeginChild("addComponentWindow",ImVec2(252,200), ImGuiChildFlags_Borders);
+				{
+					for (auto& assembly : AssemblyComponent::assemblies)
+					{
+						std::string name = assembly.first.substr(6);
+						if(name.find(buf, strlen(buf)) != std::string::npos)
+						{
+							if (ImGui::Selectable(name.c_str()))
+							{
+								assembly.second.addComponent(selectedObject);
+								ImGui::CloseCurrentPopup();
+							}
+						}
+					}
+				}
+				ImGui::EndChild();
+				ImGui::EndPopup();
 			}
 		}
 		else
@@ -1177,7 +1335,7 @@ void ImGuiApp::DrawMainGui(ImGuiContext* _mainContext)
 			int uvY = 6;
 			if (ImGui::ImageButton("LoadSource", imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
 			{
-				handleUi.SetUploadFile("texture", [](GameObject* _obj,fs::path _path)
+				handleUi.SetUploadFile("texture", [](GameObject* _obj, fs::path _path)
 					{
 						auto iter = textureSource.find(_path);
 						if (iter != textureSource.end()) return;
@@ -1187,8 +1345,8 @@ void ImGuiApp::DrawMainGui(ImGuiContext* _mainContext)
 						ImTextureID texId = (ImTextureID)texture.Get();
 						textureSource.emplace(
 							std::make_pair(_path, std::make_pair(texture, texId)));
-					}, 
-					{ ".png",".jpg" });
+					},
+					{ ".png",".jpg" ,".dds" });
 			}
 			ImGui::SetItemTooltip("load texture");
 
@@ -1366,11 +1524,11 @@ void ImGuiApp::DrawMainGui(ImGuiContext* _mainContext)
 											count = 0;
 											for (int x = 0; x < splitX; x++)
 											{
-												if (count % 11 != 0) ImGui::SameLine();
+												if (count % 10 != 0) ImGui::SameLine();
 												count++;
 												std::string id = filename + std::to_string(cutCount) + std::to_string(x + y * maxTexSplit[0]);
 												ImGui::PushID(id.c_str());
-												if (ImGui::ImageButton("cutTexButton", texId, ImVec2(50, 50), ImVec2(texScaleX * x, texScaleY * y), ImVec2(texScaleX * (x + 1), texScaleY * (y + 1)), windowBgCol))
+												if (ImGui::ImageButton("cutTexButton", texId, ImVec2(52, 52), ImVec2(texScaleX * x, texScaleY * y), ImVec2(texScaleX * (x + 1), texScaleY * (y + 1)), windowBgCol))
 												{
 													currentImTexture.id = texId;
 													currentImTexture.uv0 = ImVec2(texScaleX * x, texScaleY * y);
@@ -1552,13 +1710,13 @@ void ImGuiApp::DeleteSelectedObject()
 	if (selectedObject != nullptr /* && ImGui::IsKeyPressed(ImGuiKey_Delete)*/)
 	{
 		auto& list = ObjectManager::m_currentList;
-		auto iter = list->find(selectedObject->name);
-		if (iter != list->end())
+		auto iter = list->second.find(selectedObject->name);
+		if (iter != list->second.end())
 		{
 			if (Window::IsPause())
 			{
-				willDeleteObjects.push(std::move(*iter));
-				willDeleteObjects.top().second->SetActive(false);
+				willDeleteObjects.push(std::make_pair(std::move(list->first[iter->second]), std::move(*iter)));
+				willDeleteObjects.top().first->SetActive(false);
 
 				changes.emplace([]() {
 					if (!willDeleteObjects.empty())
@@ -1568,19 +1726,21 @@ void ImGuiApp::DeleteSelectedObject()
 						{
 							selectedObject->isSelected = GameObject::SELECT_NONE;
 						}
-						selectedObject = object.second.get();
-						object.second->isSelected = GameObject::SELECTED;
-						object.second->SetActive(true);
-						ObjectManager::m_currentList->emplace(std::move(willDeleteObjects.top()));
+						selectedObject = object.first.get();
+						object.first->isSelected = GameObject::SELECTED;
+						object.first->SetActive(true);
+						ObjectManager::m_currentList->first.emplace_back(std::move(willDeleteObjects.top().first));
+						ObjectManager::m_currentList->second.emplace(std::move(willDeleteObjects.top().second));
 						willDeleteObjects.pop();
 					}
 					});
 			}
 			else
 			{
-				PointerRegistryManager::deletePointer(iter->second.get());
+				PointerRegistryManager::deletePointer(list->first[iter->second].get());
 			}
-			list->erase(iter);
+			//list->erase(iter);
+			ObjectManager::DeleteObject(iter);
 			selectedObject = nullptr;
 			
 		}
@@ -1592,8 +1752,10 @@ void ImGuiApp::ClearStack()
 	updateValues.clear();
 	while (!willRemoveComponents.empty())
 	{
+		willRemoveComponents.top()->Delete();
+
 #ifdef DEBUG_TRUE
-		PointerRegistryManager::deletePointer(willRemoveComponents.top().second.get());
+		PointerRegistryManager::deletePointer(willRemoveComponents.top().get());
 #endif
 		willRemoveComponents.pop();
 	}
@@ -1601,7 +1763,7 @@ void ImGuiApp::ClearStack()
 	while (!willDeleteObjects.empty())
 	{
 #ifdef DEBUG_TRUE
-		PointerRegistryManager::deletePointer(willDeleteObjects.top().second.get());
+		PointerRegistryManager::deletePointer(willDeleteObjects.top().first.get());
 #endif
 		willDeleteObjects.pop();
 	}

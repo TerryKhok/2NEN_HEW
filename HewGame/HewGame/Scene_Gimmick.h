@@ -23,7 +23,7 @@ public:
 		};
 		auto object = Instantiate("StaticBox_Map");
 		b2BodyDef bodyDef2 = b2DefaultBodyDef();
-		bodyDef2.type = b2_dynamicBody;
+		bodyDef2.type = b2_staticBody;
 		bodyDef2.gravityScale = 0.0f;
 
 		auto box2d = object->AddComponent<Box2DBody>(&bodyDef2);
@@ -38,29 +38,7 @@ public:
 		box2d->SetFilter(F_OBSTACLE);
 		box2d->CreateBoxShape();
 
-		object = Instantiate("UntiGravityWindow");
-		object->transform.scale = { 30.0f,20.0f };
-		bodyDef2 = b2DefaultBodyDef();
-		bodyDef2.type = b2_kinematicBody;
-		box2d = object->AddComponent<Box2DBody>(&bodyDef2);
-		box2d->SetFilter(F_WINDOW);
-		box2d->CreateBoxShape(true);
-		object->AddComponent<Renderer>();
-		object->AddComponent<SubWindow>("UntiGravity");
-		object->AddComponent<AntiGravity>();
-
-		object = Instantiate("PermeationWindow");
-		object->transform.scale = { 30.0f,20.0f };
-		bodyDef2 = b2DefaultBodyDef();
-		bodyDef2.type = b2_kinematicBody;
-		box2d = object->AddComponent<Box2DBody>(&bodyDef2);
-		box2d->SetFilter(F_PERWINDOW);
-		box2d->CreateBoxShape({ 28.0f,18.0f }, { 0.0f,0.0f }, 0.0f, true);
-		object->AddComponent<Renderer>();
-		auto window = object->AddComponent<SubWindow>("Permeation");
-		window->DisableDrawLayer(LAYER_FOG);
-		object->AddComponent<Permeation>();
-
+		
 		object = Instantiate("StaticBox_Ground_Polygon");
 		object->transform.position = { 200.0f,0.0f };
 		std::vector<b2Vec2> mesh = {
@@ -93,6 +71,29 @@ public:
 		fog->transform.position = { 0.0f,0.0f };
 		fog->transform.scale = { 50.0f,50.0f };
 		fog->AddComponent<Fog>();
+
+		object = Instantiate("UntiGravityWindow");
+		object->transform.scale = { 30.0f,20.0f };
+		bodyDef2 = b2DefaultBodyDef();
+		bodyDef2.type = b2_kinematicBody;
+		box2d = object->AddComponent<Box2DBody>(&bodyDef2);
+		box2d->SetFilter(F_WINDOW);
+		box2d->CreateBoxShape(true);
+		object->AddComponent<Renderer>();
+		object->AddComponent<SubWindow>("UntiGravity");
+		object->AddComponent<AntiGravity>();
+
+		object = Instantiate("PermeationWindow");
+		object->transform.scale = { 30.0f,20.0f };
+		bodyDef2 = b2DefaultBodyDef();
+		bodyDef2.type = b2_kinematicBody;
+		box2d = object->AddComponent<Box2DBody>(&bodyDef2);
+		box2d->SetFilter(F_PERWINDOW);
+		box2d->CreateBoxShape({ 28.0f,18.0f }, { 0.0f,0.0f }, 0.0f, true);
+		object->AddComponent<Renderer>();
+		auto window = object->AddComponent<SubWindow>("Permeation");
+		window->DisableDrawLayer(LAYER_FOG);
+		object->AddComponent<Permeation>();
 	}
 
 	void Update()

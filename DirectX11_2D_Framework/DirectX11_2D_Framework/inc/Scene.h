@@ -88,7 +88,6 @@ private:
 			Box2D::WorldManager::EnableWorldUpdate();
 			Box2D::WorldManager::ResumeWorldUpdate();
 #endif	
-			LOG_NL;
 			LOG("Now Switching to %s", _sceneName.substr(6).c_str());
 		}
 	}
@@ -135,7 +134,6 @@ public:
 			Box2D::WorldManager::EnableWorldUpdate();
 			Box2D::WorldManager::ResumeWorldUpdate();
 #endif	
-			LOG_NL;
 			LOG("Now Switching to %s", sceneName.substr(6).c_str());
 
 			throw "";
@@ -163,7 +161,6 @@ public:
 			loading = true;
 
 			// Start scene loading asynchronously
-			LOG_NL;
 			LOG("Starting scene loading...%s", sceneName.substr(6).c_str());
 
 			//ƒXƒŒƒbƒh‚ð—§‚Ä‚é

@@ -32,6 +32,33 @@ std::string wstring_to_string(const std::wstring& wstr) {
     return str;
 }
 
+
+/*
+    stringをwstringへ変換する
+*/
+std::wstring string_to_wstring(std::string oString)
+{
+    // SJIS → wstring
+    int iBufferSize = MultiByteToWideChar(CP_ACP, 0, oString.c_str()
+        , -1, (wchar_t*)NULL, 0);
+
+    // バッファの取得
+    wchar_t* cpUCS2 = new wchar_t[iBufferSize];
+
+    // SJIS → wstring
+    MultiByteToWideChar(CP_ACP, 0, oString.c_str(), -1, cpUCS2
+        , iBufferSize);
+
+    // stringの生成
+    std::wstring oRet(cpUCS2, cpUCS2 + iBufferSize - 1);
+
+    // バッファの破棄
+    delete[] cpUCS2;
+
+    // 変換結果を返す
+    return(oRet);
+}
+
 // Open File Dialog to select PNG
 std::string OpenFileDialog() {
     OPENFILENAME ofn;
@@ -52,4 +79,15 @@ std::string OpenFileDialog() {
     }
 
     return " ";
+}
+
+const wchar_t* GetFileExtension(const wchar_t* path)
+{
+    if (!path) return nullptr; // Handle null pointer
+
+    const wchar_t* dot = wcsrchr(path, L'.'); // Find the last dot
+    if (dot && *(dot + 1)) {
+        return dot + 1; // Return the extension after the dot
+    }
+    return nullptr; // No extension found
 }

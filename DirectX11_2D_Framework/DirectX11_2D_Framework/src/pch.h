@@ -90,7 +90,7 @@
 
 
 #include "../../DirectX11_2D_Framework/math/Math.h"
-#include "../../DirectX11_2D_Framework/inc/Prefab.h"
+#include "../../DirectX11_2D_Framework/inc/Serialize.h"
 #include "../../DirectX11_2D_Framework/math/Vector.h"
 #include "../../DirectX11_2D_Framework/math/Angle.h"
 #include "../../DirectX11_2D_Framework/inc/Utility.h"
@@ -113,6 +113,7 @@
 #include "../../DirectX11_2D_Framework/inc/Camera.h"
 #include "../../DirectX11_2D_Framework/inc/SubWindow.h"
 #include "../../DirectX11_2D_Framework/inc/Button.h"
+#include "../../DirectX11_2D_Framework/inc/Assembly.h"
 #endif
 
 

@@ -8,27 +8,6 @@ DirectX::XMMATRIX SFTextManager::worldMatrix;
 std::unique_ptr<SpriteBatch> SFTextManager::spriteBatch;
 std::unique_ptr<SpriteFont> SFTextManager::spriteFont;
 
-// stringをwstringへ変換する
-std::wstring StringToWString(std::string oString)
-{
-	// SJIS → wstring
-	int iBufferSize = MultiByteToWideChar(CP_ACP, 0, oString.c_str(), -1, (wchar_t*)NULL, 0);
-
-	// バッファの取得
-	wchar_t* cpUCS2 = new wchar_t[iBufferSize];
-
-	// SJIS → wstring
-	MultiByteToWideChar(CP_ACP, 0, oString.c_str(), -1, cpUCS2, iBufferSize);
-
-	// stringの生成
-	std::wstring oRet(cpUCS2, cpUCS2 + iBufferSize - 1);
-
-	// バッファの破棄
-	delete[] cpUCS2;
-
-	// 変換結果を返す
-	return(oRet);
-}
 
 void SFText::Update()
 {
@@ -55,7 +34,7 @@ void SFText::SetString(std::string _str)
 		size = static_cast<float>(_str.size());
 	}
 
-	m_str = StringToWString(_str);
+	m_str = string_to_wstring(_str);
 
 	m_origin = DirectX::XMFLOAT2(size * 4, 0);
 

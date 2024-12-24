@@ -1,10 +1,12 @@
 
 VSObjectConstantBuffer GameObject::m_cb = {};
 
+thread_local void(*ObjectManager::pDeleteObject)(std::string) = &ObjectManager::DeleteObjectDelay;
 thread_local ObjectManager::ObjectList* ObjectManager::m_currentList = m_objectList.get();
 std::unique_ptr<ObjectManager::ObjectList> ObjectManager::m_objectList = std::unique_ptr<ObjectList>(new ObjectList());
 std::unique_ptr<ObjectManager::ObjectList> ObjectManager::m_nextObjectList = std::unique_ptr<ObjectList>(new ObjectList());
 std::unique_ptr<ObjectManager::ObjectList> ObjectManager::m_eraseObjectList = std::unique_ptr<ObjectList>(new ObjectList());
+std::vector<std::string> ObjectManager::m_delayEraseObjectName;
 
 GameObject::GameObject(std::string _name)
 {
@@ -14,16 +16,17 @@ GameObject::GameObject(std::string _name)
 
 GameObject::~GameObject()
 {
-	for (auto& component : m_componentList)
+	for (auto& component : m_componentList.first)
 	{
 #ifdef DEBUG_TRUE
 		//コンポーネントのSafePointerをNullptrにする
-		PointerRegistryManager::deletePointer(component.second.get());
+		PointerRegistryManager::deletePointer(component.get());
 #endif 
-		component.second->Delete();
+		component->Delete();
 	}
 
-	m_componentList.clear();
+	m_componentList.first.clear();
+	m_componentList.second.clear();
 }
 
 VSObjectConstantBuffer& GameObject::GetConstantBuffer()
@@ -45,9 +48,9 @@ VSObjectConstantBuffer& GameObject::GetConstantBuffer()
 
 void GameObject::UpdateComponent()
 {
-	for (auto& component : m_componentList)
+	for (auto& component : m_componentList.first)
 	{
-		component.second->Update();
+		component->Update();
 	}
 }
 
@@ -56,9 +59,9 @@ void GameObject::SetActive(bool _active)
 {
 	if (active != _active) active = _active; else return;
 
-	for (auto& component : m_componentList)
+	for (auto& component : m_componentList.first)
 	{
-		component.second->SetActive(_active);
+		component->SetActive(_active);
 	}
 	//更新関数ポインターを設定
 	pUpdate = _active ? &GameObject::UpdateComponent : &GameObject::Void;
@@ -71,7 +74,6 @@ void GameObject::SetActive(bool _active)
 void GameObject::SetName(const std::string _name)
 {
 	ObjectManager::ChangeObjectName(name, _name);
-	name = _name;
 }
 
 const std::string GameObject::GetName() const
@@ -89,8 +91,9 @@ SAFE_TYPE(Renderer) GameObject::AddComponent<Renderer>()
 	component->m_this = this;
 
 	//リストに追加(デストラクタ登録)
-	m_componentList.emplace(typeid(Renderer).name(), 
+	m_componentList.first.emplace_back(
 		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
+	m_componentList.second[typeid(Renderer).name()] = m_componentList.first.size() - 1;
 
 	Renderer* render = dynamic_cast<Renderer*>(component);
 	if (render == nullptr)
@@ -112,8 +115,9 @@ SAFE_TYPE(Renderer) GameObject::AddComponent<Renderer>(const wchar_t* _texPath)
 	component->m_this = this;
 
 	//リストに追加(デストラクタ登録)
-	m_componentList.emplace(typeid(Renderer).name(),
+	m_componentList.first.emplace_back(
 		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
+	m_componentList.second[typeid(Renderer).name()] = m_componentList.first.size() - 1;
 
 	Renderer* render = dynamic_cast<Renderer*>(component);
 	if (render == nullptr)
@@ -134,8 +138,9 @@ SAFE_TYPE(Renderer) GameObject::AddComponent(Animator* _animator)
 	component->m_this = this;
 
 	//リストに追加(デストラクタ登録)
-	m_componentList.emplace(typeid(Renderer).name(),
+	m_componentList.first.emplace_back(
 		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
+	m_componentList.second[typeid(Renderer).name()] = m_componentList.first.size() - 1;
 
 	Renderer* render = dynamic_cast<Renderer*>(component);
 	if (render == nullptr)
@@ -156,8 +161,9 @@ SAFE_TYPE(Animator) GameObject::AddComponent<Animator>()
 	component->m_this = this;
 
 	//リストに追加(デストラクタ登録)
-	m_componentList.emplace(typeid(Animator).name(),
+	m_componentList.first.emplace_back(
 		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
+	m_componentList.second[typeid(Animator).name()] = m_componentList.first.size() - 1;
 
 	Animator* animator = dynamic_cast<Animator*>(component);
 	if (animator == nullptr)
@@ -178,8 +184,9 @@ SAFE_TYPE(Box2DBody) GameObject::AddComponent<Box2DBody>()
 	component->m_this = this;
 
 	//リストに追加(デストラクタ登録)
-	m_componentList.emplace(typeid(Box2DBody).name(),
+	m_componentList.first.emplace_back(
 		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
+	m_componentList.second[typeid(Box2DBody).name()] = m_componentList.first.size() - 1;
 
 	Box2DBody* render = dynamic_cast<Box2DBody*>(component);
 	if (render == nullptr)
@@ -200,8 +207,9 @@ SAFE_TYPE(Box2DBody) GameObject::AddComponent(b2BodyDef* _bodyDef)
 	component->m_this = this;
 
 	//リストに追加(デストラクタ登録)
-	m_componentList.emplace(typeid(Box2DBody).name(),
+	m_componentList.first.emplace_back(
 		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
+	m_componentList.second[typeid(Box2DBody).name()] = m_componentList.first.size() - 1;
 
 	Box2DBody* render = dynamic_cast<Box2DBody*>(component);
 	if (render == nullptr)
@@ -222,8 +230,9 @@ SAFE_TYPE(SubWindow) GameObject::AddComponent<SubWindow>()
 	component->m_this = this;
 
 	//リストに追加(デストラクタ登録)
-	m_componentList.emplace(typeid(SubWindow).name(),
+	m_componentList.first.emplace_back(
 		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
+	m_componentList.second[typeid(SubWindow).name()] = m_componentList.first.size() - 1;
 
 	SubWindow* render = dynamic_cast<SubWindow*>(component);
 	if (render == nullptr)
@@ -244,8 +253,9 @@ SAFE_TYPE(SubWindow) GameObject::AddComponent(const char* _windowName)
 	component->m_this = this;
 
 	//リストに追加(デストラクタ登録)
-	m_componentList.emplace(typeid(SubWindow).name(),
+	m_componentList.first.emplace_back(
 		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
+	m_componentList.second[typeid(SubWindow).name()] = m_componentList.first.size() - 1;
 
 	SubWindow* render = dynamic_cast<SubWindow*>(component);
 	if (render == nullptr)
@@ -261,15 +271,30 @@ void GameObject::RemoveComponent<Renderer>()
 {
 	RemoveComponent<Animator>();
 
-	auto iter = m_componentList.find(typeid(Renderer).name());
-	if (iter != m_componentList.end())
+	auto iter = m_componentList.second.find(typeid(Renderer).name());
+	if (iter != m_componentList.second.end())
 	{
+		auto& component = m_componentList.first[iter->second];
 #ifdef DEBUG_TRUE
 		//コンポーネントのSafePointerをNullptrにする
-		PointerRegistryManager::deletePointer(iter->second.get());
+		PointerRegistryManager::deletePointer(component.get());
 #endif 
-		iter->second->Delete();
-		m_componentList.erase(iter);
+		auto& vector = m_componentList.first;
+		auto& map = m_componentList.second;
+
+		component->Delete();
+		size_t index = iter->second;
+		size_t lastIndex = vector.size() - 1;
+
+		// Move the last entity to the position of the entity to be removed
+		if (index != lastIndex) {
+			vector[index] = std::move(vector[lastIndex]);
+			map[vector[index]->getType().c_str()] = index; // Update map for the moved entity
+		}
+
+		// Remove the last element and update map
+		vector.pop_back();
+		map.erase(iter);
 	}
 }
 
@@ -286,12 +311,12 @@ bool GameObject::TryGetComponent(Transform** _output)
 	return true;
 }
 
-GameObject* ObjectManager::Find(const std::string& _name)
+SAFE_TYPE(GameObject) ObjectManager::Find(const std::string& _name)
 {
-	auto iter = m_currentList->find(_name);
-	if (iter != m_currentList->end())
+	auto iter = m_currentList->second.find(_name);
+	if (iter != m_currentList->second.end())
 	{
-		return iter->second.get();
+		return m_currentList->first[iter->second].get();
 	}
 
 	LOG("not found %s gameObject", _name.c_str());
@@ -301,20 +326,26 @@ GameObject* ObjectManager::Find(const std::string& _name)
 
 void ObjectManager::UnInit()
 {
-	for (auto& [key, value] : *m_objectList)
+	for (auto& object: m_objectList->first)
 	{
-		value.reset();
+		object.reset();
 	}
 }
 
 void ObjectManager::UpdateObjectComponent()
 {
-	for (auto& [key, value] : *m_objectList)
+	for (auto& object : m_objectList->first)
 	{
 		//参照を剥がして関数ポインタに直接アクセス
 		//(しかし、関数を介して関数ポインタにアクセスするのと速度はあまり変わらない)
-		(value.get()->*value->pUpdate)();
+		(object.get()->*object->pUpdate)();
 	}
+
+	for (auto& name : m_delayEraseObjectName)
+	{
+		DeleteObject(name);
+	}
+	m_delayEraseObjectName.clear();
 }
 
 void ObjectManager::GenerateList()
@@ -323,13 +354,13 @@ void ObjectManager::GenerateList()
 	m_currentList = m_objectList.get();
 }
 
-GameObject* ObjectManager::AddObject(GameObject* _gameObject)
+void ObjectManager::AddObject(GameObject* _gameObject)
 {
 	int count = 1;
 	auto& name = _gameObject->name;
 	std::string uniqueName = name;
 
-	while (m_currentList->find(uniqueName) != m_currentList->end()){
+	while (m_currentList->second.find(uniqueName) != m_currentList->second.end()){
 		uniqueName = name + "_" + std::to_string(count++);
 	}
 
@@ -342,10 +373,70 @@ GameObject* ObjectManager::AddObject(GameObject* _gameObject)
 	name = uniqueName;
 
 	//デストラクタと一緒にスマートポインタに登録
-	auto iter = m_currentList->emplace(name, std::unique_ptr<GameObject, void(*)(GameObject*)>
-		(_gameObject, [](GameObject* p) {delete p; })).first;
+	m_currentList->first.push_back(std::unique_ptr<GameObject, void(*)(GameObject*)>
+		(_gameObject, [](GameObject* p) {delete p; }));
+
+	m_currentList->second[uniqueName] = m_currentList->first.size() - 1;
 	
-	return iter->second.get();
+	//return m_currentList->first.back().get();
+}
+
+void ObjectManager::AddObject(std::filesystem::path& _path)
+{
+	// Deserialize from a file
+	GameObject* object = new GameObject;
+	{
+		std::ifstream is(_path.string());
+		cereal::JSONInputArchive archive(is);
+
+		archive(*object);  // Deserialize polymorphic object
+	}
+
+	//デストラクタと一緒にスマートポインタに登録
+	m_currentList->first.push_back(std::unique_ptr<GameObject, void(*)(GameObject*)>
+		(object, [](GameObject* p) {delete p; }));
+
+	m_currentList->second[object->GetName()] = m_currentList->first.size() - 1;
+}
+
+void ObjectManager::DeleteObject(ObjectListMap::iterator& _iter)
+{
+	size_t index = _iter->second;
+	size_t lastIndex = m_currentList->first.size() - 1;
+
+	auto& vector = m_currentList->first;
+	auto& map = m_currentList->second;
+
+	//リストの最後の要素と入れ替える
+	if (index != lastIndex) {
+		vector[index] = std::move(vector[lastIndex]);
+		map[vector[index]->GetName()] = index; //入れ替えた要素の番号を変更
+	}
+
+	// Remove the last element and update map
+	vector.pop_back();
+	map.erase(_iter);
+}
+
+void ObjectManager::DeleteObject(std::string _name)
+{
+	auto& list = ObjectManager::m_currentList;
+	auto iter = list->second.find(_name);
+	if (iter != list->second.end())
+	{
+		auto& targetObj = list->first[iter->second];
+	
+
+#ifdef DEBUG_TRUE
+		PointerRegistryManager::deletePointer(targetObj.get());
+#endif
+		ObjectManager::DeleteObject(iter);
+	}
+}
+
+void ObjectManager::DeleteObjectDelay(std::string _name)
+{
+	m_delayEraseObjectName.push_back(_name);
 }
 
 void ObjectManager::ChangeNextObjectList()
@@ -353,6 +444,7 @@ void ObjectManager::ChangeNextObjectList()
 	m_eraseObjectList.reset();
 	m_nextObjectList.reset(new ObjectList());
 	m_currentList = m_nextObjectList.get();
+	pDeleteObject = &ObjectManager::DeleteObject;
 }
 
 void ObjectManager::LinkNextObjectList()
@@ -367,14 +459,39 @@ void ObjectManager::LinkNextObjectList()
 void ObjectManager::ChangeObjectName(const std::string& _before, const std::string& _after)
 {
 	std::unique_ptr<GameObject, void(*)(GameObject*)> object(nullptr, [](GameObject* p) {delete p; });
-	auto iter = m_currentList->find(_before);
-	if (iter != m_currentList->end())
+	auto iter = m_currentList->second.find(_before);
+	if (iter != m_currentList->second.end())
 	{
-		object = std::move(iter->second);
-		m_currentList->erase(iter);
-	}
+		int count = 1;
+		std::string uniqueName = _after;
 
-	m_currentList->emplace(_after, std::move(object));
+		while (m_currentList->second.find(uniqueName) != m_currentList->second.end()) {
+			uniqueName = _after + "_" + std::to_string(count++);
+		}
+
+#ifdef DEBUG_TRUE
+		if (_after != uniqueName)
+		{
+			LOG("%s name existed, so we changed %s.", _after.c_str(), uniqueName.c_str());
+		}
+#endif
+		size_t index = iter->second;
+		//size_t lastIndex = m_currentList->first.size() - 1;
+		m_currentList->second.erase(iter);
+		m_currentList->second[uniqueName] = index;
+
+		Box2DBody* rb = nullptr;
+		if (m_currentList->first[index]->TryGetComponent<Box2DBody>(&rb))
+		{
+			auto it = Box2DBodyManager::m_bodyObjectName.find(rb->m_bodyId.index1);
+			if (it != Box2DBodyManager::m_bodyObjectName.end())
+			{
+				it->second = uniqueName;
+			}
+		}
+
+		m_currentList->first[index]->name = uniqueName;
+	}
 }
 
 void ObjectManager::CleanAllObjectList()

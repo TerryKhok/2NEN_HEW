@@ -61,7 +61,7 @@ class SampleScene_Box2D :public Scene
 		b2BodyDef bodyDef2 = b2DefaultBodyDef();
 		//bodyDef2.type = b2_kinematicBody;
 		auto box2d = object->AddComponent<Box2DBody>(&bodyDef2);
-		box2d->SetFilter(F_PLAYER_RAY);
+		box2d->SetFilter(F_MAPRAY);
 		box2d->CreateSegment(points);
 		//object->AddComponent<Box2DBody>()->CreateBoxShape();
 	}
@@ -84,7 +84,7 @@ class SampleScene_Box2D :public Scene
 		if (Input::Get().KeyTrigger(VK_L))
 		{
 			if (box2dbody->GetFilter() == FILTER_01)
-				box2dbody->SetFilter(F_PLAYER_RAY);
+				box2dbody->SetFilter(F_MAPRAY);
 			else
 				box2dbody->SetFilter(FILTER_01);
 		}

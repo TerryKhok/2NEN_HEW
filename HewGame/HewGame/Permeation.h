@@ -118,10 +118,6 @@ class Permeation : public Component
 		m_barrier.clear();
 	}
 
-	void OnWindowMove(HWND _hWnd,RECT* _rect) override
-	{
-
-	}
 
 	void OnWindowExit(HWND _hWnd) override
 	{

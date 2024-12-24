@@ -32,14 +32,14 @@ Renderer::Renderer(GameObject* _pObject)
 	RenderManager::AddRenderList(m_node, m_layer);
 }
 
-Renderer::Renderer(GameObject* _pObject,const wchar_t* texpath)
+Renderer::Renderer(GameObject* _pObject,const wchar_t* _texPath)
 {
-	RenderNode* node = new RenderNode(texpath);
+	RenderNode* node = new RenderNode(_texPath);
 	node->m_object = _pObject;
 	m_node = std::shared_ptr<RenderNode>(node);
 	RenderManager::AddRenderList(m_node, m_layer);
 #ifdef DEBUG_TRUE
-	m_node->texPath = wstring_to_string(texpath);
+	m_node->texPath = _texPath;
 #endif
 }
 
@@ -51,6 +51,13 @@ Renderer::Renderer(GameObject* _pObject,Animator* _animator)
 	RenderManager::AddRenderList(m_node, m_layer);
 
 	_animator->m_uvNode = node;
+}
+
+Renderer::Renderer(GameObject* _pObject, SERIALIZE_INPUT& ar)
+{
+	ar(CEREAL_NVP(m_layer), CEREAL_NVP(m_node));
+	m_node->m_object = _pObject;
+	RenderManager::AddRenderList(m_node, m_layer);
 }
 
 void Renderer::SetActive(bool _active)
@@ -66,6 +73,8 @@ void Renderer::Delete()
 
 void Renderer::SetLayer(const LAYER _layer)
 {
+	if (m_layer == _layer) return;
+
 	m_node->Delete(m_layer);
 	RenderManager::AddRenderList(m_node, _layer);
 	m_layer = _layer;
@@ -82,12 +91,17 @@ void Renderer::SetUVRenderNode(Animator* _animator)
 	_animator->m_uvNode = node;
 }
 
+void Renderer::Serialize(SERIALIZE_OUTPUT& ar)
+{
+	ar(CEREAL_NVP(m_layer),CEREAL_NVP(m_node));
+}
+
 void Renderer::DrawImGui(ImGuiApp::HandleUI& _handle)
 {
 #ifdef DEBUG_TRUE
 	ImGui::Text(" Layer : %s", magic_enum::enum_name(m_layer).data());
 
-	ImGui::Text(" path  : %s", m_node->texPath.c_str());
+	ImGui::Text(" path  : %s", wstring_to_string(m_node->texPath).c_str());
 	ImGui::SameLine();
 	if (ImGui::Button("LinkTex"))
 	{
@@ -101,7 +115,7 @@ void Renderer::DrawImGui(ImGuiApp::HandleUI& _handle)
 				{
 					render->SetTexture(path.wstring().c_str());
 				}
-			}, { ".png" ,".jpg"});
+			}, { ".png" ,".jpg",".dds" });
 	}
 	ImGui::ColorEdit4("color", &m_node->m_color.x);
 	ImVec4 color(m_node->m_color.x, m_node->m_color.y, m_node->m_color.z, m_node->m_color.w);
@@ -112,7 +126,6 @@ void Renderer::DrawImGui(ImGuiApp::HandleUI& _handle)
 void Renderer::SetTexture(const wchar_t* _texPath)
 {
 	m_node->SetTexture(_texPath);
-
 }
 
 void Renderer::SetTexture(const std::string& _filePath)
@@ -156,7 +169,8 @@ RenderNode::RenderNode(const wchar_t* _texpath)
 
 void RenderNode::Active(bool _active)
 {
-	pDrawFunc = _active ? &RenderNode::Draw : &RenderNode::VoidNext;
+	active = _active;
+	pDrawFunc = active ? &RenderNode::Draw : &RenderNode::VoidNext;
 }
 
 inline void RenderNode::Draw()
@@ -229,17 +243,13 @@ inline void RenderNode::Draw()
 void RenderNode::SetTexture(const wchar_t* _texPath)
 {
 	TextureAssets::pLoadTexture(m_pTextureView, _texPath);
-#ifdef DEBUG_TRUE
-	texPath = wstring_to_string(_texPath);
-#endif
+	texPath = _texPath;
 }
 
 void RenderNode::SetTexture(const std::string& _filePath)
 {
 	TextureAssets::StbiLoad(m_pTextureView, _filePath);
-#ifdef DEBUG_TRUE
-	texPath = _filePath;
-#endif
+	texPath = string_to_wstring(_filePath);
 }
 
 void RenderNode::Delete(LAYER _nodeLayer)

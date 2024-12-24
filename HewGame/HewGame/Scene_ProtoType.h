@@ -20,12 +20,22 @@ class Scene_ProtoType :public Scene
 		};
 		auto object = Instantiate("StaticBox_Map");
 		b2BodyDef bodyDef2 = b2DefaultBodyDef();
-		bodyDef2.type = b2_dynamicBody;
+		bodyDef2.type = b2_staticBody;
 		bodyDef2.gravityScale = 0.0f;
 
 		auto box2d = object->AddComponent<Box2DBody>(&bodyDef2);
 		box2d->SetFilter(F_TERRAIN);
 		box2d->CreateChain(points);
+
+		object = Instantiate("StaticBox_Ground_Polygon");
+		object->transform.position = { 200.0f,0.0f };
+		std::vector<b2Vec2> mesh = {
+			{-100,25},{100,25},{10,-50}, { -10,-50 }
+		};
+		bodyDef2 = b2DefaultBodyDef();
+		box2d = object->AddComponent<Box2DBody>(&bodyDef2);
+		box2d->SetFilter(F_OBSTACLE);
+		box2d->CreatePolygonShape(mesh);
 
 		object = Instantiate("StaticBox_Obstacle");
 		object->transform.position = { -200.0f,-100.0f };
@@ -78,16 +88,6 @@ class Scene_ProtoType :public Scene
 		object->AddComponent<Renderer>();
 		object->AddComponent<SubWindow>("Permeation");
 		object->AddComponent<Permeation>();
-
-		object = Instantiate("StaticBox_Ground_Polygon");
-		object->transform.position = { 200.0f,0.0f };
-		std::vector<b2Vec2> mesh = {
-			{-100,25},{100,25},{10,-50}, { -10,-50 }
-		};
-		bodyDef2 = b2DefaultBodyDef();
-		box2d = object->AddComponent<Box2DBody>(&bodyDef2);
-		box2d->SetFilter(F_OBSTACLE);
-		box2d->CreatePolygonShape(mesh);
 	}
 
 	Vector2 oldMousePos;

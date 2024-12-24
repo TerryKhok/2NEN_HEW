@@ -4,9 +4,63 @@ class Box2DBody : public Component
 {
 	friend class GameObject;
 	friend class RenderNode;
+	friend class ObjectManager;
+	friend class Box2D::WorldManager;
+
+	struct BodySaveData
+	{
+		b2BodyType type;
+		b2Vec2 lineVec;
+		float angleVec;
+		float gravity;
+		float mass;
+		bool bullet;
+		bool fixRot;
+		bool awake;
+
+	private:
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(CEREAL_NVP(type), CEREAL_NVP(lineVec), CEREAL_NVP(angleVec), CEREAL_NVP(gravity),
+				CEREAL_NVP(mass), CEREAL_NVP(bullet), CEREAL_NVP(fixRot),CEREAL_NVP(awake));
+		}
+
+		friend class cereal::access;
+	};
+
+	struct ShapeSaveData
+	{
+		bool sensor;
+		float friction;
+		float density;
+		float restitution;
+
+	private:
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(CEREAL_NVP(sensor), CEREAL_NVP(friction), CEREAL_NVP(density), CEREAL_NVP(restitution));
+		}
+
+		friend class cereal::access;
+	};
+
+	enum Box2DShapeType
+	{
+		BOX,
+		CIRCLE,
+		CAPSULE,
+		SEGMENT,
+		POLYGON,
+		CHAIN,
+		TYPE_MAX
+	};
 private:
 	Box2DBody(GameObject* _object);
 	Box2DBody(GameObject* _object, b2BodyDef* _bodyDef);
+	//デシリアライズ用
+	Box2DBody(GameObject* _object, SERIALIZE_INPUT& ar);
 	~Box2DBody() = default;
 	//Box2dWorldから位置と角度を受け取る
 	inline void Update() override;
@@ -14,6 +68,10 @@ private:
 	void Delete() override;
 	//アクティブ設定
 	void SetActive(bool _active) override;
+	//シリアライズ
+	void Serialize(SERIALIZE_OUTPUT& ar) override;
+	//シリアライズ
+	void Deserialize(SERIALIZE_INPUT& ar) override;
 	//imGuiの描画
 	void DrawImGui(ImGuiApp::HandleUI& _handle)override;
 public:
@@ -33,7 +91,7 @@ public:
 	//当たり判定の作成(Box)
 	void CreateBoxShape(bool _sensor = false);
 	//Boxオフセット指定
-	void CreateBoxShape(float _offsetX, float _offsetY, float _angle = 0.0f, bool _sensor = false);
+	void CreateBoxShape(Vector2 _offset, float _angle = 0.0f, bool _sensor = false);
 	//Boxサイズ指定
 	void CreateBoxShape(Vector2 _size, Vector2 _offset = { 0.0f,0.0f }, float _angle = 0.0f, bool _sensor = false);
 	//当たり判定の作成
@@ -44,6 +102,8 @@ public:
 	void CreateCircleShape(float _diameter,Vector2 _offset = { 0.0f,0.0f });
 	//当たり判定の作成
 	void CreateCapsuleShape();
+	//オフセットとアングル指定
+	void CreateCapsuleShape(Vector2 _offset, float _angle = 0.0f);
 	//Capsuleオフセット指定
 	void CreateCapsuleShape(float _height, Vector2 _offset = { 0.0f,0.0f }, float _angle = 0.0f);
 	//Capsule作成
@@ -75,7 +135,7 @@ public:
 	//力をじわじわ加える
 	void AddForce(b2Vec2 _force);
 	//力をぱっと加える
-	void AddForceImpule(b2Vec2 _force);
+	void AddForceImpulse(b2Vec2 _force);
 	//bodyの種類を変更する
 	void SetType(b2BodyType _type);
 	//bodyの種類を取得する
@@ -123,7 +183,7 @@ private:
 class Box2DBodyManager
 {
 	friend class Window;
-	friend class Component;
+	friend class ObjectManager;
 	friend class Box2DBody;
 	friend class SceneManager;
 	friend class Box2D::WorldManager;
@@ -144,13 +204,9 @@ private:
 #ifdef DEBUG_TRUE
 	static void Init();
 #endif
-	//対応したオブジェクトを動かす
-	static void ExecuteMoveFunction();
 	//指定したLayerのMaskBit取得
 	static unsigned int GetMaskFilterBit(FILTER _filter);
 private:
-	//bodyの位置変更関数リスト
-	static std::unordered_map<GameObject*, b2BodyId> m_moveBodyObjects;
 	//layerのフィルターのビットを格納
 	static std::unordered_map<FILTER, unsigned int> m_layerFilterBit;
 	//bodyIdに対応したオブジェクトの名前を格納

@@ -16,12 +16,12 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{b2d71112-1c8c-4edb-a694-7f68651c0dcb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="component">
+      <UniqueIdentifier>{a83426ee-92d1-491f-896d-c9b7547040f8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Box2D.cpp">
-      <Filter>box2d</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Box2DBody.cpp">
       <Filter>box2d</Filter>
     </ClCompile>
     <ClCompile Include="src\HelloBox2d.cpp">
@@ -29,9 +29,6 @@
     </ClCompile>
     <ClCompile Include="math\Vector.cpp">
       <Filter>Math</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Animator.cpp">
-      <Filter>Src</Filter>
     </ClCompile>
     <ClCompile Include="src\Camera.cpp">
       <Filter>Src</Filter>
@@ -54,22 +51,13 @@
     <ClCompile Include="src\pch.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Renderer.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
     <ClCompile Include="src\Scene.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\SFText.cpp">
       <Filter>Src</Filter>
     </ClCompile>
     <ClCompile Include="src\TextureAsset.cpp">
       <Filter>Src</Filter>
     </ClCompile>
     <ClCompile Include="src\Window.cpp">
-      <Filter>Src</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Button.cpp">
       <Filter>Src</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui.cpp">
@@ -99,10 +87,25 @@
     <ClCompile Include="src\Utility.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Prefab.cpp">
+    <ClCompile Include="src\sound.cpp">
       <Filter>Src</Filter>
     </ClCompile>
-    <ClCompile Include="src\sound.cpp">
+    <ClCompile Include="src\Animator.cpp">
+      <Filter>component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Button.cpp">
+      <Filter>component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer.cpp">
+      <Filter>component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SFText.cpp">
+      <Filter>component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Box2DBody.cpp">
+      <Filter>component</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Assembly.cpp">
       <Filter>Src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -110,14 +113,8 @@
     <ClInclude Include="inc\Box2D.h">
       <Filter>box2d</Filter>
     </ClInclude>
-    <ClInclude Include="inc\Box2DBody.h">
-      <Filter>box2d</Filter>
-    </ClInclude>
     <ClInclude Include="inc\HelloBox2d.h">
       <Filter>box2d</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\Animator.h">
-      <Filter>Inc</Filter>
     </ClInclude>
     <ClInclude Include="inc\Camera.h">
       <Filter>Inc</Filter>
@@ -137,13 +134,7 @@
     <ClInclude Include="inc\Object.h">
       <Filter>Inc</Filter>
     </ClInclude>
-    <ClInclude Include="inc\Renderer.h">
-      <Filter>Inc</Filter>
-    </ClInclude>
     <ClInclude Include="inc\Scene.h">
-      <Filter>Inc</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\SFText.h">
       <Filter>Inc</Filter>
     </ClInclude>
     <ClInclude Include="inc\TextureAsset.h">
@@ -169,9 +160,6 @@
     </ClInclude>
     <ClInclude Include="src\shaders.h">
       <Filter>Src</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\Button.h">
-      <Filter>Inc</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imconfig.h">
       <Filter>imgui</Filter>
@@ -200,16 +188,34 @@
     <ClInclude Include="inc\ImGuiApp.h">
       <Filter>Inc</Filter>
     </ClInclude>
-    <ClInclude Include="inc\SubWindow.h">
-      <Filter>Inc</Filter>
-    </ClInclude>
     <ClInclude Include="inc\Utility.h">
       <Filter>Inc</Filter>
     </ClInclude>
-    <ClInclude Include="inc\Prefab.h">
+    <ClInclude Include="inc\Serialize.h">
       <Filter>Inc</Filter>
     </ClInclude>
     <ClInclude Include="inc\sound.h">
+      <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Animator.h">
+      <Filter>component</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Button.h">
+      <Filter>component</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Renderer.h">
+      <Filter>component</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\SFText.h">
+      <Filter>component</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\SubWindow.h">
+      <Filter>component</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Box2DBody.h">
+      <Filter>component</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Assembly.h">
       <Filter>Inc</Filter>
     </ClInclude>
   </ItemGroup>

@@ -2,9 +2,9 @@
 #include "../../DirectX11_2D_Framework/inc/stb_image.h"
 
 ComPtr<IWICImagingFactory> TextureAssets::m_pWICFactory = nullptr;
-std::unordered_map<const wchar_t*, ComPtr<ID3D11ShaderResourceView>> TextureAssets::m_textureLib;
-std::unordered_map<const wchar_t*, ComPtr<ID3D11ShaderResourceView>> TextureAssets::m_nextTextureLib;
-thread_local HRESULT(*TextureAssets::pLoadTexture)(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName) = WICLoad;
+std::unordered_map<std::wstring, ComPtr<ID3D11ShaderResourceView>> TextureAssets::m_textureLib;
+std::unordered_map<std::wstring, ComPtr<ID3D11ShaderResourceView>> TextureAssets::m_nextTextureLib;
+thread_local HRESULT(*TextureAssets::pLoadTexture)(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName) = DDSWICLoad;
 
 
 HRESULT TextureAssets::Init()
@@ -19,62 +19,82 @@ void TextureAssets::UnInit()
 	CoUninitialize();
 }
 
-HRESULT TextureAssets::WICLoad(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName)
+HRESULT TextureAssets::DDSWICLoad(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texPath)
 {
-	auto iter = m_textureLib.find(_texName);
+	auto iter = m_textureLib.find(_texPath);
 	if (iter != m_textureLib.end())
 	{
 		_textureView = iter->second;
 		return S_OK;
 	}
 
+	std::wstring extension = GetFileExtension(_texPath);
+
 	//texture追加の処理をする
 	HRESULT  hr;
-	hr = DirectX::CreateWICTextureFromFile(
-		DirectX11::m_pDevice.Get(), _texName, NULL, _textureView.GetAddressOf());
-
+	if (extension == L"dds")
+	{
+		hr = DirectX::CreateDDSTextureFromFile(
+			DirectX11::m_pDevice.Get(), _texPath, NULL, _textureView.GetAddressOf());
+	}
+	else 
+	{
+		hr = DirectX::CreateWICTextureFromFile(
+			DirectX11::m_pDevice.Get(), _texPath, NULL, _textureView.GetAddressOf());
+	}
+	
 	if (FAILED(hr))
 	{
-		std::string log = wstring_to_string(_texName);
+		std::string log = wstring_to_string(_texPath);
 		log = "テクスチャ読み込み失敗 :" + log;
 		MessageBoxA(NULL, log.c_str(), "エラー", MB_ICONERROR | MB_OK);
 	}
 
-	m_textureLib[_texName] = _textureView;
+	m_textureLib[_texPath] = _textureView;
 
 	return hr;
 }
 
-HRESULT TextureAssets::WICLoadNext(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName)
+HRESULT TextureAssets::DDSWICLoadNext(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texPath)
 {
-	auto iter = m_nextTextureLib.find(_texName);
+	auto iter = m_nextTextureLib.find(_texPath);
 	if (iter != m_nextTextureLib.end())
 	{
 		_textureView = iter->second;
 		return S_OK;
 	}
 
-	auto it = m_textureLib.find(_texName);
+	auto it = m_textureLib.find(_texPath);
 	if (it != m_textureLib.end())
 	{
 		_textureView = it->second;
-		m_nextTextureLib[_texName] = _textureView;
+		m_nextTextureLib[_texPath] = _textureView;
 		return S_OK;
 	}
 
+	const std::wstring extension = GetFileExtension(_texPath);
+
 	//texture追加の処理をする
 	HRESULT  hr;
-	hr = DirectX::CreateWICTextureFromFile(
-		DirectX11::m_pDevice.Get(), _texName, NULL, _textureView.GetAddressOf());
+	if (extension == L"dds")
+	{
+		hr = DirectX::CreateDDSTextureFromFile(
+			DirectX11::m_pDevice.Get(), _texPath, NULL, _textureView.GetAddressOf());
+	}
+	else
+	{
+		hr = DirectX::CreateWICTextureFromFile(
+			DirectX11::m_pDevice.Get(), _texPath, NULL, _textureView.GetAddressOf());
+	}
 
 	if (FAILED(hr))
 	{
-		std::string log = wstring_to_string(_texName);
+		std::string log = wstring_to_string(_texPath);
 		log = "テクスチャ読み込み失敗 :" + log;
 		MessageBoxA(NULL, log.c_str(), "エラー", MB_ICONERROR | MB_OK);
 	}
 
-	m_nextTextureLib[_texName] = _textureView;
+	m_nextTextureLib[_texPath] = _textureView;
 
 	return hr;
 }
@@ -202,12 +222,12 @@ HRESULT TextureAssets::StbiLoad(ComPtr<ID3D11ShaderResourceView>& _textureView, 
 
 void TextureAssets::ChangeNextTextureLib()
 {
-	pLoadTexture = WICLoadNext;
+	pLoadTexture = DDSWICLoadNext;
 }
 
 void TextureAssets::LinkNextTextureLib()
 {
-	pLoadTexture = WICLoad;
+	pLoadTexture = DDSWICLoad;
 	m_textureLib = std::move(m_nextTextureLib);
 	m_nextTextureLib = {};
 }

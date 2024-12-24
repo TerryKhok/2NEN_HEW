@@ -113,3 +113,5 @@ class AntiGravity : public Component
 		enterObjects.clear();
 	}
 };
+
+SetReflectionComponent(AntiGravity)

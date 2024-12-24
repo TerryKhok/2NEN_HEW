@@ -4,6 +4,7 @@
 #include "TitleScene.h"
 #include "Scene_Gimmick.h"
 
+
 //シーンの登録、レイヤーの設定
 //============================================================
 void MainInit()
@@ -27,8 +28,9 @@ void MainInit()
 	Box2DBodyManager::DisableCollisionFilter(F_PERWINDOW, F_TERRAIN);
 	Box2DBodyManager::DisableCollisionFilter(F_PERWINDOW, F_WINDOW);
 	Box2DBodyManager::DisableCollisionFilter(F_PERWINDOW, F_PERWINDOW);
-	Box2DBodyManager::DisableCollisionFilter(F_PLAYER_RAY, F_WINDOW);
-	Box2DBodyManager::DisableCollisionFilter(F_PLAYER_RAY, F_PERWINDOW);
+	Box2DBodyManager::DisableCollisionFilter(F_MAPRAY, F_WINDOW);
+	Box2DBodyManager::DisableCollisionFilter(F_MAPRAY, F_PERWINDOW);
+	Box2DBodyManager::DisableCollisionFilter(F_MAPRAY, F_PLAYER);
 	Box2DBodyManager::OnlyCollisionFilter(F_ONLYOBSTACLE, F_OBSTACLE);
 	Box2DBodyManager::EnableCollisionFilter(F_ONLYOBSTACLE, F_PEROBSTACLE);
 }

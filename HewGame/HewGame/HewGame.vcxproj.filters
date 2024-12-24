@@ -87,15 +87,15 @@
     <ClInclude Include="BreakScaffold.h">
       <Filter>Component\GimmickObj\BreakScaffold</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyChaser.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Permeation.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Thon.cpp">
@@ -109,6 +109,9 @@
     </ClCompile>
     <ClCompile Include="BreakScaffold.cpp">
       <Filter>Component\GimmickObj\BreakScaffold</Filter>
+    </ClCompile>
+    <ClCompile Include="Permeation.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

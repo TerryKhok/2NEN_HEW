@@ -263,6 +263,416 @@ bool Box2D::WorldManager::RayCastAll(Vector2 _start, Vector2 _end, std::vector<V
 	return hit;
 }
 
+// This shows how to filter a specific shape using using data.
+struct ShapeUserData
+{
+	int index;
+	bool ignore;
+};
+
+// Context for ray cast callbacks. Do what you want with this.
+struct RayCastContext
+{
+	b2Vec2 points[3];
+	b2Vec2 normals[3];
+	float fractions[3];
+	int count;
+};
+
+// This callback finds the closest hit. This is the most common callback used in games.
+static float RayCastClosestCallback(b2ShapeId shapeId, b2Vec2 point, b2Vec2 normal, float fraction, void* context)
+{
+	RayCastContext* rayContext = (RayCastContext*)context;
+
+	ShapeUserData* userData = (ShapeUserData*)b2Shape_GetUserData(shapeId);
+	if (userData != nullptr && userData->ignore)
+	{
+		// By returning -1, we instruct the calling code to ignore this shape and
+		// continue the ray-cast to the next shape.
+		return -1.0f;
+	}
+
+	rayContext->points[0] = point;
+	rayContext->normals[0] = normal;
+	rayContext->fractions[0] = fraction;
+	rayContext->count = 1;
+
+	// By returning the current fraction, we instruct the calling code to clip the ray and
+	// continue the ray-cast to the next shape. WARNING: do not assume that shapes
+	// are reported in order. However, by clipping, we can always get the closest shape.
+	return fraction;
+}
+
+
+bool Box2D::WorldManager::RayCastShape(Vector2 _start, Vector2 _end, Box2DBody* _body)
+{
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pPauseWorldUpdate();
+#endif 
+	b2Vec2 rayStart = { _start.x / DEFAULT_OBJECT_SIZE,_start.y / DEFAULT_OBJECT_SIZE };
+	b2Vec2 rayEnd = { _end.x / DEFAULT_OBJECT_SIZE,_end.y / DEFAULT_OBJECT_SIZE };
+	b2Vec2 translation = b2Sub(rayEnd, rayStart);
+	b2Transform originTransform =
+	//{ rayStart,b2Body_GetRotation(_body->m_bodyId) };
+		b2Body_GetTransform(_body->m_bodyId);
+	
+	RayCastContext context = { 0 };
+	// Must initialize fractions for sorting
+	context.fractions[0] = FLT_MAX;
+	context.fractions[1] = FLT_MAX;
+	context.fractions[2] = FLT_MAX;
+
+	bool hit = false;
+	for (auto& shape : _body->m_shapeList)
+	{
+		b2ShapeType type = b2Shape_GetType(shape);
+		switch (type)
+		{
+		case b2_circleShape:
+		{
+			b2Circle circle = b2Shape_GetCircle(shape);
+			b2World_CastCircle(*currentWorldId, &circle, originTransform, translation,
+				b2DefaultQueryFilter(), RayCastClosestCallback, &context);
+
+			if (context.count > 0) hit = true;
+			break;
+		}
+		case b2_capsuleShape:
+		{
+			b2Capsule capsule = b2Shape_GetCapsule(shape);
+			b2World_CastCapsule(*currentWorldId, &capsule, originTransform, translation,
+				b2DefaultQueryFilter(), RayCastClosestCallback, &context);
+
+			if (context.count > 0) hit = true;
+			break;
+		}
+		case b2_polygonShape:
+		{
+			b2Polygon polygon = b2Shape_GetPolygon(shape);
+			b2World_CastPolygon(*currentWorldId, &polygon, originTransform, translation,
+				b2DefaultQueryFilter(), RayCastClosestCallback, &context);
+
+			if (context.count > 0) hit = true;
+			break;
+		}
+		default:
+			LOG_ERROR("No corresponding SHAPE is attached to this body.");
+			break;
+		}
+
+		if (hit) break;
+	}
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+
+#ifdef DEBUG_TRUE
+	Vector2 hitPoint = _end;
+	if (hit)
+	{
+		hitPoint = { context.points[0].x * DEFAULT_OBJECT_SIZE ,context.points[0].y * DEFAULT_OBJECT_SIZE };
+	}
+
+	RenderManager::DrawRayNode rayNode;
+	Vector2 dis = hitPoint - _start;
+	rayNode.center = _start + dis / 2;
+	//rayNode.length = Math::PointDistance(_start.x, _start.y, hitPoint.x, hitPoint.y);
+	rayNode.length = sqrt(dis.x * dis.x + dis.y * dis.y);
+	rayNode.radian = Math::PointRadian(_start.x, _start.y, hitPoint.x, hitPoint.y);
+	rayNode.color = hit ? XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) : XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+
+	RenderManager::m_drawRayNode.push_back(rayNode);
+#endif
+
+	return hit;
+}
+
+bool Box2D::WorldManager::RayCastShape(Vector2 _start, Vector2 _end, Box2DBody* _body, FILTER _filter)
+{
+	b2QueryFilter filter;
+	filter.categoryBits = _filter;
+	filter.maskBits = Box2DBodyManager::GetMaskFilterBit(_filter);
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pPauseWorldUpdate();
+#endif 
+	b2Vec2 rayStart = { _start.x / DEFAULT_OBJECT_SIZE,_start.y / DEFAULT_OBJECT_SIZE };
+	b2Vec2 rayEnd = { _end.x / DEFAULT_OBJECT_SIZE,_end.y / DEFAULT_OBJECT_SIZE };
+	b2Vec2 translation = b2Sub(rayEnd, rayStart);
+	b2Transform originTransform =
+		//{ rayStart,b2Body_GetRotation(_body->m_bodyId) };
+		b2Body_GetTransform(_body->m_bodyId);
+
+	RayCastContext context = { 0 };
+	// Must initialize fractions for sorting
+	context.fractions[0] = FLT_MAX;
+	context.fractions[1] = FLT_MAX;
+	context.fractions[2] = FLT_MAX;
+
+	bool hit = false;
+	for (auto& shape : _body->m_shapeList)
+	{
+		b2ShapeType type = b2Shape_GetType(shape);
+		switch (type)
+		{
+		case b2_circleShape:
+		{
+			b2Circle circle = b2Shape_GetCircle(shape);
+			b2World_CastCircle(*currentWorldId, &circle, originTransform, translation,
+				filter, RayCastClosestCallback, &context);
+
+			if (context.count > 0) hit = true;
+			break;
+		}
+		case b2_capsuleShape:
+		{
+			b2Capsule capsule = b2Shape_GetCapsule(shape);
+			b2World_CastCapsule(*currentWorldId, &capsule, originTransform, translation,
+				filter, RayCastClosestCallback, &context);
+
+			if (context.count > 0) hit = true;
+			break;
+		}
+		case b2_polygonShape:
+		{
+			b2Polygon polygon = b2Shape_GetPolygon(shape);
+			b2World_CastPolygon(*currentWorldId, &polygon, originTransform, translation,
+				filter, RayCastClosestCallback, &context);
+
+			if (context.count > 0) hit = true;
+			break;
+		}
+		default:
+			LOG_ERROR("No corresponding SHAPE is attached to this body.");
+			break;
+		}
+
+		if (hit) break;
+	}
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+
+#ifdef DEBUG_TRUE
+	Vector2 hitPoint = _end;
+	if (hit)
+	{
+		hitPoint = { context.points[0].x * DEFAULT_OBJECT_SIZE ,context.points[0].y * DEFAULT_OBJECT_SIZE };
+	}
+
+	RenderManager::DrawRayNode rayNode;
+	Vector2 dis = hitPoint - _start;
+	rayNode.center = _start + dis / 2;
+	//rayNode.length = Math::PointDistance(_start.x, _start.y, hitPoint.x, hitPoint.y);
+	rayNode.length = sqrt(dis.x * dis.x + dis.y * dis.y);
+	rayNode.radian = Math::PointRadian(_start.x, _start.y, hitPoint.x, hitPoint.y);
+	rayNode.color = hit ? XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) : XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+
+	RenderManager::m_drawRayNode.push_back(rayNode);
+#endif
+
+	return hit;
+}
+
+static float RayCastMultipleCallback(b2ShapeId shapeId, b2Vec2 point, b2Vec2 normal, float fraction, void* context)
+{
+	RayCastContext* rayContext = (RayCastContext*)context;
+
+	ShapeUserData* userData = (ShapeUserData*)b2Shape_GetUserData(shapeId);
+	if (userData != nullptr && userData->ignore)
+	{
+		// By returning -1, we instruct the calling code to ignore this shape and
+		// continue the ray-cast to the next shape.
+		return -1.0f;
+	}
+
+	int count = rayContext->count;
+	assert(count < 3);
+
+	rayContext->points[count] = point;
+	rayContext->normals[count] = normal;
+	rayContext->fractions[count] = fraction;
+	rayContext->count = count + 1;
+
+	if (rayContext->count == 3)
+	{
+		// At this point the buffer is full.
+		// By returning 0, we instruct the calling code to terminate the ray-cast.
+		return 0.0f;
+	}
+
+	// By returning 1, we instruct the caller to continue without clipping the ray.
+	return 1.0f;
+}
+
+bool Box2D::WorldManager::RayCastShape(Vector2 _start, Vector2 _end, Box2DBody* _body, std::vector<Vector2>& _output)
+{
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pPauseWorldUpdate();
+#endif 
+	b2Vec2 rayStart = { _start.x / DEFAULT_OBJECT_SIZE,_start.y / DEFAULT_OBJECT_SIZE };
+	b2Vec2 rayEnd = { _end.x / DEFAULT_OBJECT_SIZE,_end.y / DEFAULT_OBJECT_SIZE };
+	b2Vec2 translation = b2Sub(rayEnd, rayStart);
+	b2Transform originTransform = b2Body_GetTransform(_body->m_bodyId);
+
+	RayCastContext context = { 0 };
+	// Must initialize fractions for sorting
+	context.fractions[0] = FLT_MAX;
+	context.fractions[1] = FLT_MAX;
+	context.fractions[2] = FLT_MAX;
+	
+	for (auto& shape : _body->m_shapeList)
+	{
+		b2ShapeType type = b2Shape_GetType(shape);
+		switch (type)
+		{
+		case b2_circleShape:
+		{
+			b2Circle circle = b2Shape_GetCircle(shape);
+			b2World_CastCircle(*currentWorldId, &circle, originTransform, translation,
+				b2DefaultQueryFilter(), RayCastMultipleCallback, &context);
+
+			break;
+		}
+		case b2_capsuleShape:
+		{
+			b2Capsule capsule = b2Shape_GetCapsule(shape);
+			b2World_CastCapsule(*currentWorldId, &capsule, originTransform, translation,
+				b2DefaultQueryFilter(), RayCastMultipleCallback, &context);
+
+			break;
+		}
+		break;
+		case b2_polygonShape:
+		{
+			b2Polygon polygon = b2Shape_GetPolygon(shape);
+			b2World_CastPolygon(*currentWorldId, &polygon, originTransform, translation,
+				b2DefaultQueryFilter(), RayCastMultipleCallback, &context);
+
+			break;
+		}
+		break;
+		default:
+			LOG_ERROR("No corresponding SHAPE is attached to this body.");
+			break;
+		}
+	}
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+	bool hit = context.count > 0;
+
+	for (int i = 0; i < context.count; i++)
+	{
+		_output.emplace_back(
+			context.points[i].x * DEFAULT_OBJECT_SIZE,
+			context.points[i].y * DEFAULT_OBJECT_SIZE
+		);
+	}
+
+#ifdef DEBUG_TRUE
+	RenderManager::DrawRayNode rayNode;
+	Vector2 dis = _end - _start;
+	rayNode.center = _start + dis / 2;
+	//rayNode.length = Math::PointDistance(_start.x, _start.y, hitPoint.x, hitPoint.y);
+	rayNode.length = sqrt(dis.x * dis.x + dis.y * dis.y);
+	rayNode.radian = Math::PointRadian(_start.x, _start.y, _end.x, _end.y);
+	rayNode.color = hit ? XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) : XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+
+	RenderManager::m_drawRayNode.push_back(rayNode);
+#endif
+
+	return hit;
+}
+
+bool Box2D::WorldManager::RayCastShape(Vector2 _start, Vector2 _end, Box2DBody* _body, std::vector<Vector2>& _output, FILTER _filter)
+{
+	b2QueryFilter filter;
+	filter.categoryBits = _filter;
+	filter.maskBits = Box2DBodyManager::GetMaskFilterBit(_filter);
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pPauseWorldUpdate();
+#endif 
+	b2Vec2 rayStart = { _start.x / DEFAULT_OBJECT_SIZE,_start.y / DEFAULT_OBJECT_SIZE };
+	b2Vec2 rayEnd = { _end.x / DEFAULT_OBJECT_SIZE,_end.y / DEFAULT_OBJECT_SIZE };
+	b2Vec2 translation = b2Sub(rayEnd, rayStart);
+	b2Transform originTransform = b2Body_GetTransform(_body->m_bodyId);
+
+	RayCastContext context = { 0 };
+	// Must initialize fractions for sorting
+	context.fractions[0] = FLT_MAX;
+	context.fractions[1] = FLT_MAX;
+	context.fractions[2] = FLT_MAX;
+
+	for (auto& shape : _body->m_shapeList)
+	{
+		b2ShapeType type = b2Shape_GetType(shape);
+		switch (type)
+		{
+		case b2_circleShape:
+		{
+			b2Circle circle = b2Shape_GetCircle(shape);
+			b2World_CastCircle(*currentWorldId, &circle, originTransform, translation,
+				filter, RayCastMultipleCallback, &context);
+
+			break;
+		}
+		case b2_capsuleShape:
+		{
+			b2Capsule capsule = b2Shape_GetCapsule(shape);
+			b2World_CastCapsule(*currentWorldId, &capsule, originTransform, translation,
+				filter, RayCastMultipleCallback, &context);
+
+			break;
+		}
+		break;
+		case b2_polygonShape:
+		{
+			b2Polygon polygon = b2Shape_GetPolygon(shape);
+			b2World_CastPolygon(*currentWorldId, &polygon, originTransform, translation,
+				filter, RayCastMultipleCallback, &context);
+
+			break;
+		}
+		break;
+		default:
+			LOG_ERROR("No corresponding SHAPE is attached to this body.");
+			break;
+		}
+	}
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+	bool hit = context.count > 0;
+
+	for (int i = 0; i < context.count; i++)
+	{
+		_output.emplace_back(
+			context.points[i].x * DEFAULT_OBJECT_SIZE,
+			context.points[i].y * DEFAULT_OBJECT_SIZE
+		);
+	}
+
+#ifdef DEBUG_TRUE
+	RenderManager::DrawRayNode rayNode;
+	Vector2 dis = _end - _start;
+	rayNode.center = _start + dis / 2;
+	//rayNode.length = Math::PointDistance(_start.x, _start.y, hitPoint.x, hitPoint.y);
+	rayNode.length = sqrt(dis.x * dis.x + dis.y * dis.y);
+	rayNode.radian = Math::PointRadian(_start.x, _start.y, _end.x, _end.y);
+	rayNode.color = hit ? XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) : XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+
+	RenderManager::m_drawRayNode.push_back(rayNode);
+#endif
+
+	return hit;
+}
+
 void Box2D::WorldManager::CreateWorld()
 {
 	//ワールド定義、初期化
@@ -492,13 +902,13 @@ void Box2D::WorldManager::ExecuteSensorEvent()
 					GameObject* contactObjectB = ObjectManager::Find(it->second);
 					if (contactObjectB != nullptr)
 					{
-						for (auto& component : contactObjectA->m_componentList)
+						for (auto& component : contactObjectA->m_componentList.first)
 						{
-							component.second->OnCollisionEnter(contactObjectB);
+							component->OnCollisionEnter(contactObjectB);
 						}
-						for (auto& component : contactObjectB->m_componentList)
+						for (auto& component : contactObjectB->m_componentList.first)
 						{
-							component.second->OnCollisionEnter(contactObjectA);
+							component->OnCollisionEnter(contactObjectA);
 						}
 					}
 				}
@@ -518,9 +928,9 @@ void Box2D::WorldManager::ExecuteSensorEvent()
 			if (it != Box2DBodyManager::m_bodyObjectName.end())
 			{
 				GameObject* contactObjectB = ObjectManager::Find(it->second);
-				for (auto& component : contactObjectA->m_componentList)
+				for (auto& component : contactObjectA->m_componentList.first)
 				{
-					component.second->OnCollisionExit(contactObjectB);
+					component->OnCollisionExit(contactObjectB);
 				}
 			}
 		}
@@ -541,9 +951,9 @@ void Box2D::WorldManager::ExecuteSensorEvent()
 					GameObject* visitorObject = ObjectManager::Find(it->second);
 					if (visitorObject != nullptr)
 					{
-						for (auto& component : sensorObject->m_componentList)
+						for (auto& component : sensorObject->m_componentList.first)
 						{
-							component.second->OnColliderEnter(visitorObject);
+							component->OnColliderEnter(visitorObject);
 						}
 					}
 				}
@@ -562,9 +972,9 @@ void Box2D::WorldManager::ExecuteSensorEvent()
 			if (it != Box2DBodyManager::m_bodyObjectName.end())
 			{
 				GameObject* visitorObject = ObjectManager::Find(it->second);
-				for (auto& component : sensorObject->m_componentList)
+				for (auto& component : sensorObject->m_componentList.first)
 				{
-					component.second->OnColliderExit(visitorObject);
+					component->OnColliderExit(visitorObject);
 				}
 			}
 		}

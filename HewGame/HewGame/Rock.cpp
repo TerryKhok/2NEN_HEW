@@ -15,7 +15,7 @@ void Rock::Update()
 {
 	b2Vec2 vec = { rand() % 10 - 5,rand() % 10 - 5 };
 
-	rb->AddForceImpule(vec);
+	rb->AddForceImpulse(vec);
 }
 
 void Rock::OnCollisionEnter(GameObject* _other)

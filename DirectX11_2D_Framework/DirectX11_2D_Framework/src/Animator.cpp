@@ -8,7 +8,7 @@ void AnimationClip::SetUVRenderNode(UVRenderNode* _renderNode)
 	auto& frame = frames[frameIndex];
 	_renderNode->m_pTextureView = textureList[frame.texIndex];
 #ifdef DEBUG_TRUE
-	_renderNode->texPath = wstring_to_string(frame.texPath);
+	_renderNode->texPath = frame.texPath;
 #endif
 	_renderNode->m_frameX = frame.frameX;
 	_renderNode->m_frameY = frame.frameY;
@@ -203,6 +203,12 @@ void Animator::DrawImGui(ImGuiApp::HandleUI& _handle)
 	}
 
 	static char buf[256] = {};
+	if (ImGui::Button("-##clear"))
+	{
+		memset(buf, '\0', strlen(buf));
+	}
+	ImGui::SetItemTooltip("clear");
+	ImGui::SameLine();
 	ImGui::InputText("clipName", buf, sizeof(buf) / sizeof(char));
 	static bool loop = true;
 	ImGui::Checkbox("loop", &loop);

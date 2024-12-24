@@ -1,6 +1,7 @@
 #pragma once
 
 //directXTKŠÖŒW
+#include "../directxtk/include/directxtk/DDSTextureLoader.h"
 #include "../directxtk/include/directxtk/WICTextureLoader.h"
 #include "../directxtk/include/directxtk/SpriteFont.h"
 #include "../directxtk/include/directxtk/SimpleMath.h"
@@ -136,3 +137,4 @@ private:
 	//‰æ–Ê“h‚è‚Â‚Ô‚µƒJƒ‰[
 	static float clearColor[4];
 };
+

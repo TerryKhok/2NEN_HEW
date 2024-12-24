@@ -9,20 +9,23 @@ bool SceneManager::loading = false;
 GameObject* Scene::Instantiate()
 {
     GameObject* object = new GameObject();
-    return ObjectManager::AddObject(object);
+    ObjectManager::AddObject(object);
+    return object;
 }
 
 GameObject* Scene::Instantiate(std::string _name)
 {
     GameObject* object = new GameObject(_name);
-    return ObjectManager::AddObject(object);
+    ObjectManager::AddObject(object);
+    return object;
 }
 
 GameObject* Scene::Instantiate(std::string _name, const wchar_t* _texPath)
 {
     GameObject* object = new GameObject(_name);
     object->AddComponent<Renderer>(_texPath);
-    return ObjectManager::AddObject(object);
+    ObjectManager::AddObject(object);
+    return object;
 }
 
 void Scene::DeleteObject(GameObject* _object)
@@ -33,13 +36,14 @@ void Scene::DeleteObject(GameObject* _object)
 void Scene::DeleteObject(std::string _name)
 {
     auto& list = ObjectManager::m_currentList;
-    auto iter = list->find(_name);
-    if (iter != list->end())
+    auto iter = list->second.find(_name);
+    if (iter != list->second.end())
     {
 #ifdef DEBUG_TRUE
-        PointerRegistryManager::deletePointer(iter->second.get());
+        PointerRegistryManager::deletePointer(list->first[iter->second].get());
 #endif
-        list->erase(iter);
+        //list->erase(iter);
+        ObjectManager::DeleteObject(iter);
     }
 }
 
@@ -70,9 +74,6 @@ void SceneManager::NextScene()
 {
     //シーンのかたずけ
     TRY_CATCH_LOG(m_currentScene->UnInit());
-
-    //古いオブジェクトの移動情報を一応消しておく
-    Box2DBodyManager::m_moveBodyObjects.clear();
 
     //レンダーカメラ設定初期化
     RenderManager::renderZoom = { 1.0f,1.0f };

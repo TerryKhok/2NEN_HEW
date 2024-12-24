@@ -19,8 +19,8 @@ private:
 	static HRESULT Init();
 	static void UnInit();
 	
-	static HRESULT WICLoad(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texPath);
-	static HRESULT WICLoadNext(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texPath);
+	static HRESULT DDSWICLoad(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texPath);
+	static HRESULT DDSWICLoadNext(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texPath);
 	static HRESULT Void(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texPath);
 
 	static HRESULT StbiLoad(ComPtr<ID3D11ShaderResourceView>& _textureView, std::string _filePath);
@@ -35,6 +35,6 @@ private:
 	static thread_local HRESULT(* pLoadTexture)(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texPath);
 private:
 	static ComPtr<IWICImagingFactory> m_pWICFactory;
-	static std::unordered_map<const wchar_t*, ComPtr<ID3D11ShaderResourceView>> m_textureLib;
-	static std::unordered_map<const wchar_t*, ComPtr<ID3D11ShaderResourceView>> m_nextTextureLib;
+	static std::unordered_map<std::wstring, ComPtr<ID3D11ShaderResourceView>> m_textureLib;
+	static std::unordered_map<std::wstring, ComPtr<ID3D11ShaderResourceView>> m_nextTextureLib;
 };

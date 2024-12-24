@@ -4,8 +4,6 @@
 
 #ifdef SFTEXT_TRUE
 
-// string‚ðwstring‚Ö•ÏŠ·‚·‚é
-std::wstring StringToWString(std::string oString);
 
 class SFText :public Component
 {

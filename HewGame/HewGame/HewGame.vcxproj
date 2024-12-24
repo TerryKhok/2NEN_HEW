@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="Bounce.h" />
     <ClInclude Include="BreakScaffold.h" />
+    <ClInclude Include="EnemyChaser.h" />
     <ClInclude Include="Fog.h" />
     <ClInclude Include="LowGravity.h" />
     <ClInclude Include="MovePlayer.h" />

@@ -64,6 +64,11 @@ namespace Box2D
 		static bool RayCastAll(Vector2 _start, Vector2 _end, std::vector<Vector2>& _output);
 		static bool RayCastAll(Vector2 _start, Vector2 _end, std::vector<Vector2>& _output, FILTER _filter);
 
+		static bool RayCastShape(Vector2 _start, Vector2 _end, Box2DBody* _body);
+		static bool RayCastShape(Vector2 _start, Vector2 _end, Box2DBody* _body, FILTER _filter);
+		static bool RayCastShape(Vector2 _start, Vector2 _end, Box2DBody* _body,std::vector<Vector2>& _output);
+		static bool RayCastShape(Vector2 _start, Vector2 _end, Box2DBody* _body, std::vector<Vector2>& _output,FILTER _filter);
+
 	private:
 		//ê∂ê¨ã÷é~
 		WorldManager() = delete;
@@ -146,5 +151,32 @@ namespace Box2D
 	constexpr XMFLOAT4 b2_colorOnMouse =	{ 0.0f,0.2f,1.0f,b2_colorAlpha };
 };
 
+namespace cereal
+{
+	template<class Archive>
+	void serialize(Archive& ar, b2Vec2& vec)
+	{
+		ar(CEREAL_NVP(vec.x), CEREAL_NVP(vec.y));
+	}
+
+	template<class Archive>
+	void serialize(Archive& ar, b2Polygon& poly)
+	{
+		ar(CEREAL_NVP(poly.centroid), CEREAL_NVP(poly.count), 
+			CEREAL_NVP(poly.normals), CEREAL_NVP(poly.radius), CEREAL_NVP(poly.vertices));
+	}
+
+	template<class Archive>
+	void serialize(Archive& ar, b2Circle& circle)
+	{
+		ar(CEREAL_NVP(circle.center), CEREAL_NVP(circle.radius));
+	}
+
+	template<class Archive>
+	void serialize(Archive& ar, b2Capsule& cap)
+	{
+		ar(CEREAL_NVP(cap.center1), CEREAL_NVP(cap.center2),CEREAL_NVP(cap.radius));
+	}
+}
 
 #endif

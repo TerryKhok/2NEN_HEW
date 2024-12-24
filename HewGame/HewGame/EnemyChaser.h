@@ -16,6 +16,8 @@ class EnemyChaser : public Component
 
 	void Update() override
 	{
+		target = ObjectManager::Find("Player");
+
 		if (target != nullptr)
 		{
 			Vector2 vec = target->transform.position - m_this->transform.position;
@@ -25,7 +27,7 @@ class EnemyChaser : public Component
 				vec.Normalize();
 				vec *= speed;
 
-				rb->AddForceImpule({ vec.x,0.0f });
+				rb->AddForceImpulse({ vec.x,0.0f });
 			}	
 		}
 	}
@@ -40,7 +42,7 @@ class EnemyChaser : public Component
 			Vector2 vec = other->transform.position - m_this->transform.position;
 			vec.Normalize();
 			vec *= 1000.0f;
-			targetRb->AddForceImpule({ vec.x,vec.y });
+			targetRb->AddForceImpulse({ vec.x,vec.y });
 		}
 	}
 
