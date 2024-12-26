@@ -13,7 +13,9 @@ class MovePlayer : public Component
 
 		rb->SetFilter(F_PLAYER);
 		rb->SetFixedRotation(true);
-		rb->CreateCapsuleShape();
+
+		if (rb->GetShapeCount() == 0)
+			rb->CreateCapsuleShape();
 		rb->SetGravityScale(10.0f);
 		rb->SetBullet(true);
 	}
@@ -130,3 +132,5 @@ class MovePlayer : public Component
 		}
 	}
 };
+
+SetReflectionComponent(MovePlayer)

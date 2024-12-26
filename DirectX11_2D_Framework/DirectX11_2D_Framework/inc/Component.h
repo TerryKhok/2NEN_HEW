@@ -94,7 +94,6 @@ private:
 	}
 };
 
-CEREAL_REGISTER_TYPE(Component)
 
 class AssemblyComponent final
 {

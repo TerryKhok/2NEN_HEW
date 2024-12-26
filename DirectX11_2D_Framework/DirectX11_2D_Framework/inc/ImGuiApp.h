@@ -61,6 +61,8 @@ private:
 
 	static bool UpdateHandleUI(Vector2 _targetPos);
 	static void DrawHandleUI(const Vector2& _targetPos);
+
+	static void SaveSceneFileDialog(std::filesystem::path& _path);
 	
 	static void UnInit();
 

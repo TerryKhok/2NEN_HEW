@@ -73,6 +73,7 @@ class DirectX11 final
 	friend class Box2DCapsuleRenderNode;
 	friend class Box2DMeshRenderNode;
 	friend class Box2DConvexMeshRenderNode;
+	friend class Box2DLineRenderNode;
 
 	DirectX11() = delete;
 

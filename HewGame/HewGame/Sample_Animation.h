@@ -89,3 +89,5 @@ class SampleScene_Animation : public Scene
 		}
 	}
 };
+
+SetReflectionScene(SampleScene_Animation)

@@ -5,6 +5,8 @@
 #include <cereal/archives/json.hpp>
 #include <cereal/types/vector.hpp>
 
+static constexpr int SceneFileIndex = 's';
+
 #define SERIALIZE_OUTPUT cereal::JSONOutputArchive
 #define SERIALIZE_INPUT cereal::JSONInputArchive
 

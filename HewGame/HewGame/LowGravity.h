@@ -116,3 +116,5 @@ class LowGravity : public Component
 		enterObjects.clear();
 	}
 };
+
+SetReflectionComponent(LowGravity)

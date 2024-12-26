@@ -59,3 +59,5 @@ public:
 		target = _target;
 	}
 };
+
+SetReflectionComponent(EnemyChaser)

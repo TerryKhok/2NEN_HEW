@@ -18,8 +18,6 @@ class SeigoTestScene :public Scene
 		auto enemyChaser = enemy->AddComponent<EnemyChaser>();
 		enemyChaser->SetTarget(player);
 
-	
-
 		std::vector<b2Vec2> points =
 		{
 			{-800,300}, { 800, 300 } ,{ 800,-300} ,{500,-300},{500,100},{400,100},{400,-300},{-600,-300}, { -800,-100 }
@@ -29,15 +27,14 @@ class SeigoTestScene :public Scene
 		bodyDef2.type = b2_staticBody;
 		bodyDef2.gravityScale = 0.0f;
 
-		auto box2d = object->AddComponent<Box2DBody>(&bodyDef2);
-		box2d->SetFilter(F_TERRAIN);
-		box2d->CreateChain(points);
+		auto box2dChain = object->AddComponent<Box2DBody>(&bodyDef2);
+		box2dChain->CreateSegment(points);
 
 		object = Instantiate("StaticBox_Obstacle");
 		object->transform.position = { -200.0f,-100.0f };
 		object->transform.scale = { 20.0f,10.0f };
 		bodyDef2 = b2DefaultBodyDef();
-		box2d = object->AddComponent<Box2DBody>(&bodyDef2);
+		auto box2d = object->AddComponent<Box2DBody>(&bodyDef2);
 		box2d->SetFilter(F_OBSTACLE);
 		box2d->CreateBoxShape();
 

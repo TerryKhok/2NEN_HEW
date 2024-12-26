@@ -13,20 +13,21 @@ bool CreateComponent<Renderer>(GameObject* obj, SERIALIZE_INPUT& ar);
 template<>
 bool CreateComponent<Box2DBody>(GameObject* obj, SERIALIZE_INPUT& ar);
 
+
 template<class T>
 class ReflectionComponent final
 {
 	ReflectionComponent()
 	{
 #ifdef DEBUG_TRUE
-		AssemblyComponent::IReflection ref(CreateComponent<T>, ReflectionComponent::AddComponent);
+		AssemblyComponent::IReflection ref(CreateComponent<T>, AddComponentFunc);
 		AssemblyComponent::assemblies.emplace(typeid(T).name(),std::move(ref));
 #else
 		AssemblyComponent::assemblies.emplace(typeid(T).name(), CreateComponent<T>);
 #endif
 	}
 
-	static void AddComponent(GameObject* obj)
+	static void AddComponentFunc(GameObject* obj)
 	{
 		obj->AddComponent<T>();
 	}
@@ -53,4 +54,32 @@ SetReflectionComponent(SubWindow)
 SetReflectionComponent(Animator)
 SetReflectionComponent(Button)
 SetReflectionComponent(SFText)
+
+template<class T>
+class ReflectionScene final
+{
+	ReflectionScene()
+	{
+		AssemblyScene::assemblies.emplace(typeid(T).name(), RegisterSceneFunc);
+	}
+
+	static void RegisterSceneFunc()
+	{
+		SceneManager::RegisterScene<T>();
+	}
+public:
+	static ReflectionScene& Instance()
+	{
+		static ReflectionScene instance;
+		return instance;
+	}
+};
+
+
+#define SetReflectionScene(className) namespace className##Reflection \
+	{ \
+		 inline ReflectionScene< className >& reflection = ReflectionScene< className >::Instance(); \
+	}
+
+SetReflectionScene(SampleScene)
 

@@ -33,7 +33,11 @@ ComPtr<ID3D11RasterizerState> DirectX11::m_pWireframeRasterState;
 //whitePixelテクスチャビュー
 ComPtr<ID3D11ShaderResourceView> DirectX11::m_pTextureView;
 //画面塗りつぶしカラー
+#ifdef DEBUG_TRUE
+float DirectX11::clearColor[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
+#else
 float DirectX11::clearColor[4] = { 0.0f, 0.5f, 0.5f, 1.0f };
+#endif
 
 //--------------------------------------------------------------------------------------
 // シェーダーをファイル拡張子に合わせてコンパイル

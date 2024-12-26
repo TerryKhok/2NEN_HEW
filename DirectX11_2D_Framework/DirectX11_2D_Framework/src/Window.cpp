@@ -349,6 +349,7 @@ LRESULT Window::WindowInit(void(*p_mainInitFunc)(void))
 	SFTextManager::Init();
 #endif
 
+	PostMessage(mainHwnd, WM_PAUSE_GAME, 0, 0);
 	//=================================================
 
 	return LRESULT();
@@ -424,7 +425,7 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 			RenderManager::Draw();
 
 #ifdef SFTEXT_TRUE
-			SFTextManager::ExecuteDrawString();
+			SFTextManager::Draw();
 #endif
 #ifdef DEBUG_TRUE
 			ImGuiApp::DrawMainGui(mainContext);
@@ -522,7 +523,7 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 				RenderManager::Draw();
 
 #ifdef SFTEXT_TRUE
-				SFTextManager::ExecuteDrawString();
+				SFTextManager::Draw();
 #endif
 #ifdef DEBUG_TRUE
 				ImGuiApp::DrawMainGui(mainContext);
@@ -773,7 +774,6 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					{
 						std::list<GameObject*> targetObjects;
 						
-
 						for (auto& object : ObjectManager::m_objectList->first)
 						{
 							if (!object->active) continue;
@@ -900,7 +900,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					ImGuiApp::DrawHandleUI(worldPos);
 #endif
 #ifdef SFTEXT_TRUE
-					SFTextManager::KeepExecuteDrawString();
+					SFTextManager::Draw();
 #endif
 #ifdef DEBUG_TRUE
 					ImGuiApp::DrawMainGui(mainContext);
@@ -1094,7 +1094,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		RenderManager::Draw();
 
 #ifdef SFTEXT_TRUE
-		SFTextManager::KeepExecuteDrawString();
+		SFTextManager::Draw();
 #endif
 
 #ifdef DEBUG_TRUE
@@ -1177,7 +1177,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		RenderManager::Draw();
 
 #ifdef SFTEXT_TRUE
-		SFTextManager::KeepExecuteDrawString();
+		SFTextManager::Draw();
 #endif
 
 #ifdef DEBUG_TRUE
@@ -1352,7 +1352,7 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		RenderManager::Draw();
 
 #ifdef SFTEXT_TRUE
-		SFTextManager::KeepExecuteDrawString();
+		SFTextManager::Draw();
 #endif
 
 #ifdef DEBUG_TRUE

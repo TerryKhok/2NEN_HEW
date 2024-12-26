@@ -189,10 +189,8 @@ void Animator::DrawImGui(ImGuiApp::HandleUI& _handle)
 {
 #ifdef DEBUG_TRUE
 	ImGui::SeparatorText("editor");
-
-	ImGui::Text("clip path : %s", currentClipPath.filename().string().c_str());
-	ImGui::SameLine();
-	if (ImGui::Button("LinkAnim"))
+	
+	if (ImGui::Button("Link##AnimationClip"))
 	{
 		_handle.SetUploadFile("animation clip file",
 			[&](GameObject* _obj, std::filesystem::path _path)
@@ -201,7 +199,9 @@ void Animator::DrawImGui(ImGuiApp::HandleUI& _handle)
 			}
 		, { ANIM_CLIP_EXTENSION_DOT });
 	}
-
+	ImGui::SameLine();
+	ImGui::Text("clip path : %s", currentClipPath.filename().string().c_str());
+	
 	static char buf[256] = {};
 	if (ImGui::Button("-##clear"))
 	{

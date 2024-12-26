@@ -1,6 +1,5 @@
 
 thread_local RenderManager::RenderList* RenderManager::currentList = RenderManager::m_rendererList;
-std::mutex RenderManager::listMutex;
 
 Vector2 RenderManager::renderOffset = { 0.0f,0.0f };
 Vector2 RenderManager::renderZoom = { 1.0f,1.0f };
@@ -99,11 +98,32 @@ void Renderer::Serialize(SERIALIZE_OUTPUT& ar)
 void Renderer::DrawImGui(ImGuiApp::HandleUI& _handle)
 {
 #ifdef DEBUG_TRUE
-	ImGui::Text(" Layer : %s", magic_enum::enum_name(m_layer).data());
-
-	ImGui::Text(" path  : %s", wstring_to_string(m_node->texPath).c_str());
+	if (ImGui::Button("<>##Layer"))
+	{
+		ImGui::OpenPopup("SelectLayer");
+	}
 	ImGui::SameLine();
-	if (ImGui::Button("LinkTex"))
+	ImGui::Text("  layer : %s", magic_enum::enum_name(m_layer).data());
+
+	if(ImGui::BeginPopup("SelectLayer"))
+	{
+		for (int i = 0; i < LAYER_MAX; i++)
+		{
+			LAYER layer = (LAYER)i;
+			if (layer == LAYER_BOX2D_DEBUG) continue;
+
+			bool same = layer == m_layer;
+			if (ImGui::Selectable(magic_enum::enum_name(layer).data(), same))
+			{
+				if (!same) SetLayer(layer);
+			}
+		}
+
+		ImGui::EndPopup();
+	}
+
+	
+	if (ImGui::Button("Link##Texture"))
 	{
 		std::string str = m_this->GetName() + "Texture";
 		_handle.SetUploadFile(str, [&](GameObject* obj, std::filesystem::path path)
@@ -117,7 +137,10 @@ void Renderer::DrawImGui(ImGuiApp::HandleUI& _handle)
 				}
 			}, { ".png" ,".jpg",".dds" });
 	}
-	ImGui::ColorEdit4("color", &m_node->m_color.x);
+	ImGui::SameLine();
+	ImGui::Text("path  : %s", wstring_to_string(m_node->texPath).c_str());
+	
+	ImGui::ColorEdit4("color##render", &m_node->m_color.x);
 	ImVec4 color(m_node->m_color.x, m_node->m_color.y, m_node->m_color.z, m_node->m_color.w);
 	ImGui::Image((ImTextureID)(m_node->m_pTextureView.Get()), ImVec2(50, 50), ImVec2(0, 0), ImVec2(1, 1), color);
 #endif
@@ -558,8 +581,6 @@ void RenderManager::Draw()
 
 void RenderManager::AddRenderList(std::shared_ptr<RenderNode> _node, LAYER _layer)
 {
-	std::lock_guard<std::mutex> lock(listMutex);  // Protect access to arrayB if necessary
-
 	//ポインタでつなぐ
 	currentList[_layer].second->next = _node;
 	currentList[_layer].second->NextContinue();
@@ -579,7 +600,7 @@ void RenderManager::LinkNextRenderList()
 	//リストのコピー
 	for (int i = 0; i < LAYER_MAX; i++)
 	{
-		m_rendererList[i] = m_nextRendererList[i];
+		m_rendererList[i] = std::move(m_nextRendererList[i]);
 	}
 
 	//リストの初期化

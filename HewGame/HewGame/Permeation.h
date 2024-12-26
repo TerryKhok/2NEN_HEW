@@ -180,3 +180,5 @@ class Permeation : public Component
 		enterObjects.clear();
 	}
 };
+
+SetReflectionComponent(Permeation)

@@ -214,7 +214,6 @@ HRESULT ImGuiApp::Init(HINSTANCE hInstance)
 
 namespace fs = std::filesystem;
 
-
 void SaveAnimationClipFile(const std::string& _path);
 void SaveAnimationClipFileDialog();
 void ReadAnimationClipFile(fs::path _path);
@@ -425,14 +424,16 @@ void ImGuiApp::DrawOptionGui()
 	static bool showFilterTable = false;
 
 	ImGui::SetNextWindowPos(ImVec2(0,100));  // Start at the end of game viewport
-	ImGui::SetNextWindowSize(ImVec2(IMGUI_WINDOW_WIDTH, 180)); // Cover the remaining area
+	ImGui::SetNextWindowSize(ImVec2(IMGUI_WINDOW_WIDTH, 150)); // Cover the remaining area
 	if (ImGui::Begin("Menu",nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove)) {
 		ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
 		if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
 		{
 			if (ImGui::BeginTabItem("Game"))
 			{
-				static bool pauseGame = true;
+				ImGui::Text("ScenePath : %s", SceneManager::currentScenePath.string().c_str());
+
+				static bool pauseGame = false;
 				//ImVec4 b2col = playGame ? ImVec4(0.5f, 0.5f, 0.5f, 1.0f) : ImVec4(1, 1, 1, 1);
 				int uvX = pauseGame ? 13 : 16;
 				int uvY = 13;
@@ -522,31 +523,70 @@ void ImGuiApp::DrawOptionGui()
 					DirectX11::m_pDeviceContext->RSSetViewports(1, &viewport);
 				}
 				ImGui::SetItemTooltip(showMainEditor ? "close editor" : "show editor");
-				ImGui::PopStyleVar();
 
-				ImGui::ColorEdit3("clear color", DirectX11::clearColor); // Edit 3 floats representing a color
-				if (ImGui::Button("Button"))
+				uvX = 8;
+				uvY = 5;
+				ImGui::SameLine();
+				if (ImGui::ImageButton("saveScene", imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
 				{
-					OpenFileDialog();
-				}
+					if (SceneManager::currentScenePath == "null")
+					{
+						ImGui::SetMouseCursor(ImGuiMouseCursor_NotAllowed);
+						 SaveSceneFileDialog(SceneManager::currentScenePath);
+					}
 
-				if(ImGui::Button("Serialize"))
-				{
-					fs::path filePath = /*"asset/object/" + */selectedObject->GetName() + ".json";
-					//filePath /= ;
-					std::ofstream ofs(filePath);
-					SERIALIZE_OUTPUT archive(ofs);
-					archive(CEREAL_NVP(*selectedObject));
+					if (SceneManager::currentScenePath != "null")
+						SceneManager::SaveScene(SceneManager::currentScenePath);
 				}
-				if (ImGui::Button("Deserialize"))
+				ImGui::SetItemTooltip("saveScene");
+
+				uvX = 10;
+				uvY = 5;
+				ImGui::SameLine();
+				if (ImGui::ImageButton("overSaveScene", imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
+				{
+					ImGui::SetMouseCursor(ImGuiMouseCursor_NotAllowed);
+					SaveSceneFileDialog(SceneManager::currentScenePath);
+
+					if (SceneManager::currentScenePath != "null")
+						SceneManager::SaveScene(SceneManager::currentScenePath);
+				}
+				ImGui::SetItemTooltip("overSaveScene");
+
+				uvX = 18;
+				uvY = 7;
+				ImGui::SameLine();
+				if (ImGui::ImageButton("serializeObject", imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
+				{
+					if (selectedObject != nullptr)
+					{
+						fs::path filePath;
+						ImGui::SetMouseCursor(ImGuiMouseCursor_NotAllowed);
+						SaveSceneFileDialog(filePath);
+						std::ofstream ofs(filePath);
+						SERIALIZE_OUTPUT archive(ofs);
+						archive(CEREAL_NVP(*selectedObject));
+					}
+				}
+				ImGui::SetItemTooltip("pack object");
+
+				uvX = 13;
+				uvY = 7;
+				ImGui::SameLine();
+				if (ImGui::ImageButton("deserializeObject", imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
 				{
 					handleUi.SetUploadFile("object file",
 						[](GameObject* obj, std::filesystem::path path)
 						{
 							ObjectManager::AddObject(path);
-						},{".json"});
+						}, { ".json" });
 				}
+				ImGui::SetItemTooltip("unpack object");
 
+				ImGui::PopStyleVar();
+
+				ImGui::ColorEdit3("clear color", DirectX11::clearColor); // Edit 3 floats representing a color
+		
 				ImGui::EndTabItem();
 			}
 			if (ImGui::BeginTabItem("Box2D"))
@@ -629,8 +669,8 @@ void ImGuiApp::DrawOptionGui()
 		ImGui::End();
 	}
 
-	ImGui::SetNextWindowPos(ImVec2(0, 280));  // Start at the end of game viewport
-	ImGui::SetNextWindowSize(ImVec2(IMGUI_WINDOW_WIDTH, 440)); // Cover the remaining area
+	ImGui::SetNextWindowPos(ImVec2(0, 250));  // Start at the end of game viewport
+	ImGui::SetNextWindowSize(ImVec2(IMGUI_WINDOW_WIDTH, 470)); // Cover the remaining area
 	if (ImGui::Begin("Hierarchy", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 	{
 		if (ImGui::BeginTabBar("hierarchyTab"))
@@ -760,15 +800,118 @@ void ImGuiApp::DrawOptionGui()
 
 			if (ImGui::BeginTabItem("SceneList"))
 			{
-				for (auto scene : SceneManager::m_sceneList)
+				ImGui::BeginChild("SceneListChild");
+				int eraseIndex = -1;
+				auto& sceneList = SceneManager::m_registerScenePath;
+				int sceneSize = (int)sceneList.size();
+				for (int i = 0;i < sceneSize;i++)
 				{
-					std::string currentSceneName = typeid(*SceneManager::m_currentScene).name();
-					bool current = currentSceneName == scene.first;
-					if (ImGui::Selectable(scene.first.substr(5).c_str(), &current))
+					auto& scene = sceneList[i];
+					ImGui::BeginGroup();
 					{
-						SceneManager::LoadScene(scene.first);
-						ImGuiApp::ClearStack();
+						if (sceneSize > 1)
+						{
+							ImGui::PushID(i);
+							if (ImGui::Button("-"))
+							{
+								eraseIndex = i;
+							}
+							ImGui::SetItemTooltip("move");
+							ImGui::PopID();
+						}
+
+						std::string currentSceneName = SceneManager::m_currentScene->getType();
+						ImGui::SameLine();
+						bool current = currentSceneName == scene.name;
+						if (ImGui::Selectable(scene.name.c_str(), &current))
+						{
+							SceneManager::LoadScene(scene.name);
+							ImGuiApp::ClearStack();
+						}
+						// Source: Dragging starts here
+						if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
+							ImGui::SetDragDropPayload("DND_SCENE_ITEM", &i, sizeof(int)); // Pass the index
+							ImGui::Text("%s", currentSceneName.c_str());
+							ImGui::EndDragDropSource();
+						}
 					}
+					ImGui::EndGroup();
+					// Target: Dropping ends here
+					if (ImGui::BeginDragDropTarget()) {
+						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DND_SCENE_ITEM")) {
+							size_t dragged_index = *(const size_t*)payload->Data;
+							if (dragged_index != i) {
+								// Move the dragged item to the target index
+								auto dragged_item = sceneList[dragged_index];
+								sceneList.erase(sceneList.begin() + dragged_index);
+								sceneList.insert(sceneList.begin() + i, dragged_item);
+							}
+						}
+						ImGui::EndDragDropTarget();
+					}
+				}
+				ImGui::EndChild();
+				if (ImGui::BeginPopupContextItem())
+				{
+					if (ImGui::Selectable("New Scene"))
+					{
+						ImGui::SetMouseCursor(ImGuiMouseCursor_NotAllowed);
+						fs::path savePath;
+						SaveSceneFileDialog(savePath);
+						std::ofstream ofs(savePath);
+						SERIALIZE_OUTPUT archive(ofs);
+						int index = SceneFileIndex;
+						int objectNum = 0;
+						archive(CEREAL_NVP(index), CEREAL_NVP(objectNum));
+						fs::path relativePath = savePath.lexically_relative(fs::current_path());
+						SceneManager::RegisterScene(relativePath);
+					}
+
+					if (ImGui::Selectable("Load Scene"))
+					{
+						handleUi.SetUploadFile("Scene File", [](GameObject* _obj, fs::path _path)
+							{
+								int index = 0;
+								{
+									std::ifstream ifs(_path);
+									SERIALIZE_INPUT archive(ifs);
+									archive(CEREAL_NVP(index));
+								}
+								if (index == SceneFileIndex)
+								{
+									SceneManager::RegisterScene(_path);
+								}
+								else
+								{
+									LOG_WARNING("upload file is not scene file");
+								}
+							}, { ".json" });
+					}
+
+					if (ImGui::BeginMenu("Add Class Scene"))
+					{
+						for (auto& assembly : AssemblyScene::assemblies)
+						{
+							if (ImGui::MenuItem(assembly.first.substr(6).c_str()))
+							{
+								AssemblyScene::RegisterScene(assembly.first);
+							}
+						}
+						ImGui::EndMenu();
+					}
+
+					ImGui::EndPopup();
+				}
+
+				if (eraseIndex > 0)
+				{
+					auto iter = sceneList.begin() + eraseIndex;
+					auto it = SceneManager::m_sceneList.find(iter->name);
+					if (it != SceneManager::m_sceneList.end())
+					{
+						SceneManager::m_sceneList.erase(it);
+					}
+					sceneList.erase(iter);
 				}
 
 				ImGui::EndTabItem();
@@ -1794,6 +1937,38 @@ void ImGuiApp::InvalidSelectedObject()
 	handleUi.SetUploadFile("", {}, {""});
 }
 
+void ImGuiApp::SaveSceneFileDialog(fs::path& _path)
+{
+	// Initialize the OPENFILENAME structure
+	OPENFILENAME ofn;
+	char szFile[MAX_PATH] = ""; // Buffer for the file name
+	ZeroMemory(&ofn, sizeof(ofn));
+
+	// Set up the OPENFILENAME structure
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = m_hWnd[OPTIONS];
+	ofn.lpstrFile = szFile;
+	ofn.nMaxFile = sizeof(szFile);
+	ofn.lpstrFilter = "Scene Files(*.json)\0*.json\0";//\0All Files (*.*)\0*.*\0";
+	ofn.lpstrDefExt = "json"; // Default file extension
+	ofn.lpstrTitle = "Save Scene";
+	ofn.Flags = OFN_OVERWRITEPROMPT; // Prompt to overwrite existing files
+
+	// 現在のカレントディレクトリを保存
+	auto originalPath = std::filesystem::current_path();
+
+	// Show the Save File dialog
+	if (GetSaveFileName(&ofn)) {
+		std::string filePath = szFile;
+		_path = filePath;
+	}
+	else {
+		std::cerr << "No file selected or operation canceled." << std::endl;
+	}
+	// カレントディレクトリを元に戻す
+	std::filesystem::current_path(originalPath);
+}
+
 void ImGuiApp::UnInit()
 {
 	ClearStack();
@@ -1870,6 +2045,7 @@ LRESULT ImGuiApp::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	// Pass any unhandled messages to the default window procedure
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
+
 
 void SaveAnimationClipFile(const std::string& _path)
 {
@@ -2393,7 +2569,6 @@ void ImGuiApp::HandleUI::Draw(GameObject* _target,const Vector2 _targetPos)
 	// 描画先のキャンバスと使用する深度バッファを指定する
 	DirectX11::m_pDeviceContext->OMSetRenderTargets(1,
 		DirectX11::m_pRenderTargetViewList[Window::GetMainHWnd()].first.GetAddressOf(), DirectX11::m_pDepthStencilView.Get());
-
 
 	RenderManager::SetMainCameraMatrix();
 

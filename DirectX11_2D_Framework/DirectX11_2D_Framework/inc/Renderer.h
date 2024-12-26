@@ -27,6 +27,8 @@ private:
 public:
 	//レイヤーの変更
 	void SetLayer(const LAYER _layer);
+	//レイヤーの取得
+	const LAYER GetLayer() const { return m_layer; }
 	//テクスチャの変更
 	void SetTexture(const wchar_t* _texPath);
 	void SetTexture(const std::string& _filePath);
@@ -61,6 +63,7 @@ class RenderNode
 	friend class Renderer;
 	friend class RenderManager;
 	friend class Box2DBody;
+	friend class Box2DBodyChain;
 	friend class Animator;
 
 	//描画関連
@@ -182,7 +185,7 @@ private:
 };
 
 // Register the types with Cereal
-CEREAL_REGISTER_TYPE(RenderNode)
+CEREAL_REGISTER_TYPE(UVRenderNode)
 CEREAL_REGISTER_POLYMORPHIC_RELATION(RenderNode, UVRenderNode)
 
 class RenderManager final
@@ -191,12 +194,13 @@ class RenderManager final
 	friend class RenderNode;
 	friend class UVRenderNode;
 	friend class Renderer;
-	friend class RenderManager;
 	friend class SceneManager;
 	friend class Box2D::WorldManager;
 	friend class Box2DBody;
+	friend class Box2DBodyChain;
 	friend class Box2DBoxRenderNode;
 	friend class Box2DCapsuleRenderNode;
+	friend class Box2DLineRenderNode;
 	friend class ImGuiApp;
 
 	using RenderList = std::pair < std::shared_ptr<RenderNode>, std::shared_ptr<RenderNode>>;
@@ -225,8 +229,6 @@ public:
 private:
 	// スレッドごとの現在のリスト
 	static thread_local RenderList* currentList;
-	//リストをロックする
-	static std::mutex listMutex;
 	//ノードリスト(レイヤーの数だけ増える)
 	static RenderList m_rendererList[LAYER::LAYER_MAX];
 	//次のレンダーリスト（後に上のリストにコピーする）

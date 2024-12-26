@@ -4,8 +4,8 @@
         "transform": {
             "position": {
                 "x": 0.0,
-                "y": 202.38426208496095,
-                "z": 0.5
+                "y": 0.0,
+                "z": 0.0
             },
             "scale": {
                 "x": 5.0,
@@ -52,7 +52,7 @@
             "type": 2,
             "lineVec": {
                 "vec.x": 0.0,
-                "vec.y": -15.89011001586914
+                "vec.y": 0.0
             },
             "angleVec": 0.0,
             "gravity": 10.0,
@@ -80,6 +80,25 @@
                 "vec.y": 1.25
             },
             "cap.radius": 2.5
-        }
+        },
+        "renderData": [
+            {
+                "polymorphic_id": 2147483649,
+                "polymorphic_name": "Box2DCapsuleData",
+                "ptr_wrapper": {
+                    "valid": 1,
+                    "data": {
+                        "m_offset": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "m_diameter": 5.0,
+                        "m_sizeY": 12.5,
+                        "m_height": 2.5,
+                        "m_angle": 0.0
+                    }
+                }
+            }
+        ]
     }
 }

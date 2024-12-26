@@ -138,3 +138,5 @@ class Scene_ProtoType :public Scene
 		}*/
 	}
 };
+
+SetReflectionScene(Scene_ProtoType)

@@ -190,6 +190,15 @@ public:
 	{
 		return v;
 	}
+
+private:
+	template<class Archive>
+	void serialize(Archive& ar)
+	{
+		ar(CEREAL_NVP(x), CEREAL_NVP(y));
+	}
+
+	friend class cereal::access;
 };
 /// <summary>
 /// 3次元ベクトル。

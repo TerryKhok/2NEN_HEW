@@ -24,12 +24,13 @@ private:
 	GENERATE_SERIALIZE(position, scale, angle)
 };
 
-
+//class FileScene;
 
 class GameObject final
 {
 	friend class Window;
 	friend class Scene;
+	friend class FileScene;
 	friend class ImGuiApp;
 	friend class Component;
 	friend class ObjectManager;
@@ -41,6 +42,8 @@ class GameObject final
 	friend class Box2DCircleRenderNode;
 	friend class Box2DCapsuleRenderNode;
 	friend class Box2DMeshRenderNode;	
+	friend class Box2DLineRenderNode;
+
 	template<typename T>
 	friend bool CreateComponent(GameObject* obj, SERIALIZE_INPUT& ar);
 
@@ -158,6 +161,10 @@ public:
 	//bodyDef指定
 	template<>
 	SAFE_TYPE(SubWindow) AddComponent<SubWindow, const char*>(const char* _windowName);
+	template<>
+	SAFE_TYPE(SFText) AddComponent<SFText>();
+	template<>
+	SAFE_TYPE(SFText) AddComponent<SFText>(const char* _str);
 
 	//コンポーネント削除
 	template<typename T>
@@ -335,6 +342,7 @@ class ObjectManager final
 	friend class ImGuiApp;
 	friend class Component;
 	friend class Scene;
+	friend class FileScene;
 	friend class SceneManager;
 	friend void GameObject::SetName(const std::string);
 	template <class Archive>

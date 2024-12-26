@@ -25,6 +25,7 @@
 
 class GameObject;
 class Box2DBody;
+class Box2DBodyChain;
 class SceneManager;
 
 namespace Box2D
@@ -49,6 +50,7 @@ namespace Box2D
 		friend class Window;
 		friend class GameObject;
 		friend class Box2DBody;
+		friend class Box2DBodyChain;
 		friend class SceneManager;
 
 	public:
@@ -176,6 +178,18 @@ namespace cereal
 	void serialize(Archive& ar, b2Capsule& cap)
 	{
 		ar(CEREAL_NVP(cap.center1), CEREAL_NVP(cap.center2),CEREAL_NVP(cap.radius));
+	}
+
+	template<class Archive>
+	void serialize(Archive& ar, b2Segment& seg)
+	{
+		ar(CEREAL_NVP(seg.point1), CEREAL_NVP(seg.point2));
+	}
+
+	template<class Archive>
+	void serialize(Archive& ar, b2ChainSegment& chain)
+	{
+		ar(CEREAL_NVP(chain.chainId), CEREAL_NVP(chain.ghost1), CEREAL_NVP(chain.ghost2), CEREAL_NVP(chain.segment));
 	}
 }
 

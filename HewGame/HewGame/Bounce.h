@@ -115,3 +115,5 @@ class Bounce : public Component
 		enterObjects.clear();
 	}
 };
+
+SetReflectionComponent(Bounce)

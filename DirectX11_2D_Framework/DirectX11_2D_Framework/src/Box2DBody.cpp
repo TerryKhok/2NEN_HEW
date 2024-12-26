@@ -85,6 +85,7 @@ Box2DBody::Box2DBody(GameObject* _object, SERIALIZE_INPUT& ar)
 
 	Box2DBodyManager::m_bodyObjectName.insert(std::pair(m_bodyId.index1, _object->GetName()));
 
+	std::unordered_map<int32_t, std::pair<std::vector<b2Vec2>,std::vector<ShapeSaveData>>> chainVertex;
 	for (auto& type : types)
 	{
 		ShapeSaveData shapeData;
@@ -99,16 +100,22 @@ Box2DBody::Box2DBody(GameObject* _object, SERIALIZE_INPUT& ar)
 
 		switch (type)
 		{
-		case b2_polygonShape:
-		{
-			b2Polygon polygon;
-			ar(CEREAL_NVP(polygon));
-			break;
-		}
 		case b2_circleShape:
+		{
 			b2Circle circle;
 			ar(CEREAL_NVP(circle));
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+			Box2D::WorldManager::pPauseWorldUpdate();
+#endif 
+			auto shape = b2CreateCircleShape(m_bodyId, &shapeDef, &circle);
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+			Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+			m_shapeList.push_back(shape);
 			break;
+		}
 		case b2_capsuleShape:
 		{
 			b2Capsule capsule;
@@ -122,19 +129,108 @@ Box2DBody::Box2DBody(GameObject* _object, SERIALIZE_INPUT& ar)
 #ifdef BOX2D_UPDATE_MULTITHREAD
 			Box2D::WorldManager::pResumeWorldUpdate();
 #endif
-#ifdef DEBUG_TRUE
-
-#endif
 			m_shapeList.push_back(shape);
 			break;
 		}
 		case b2_segmentShape:
+		{
+			b2Segment segment;
+			ar(CEREAL_NVP(segment));
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+			Box2D::WorldManager::pPauseWorldUpdate();
+#endif 
+			auto shape = b2CreateSegmentShape(m_bodyId, &shapeDef, &segment);
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+			Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+			m_shapeList.push_back(shape);
+			break;
+		}
+		case b2_polygonShape:
+		{
+			b2Polygon polygon;
+			ar(CEREAL_NVP(polygon));
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+			Box2D::WorldManager::pPauseWorldUpdate();
+#endif 
+			auto shape = b2CreatePolygonShape(m_bodyId, &shapeDef, &polygon);
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+			Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+			m_shapeList.push_back(shape);
+			break;
+		}
+		case b2_chainSegmentShape:
+		{
+			b2ChainSegment chainSegment;
+			ar(CEREAL_NVP(chainSegment));
+			auto iter = chainVertex.find(chainSegment.chainId);
+			if (iter == chainVertex.end())
+			{
+				iter = chainVertex.emplace(chainSegment.chainId, 
+					std::make_pair(std::vector<b2Vec2>(), std::vector<ShapeSaveData>())).first;
+			}
+			iter->second.first.push_back(chainSegment.segment.point1);
+			iter->second.second.push_back(shapeData);
 
 			break;
+		}
 		default:
 			break;
 		}
 	}
+
+	for (auto& chainData : chainVertex)
+	{
+		b2ChainDef chainDef = b2DefaultChainDef();
+		chainDef.filter.categoryBits = m_filter;
+		chainDef.filter.maskBits = Box2DBodyManager::GetMaskFilterBit(m_filter);
+
+		chainDef.points = chainData.second.first.data();
+		chainDef.count = static_cast<int32_t>(chainData.second.first.size());
+		chainDef.isLoop = true;
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+		Box2D::WorldManager::pPauseWorldUpdate();
+#endif 
+		b2ChainId chainId = b2CreateChain(m_bodyId, &chainDef);
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+		Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+
+		int chainCount = b2Chain_GetSegmentCount(chainId);
+		std::vector<b2ShapeId> shapeArray;
+		shapeArray.resize(chainCount);
+		int num = b2Chain_GetSegments(chainId, shapeArray.data(), chainCount);
+		for (int i = 0;i < num;i++)
+		{
+			auto& shape = shapeArray[i];
+			auto& data = chainData.second.second[i];
+			b2Shape_SetFriction(shape, data.friction);
+			b2Shape_SetDensity(shape, data.density);
+			b2Shape_SetRestitution(shape, data.restitution);
+			m_shapeList.push_back(shape);
+		}
+	}
+
+#ifdef RELEASE_SERIALIZE_VIEW_HITBOX
+	ar(CEREAL_NVP(renderData));
+#endif
+
+#ifdef DEBUG_TRUE
+	for (auto& data : renderData)
+	{
+		auto node = std::shared_ptr<RenderNode>(data->CreateRenderNode(m_bodyId));
+		node->m_object = _object;
+		m_nodeList.push_back((node));
+		RenderManager::AddRenderList(node, LAYER::LAYER_BOX2D_DEBUG);
+	}
+#endif
 }
 
 inline void Box2DBody::Update()
@@ -240,12 +336,6 @@ void Box2DBody::Serialize(SERIALIZE_OUTPUT& ar)
 		b2ShapeType type = b2Shape_GetType(shape);
 		switch (type)
 		{
-		case b2_polygonShape:
-		{
-			b2Polygon polygon = b2Shape_GetPolygon(shape);
-			ar(CEREAL_NVP(polygon));
-			break;
-		}
 		case b2_circleShape:
 			b2Circle circle = b2Shape_GetCircle(shape);
 			ar(CEREAL_NVP(circle));
@@ -255,18 +345,27 @@ void Box2DBody::Serialize(SERIALIZE_OUTPUT& ar)
 			ar(CEREAL_NVP(capsule));
 			break;
 		case b2_segmentShape:
-
+			b2Segment segment = b2Shape_GetSegment(shape);
+			ar(CEREAL_NVP(segment));
+			break;
+		case b2_polygonShape:
+			b2Polygon polygon = b2Shape_GetPolygon(shape);
+			ar(CEREAL_NVP(polygon));
+			break;		
+		case b2_chainSegmentShape:
+			b2ChainSegment chainSegment = b2Shape_GetChainSegment(shape);
+			ar(CEREAL_NVP(chainSegment));
 			break;
 		default:
 			break;
 		}
 	}
+
+#ifdef RELEASE_SERIALIZE_VIEW_HITBOX
+	ar(CEREAL_NVP(renderData));
+#endif
 }
 
-void Box2DBody::Deserialize(SERIALIZE_INPUT& ar)
-{
-	
-}
 
 void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 {
@@ -356,7 +455,8 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 		b2Body_SetAwake(m_bodyId, isAwake);
 	}
 
-	ImGui::SeparatorText("Create");
+	ImGui::SeparatorText("+Create");
+
 	static const char* shapeTypes[] =
 	{
 		"Box",
@@ -378,8 +478,10 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 		}
 		ImGui::EndListBox();
 	}
+
 	ImGui::SameLine();
 	ImGui::BeginChild("parameter", ImVec2(IMGUI_WINDOW_WIDTH - 100, 110));
+
 	bool create = false;
 	if (ImGui::Button("Create"))create = true;
 
@@ -621,11 +723,16 @@ void Box2DBody::CreateBoxShape(Vector2 _size, Vector2 _offset, float _angle,bool
 	Vector2 offset;
 	offset.x = _offset.x * cos(rad) - offset.y * sin(rad);
 	offset.y = (_offset.x * sin(rad) + offset.y * cos(rad)) / 2;
-	auto node = std::shared_ptr<RenderNode>(new Box2DBoxRenderNode(_offset, { _size.x,_size.y }, rad, m_bodyId));
+	auto node = std::shared_ptr<RenderNode>(new Box2DBoxRenderNode(_offset, _size, rad, m_bodyId));
 	//auto node = std::shared_ptr<RenderNode>(new Box2DCircleRenderNode(scale.x, m_bodyId));
 	node->m_object = m_this;
 	m_nodeList.push_back((node));
 	RenderManager::AddRenderList(node, LAYER::LAYER_BOX2D_DEBUG);
+#endif
+
+#ifdef RELEASE_SERIALIZE_VIEW_HITBOX
+	Box2DBoxData* boxData = new Box2DBoxData(_offset, _size, rad);
+	renderData.emplace_back(boxData);
 #endif
 
 	m_shapeList.push_back(shape);
@@ -670,6 +777,11 @@ void Box2DBody::CreateCircleShape(float _diameter, Vector2 _offset)
 	node->m_object = m_this;
 	m_nodeList.push_back((node));
 	RenderManager::AddRenderList(node, LAYER::LAYER_BOX2D_DEBUG);
+#endif
+
+#ifdef RELEASE_SERIALIZE_VIEW_HITBOX
+	Box2DCircleData* circleData = new Box2DCircleData(_offset,_diameter);
+	renderData.emplace_back(circleData);
 #endif
 
 	m_shapeList.push_back(shape);
@@ -737,6 +849,12 @@ void Box2DBody::CreateCapsuleShape(float _diameter, float _height, float _angle,
 	RenderManager::AddRenderList(node, LAYER::LAYER_BOX2D_DEBUG);
 #endif
 
+#ifdef RELEASE_SERIALIZE_VIEW_HITBOX
+	Box2DCapsuleData* capsuleData = 
+		new Box2DCapsuleData(_offset,_diameter, halfHeight * DEFAULT_OBJECT_SIZE,_height,rad);
+	renderData.emplace_back(capsuleData);
+#endif
+
 	m_shapeList.push_back(shape);
 }
 
@@ -755,6 +873,11 @@ void Box2DBody::CreatePolygonShape(std::vector<b2Vec2> _pointList)
 	node->m_object = m_this;
 	m_nodeList.push_back((node));
 	RenderManager::AddRenderList(node, LAYER::LAYER_BOX2D_DEBUG);
+#endif
+
+#ifdef RELEASE_SERIALIZE_VIEW_HITBOX
+	Box2DConvexMeshData* convexMeshData = new Box2DConvexMeshData(_pointList);
+	renderData.emplace_back(convexMeshData);
 #endif
 
 	for (auto& point : _pointList)
@@ -793,11 +916,40 @@ void Box2DBody::CreateSegment(std::vector<b2Vec2> _pointList)
 
 
 #ifdef DEBUG_TRUE
-	auto node = std::shared_ptr<RenderNode>(
-		new Box2DMeshRenderNode(_pointList, m_bodyId, false));
-	node->m_object = m_this;
-	m_nodeList.push_back((node));
-	RenderManager::AddRenderList(node, LAYER::LAYER_BOX2D_DEBUG);
+	size_t pointNum = _pointList.size();
+	for (size_t i = 0; i < pointNum; ++i)
+	{
+		size_t j = (i + 1) % pointNum;
+		Vector2 start = { _pointList[i].x,_pointList[i].y };
+		Vector2 end = { _pointList[j].x,_pointList[j].y };
+		Vector2 dis = end - start;
+		Vector2 center = start + dis / 2;
+		float length = sqrt(dis.x * dis.x + dis.y * dis.y);
+		float radian = Math::PointRadian(start.x, start.y, end.x, end.y);
+
+		auto node = std::shared_ptr<RenderNode>(
+			new Box2DLineRenderNode(length, radian, center, m_bodyId));
+		node->m_object = m_this;
+		m_nodeList.push_back((node));
+		RenderManager::AddRenderList(node, LAYER::LAYER_BOX2D_DEBUG);
+	}
+#endif
+
+#ifdef RELEASE_SERIALIZE_VIEW_HITBOX
+	size_t pointNum2 = _pointList.size();
+	for (size_t i = 0; i < pointNum2; ++i)
+	{
+		size_t j = (i + 1) % pointNum2;
+		Vector2 start = { _pointList[i].x,_pointList[i].y };
+		Vector2 end = { _pointList[j].x,_pointList[j].y };
+		Vector2 dis = end - start;
+		Vector2 center = start + dis / 2;
+		float length = sqrt(dis.x * dis.x + dis.y * dis.y);
+		float radian = Math::PointRadian(start.x, start.y, end.x, end.y);
+
+		Box2DLineData* meshData = new Box2DLineData(length,radian,center);
+		renderData.emplace_back(meshData);
+	}
 #endif
 
 	for (auto& point : _pointList)
@@ -835,11 +987,40 @@ void Box2DBody::CreateChain(std::vector<b2Vec2>& _pointList)
 	}
 
 #ifdef DEBUG_TRUE
-	auto node = std::shared_ptr<RenderNode>(
-		new Box2DMeshRenderNode(_pointList, m_bodyId, true));
-	node->m_object = m_this;
-	m_nodeList.push_back((node));
-	RenderManager::AddRenderList(node, LAYER::LAYER_BOX2D_DEBUG);
+	size_t pointNum = _pointList.size();
+	for (size_t i = 0; i < pointNum; ++i)
+	{
+		size_t j = (i + 1) % pointNum;
+		Vector2 start = { _pointList[i].x,_pointList[i].y };
+		Vector2 end = { _pointList[j].x,_pointList[j].y };
+		Vector2 dis = end - start;
+		Vector2 center = start + dis / 2;
+		float length = sqrt(dis.x * dis.x + dis.y * dis.y);
+		float radian = Math::PointRadian(start.x, start.y, end.x, end.y);
+
+		auto node = std::shared_ptr<RenderNode>(
+			new Box2DLineRenderNode(length, radian, center, m_bodyId));
+		node->m_object = m_this;
+		m_nodeList.push_back((node));
+		RenderManager::AddRenderList(node, LAYER::LAYER_BOX2D_DEBUG);
+	}
+#endif
+
+#ifdef RELEASE_SERIALIZE_VIEW_HITBOX
+	size_t pointNum2 = _pointList.size();
+	for (size_t i = 0; i < pointNum2; ++i)
+	{
+		size_t j = (i + 1) % pointNum2;
+		Vector2 start = { _pointList[i].x,_pointList[i].y };
+		Vector2 end = { _pointList[j].x,_pointList[j].y };
+		Vector2 dis = end - start;
+		Vector2 center = start + dis / 2;
+		float length = sqrt(dis.x * dis.x + dis.y * dis.y);
+		float radian = Math::PointRadian(start.x, start.y, end.x, end.y);
+
+		Box2DLineData* meshData = new Box2DLineData(length, radian, center);
+		renderData.emplace_back(meshData);
+	}
 #endif
 
 	for (auto& point : _pointList)
@@ -859,11 +1040,20 @@ void Box2DBody::CreateChain(std::vector<b2Vec2>& _pointList)
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pPauseWorldUpdate();
 #endif 
-	b2CreateChain(m_bodyId, &chainDef);
+	b2ChainId chainId = b2CreateChain(m_bodyId, &chainDef);
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pResumeWorldUpdate();
 #endif
+
+	int chainCount = b2Chain_GetSegmentCount(chainId);
+	std::vector<b2ShapeId> shapeArray;
+	shapeArray.resize(chainCount);
+	int num = b2Chain_GetSegments(chainId, shapeArray.data(), chainCount);
+	for (auto& shape : shapeArray)
+	{
+		m_shapeList.push_back(shape);
+	}
 }
 
 void Box2DBody::SetPosition(Vector2 _pos)
@@ -1195,6 +1385,444 @@ void Box2DBody::GetOverlapObject(std::unordered_map<GameObject*, b2ShapeId>& _ob
 	}
 }
 
+#pragma region Box2DBodyChain
+
+//Box2DBodyChain::Box2DBodyChain(GameObject* _object)
+//{
+//	auto& position = _object->transform.position;
+//	//ボディ定義とワールドIDを使ってグラウンド・ボディを作成する
+//	b2BodyDef bodyDef = b2DefaultBodyDef();
+//	bodyDef.type = b2_dynamicBody;
+//	bodyDef.position = { position.x / DEFAULT_OBJECT_SIZE, position.y / DEFAULT_OBJECT_SIZE };
+//	bodyDef.rotation = b2MakeRot(static_cast<float>(_object->transform.angle.z.Get()));
+//
+//#ifdef BOX2D_UPDATE_MULTITHREAD
+//	Box2D::WorldManager::pPauseWorldUpdate();
+//#endif
+//	Box2D::WorldManager::GenerateBody(m_bodyId, &bodyDef);
+//
+//#ifdef BOX2D_UPDATE_MULTITHREAD
+//	Box2D::WorldManager::pResumeWorldUpdate();
+//#endif
+//
+//	Box2DBodyManager::m_bodyObjectName.insert(std::pair(m_bodyId.index1, _object->GetName()));
+//}
+//
+//Box2DBodyChain::Box2DBodyChain(GameObject* _object, b2BodyDef* _bodyDef)
+//{
+//	auto& position = _object->transform.position;
+//	_bodyDef->position = { position.x / DEFAULT_OBJECT_SIZE, position.y / DEFAULT_OBJECT_SIZE };
+//
+//#ifdef BOX2D_UPDATE_MULTITHREAD
+//	Box2D::WorldManager::pPauseWorldUpdate();
+//#endif
+//	Box2D::WorldManager::GenerateBody(m_bodyId, _bodyDef);
+//
+//#ifdef BOX2D_UPDATE_MULTITHREAD
+//	Box2D::WorldManager::pResumeWorldUpdate();
+//#endif
+//
+//	Box2DBodyManager::m_bodyObjectName.insert(std::pair(m_bodyId.index1, _object->GetName()));
+//}
+//
+//Box2DBodyChain::Box2DBodyChain(GameObject* _object, SERIALIZE_INPUT& ar)
+//{
+//
+//}
+//
+//inline void Box2DBodyChain::Update()
+//{
+//	{
+//		auto pos = b2Body_GetPosition(m_bodyId);
+//		pos *= DEFAULT_OBJECT_SIZE;
+//		m_this->transform.position = Vector3(pos.x, pos.y, 0.5f);
+//		auto rot = b2Rot_GetAngle(b2Body_GetRotation(m_bodyId));
+//		m_this->transform.angle.z.Set(rot);
+//	};
+//}
+//
+//
+//#ifdef DEBUG_TRUE
+//void Box2DBodyChain::Delete()
+//{
+//	for (auto& node : m_nodeList)
+//	{
+//		node->Delete(LAYER_BOX2D_DEBUG);
+//	}
+//	auto& list = Box2DBodyManager::m_bodyObjectName;
+//	auto it = list.find(m_bodyId.index1);
+//	if (it != list.end()) {
+//		list.erase(it);
+//	}
+//#ifdef BOX2D_UPDATE_MULTITHREAD
+//	Box2D::WorldManager::pPauseWorldUpdate();
+//#endif
+//	b2DestroyBody(m_bodyId);
+//
+//#ifdef BOX2D_UPDATE_MULTITHREAD
+//	Box2D::WorldManager::pResumeWorldUpdate();
+//#endif
+//}
+//
+//#else
+//void Box2DBodyChain::Delete()
+//{
+//	auto& list = Box2DBodyManager::m_bodyObjectName;
+//	auto it = list.find(m_bodyId.index1);
+//	if (it != list.end()) {
+//		list.erase(it);
+//	}
+//	b2DestroyBody(m_bodyId);
+//}
+//#endif
+//
+//void Box2DBodyChain::SetActive(bool _active)
+//{
+//#ifdef BOX2D_UPDATE_MULTITHREAD
+//	Box2D::WorldManager::pPauseWorldUpdate();
+//#endif
+//	_active ? b2Body_Enable(m_bodyId) : b2Body_Disable(m_bodyId);
+//
+//#ifdef BOX2D_UPDATE_MULTITHREAD
+//	Box2D::WorldManager::pResumeWorldUpdate();
+//#endif
+//
+//#ifdef DEBUG_TRUE
+//	for (auto& node : m_nodeList)
+//	{
+//		node->Active(_active);
+//	}
+//#endif
+//}
+//
+//void Box2DBodyChain::Serialize(SERIALIZE_OUTPUT& ar)
+//{
+//	BodySaveData data;
+//	data.type = b2Body_GetType(m_bodyId);
+//	data.lineVec = b2Body_GetLinearVelocity(m_bodyId);
+//	data.angleVec = b2Body_GetAngularVelocity(m_bodyId);
+//	data.gravity = b2Body_GetGravityScale(m_bodyId);
+//	data.mass = b2Body_GetAutomaticMass(m_bodyId);
+//	data.bullet = b2Body_IsBullet(m_bodyId);
+//	data.fixRot = b2Body_IsFixedRotation(m_bodyId);
+//	data.awake = b2Body_IsAwake(m_bodyId);
+//
+//	ar(CEREAL_NVP(data),CEREAL_NVP(m_chainVertexList));
+//}
+//
+//void Box2DBodyChain::DrawImGui(ImGuiApp::HandleUI& _handle)
+//{
+//#ifdef DEBUG_TRUE
+//	if (ImGui::Button("<>##type"))
+//	{
+//		ImGui::OpenPopup("changeType");
+//	}
+//	ImGui::SetItemTooltip("change type");
+//	ImGui::SameLine();
+//
+//	b2BodyType bodyType = GetType();
+//	ImGui::Text("type : %s", magic_enum::enum_name(bodyType).data());
+//
+//	if (ImGui::BeginPopup("changeType"))
+//	{
+//		for (int i = 0; i < b2_bodyTypeCount; i++)
+//		{
+//			b2BodyType type = (b2BodyType)i;
+//			bool same = type == bodyType;
+//			if (ImGui::Selectable(magic_enum::enum_name(type).data(), same))
+//			{
+//				if (!same)SetType(type);
+//			}
+//		}
+//		ImGui::EndPopup();
+//	}
+//
+//	auto vec = b2Body_GetLinearVelocity(m_bodyId);
+//	float velocity[2] = { vec.x,vec.y };
+//	//ImGui::Text(" LinerVelocity\n  <x: %.2f   y:%.2f>", vec.x, vec.y);
+//	if (ImGui::InputFloat2("Velocity", velocity))
+//	{
+//		b2Body_SetLinearVelocity(m_bodyId, { velocity[0],velocity[1] });
+//	}
+//
+//	auto massData = b2Body_GetMassData(m_bodyId);
+//	if (ImGui::InputFloat("Mass", &massData.mass))
+//	{
+//		b2Body_SetMassData(m_bodyId, massData);
+//	}
+//
+//	float gravity = b2Body_GetGravityScale(m_bodyId);
+//	if (ImGui::InputFloat(" Gravity", &gravity))
+//	{
+//		b2Body_SetGravityScale(m_bodyId, gravity);
+//	}
+//
+//	bool isBullet = b2Body_IsBullet(m_bodyId);
+//	if (ImGui::Checkbox("Bullet", &isBullet))
+//	{
+//		b2Body_SetBullet(m_bodyId, isBullet);
+//	}
+//
+//	bool isFixRot = b2Body_IsFixedRotation(m_bodyId);
+//	if (ImGui::Checkbox("FixedRotation", &isFixRot))
+//	{
+//		b2Body_SetFixedRotation(m_bodyId, isFixRot);
+//	}
+//
+//	bool isAwake = b2Body_IsAwake(m_bodyId);
+//	if (ImGui::Checkbox("Awake", &isAwake))
+//	{
+//		b2Body_SetAwake(m_bodyId, isAwake);
+//	}
+//#endif
+//}
+//
+//
+//void Box2DBodyChain::CreateChain(std::vector<b2Vec2>& _pointList, FILTER _filter)
+//{
+//	if (_pointList.size() < 4)
+//	{
+//		LOG_ERROR("Not enough vertices in Chain");
+//		return;
+//	}
+//
+//#ifdef DEBUG_TRUE
+//	auto node = std::shared_ptr<RenderNode>(
+//		new Box2DMeshRenderNode(_pointList, m_bodyId, true));
+//	node->m_object = m_this;
+//	m_nodeList.push_back((node));
+//	RenderManager::AddRenderList(node, LAYER::LAYER_BOX2D_DEBUG);
+//#endif
+//
+//	for (auto& point : _pointList)
+//	{
+//		point.x /= DEFAULT_OBJECT_SIZE;
+//		point.y /= DEFAULT_OBJECT_SIZE;
+//	}
+//
+//	b2ChainDef chainDef = b2DefaultChainDef();
+//	chainDef.filter.categoryBits = _filter;
+//	chainDef.filter.maskBits = Box2DBodyManager::GetMaskFilterBit(_filter);
+//
+//	chainDef.points = _pointList.data();
+//	chainDef.count = static_cast<int32_t>(_pointList.size());
+//	chainDef.isLoop = true;
+//
+//#ifdef BOX2D_UPDATE_MULTITHREAD
+//	Box2D::WorldManager::pPauseWorldUpdate();
+//#endif 
+//	auto id = b2CreateChain(m_bodyId, &chainDef);
+//
+//#ifdef BOX2D_UPDATE_MULTITHREAD
+//	Box2D::WorldManager::pResumeWorldUpdate();
+//#endif
+//
+//	m_chainList.push_back(id);
+//
+//	m_chainVertexList.push_back(std::move(_pointList));
+//}
+//
+//void Box2DBodyChain::SetPosition(Vector2 _pos)
+//{
+//#ifdef BOX2D_UPDATE_MULTITHREAD
+//	b2BodyId id = m_bodyId;
+//	Box2D::WorldManager::AddWorldTask(std::move([id, _pos]()
+//		{
+//			b2Vec2 pos = { _pos.x / DEFAULT_OBJECT_SIZE,_pos.y / DEFAULT_OBJECT_SIZE };
+//			b2Body_SetTransform(id, pos, b2Body_GetRotation(id));
+//		})
+//	);
+//#else
+//	b2Vec2 pos = { _pos.x / DEFAULT_OBJECT_SIZE,_pos.y / DEFAULT_OBJECT_SIZE };
+//	b2Body_SetTransform(m_bodyId, pos, b2Body_GetRotation(m_bodyId));
+//#endif
+//}
+//
+//
+//void Box2DBodyChain::SetAngle(float _deg)
+//{
+//	Angle angle(_deg);
+//	SetAngle(angle);
+//}
+//
+//void Box2DBodyChain::SetAngle(double _rad)
+//{
+//	Angle angle(_rad);
+//	SetAngle(angle);
+//}
+//
+//void Box2DBodyChain::SetAngle(Angle _angle)
+//{
+//#ifdef BOX2D_UPDATE_MULTITHREAD
+//	b2BodyId id = m_bodyId;
+//	Box2D::WorldManager::AddWorldTask(std::move([id, _angle]()
+//		{
+//			b2Body_SetTransform(id, b2Body_GetPosition(id), b2MakeRot(_angle));
+//		})
+//	);
+//#else
+//	b2Body_SetTransform(m_bodyId, b2Body_GetPosition(m_bodyId), b2MakeRot(static_cast<float>(_angle.Get())));
+//#endif
+//}
+//
+//
+//void Box2DBodyChain::SetVelocity(b2Vec2 _velocity)
+//{
+//	b2Body_SetLinearVelocity(m_bodyId, _velocity);
+//}
+//
+//void Box2DBodyChain::SetVelocityX(float _velocityX)
+//{
+//	b2Vec2 vec = b2Body_GetLinearVelocity(m_bodyId);
+//	vec.x = _velocityX;
+//	b2Body_SetLinearVelocity(m_bodyId, vec);
+//}
+//
+//void Box2DBodyChain::SetVelocityY(float _velocityY)
+//{
+//	b2Vec2 vec = b2Body_GetLinearVelocity(m_bodyId);
+//	vec.y = _velocityY;
+//	b2Body_SetLinearVelocity(m_bodyId, vec);
+//}
+//
+//const b2Vec2 Box2DBodyChain::GetVelocity() const
+//{
+//	return b2Body_GetLinearVelocity(m_bodyId);
+//}
+//
+//void Box2DBodyChain::AddForce(b2Vec2 _force)
+//{
+//	_force.x *= DEFAULT_OBJECT_SIZE;
+//	_force.y *= DEFAULT_OBJECT_SIZE;
+//	b2Body_ApplyForceToCenter(m_bodyId, _force, true);
+//}
+//
+//void Box2DBodyChain::AddForceImpulse(b2Vec2 _force)
+//{
+//	_force.x *= DEFAULT_OBJECT_SIZE;
+//	_force.y *= DEFAULT_OBJECT_SIZE;
+//	b2Body_ApplyLinearImpulseToCenter(m_bodyId, _force, true);
+//}
+//
+//void Box2DBodyChain::SetType(b2BodyType _type)
+//{
+//#ifdef BOX2D_UPDATE_MULTITHREAD
+//	b2BodyId id = m_bodyId;
+//	Box2D::WorldManager::AddWorldTask(std::move([id, _type]()
+//		{
+//			b2Body_SetType(id, _type);
+//		})
+//	);
+//#else
+//	b2Body_SetType(m_bodyId, _type);
+//#endif
+//}
+//
+//b2BodyType Box2DBodyChain::GetType()
+//{
+//	return b2Body_GetType(m_bodyId);
+//}
+//
+//float  Box2DBodyChain::GetGravityScale() const
+//{
+//	return b2Body_GetGravityScale(m_bodyId);
+//}
+//
+//void Box2DBodyChain::SetGravityScale(float _scale)
+//{
+//#ifdef BOX2D_UPDATE_MULTITHREAD
+//	b2BodyId id = m_bodyId;
+//	Box2D::WorldManager::AddWorldTask(std::move([id, _scale]()
+//		{
+//			b2Body_SetGravityScale(id, _scale);
+//		})
+//	);
+//#else
+//	b2Body_SetGravityScale(m_bodyId, _scale);
+//#endif
+//}
+//
+//float Box2DBodyChain::GetMass()
+//{
+//	return b2Body_GetMass(m_bodyId);
+//}
+//
+//void Box2DBodyChain::SetMass(float _mass)
+//{
+//#ifdef BOX2D_UPDATE_MULTITHREAD
+//	b2BodyId id = m_bodyId;
+//	Box2D::WorldManager::AddWorldTask(std::move([id, _mass]()
+//		{
+//			b2MassData massData;
+//			massData.mass = _mass;
+//			b2Body_SetMassData(id, massData);
+//		})
+//	);
+//#else
+//	b2MassData massData;
+//	massData.mass = _mass;
+//	b2Body_SetMassData(m_bodyId, massData);
+//#endif
+//}
+//
+//void Box2DBodyChain::SetBullet(bool _isBullet)
+//{
+//#ifdef BOX2D_UPDATE_MULTITHREAD
+//	b2BodyId id = m_bodyId;
+//	Box2D::WorldManager::AddWorldTask(std::move([id, _isBullet]()
+//		{
+//			b2Body_SetBullet(id, _isBullet);
+//		})
+//	);
+//#else
+//	b2Body_SetBullet(m_bodyId, _isBullet);
+//#endif
+//}
+//
+//bool Box2DBodyChain::IsBullet()
+//{
+//	return b2Body_IsBullet(m_bodyId);
+//}
+//
+//
+//void Box2DBodyChain::SetRestitution(float _restitution)
+//{
+//	for (auto& id : m_chainList)
+//	{
+//		b2Chain_SetRestitution(id,_restitution);
+//	}
+//}
+//
+//void Box2DBodyChain::SetFixedRotation(bool _flag)
+//{
+//#ifdef BOX2D_UPDATE_MULTITHREAD
+//	b2BodyId id = m_bodyId;
+//	Box2D::WorldManager::AddWorldTask(std::move([id, _flag]()
+//		{
+//			b2Body_SetFixedRotation(id, _flag);
+//		})
+//	);
+//#else
+//	b2Body_SetFixedRotation(m_bodyId, _flag);
+//#endif
+//}
+//
+//void Box2DBodyChain::SetAwake(bool _awake)
+//{
+//#ifdef BOX2D_UPDATE_MULTITHREAD
+//	b2BodyId id = m_bodyId;
+//	Box2D::WorldManager::AddWorldTask(std::move([id, _awake]()
+//		{
+//			b2Body_SetAwake(id, _awake);
+//		})
+//	);
+//#else
+//	b2Body_SetAwake(m_bodyId, _awake);
+//#endif
+//}
+
+#pragma endregion
+
 void Box2DBodyManager::DisableCollisionFilter(FILTER _filter01, FILTER _filter02)
 {
 	FILTER filter = _filter01;
@@ -1325,6 +1953,47 @@ unsigned int Box2DBodyManager::GetMaskFilterBit(FILTER _filter)
 	m_layerFilterBit.insert(std::make_pair(_filter, ALL_BITS));
 	return m_layerFilterBit.find(_filter)->second;
 }
+
+
+#ifdef RELEASE_SERIALIZE_VIEW_HITBOX
+
+RenderNode* Box2DBoxData::CreateRenderNode(b2BodyId bodyId)
+{
+	RenderNode* node = new Box2DBoxRenderNode(m_offset, m_size, m_angle, bodyId);
+	return node;
+};
+
+RenderNode* Box2DCircleData::CreateRenderNode(b2BodyId bodyId)
+{
+	RenderNode* node = new Box2DCircleRenderNode(m_offset, m_size, bodyId);
+	return node;
+}
+
+RenderNode* Box2DCapsuleData::CreateRenderNode(b2BodyId bodyId)
+{
+	RenderNode* node = new Box2DCapsuleRenderNode(m_offset, m_diameter, m_sizeY, m_height, m_angle, bodyId);
+	return node;
+}
+
+RenderNode* Box2DMeshData::CreateRenderNode(b2BodyId bodyId)
+{
+	RenderNode* node = new Box2DMeshRenderNode(m_pointList, bodyId, m_loop);
+	return node;
+}
+
+RenderNode* Box2DConvexMeshData::CreateRenderNode(b2BodyId bodyId)
+{
+	RenderNode* node = new Box2DConvexMeshRenderNode(m_pointList, bodyId);
+	return node;
+}
+
+RenderNode* Box2DLineData::CreateRenderNode(b2BodyId bodyId)
+{
+	RenderNode* node = new Box2DLineRenderNode(m_length, m_radian, m_center, bodyId);
+	return node;
+}
+
+#endif
 
 #ifdef DEBUG_TRUE
 
@@ -1668,6 +2337,55 @@ Box2DConvexMeshRenderNode::Box2DConvexMeshRenderNode(std::vector<b2Vec2>& _point
 	DirectX11::m_pDevice->CreateBuffer(&indexBufferDesc, &indexData, m_chainIndexBuffer.GetAddressOf());
 }
 
+inline void Box2DLineRenderNode::Draw()
+{
+	static VSObjectConstantBuffer cb;
+
+	UINT strides = sizeof(Vertex);
+	UINT offsets = 0;
+
+	//rayの描画
+	DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_lineVertexBuffer.GetAddressOf(), &strides, &offsets);
+	DirectX11::m_pDeviceContext->IASetIndexBuffer(RenderManager::m_lineIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+
+	const float rad = (float)m_object->transform.angle.z.Get();
+	auto& objectPos = m_object->transform.position;
+	Vector2 pos = 
+	{
+		m_center.x * cosf(rad) - m_center.y * sinf(rad),
+		m_center.x * sinf(rad) + m_center.y * cosf(rad),
+	};
+
+	//ワールド変換行列の作成
+	//ー＞オブジェクトの位置・大きさ・向きを指定
+	cb.world = DirectX::XMMatrixScaling(m_length, 1.0f, 1.0f);
+	cb.world *= DirectX::XMMatrixRotationZ(m_radian + rad);
+	cb.world *= DirectX::XMMatrixTranslation(objectPos.x + pos.x, objectPos.y + pos.y, 0.5f);
+	cb.world = DirectX::XMMatrixTranspose(cb.world);
+	
+	switch (m_object->isSelected)
+	{
+	case GameObject::SELECT_NONE:
+		SetDebugBodyColor(m_bodyId, cb.color);
+		break;
+	case GameObject::SELECTED:
+		cb.color = Box2D::b2_colorSelected;
+		break;
+	case GameObject::ON_MOUSE:
+		cb.color = Box2D::b2_colorOnMouse;
+		break;
+	}
+
+	//行列をシェーダーに渡す
+	DirectX11::m_pDeviceContext->UpdateSubresource(
+		DirectX11::m_pVSObjectConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
+
+	DirectX11::m_pDeviceContext->DrawIndexed(2, 0, 0);
+
+	//次のポインタにつなぐ
+	NextFunc();
+}	
+
 void SetDebugBodyColor(b2BodyId _bodyId, DirectX::XMFLOAT4& _color)
 {
 	b2BodyType bodyType = b2Body_GetType(_bodyId);
@@ -1695,4 +2413,3 @@ void SetDebugBodyColor(b2BodyId _bodyId, DirectX::XMFLOAT4& _color)
 }
 
 #endif
-

@@ -5,21 +5,16 @@
 #include "Scene_Gimmick.h"
 
 
+SetReflectionComponent(BreakScaffold)
+SetReflectionComponent(Fog)
+SetReflectionComponent(Rock)
+SetReflectionComponent(Thon)
+SetReflectionScene(SceneGimmick)
+
 //シーンの登録、レイヤーの設定
 //============================================================
 void MainInit()
 {	
-	//一番上のシーンが初めにロードされる
-	//SceneManager::RegisterScene<AnimationBulider_Scene>();
-	SceneManager::RegisterScene<SceneGimmick>();
-	SceneManager::RegisterScene<TitleScene>();
-	SceneManager::RegisterScene<SeigoTestScene>();
-	SceneManager::RegisterScene<Scene_ProtoType>();
-	SceneManager::RegisterScene<SampleScene_Title>();
-	SceneManager::RegisterScene<SampleScene_Loading>();
-	SceneManager::RegisterScene<SampleScene_Box2D>();
-	SceneManager::RegisterScene<SampleScene_Animation>();
-
 	//LAYER_01とLAYER_02が衝突しないようにする
 	Box2DBodyManager::DisableCollisionFilter(F_WINDOW, F_TERRAIN);
 	Box2DBodyManager::DisableCollisionFilter(F_WINDOW, F_WINDOW);

@@ -9,7 +9,7 @@ class SampleScene_Box2D :public Scene
 	{
 		auto text = Instantiate("text");
 		text->transform.position = { 0.0f,0.0f };
-		text->AddComponent<SFText>("メインゲーム画面!!")->scale = 3.0f;
+		text->AddComponent<SFText>("メインゲーム画面!!");
 		
 
 		std::vector<b2Vec2> mesh =

@@ -267,6 +267,53 @@ SAFE_TYPE(SubWindow) GameObject::AddComponent(const char* _windowName)
 }
 
 template<>
+SAFE_TYPE(SFText) GameObject::AddComponent<SFText>()
+{
+	if (ExistComponent<SFText>()) return GetComponent<SFText>();
+
+	Component* component = nullptr;
+	component = new SFText(this);
+	component->m_this = this;
+
+	//リストに追加(デストラクタ登録)
+	m_componentList.first.emplace_back(
+		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
+	m_componentList.second[typeid(SFText).name()] = m_componentList.first.size() - 1;
+
+	SFText* render = dynamic_cast<SFText*>(component);
+	if (render == nullptr)
+	{
+		LOG_WARNING("%s component down_cast failed", typeid(SFText).name());
+	}
+
+	return render;
+}
+
+template<>
+SAFE_TYPE(SFText) GameObject::AddComponent<SFText>(const char* _str)
+{
+	if (ExistComponent<SFText>()) return GetComponent<SFText>();
+
+	Component* component = nullptr;
+	component = new SFText(this, _str);
+	component->m_this = this;
+
+	//リストに追加(デストラクタ登録)
+	m_componentList.first.emplace_back(
+		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
+	m_componentList.second[typeid(SFText).name()] = m_componentList.first.size() - 1;
+
+	SFText* render = dynamic_cast<SFText*>(component);
+	if (render == nullptr)
+	{
+		LOG_WARNING("%s component down_cast failed", typeid(SFText).name());
+	}
+
+	return render;
+}
+
+
+template<>
 void GameObject::RemoveComponent<Renderer>()
 {
 	RemoveComponent<Animator>();
