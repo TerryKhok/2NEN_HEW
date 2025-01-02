@@ -613,355 +613,356 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 		}
 	}
 
-	ImGui::BeginChild("parameter", ImVec2(IMGUI_WINDOW_WIDTH - 100, 110));
-
-	static bool sensor = false;
-	switch (selectType)
+	if (ImGui::BeginChild("parameter", ImVec2(IMGUI_WINDOW_WIDTH - 100, 100)))
 	{
-	case BOX:
-	{
-		static Vector2 size = {5.0f,5.0f};
-		static Vector2 offset;
-		static float angle = 0.0f;
-		static bool decideSize = false;
-		static bool decideOffset = false;
-		static bool decideAngle = false;
-		ImGui::Checkbox("sensor", &sensor);
-		ImGui::Checkbox("##size", &decideSize);
-		ImGui::SameLine();
-		if (!decideSize)ImGui::BeginDisabled();
-		ImGui::DragFloat2("size", size.data(),0.1f,0.0f,100.0f);
-		if (!decideSize)ImGui::EndDisabled();
-
-		ImGui::Checkbox("##offset", &decideOffset);
-		ImGui::SameLine();
-		if (!decideOffset)ImGui::BeginDisabled();
-		ImGui::InputFloat2("offset", offset.data());
-		if (!decideOffset)ImGui::EndDisabled();
-
-		ImGui::Checkbox("##angle", &decideAngle);
-		ImGui::SameLine();
-		if (!decideAngle)ImGui::BeginDisabled();
-		ImGui::DragFloat("angle", &angle,1.0f,-180.0f,180.0f);
-		if (!decideAngle)ImGui::EndDisabled();
-
-		if (create)
+		static bool sensor = false;
+		switch (selectType)
 		{
-			if (decideSize) CreateBoxShape(size, decideOffset ? offset : Vector2(0.0f, 0.0f), decideAngle ? angle : 0.0f, sensor);
-			else CreateBoxShape(decideOffset ? offset : Vector2(0.0f, 0.0f), decideAngle ? angle : 0.0f, sensor);
-		}
-		break;
-	}
-	case CIRCLE:
-	{
-		static float diameter = 1.0f;
-		static Vector2 offset = { 0.0f,0.0f };
-		static bool decideDiameter = false;
-		static bool decideOffset = false;
-
-		ImGui::Checkbox("sensor", &sensor);
-		ImGui::Checkbox("##diameter", &decideDiameter);
-		ImGui::SameLine();
-		if (!decideDiameter)ImGui::BeginDisabled();
-		ImGui::InputFloat("diameter", &diameter);
-		if (!decideDiameter)ImGui::EndDisabled();
-
-		ImGui::Checkbox("##offset", &decideOffset);
-		ImGui::SameLine();
-		if (!decideOffset)ImGui::BeginDisabled();
-		ImGui::InputFloat2("offset", offset.data());
-		if (!decideOffset)ImGui::EndDisabled();
-
-		if (create)
+		case BOX:
 		{
-			if (decideDiameter)CreateCircleShape(diameter, decideOffset ? offset : Vector2(0.0f, 0.0f), sensor);
-			else CreateCircleShape(decideOffset ? offset : Vector2(0.0f, 0.0f), sensor);
-		}
-	}
-		break;
-	case CAPSULE :
-	{
-		static float diameter = 1.0f;
-		static float height = 1.0f;
-		static float angle = 0.0f;
-		static Vector2 offset = { 0.0f,0.0f };
-		static bool decideDiameter = false;
-		static bool decideHeight = false;
-		static bool decideAngle = false;
-		static bool decideOffset = false;
+			static Vector2 size = { 5.0f,5.0f };
+			static Vector2 offset;
+			static float angle = 0.0f;
+			static bool decideSize = false;
+			static bool decideOffset = false;
+			static bool decideAngle = false;
+			ImGui::Checkbox("sensor", &sensor);
+			ImGui::Checkbox("##size", &decideSize);
+			ImGui::SameLine();
+			if (!decideSize)ImGui::BeginDisabled();
+			ImGui::DragFloat2("size", size.data(), 0.1f, 0.0f, 100.0f);
+			if (!decideSize)ImGui::EndDisabled();
 
-		ImGui::Checkbox("sensor", &sensor);
-		ImGui::Checkbox("##diameter", &decideDiameter);
-		ImGui::SameLine();
-		if (!decideDiameter)ImGui::BeginDisabled();
-		ImGui::InputFloat("diameter", &diameter);
-		if (!decideDiameter)ImGui::EndDisabled();
+			ImGui::Checkbox("##offset", &decideOffset);
+			ImGui::SameLine();
+			if (!decideOffset)ImGui::BeginDisabled();
+			ImGui::InputFloat2("offset", offset.data());
+			if (!decideOffset)ImGui::EndDisabled();
 
-		ImGui::Checkbox("##height", &decideHeight);
-		ImGui::SameLine();
-		if (!decideHeight)ImGui::BeginDisabled();
-		ImGui::DragFloat("height", &height,0.1f,0.0f,100.0f);
-		if (!decideHeight)ImGui::EndDisabled();
+			ImGui::Checkbox("##angle", &decideAngle);
+			ImGui::SameLine();
+			if (!decideAngle)ImGui::BeginDisabled();
+			ImGui::DragFloat("angle", &angle, 1.0f, -180.0f, 180.0f);
+			if (!decideAngle)ImGui::EndDisabled();
 
-		ImGui::Checkbox("##angle", &decideAngle);
-		ImGui::SameLine();
-		if (!decideAngle)ImGui::BeginDisabled();
-		ImGui::DragFloat("angle", &angle, 1.0f, -180.0f, 180.0f);
-		if (!decideAngle)ImGui::EndDisabled();
-
-		ImGui::Checkbox("##offset", &decideOffset);
-		ImGui::SameLine();
-		if (!decideOffset)ImGui::BeginDisabled();
-		ImGui::InputFloat2("offset", offset.data());
-		if (!decideOffset)ImGui::EndDisabled();
-
-		if (create)
-		{
-			if (decideDiameter && decideHeight)
-				CreateCapsuleShape(diameter, height, decideAngle ? angle : 0.0f, decideOffset ? offset : Vector2(0.0f, 0.0f), sensor);
-			else if (decideHeight)
-				CreateCapsuleShape(height, decideOffset ? offset : Vector2(0.0f, 0.0f), decideAngle ? angle : 0.0f, sensor);
-			else
-				CreateCapsuleShape(decideOffset ? offset : Vector2(0.0f, 0.0f), decideAngle ? angle : 0.0f, sensor);
-		}
-	}
-		break;
-	case SEGMENT:
-	case POLYGON :
-	case CHAIN:
-	{
-		static std::vector<Vector2> pointList = 
-		{
-			{-100.0f,100.0f},{100.0f,100.0f},{100.0f,-100.0f},{-100.0f,-100.0f},
-		};
-
-		int pointNum = (int)pointList.size();
-
-		static int selectIndex = -1;
-		if (editVertex)
-		{
-			Vector2 worldPos = Input::Get().MousePoint();
-			worldPos.x = worldPos.x * DISPALY_ASPECT_WIDTH / RenderManager::renderZoom.x + RenderManager::renderOffset.x;
-			worldPos.y = worldPos.y * DISPALY_ASPECT_HEIGHT / RenderManager::renderZoom.y + RenderManager::renderOffset.y;
-
-			if (selectIndex < 0)
-			{
-				if (Input::Get().MouseLeftTrigger())
-				{
-					for (int i = 0; i < pointNum; i++)
-					{
-						const Vector2& pos = pointList[i] + m_this->transform.position;
-						Vector2 scale = { HALF_OBJECT_SIZE,HALF_OBJECT_SIZE };
-						scale.x /= RenderManager::renderZoom.x;
-						scale.y /= RenderManager::renderZoom.y;
-						if ((pos.x - scale.x) < worldPos.x &&
-							(pos.x + scale.x) > worldPos.x &&
-							(pos.y - scale.y) < worldPos.y &&
-							(pos.y + scale.y) > worldPos.y)
-						{
-							selectIndex = i;
-							break;
-						}
-					}
-				}
-			}
-			else
-			{
-				pointList[selectIndex] = worldPos - m_this->transform.position;
-
-				if (Input::Get().MouseLeftRelease())
-				{
-					selectIndex = -1;
-				}
-			}
-		}
-
-		if (ImGui::Checkbox("EditLock##vertex", &editVertex))
-		{
-			_handle.LockHandle(editVertex, "editVertex");
-		}
-		if (editVertex)
-		{
 			if (create)
 			{
-				std::vector<b2Vec2> points;
-				for (auto& point : pointList)
-				{
-					points.emplace_back(
-						point.x, point.y
-					);
-				}
-				switch (selectType)
-				{
-				case SEGMENT:
-					CreateSegment(points, sensor);
-					break;
-				case POLYGON:
-					CreatePolygonShape(points, sensor);
-					break;
-				case CHAIN:
-					CreateChain(points);
-					break;
-				}
+				if (decideSize) CreateBoxShape(size, decideOffset ? offset : Vector2(0.0f, 0.0f), decideAngle ? angle : 0.0f, sensor);
+				else CreateBoxShape(decideOffset ? offset : Vector2(0.0f, 0.0f), decideAngle ? angle : 0.0f, sensor);
 			}
+			break;
+		}
+		case CIRCLE:
+		{
+			static float diameter = 1.0f;
+			static Vector2 offset = { 0.0f,0.0f };
+			static bool decideDiameter = false;
+			static bool decideOffset = false;
 
-			if (ImGui::Button("+AddVertex"))
-			{
-				pointList.emplace_back(0.0f, 0.0f);
-			}
+			ImGui::Checkbox("sensor", &sensor);
+			ImGui::Checkbox("##diameter", &decideDiameter);
 			ImGui::SameLine();
-			if (ImGui::Button("-Reset"))
-			{
-				pointList.clear();
-				pointList.resize(4);
-				pointList = { { -100.0f,100.0f }, { 100.0f,100.0f }, { 100.0f,-100.0f }, { -100.0f,-100.0f } };
-			}
+			if (!decideDiameter)ImGui::BeginDisabled();
+			ImGui::InputFloat("diameter", &diameter);
+			if (!decideDiameter)ImGui::EndDisabled();
+
+			ImGui::Checkbox("##offset", &decideOffset);
 			ImGui::SameLine();
-			if (ImGui::Button("=Load"))
+			if (!decideOffset)ImGui::BeginDisabled();
+			ImGui::InputFloat2("offset", offset.data());
+			if (!decideOffset)ImGui::EndDisabled();
+
+			if (create)
 			{
-				pointList.clear();
-				for (auto& shape : m_shapeList)
+				if (decideDiameter)CreateCircleShape(diameter, decideOffset ? offset : Vector2(0.0f, 0.0f), sensor);
+				else CreateCircleShape(decideOffset ? offset : Vector2(0.0f, 0.0f), sensor);
+			}
+		}
+		break;
+		case CAPSULE:
+		{
+			static float diameter = 1.0f;
+			static float height = 1.0f;
+			static float angle = 0.0f;
+			static Vector2 offset = { 0.0f,0.0f };
+			static bool decideDiameter = false;
+			static bool decideHeight = false;
+			static bool decideAngle = false;
+			static bool decideOffset = false;
+
+			ImGui::Checkbox("sensor", &sensor);
+			ImGui::Checkbox("##diameter", &decideDiameter);
+			ImGui::SameLine();
+			if (!decideDiameter)ImGui::BeginDisabled();
+			ImGui::InputFloat("diameter", &diameter);
+			if (!decideDiameter)ImGui::EndDisabled();
+
+			ImGui::Checkbox("##height", &decideHeight);
+			ImGui::SameLine();
+			if (!decideHeight)ImGui::BeginDisabled();
+			ImGui::DragFloat("height", &height, 0.1f, 0.0f, 100.0f);
+			if (!decideHeight)ImGui::EndDisabled();
+
+			ImGui::Checkbox("##angle", &decideAngle);
+			ImGui::SameLine();
+			if (!decideAngle)ImGui::BeginDisabled();
+			ImGui::DragFloat("angle", &angle, 1.0f, -180.0f, 180.0f);
+			if (!decideAngle)ImGui::EndDisabled();
+
+			ImGui::Checkbox("##offset", &decideOffset);
+			ImGui::SameLine();
+			if (!decideOffset)ImGui::BeginDisabled();
+			ImGui::InputFloat2("offset", offset.data());
+			if (!decideOffset)ImGui::EndDisabled();
+
+			if (create)
+			{
+				if (decideDiameter && decideHeight)
+					CreateCapsuleShape(diameter, height, decideAngle ? angle : 0.0f, decideOffset ? offset : Vector2(0.0f, 0.0f), sensor);
+				else if (decideHeight)
+					CreateCapsuleShape(height, decideOffset ? offset : Vector2(0.0f, 0.0f), decideAngle ? angle : 0.0f, sensor);
+				else
+					CreateCapsuleShape(decideOffset ? offset : Vector2(0.0f, 0.0f), decideAngle ? angle : 0.0f, sensor);
+			}
+		}
+		break;
+		case SEGMENT:
+		case POLYGON:
+		case CHAIN:
+		{
+			static std::vector<Vector2> pointList =
+			{
+				{-100.0f,100.0f},{100.0f,100.0f},{100.0f,-100.0f},{-100.0f,-100.0f},
+			};
+
+			int pointNum = (int)pointList.size();
+
+			static int selectIndex = -1;
+			if (editVertex)
+			{
+				Vector2 worldPos = Input::Get().MousePoint();
+				worldPos.x = worldPos.x * DISPALY_ASPECT_WIDTH / RenderManager::renderZoom.x + RenderManager::renderOffset.x;
+				worldPos.y = worldPos.y * DISPALY_ASPECT_HEIGHT / RenderManager::renderZoom.y + RenderManager::renderOffset.y;
+
+				if (selectIndex < 0)
 				{
-					b2ShapeType type = b2Shape_GetType(shape);
-					switch (type)
+					if (Input::Get().MouseLeftTrigger())
 					{
-						/// A circle with an offset
-					case b2_circleShape:
-					{
-						auto circle = b2Shape_GetCircle(shape);
-						pointList.emplace_back(circle.center.x * DEFAULT_OBJECT_SIZE,
-							circle.center.y * DEFAULT_OBJECT_SIZE);
-						break;
-					}
-					/// A capsule is an extruded circle
-					case b2_capsuleShape:
-					{
-						auto capsule = b2Shape_GetCapsule(shape);
-						pointList.emplace_back(capsule.center1.x * DEFAULT_OBJECT_SIZE,
-							capsule.center1.y * DEFAULT_OBJECT_SIZE);
-						break;
-					}
-					/// A line segment
-					case b2_segmentShape:
-					{
-						auto segment = b2Shape_GetSegment(shape);
-						pointList.emplace_back(segment.point1.x * DEFAULT_OBJECT_SIZE,
-							segment.point1.y * DEFAULT_OBJECT_SIZE);
-						break;
-					}
-					/// A convex polygon
-					case b2_polygonShape:
-					{
-						auto polygon = b2Shape_GetPolygon(shape);
-						for (int i = 0; i < polygon.count; i++)
+						for (int i = 0; i < pointNum; i++)
 						{
-							pointList.emplace_back(
-								polygon.vertices[i].x * DEFAULT_OBJECT_SIZE,
-								polygon.vertices[i].y * DEFAULT_OBJECT_SIZE
-							);
+							const Vector2& pos = pointList[i] + m_this->transform.position;
+							Vector2 scale = { HALF_OBJECT_SIZE,HALF_OBJECT_SIZE };
+							scale.x /= RenderManager::renderZoom.x;
+							scale.y /= RenderManager::renderZoom.y;
+							if ((pos.x - scale.x) < worldPos.x &&
+								(pos.x + scale.x) > worldPos.x &&
+								(pos.y - scale.y) < worldPos.y &&
+								(pos.y + scale.y) > worldPos.y)
+							{
+								selectIndex = i;
+								break;
+							}
 						}
-						break;
-					}
-					/// A line segment owned by a chain shape
-
-					case b2_chainSegmentShape:
-					{
-						auto chainSegment = b2Shape_GetChainSegment(shape);
-						pointList.emplace_back(chainSegment.segment.point1.x * DEFAULT_OBJECT_SIZE,
-							chainSegment.segment.point1.y * DEFAULT_OBJECT_SIZE);
-
-						break;
-					}
 					}
 				}
-				while (pointList.size() < 4)
+				else
+				{
+					pointList[selectIndex] = worldPos - m_this->transform.position;
+
+					if (Input::Get().MouseLeftRelease())
+					{
+						selectIndex = -1;
+					}
+				}
+			}
+
+			if (ImGui::Checkbox("EditLock##vertex", &editVertex))
+			{
+				_handle.LockHandle(editVertex, "editVertex");
+			}
+			if (editVertex)
+			{
+				if (create)
+				{
+					std::vector<b2Vec2> points;
+					for (auto& point : pointList)
+					{
+						points.emplace_back(
+							point.x, point.y
+						);
+					}
+					switch (selectType)
+					{
+					case SEGMENT:
+						CreateSegment(points, sensor);
+						break;
+					case POLYGON:
+						CreatePolygonShape(points, sensor);
+						break;
+					case CHAIN:
+						CreateChain(points);
+						break;
+					}
+				}
+
+				if (ImGui::Button("+AddVertex"))
 				{
 					pointList.emplace_back(0.0f, 0.0f);
 				}
-			}
-
-			ImGui::SeparatorText("Vertices");
-
-			ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
-			if (ImGui::BeginChild("ListChild", ImVec2(0, 70), ImGuiChildFlags_Borders))
-			{
-				int count = 0;
-				for (auto iter = pointList.begin(); iter != pointList.end();)
+				ImGui::SameLine();
+				if (ImGui::Button("-Reset"))
 				{
-					count++;
-
-					ImGui::BulletText("%d", count);
-					ImGui::SameLine();
-
-					ImGui::PushID(count);
-					if (pointNum > 4)
+					pointList.clear();
+					pointList.resize(4);
+					pointList = { { -100.0f,100.0f }, { 100.0f,100.0f }, { 100.0f,-100.0f }, { -100.0f,-100.0f } };
+				}
+				ImGui::SameLine();
+				if (ImGui::Button("=Load"))
+				{
+					pointList.clear();
+					for (auto& shape : m_shapeList)
 					{
-						if (ImGui::Button("-##erase"))
+						b2ShapeType type = b2Shape_GetType(shape);
+						switch (type)
 						{
-							iter = pointList.erase(iter);
+							/// A circle with an offset
+						case b2_circleShape:
+						{
+							auto circle = b2Shape_GetCircle(shape);
+							pointList.emplace_back(circle.center.x * DEFAULT_OBJECT_SIZE,
+								circle.center.y * DEFAULT_OBJECT_SIZE);
+							break;
+						}
+						/// A capsule is an extruded circle
+						case b2_capsuleShape:
+						{
+							auto capsule = b2Shape_GetCapsule(shape);
+							pointList.emplace_back(capsule.center1.x * DEFAULT_OBJECT_SIZE,
+								capsule.center1.y * DEFAULT_OBJECT_SIZE);
+							break;
+						}
+						/// A line segment
+						case b2_segmentShape:
+						{
+							auto segment = b2Shape_GetSegment(shape);
+							pointList.emplace_back(segment.point1.x * DEFAULT_OBJECT_SIZE,
+								segment.point1.y * DEFAULT_OBJECT_SIZE);
+							break;
+						}
+						/// A convex polygon
+						case b2_polygonShape:
+						{
+							auto polygon = b2Shape_GetPolygon(shape);
+							for (int i = 0; i < polygon.count; i++)
+							{
+								pointList.emplace_back(
+									polygon.vertices[i].x * DEFAULT_OBJECT_SIZE,
+									polygon.vertices[i].y * DEFAULT_OBJECT_SIZE
+								);
+							}
+							break;
+						}
+						/// A line segment owned by a chain shape
+
+						case b2_chainSegmentShape:
+						{
+							auto chainSegment = b2Shape_GetChainSegment(shape);
+							pointList.emplace_back(chainSegment.segment.point1.x * DEFAULT_OBJECT_SIZE,
+								chainSegment.segment.point1.y * DEFAULT_OBJECT_SIZE);
+
+							break;
+						}
+						}
+					}
+					while (pointList.size() < 4)
+					{
+						pointList.emplace_back(0.0f, 0.0f);
+					}
+				}
+
+				ImGui::SeparatorText("Vertices");
+
+				ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
+				if (ImGui::BeginChild("ListChild", ImVec2(280, 100), ImGuiChildFlags_Borders))
+				{
+					int count = 0;
+					for (auto iter = pointList.begin(); iter != pointList.end();)
+					{
+						count++;
+
+						ImGui::BulletText("%d", count);
+						ImGui::SameLine();
+
+						ImGui::PushID(count);
+						if (pointNum > 4)
+						{
+							if (ImGui::Button("-##erase"))
+							{
+								iter = pointList.erase(iter);
+								ImGui::PopID();
+								continue;
+							}
+							ImGui::SameLine();
+						}
+						ImGui::DragFloat2("##pos", iter->data());
+						ImGui::SameLine();
+						if (ImGui::Button("+##add"))
+						{
+							Vector2 addPos = *iter;
+							addPos.Normalize();
+							iter = pointList.insert(iter + 1, addPos);
 							ImGui::PopID();
 							continue;
 						}
-						ImGui::SameLine();
-					}
-					ImGui::DragFloat2("##pos", iter->data());
-					ImGui::SameLine();
-					if (ImGui::Button("+##add"))
-					{
-						Vector2 addPos = *iter;
-						addPos.Normalize();
-						iter = pointList.insert(iter + 1, addPos);
+
 						ImGui::PopID();
-						continue;
+
+						iter++;
 					}
 
-					ImGui::PopID();
-
-					iter++;
+					ImGui::EndChild();
 				}
+				ImGui::PopStyleVar();
 
-				ImGui::EndChild();
+				pointNum = (int)pointList.size();
+				const float colorSeg = 1.0f / pointNum;
+				for (int i = 0; i < pointNum; i++)
+				{
+					int nextIndex = (i + 1) % pointNum;
+					auto& start = pointList[i];
+					auto& end = pointList[nextIndex];
+					RenderManager::DrawRayNode rayNode;
+					Vector2 dis = end - start;
+					rayNode.center = start + dis / 2 + m_this->transform.position;
+					rayNode.length = sqrt(dis.x * dis.x + dis.y * dis.y);
+					rayNode.radian = Math::PointRadian(start.x, start.y, end.x, end.y);
+					rayNode.color = XMFLOAT4(0.6f, 1.0f, 0.6f, 1.0f);
+
+					RenderManager::m_drawRayNode.push_back(std::move(rayNode));
+
+					RenderManager::DrawBoxNode boxNode;
+					boxNode.center = pointList[i] + m_this->transform.position;
+					boxNode.size = { 1.0f / RenderManager::renderZoom.x,1.0f / RenderManager::renderZoom.y };
+					if (selectIndex == i)
+						boxNode.color = XMFLOAT4(1.0f, colorSeg * i, 1.0f, 1.0f);
+					else
+						boxNode.color = XMFLOAT4(0.6f, colorSeg * i, 0.6f, 1.0f);
+
+					RenderManager::m_drawBoxNode.push_back(std::move(boxNode));
+				}
 			}
-			ImGui::PopStyleVar();
-
-			pointNum = (int)pointList.size();
-			const float colorSeg = 1.0f / pointNum;
-			for (int i = 0; i < pointNum; i++)
-			{
-				int nextIndex = (i + 1) % pointNum;
-				auto& start = pointList[i];
-				auto& end = pointList[nextIndex];
-				RenderManager::DrawRayNode rayNode;
-				Vector2 dis = end - start;
-				rayNode.center = start + dis / 2 + m_this->transform.position;
-				rayNode.length = sqrt(dis.x * dis.x + dis.y * dis.y);
-				rayNode.radian = Math::PointRadian(start.x, start.y, end.x, end.y);
-				rayNode.color = XMFLOAT4(0.6f, 1.0f, 0.6f, 1.0f);
-
-				RenderManager::m_drawRayNode.push_back(std::move(rayNode));
-
-				RenderManager::DrawBoxNode boxNode;
-				boxNode.center = pointList[i] + m_this->transform.position;
-				boxNode.size = { 1.0f / RenderManager::renderZoom.x,1.0f / RenderManager::renderZoom.y };
-				if (selectIndex == i)
-					boxNode.color = XMFLOAT4(1.0f, colorSeg * i, 1.0f, 1.0f);
-				else
-					boxNode.color = XMFLOAT4(0.6f, colorSeg * i, 0.6f, 1.0f);
-
-				RenderManager::m_drawBoxNode.push_back(std::move(boxNode));
-			}
+			break;
 		}
-		break;
+		}
+		ImGui::EndChild();
 	}
-	}
-	ImGui::EndChild();
 
 	ImGui::EndGroup();
-
 	if (!m_shapeList.empty())
 	{
 		if (ImGui::TreeNode("ShapeList"))
 		{
+			ImGui::BeginChild("ShapeListChild", ImVec2(0, 200));
 			int count = 0;
 			//ImGui::BeginDisabled(true); // Disable interaction
 			//for (auto& shape : m_shapeList)
@@ -1010,6 +1011,7 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 				count++;
 			}
 			
+			ImGui::EndChild();
 			//ImGui::EndDisabled(); // Re-enable interaction
 			ImGui::TreePop();
 		}

@@ -729,8 +729,8 @@ void ImGuiApp::DrawOptionGui()
 							if (dragged_index != i) {
 								// Move the dragged item to the target index
 								std::swap(objectList->first[i], objectList->first[dragged_index]);
-								objectList->second[objectList->first[i]->name] = dragged_index;
-								objectList->second[objectList->first[dragged_index]->name] = i;
+								objectList->second[objectList->first[i]->name] = i;
+								objectList->second[objectList->first[dragged_index]->name] = dragged_index;
 							}
 						}
 						ImGui::EndDragDropTarget();
