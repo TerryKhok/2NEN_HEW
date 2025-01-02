@@ -2,12 +2,10 @@
 std::unordered_map<FILTER, unsigned int> Box2DBodyManager::m_layerFilterBit;
 
 //shapeIdに対応したオブジェクトの名前を格納
-std::unordered_map<int32_t, std::string> Box2DBodyManager::m_bodyObjectName;
+std::unordered_map<int32_t, const std::string&> Box2DBodyManager::m_bodyObjectName;
 
 #ifdef DEBUG_TRUE
 const int Box2DBodyManager::numSegments = 36;
-//box用インデックス
-ComPtr<ID3D11Buffer> Box2DBodyManager::m_boxIndexBuffer;
 //Circle用頂点データ
 ComPtr<ID3D11Buffer> Box2DBodyManager::m_circleVertexBuffer;
 //Circle用インデックス
@@ -34,7 +32,7 @@ Box2DBody::Box2DBody(GameObject* _object)
 	Box2D::WorldManager::pResumeWorldUpdate();
 #endif
 
-	Box2DBodyManager::m_bodyObjectName.insert(std::pair(m_bodyId.index1, _object->GetName()));
+	Box2DBodyManager::m_bodyObjectName.emplace(m_bodyId.index1, _object->GetName());
 }
 
 Box2DBody::Box2DBody(GameObject* _object, b2BodyDef* _bodyDef)
@@ -51,7 +49,7 @@ Box2DBody::Box2DBody(GameObject* _object, b2BodyDef* _bodyDef)
 	Box2D::WorldManager::pResumeWorldUpdate();
 #endif
 
-	Box2DBodyManager::m_bodyObjectName.insert(std::pair(m_bodyId.index1, _object->GetName()));
+	Box2DBodyManager::m_bodyObjectName.emplace(m_bodyId.index1, _object->GetName());
 }
 
 Box2DBody::Box2DBody(GameObject* _object, SERIALIZE_INPUT& ar)
@@ -83,7 +81,7 @@ Box2DBody::Box2DBody(GameObject* _object, SERIALIZE_INPUT& ar)
 	Box2D::WorldManager::pResumeWorldUpdate();
 #endif
 
-	Box2DBodyManager::m_bodyObjectName.insert(std::pair(m_bodyId.index1, _object->GetName()));
+	Box2DBodyManager::m_bodyObjectName.emplace(m_bodyId.index1, _object->GetName());
 
 	std::unordered_map<int32_t, std::pair<std::vector<b2Vec2>,std::vector<ShapeSaveData>>> chainVertex;
 	for (auto& type : types)
@@ -114,6 +112,15 @@ Box2DBody::Box2DBody(GameObject* _object, SERIALIZE_INPUT& ar)
 			Box2D::WorldManager::pResumeWorldUpdate();
 #endif
 			m_shapeList.push_back(shape);
+
+#ifdef DEBUG_TRUE
+			Vector2 offset = { circle.center.x * DEFAULT_OBJECT_SIZE,circle.center.y * DEFAULT_OBJECT_SIZE };
+			float diameter = circle.radius * 2;
+			auto node = std::shared_ptr<RenderNode>(new Box2DCircleRenderNode(offset, diameter, m_bodyId));
+			node->m_object = _object;
+			m_nodeList.push_back((node));
+			RenderManager::AddRenderList(node, LAYER::LAYER_BOX2D_DEBUG);
+#endif
 			break;
 		}
 		case b2_capsuleShape:
@@ -130,6 +137,22 @@ Box2DBody::Box2DBody(GameObject* _object, SERIALIZE_INPUT& ar)
 			Box2D::WorldManager::pResumeWorldUpdate();
 #endif
 			m_shapeList.push_back(shape);
+
+#ifdef DEBUG_TRUE
+			auto& p1 = capsule.center1;
+			auto& p2 = capsule.center2;
+			b2Vec2 center = p1 + p2;
+			Vector2 offset = {center.x * HALF_OBJECT_SIZE,center.y * HALF_OBJECT_SIZE };
+			float diameter = capsule.radius * 2;
+			float height = Math::PointDistance(p1.x, p1.y, p2.x, p2.y);
+			float rad = Math::PointRadian(p1.x, p1.y, p2.x, p2.y) - Math::hPI;
+			auto node = std::shared_ptr<RenderNode>(
+				new Box2DCapsuleRenderNode(offset, diameter, height * HALF_OBJECT_SIZE, height, rad, m_bodyId));
+			node->m_object = _object;
+			m_nodeList.push_back((node));
+			RenderManager::AddRenderList(node, LAYER::LAYER_BOX2D_DEBUG);
+#endif
+
 			break;
 		}
 		case b2_segmentShape:
@@ -146,6 +169,21 @@ Box2DBody::Box2DBody(GameObject* _object, SERIALIZE_INPUT& ar)
 			Box2D::WorldManager::pResumeWorldUpdate();
 #endif
 			m_shapeList.push_back(shape);
+
+#ifdef DEBUG_TRUE
+			Vector2 start = { segment.point1.x * DEFAULT_OBJECT_SIZE,segment.point1.y * DEFAULT_OBJECT_SIZE };
+			Vector2 end = { segment.point2.x * DEFAULT_OBJECT_SIZE,segment.point2.y * DEFAULT_OBJECT_SIZE };
+			Vector2 dis = end - start;
+			Vector2 center = start + dis / 2;
+			float length = sqrt(dis.x * dis.x + dis.y * dis.y);
+			float radian = Math::PointRadian(start.x, start.y, end.x, end.y);
+
+			auto node = std::shared_ptr<RenderNode>(
+				new Box2DLineRenderNode(length, radian, center, m_bodyId));
+			node->m_object = _object;
+			m_nodeList.push_back((node));
+			RenderManager::AddRenderList(node, LAYER::LAYER_BOX2D_DEBUG);
+#endif
 			break;
 		}
 		case b2_polygonShape:
@@ -162,6 +200,49 @@ Box2DBody::Box2DBody(GameObject* _object, SERIALIZE_INPUT& ar)
 			Box2D::WorldManager::pResumeWorldUpdate();
 #endif
 			m_shapeList.push_back(shape);
+
+#ifdef DEBUG_TRUE
+			bool box = false;
+			auto& vertex = polygon.vertices;
+			if (polygon.count == 4)
+			{
+				if (vertex[0].x == vertex[3].x &&
+					vertex[0].y == vertex[1].y &&
+					vertex[1].x == vertex[2].x &&
+					vertex[2].y == vertex[3].y)
+					box = true;
+			}
+
+			if (box)
+			{
+				Vector2 offset = { polygon.centroid.x * DEFAULT_OBJECT_SIZE,polygon.centroid.y * DEFAULT_OBJECT_SIZE };
+				Vector2 size = { vertex[2].x - vertex[3].x,vertex[2].y - vertex[1].y};
+				auto& p1 = vertex[0];
+				auto& p2 = vertex[1];
+				float rad = Math::PointRadian(p1.x, p1.y, p2.x, p2.y);
+				auto node = std::shared_ptr<RenderNode>(
+					new Box2DBoxRenderNode(offset, size, rad, m_bodyId));
+				node->m_object = _object;
+				m_nodeList.push_back((node));
+				RenderManager::AddRenderList(node, LAYER::LAYER_BOX2D_DEBUG);
+			}
+			else
+			{
+				std::vector<b2Vec2> pointList;
+				pointList.resize(polygon.count);
+				for (int i = 0; i < polygon.count; i++)
+				{
+					pointList.push_back(
+						{ polygon.vertices[i].x * DEFAULT_OBJECT_SIZE,polygon.vertices[i].y * DEFAULT_OBJECT_SIZE });
+				}
+				//Polygon用の描画ノードの生成
+				auto node = std::shared_ptr<RenderNode>(
+					new Box2DConvexMeshRenderNode(pointList, m_bodyId));
+				node->m_object = _object;
+				m_nodeList.push_back((node));
+				RenderManager::AddRenderList(node, LAYER::LAYER_BOX2D_DEBUG);
+			}
+#endif
 			break;
 		}
 		case b2_chainSegmentShape:
@@ -177,6 +258,22 @@ Box2DBody::Box2DBody(GameObject* _object, SERIALIZE_INPUT& ar)
 			iter->second.first.push_back(chainSegment.segment.point1);
 			iter->second.second.push_back(shapeData);
 
+#ifdef DEBUG_TRUE
+			Vector2 start = { chainSegment.segment.point1.x * DEFAULT_OBJECT_SIZE,
+				chainSegment.segment.point1.y * DEFAULT_OBJECT_SIZE };
+			Vector2 end = { chainSegment.segment.point2.x * DEFAULT_OBJECT_SIZE,
+				chainSegment.segment.point2.y * DEFAULT_OBJECT_SIZE };
+			Vector2 dis = end - start;
+			Vector2 center = start + dis / 2;
+			float length = sqrt(dis.x * dis.x + dis.y * dis.y);
+			float radian = Math::PointRadian(start.x, start.y, end.x, end.y);
+
+			auto node = std::shared_ptr<RenderNode>(
+				new Box2DLineRenderNode(length, radian, center, m_bodyId));
+			node->m_object = _object;
+			m_nodeList.push_back((node));
+			RenderManager::AddRenderList(node, LAYER::LAYER_BOX2D_DEBUG);
+#endif
 			break;
 		}
 		default:
@@ -220,7 +317,7 @@ Box2DBody::Box2DBody(GameObject* _object, SERIALIZE_INPUT& ar)
 
 #ifdef RELEASE_SERIALIZE_VIEW_HITBOX
 	ar(CEREAL_NVP(renderData));
-#endif
+
 
 #ifdef DEBUG_TRUE
 	for (auto& data : renderData)
@@ -231,6 +328,9 @@ Box2DBody::Box2DBody(GameObject* _object, SERIALIZE_INPUT& ar)
 		RenderManager::AddRenderList(node, LAYER::LAYER_BOX2D_DEBUG);
 	}
 #endif
+
+#endif
+
 }
 
 inline void Box2DBody::Update()
@@ -409,9 +509,9 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 		{
 			FILTER filter = (FILTER)pow(2, i);
 			bool same = filter == m_filter;
-			if (ImGui::Selectable(magic_enum::enum_name(filter).data(), same))
+			if (ImGui::Selectable(magic_enum::enum_name(filter).data(), &same))
 			{
-				if (!same)SetFilter(filter);
+				SetFilter(filter);
 			}
 		}
 		ImGui::EndPopup();
@@ -423,6 +523,12 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 	if (ImGui::InputFloat2("Velocity", velocity))
 	{
 		b2Body_SetLinearVelocity(m_bodyId, { velocity[0],velocity[1] });
+	}
+
+	float angulerVelocity = b2Body_GetAngularVelocity(m_bodyId);
+	if (ImGui::InputFloat("AnglerVelocity", &angulerVelocity))
+	{
+		b2Body_SetAngularVelocity(m_bodyId, angulerVelocity);
 	}
 	
 	auto massData = b2Body_GetMassData(m_bodyId);
@@ -480,13 +586,36 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 	}
 
 	ImGui::SameLine();
-	ImGui::BeginChild("parameter", ImVec2(IMGUI_WINDOW_WIDTH - 100, 110));
+
+	ImGui::BeginGroup();
 
 	bool create = false;
+	static bool editVertex = false;
+
 	if (ImGui::Button("Create"))create = true;
 
+	ImGui::SameLine();
+	if (ImGui::Button("Swap"))
+	{
+		if (selectType < SEGMENT || editVertex)
+		{
+			for (auto& node : m_nodeList)
+			{
+				node->Delete(LAYER_BOX2D_DEBUG);
+			}
+			m_nodeList.clear();
+			for (auto& shape : m_shapeList)
+			{
+				b2DestroyShape(shape);
+			}
+			m_shapeList.clear();
+			create = true;
+		}
+	}
+
+	ImGui::BeginChild("parameter", ImVec2(IMGUI_WINDOW_WIDTH - 100, 110));
+
 	static bool sensor = false;
-	ImGui::Checkbox("sensor", &sensor);
 	switch (selectType)
 	{
 	case BOX:
@@ -497,6 +626,7 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 		static bool decideSize = false;
 		static bool decideOffset = false;
 		static bool decideAngle = false;
+		ImGui::Checkbox("sensor", &sensor);
 		ImGui::Checkbox("##size", &decideSize);
 		ImGui::SameLine();
 		if (!decideSize)ImGui::BeginDisabled();
@@ -517,8 +647,8 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 
 		if (create)
 		{
-			if (decideSize) CreateBoxShape(size, decideOffset ? offset : Vector2(0.0f, 0.0f), decideAngle ? angle : 0.0f);
-			else CreateBoxShape(decideOffset ? offset : Vector2(0.0f, 0.0f), decideAngle ? angle : 0.0f);
+			if (decideSize) CreateBoxShape(size, decideOffset ? offset : Vector2(0.0f, 0.0f), decideAngle ? angle : 0.0f, sensor);
+			else CreateBoxShape(decideOffset ? offset : Vector2(0.0f, 0.0f), decideAngle ? angle : 0.0f, sensor);
 		}
 		break;
 	}
@@ -529,6 +659,7 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 		static bool decideDiameter = false;
 		static bool decideOffset = false;
 
+		ImGui::Checkbox("sensor", &sensor);
 		ImGui::Checkbox("##diameter", &decideDiameter);
 		ImGui::SameLine();
 		if (!decideDiameter)ImGui::BeginDisabled();
@@ -543,8 +674,8 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 
 		if (create)
 		{
-			if (decideDiameter)CreateCircleShape(diameter, decideOffset ? offset : Vector2(0.0f, 0.0f));
-			else CreateCircleShape(decideOffset ? offset : Vector2(0.0f, 0.0f));
+			if (decideDiameter)CreateCircleShape(diameter, decideOffset ? offset : Vector2(0.0f, 0.0f), sensor);
+			else CreateCircleShape(decideOffset ? offset : Vector2(0.0f, 0.0f), sensor);
 		}
 	}
 		break;
@@ -559,6 +690,7 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 		static bool decideAngle = false;
 		static bool decideOffset = false;
 
+		ImGui::Checkbox("sensor", &sensor);
 		ImGui::Checkbox("##diameter", &decideDiameter);
 		ImGui::SameLine();
 		if (!decideDiameter)ImGui::BeginDisabled();
@@ -586,22 +718,245 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 		if (create)
 		{
 			if (decideDiameter && decideHeight)
-				CreateCapsuleShape(diameter, height, decideAngle ? angle : 0.0f, decideOffset ? offset : Vector2(0.0f, 0.0f));
+				CreateCapsuleShape(diameter, height, decideAngle ? angle : 0.0f, decideOffset ? offset : Vector2(0.0f, 0.0f), sensor);
 			else if (decideHeight)
-				CreateCapsuleShape(height, decideOffset ? offset : Vector2(0.0f, 0.0f), decideAngle ? angle : 0.0f);
+				CreateCapsuleShape(height, decideOffset ? offset : Vector2(0.0f, 0.0f), decideAngle ? angle : 0.0f, sensor);
 			else
-				CreateCapsuleShape(decideOffset ? offset : Vector2(0.0f, 0.0f), decideAngle ? angle : 0.0f);
+				CreateCapsuleShape(decideOffset ? offset : Vector2(0.0f, 0.0f), decideAngle ? angle : 0.0f, sensor);
 		}
 	}
 		break;
 	case SEGMENT:
-		break;
 	case POLYGON :
-		break;
 	case CHAIN:
+	{
+		static std::vector<Vector2> pointList = 
+		{
+			{-100.0f,100.0f},{100.0f,100.0f},{100.0f,-100.0f},{-100.0f,-100.0f},
+		};
+
+		int pointNum = (int)pointList.size();
+
+		static int selectIndex = -1;
+		if (editVertex)
+		{
+			Vector2 worldPos = Input::Get().MousePoint();
+			worldPos.x = worldPos.x * DISPALY_ASPECT_WIDTH / RenderManager::renderZoom.x + RenderManager::renderOffset.x;
+			worldPos.y = worldPos.y * DISPALY_ASPECT_HEIGHT / RenderManager::renderZoom.y + RenderManager::renderOffset.y;
+
+			if (selectIndex < 0)
+			{
+				if (Input::Get().MouseLeftTrigger())
+				{
+					for (int i = 0; i < pointNum; i++)
+					{
+						const Vector2& pos = pointList[i] + m_this->transform.position;
+						Vector2 scale = { HALF_OBJECT_SIZE,HALF_OBJECT_SIZE };
+						scale.x /= RenderManager::renderZoom.x;
+						scale.y /= RenderManager::renderZoom.y;
+						if ((pos.x - scale.x) < worldPos.x &&
+							(pos.x + scale.x) > worldPos.x &&
+							(pos.y - scale.y) < worldPos.y &&
+							(pos.y + scale.y) > worldPos.y)
+						{
+							selectIndex = i;
+							break;
+						}
+					}
+				}
+			}
+			else
+			{
+				pointList[selectIndex] = worldPos - m_this->transform.position;
+
+				if (Input::Get().MouseLeftRelease())
+				{
+					selectIndex = -1;
+				}
+			}
+		}
+
+		if (ImGui::Checkbox("EditLock##vertex", &editVertex))
+		{
+			_handle.LockHandle(editVertex, "editVertex");
+		}
+		if (editVertex)
+		{
+			if (create)
+			{
+				std::vector<b2Vec2> points;
+				for (auto& point : pointList)
+				{
+					points.emplace_back(
+						point.x, point.y
+					);
+				}
+				switch (selectType)
+				{
+				case SEGMENT:
+					CreateSegment(points, sensor);
+					break;
+				case POLYGON:
+					CreatePolygonShape(points, sensor);
+					break;
+				case CHAIN:
+					CreateChain(points);
+					break;
+				}
+			}
+
+			if (ImGui::Button("+AddVertex"))
+			{
+				pointList.emplace_back(0.0f, 0.0f);
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("-Reset"))
+			{
+				pointList.clear();
+				pointList.resize(4);
+				pointList = { { -100.0f,100.0f }, { 100.0f,100.0f }, { 100.0f,-100.0f }, { -100.0f,-100.0f } };
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("=Load"))
+			{
+				pointList.clear();
+				for (auto& shape : m_shapeList)
+				{
+					b2ShapeType type = b2Shape_GetType(shape);
+					switch (type)
+					{
+						/// A circle with an offset
+					case b2_circleShape:
+					{
+						auto circle = b2Shape_GetCircle(shape);
+						pointList.emplace_back(circle.center.x * DEFAULT_OBJECT_SIZE,
+							circle.center.y * DEFAULT_OBJECT_SIZE);
+						break;
+					}
+					/// A capsule is an extruded circle
+					case b2_capsuleShape:
+					{
+						auto capsule = b2Shape_GetCapsule(shape);
+						pointList.emplace_back(capsule.center1.x * DEFAULT_OBJECT_SIZE,
+							capsule.center1.y * DEFAULT_OBJECT_SIZE);
+						break;
+					}
+					/// A line segment
+					case b2_segmentShape:
+					{
+						auto segment = b2Shape_GetSegment(shape);
+						pointList.emplace_back(segment.point1.x * DEFAULT_OBJECT_SIZE,
+							segment.point1.y * DEFAULT_OBJECT_SIZE);
+						break;
+					}
+					/// A convex polygon
+					case b2_polygonShape:
+					{
+						auto polygon = b2Shape_GetPolygon(shape);
+						for (int i = 0; i < polygon.count; i++)
+						{
+							pointList.emplace_back(
+								polygon.vertices[i].x * DEFAULT_OBJECT_SIZE,
+								polygon.vertices[i].y * DEFAULT_OBJECT_SIZE
+							);
+						}
+						break;
+					}
+					/// A line segment owned by a chain shape
+
+					case b2_chainSegmentShape:
+					{
+						auto chainSegment = b2Shape_GetChainSegment(shape);
+						pointList.emplace_back(chainSegment.segment.point1.x * DEFAULT_OBJECT_SIZE,
+							chainSegment.segment.point1.y * DEFAULT_OBJECT_SIZE);
+
+						break;
+					}
+					}
+				}
+				while (pointList.size() < 4)
+				{
+					pointList.emplace_back(0.0f, 0.0f);
+				}
+			}
+
+			ImGui::SeparatorText("Vertices");
+
+			ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
+			if (ImGui::BeginChild("ListChild", ImVec2(0, 70), ImGuiChildFlags_Borders))
+			{
+				int count = 0;
+				for (auto iter = pointList.begin(); iter != pointList.end();)
+				{
+					count++;
+
+					ImGui::BulletText("%d", count);
+					ImGui::SameLine();
+
+					ImGui::PushID(count);
+					if (pointNum > 4)
+					{
+						if (ImGui::Button("-##erase"))
+						{
+							iter = pointList.erase(iter);
+							ImGui::PopID();
+							continue;
+						}
+						ImGui::SameLine();
+					}
+					ImGui::DragFloat2("##pos", iter->data());
+					ImGui::SameLine();
+					if (ImGui::Button("+##add"))
+					{
+						Vector2 addPos = *iter;
+						addPos.Normalize();
+						iter = pointList.insert(iter + 1, addPos);
+						ImGui::PopID();
+						continue;
+					}
+
+					ImGui::PopID();
+
+					iter++;
+				}
+
+				ImGui::EndChild();
+			}
+			ImGui::PopStyleVar();
+
+			pointNum = (int)pointList.size();
+			const float colorSeg = 1.0f / pointNum;
+			for (int i = 0; i < pointNum; i++)
+			{
+				int nextIndex = (i + 1) % pointNum;
+				auto& start = pointList[i];
+				auto& end = pointList[nextIndex];
+				RenderManager::DrawRayNode rayNode;
+				Vector2 dis = end - start;
+				rayNode.center = start + dis / 2 + m_this->transform.position;
+				rayNode.length = sqrt(dis.x * dis.x + dis.y * dis.y);
+				rayNode.radian = Math::PointRadian(start.x, start.y, end.x, end.y);
+				rayNode.color = XMFLOAT4(0.6f, 1.0f, 0.6f, 1.0f);
+
+				RenderManager::m_drawRayNode.push_back(std::move(rayNode));
+
+				RenderManager::DrawBoxNode boxNode;
+				boxNode.center = pointList[i] + m_this->transform.position;
+				boxNode.size = { 1.0f / RenderManager::renderZoom.x,1.0f / RenderManager::renderZoom.y };
+				if (selectIndex == i)
+					boxNode.color = XMFLOAT4(1.0f, colorSeg * i, 1.0f, 1.0f);
+				else
+					boxNode.color = XMFLOAT4(0.6f, colorSeg * i, 0.6f, 1.0f);
+
+				RenderManager::m_drawBoxNode.push_back(std::move(boxNode));
+			}
+		}
 		break;
 	}
+	}
 	ImGui::EndChild();
+
+	ImGui::EndGroup();
 
 	if (!m_shapeList.empty())
 	{
@@ -738,27 +1093,28 @@ void Box2DBody::CreateBoxShape(Vector2 _size, Vector2 _offset, float _angle,bool
 	m_shapeList.push_back(shape);
 }
 
-void Box2DBody::CreateCircleShape()
+void Box2DBody::CreateCircleShape(bool _sensor)
 {
 	auto scale = m_this->transform.scale;
 	float diameter = (scale.x + scale.y) / 2;
-	CreateCircleShape(diameter);
+	CreateCircleShape(diameter, { 0.0f,0.0f }, _sensor);
 }
 
-void Box2DBody::CreateCircleShape(Vector2 _offset)
+void Box2DBody::CreateCircleShape(Vector2 _offset, bool _sensor)
 {
 	auto scale = m_this->transform.scale;
 	float diameter = (scale.x + scale.y) / 2;
-	CreateCircleShape(diameter, _offset);
+	CreateCircleShape(diameter, _offset,_sensor);
 }
 
-void Box2DBody::CreateCircleShape(float _diameter, Vector2 _offset)
+void Box2DBody::CreateCircleShape(float _diameter, Vector2 _offset, bool _sensor)
 {
 	//地面ポリゴンを作る。 b2MakeBox()ヘルパー関数を使い、地面ポリゴンを箱型にする。箱の中心は親ボディの原点である。
 	b2Circle circle = { {_offset.x / DEFAULT_OBJECT_SIZE,_offset.y / DEFAULT_OBJECT_SIZE},_diameter / 2 };
 
 	//シェイプを作成して地面のボディを仕上げる
 	b2ShapeDef shapeDef = b2DefaultShapeDef();
+	shapeDef.isSensor = _sensor;
 	shapeDef.filter.categoryBits = m_filter;
 	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskFilterBit(m_filter);
 
@@ -787,31 +1143,31 @@ void Box2DBody::CreateCircleShape(float _diameter, Vector2 _offset)
 	m_shapeList.push_back(shape);
 }
 
-void Box2DBody::CreateCapsuleShape()
+void Box2DBody::CreateCapsuleShape(bool _sensor)
 {
 	auto& transform = m_this->transform;
 	auto scale = transform.scale;
 	float diameter = (scale.x + scale.y) / 2;
-	CreateCapsuleShape(diameter, scale.y / 2);
+	CreateCapsuleShape(diameter, scale.y / 2, 0.0f, { 0.0f,0.0f }, _sensor);
 }
 
-void Box2DBody::CreateCapsuleShape(Vector2 _offset, float _angle)
+void Box2DBody::CreateCapsuleShape(Vector2 _offset, float _angle, bool _sensor)
 {
 	auto& transform = m_this->transform;
 	auto scale = transform.scale;
 	float diameter = (scale.x + scale.y) / 2;
-	CreateCapsuleShape(diameter, scale.y / 2,_angle, _offset);
+	CreateCapsuleShape(diameter, scale.y / 2,_angle, _offset, _sensor);
 }
 
-void Box2DBody::CreateCapsuleShape(float _height, Vector2 _offset, float _angle)
+void Box2DBody::CreateCapsuleShape(float _height, Vector2 _offset, float _angle, bool _sensor)
 {
 	auto& transform = m_this->transform;
 	auto scale = transform.scale;
 	float diameter = (scale.x + scale.y) / 2;
-	CreateCapsuleShape(diameter, _height, _angle, _offset);
+	CreateCapsuleShape(diameter, _height, _angle, _offset, _sensor);
 }
 
-void Box2DBody::CreateCapsuleShape(float _diameter, float _height, float _angle, Vector2 _offset)
+void Box2DBody::CreateCapsuleShape(float _diameter, float _height, float _angle, Vector2 _offset, bool _sensor)
 {
 	float rad = Math::DegToRad(_angle);
 	float halfHeight = _height / 2;
@@ -826,6 +1182,7 @@ void Box2DBody::CreateCapsuleShape(float _diameter, float _height, float _angle,
 
 	//シェイプを作成して地面のボディを仕上げる
 	b2ShapeDef shapeDef = b2DefaultShapeDef();
+	shapeDef.isSensor = _sensor;
 	shapeDef.filter.categoryBits = m_filter;
 	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskFilterBit(m_filter);
 
@@ -840,8 +1197,6 @@ void Box2DBody::CreateCapsuleShape(float _diameter, float _height, float _angle,
 
 
 #ifdef DEBUG_TRUE
-	halfHeight = _height / 2;
-
 	auto node = std::shared_ptr<RenderNode>(
 		new Box2DCapsuleRenderNode(_offset, _diameter, halfHeight * DEFAULT_OBJECT_SIZE, _height, rad, m_bodyId));
 	node->m_object = m_this;
@@ -858,7 +1213,7 @@ void Box2DBody::CreateCapsuleShape(float _diameter, float _height, float _angle,
 	m_shapeList.push_back(shape);
 }
 
-void Box2DBody::CreatePolygonShape(std::vector<b2Vec2> _pointList)
+void Box2DBody::CreatePolygonShape(std::vector<b2Vec2> _pointList, bool _sensor)
 {
 	int count = static_cast<int>(_pointList.size());
 	if (_pointList.size() < 4)
@@ -887,6 +1242,7 @@ void Box2DBody::CreatePolygonShape(std::vector<b2Vec2> _pointList)
 	}
 
 	b2ShapeDef shapeDef = b2DefaultShapeDef();
+	shapeDef.isSensor = _sensor;
 	shapeDef.filter.categoryBits = m_filter;
 	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskFilterBit(m_filter);
 
@@ -904,7 +1260,7 @@ void Box2DBody::CreatePolygonShape(std::vector<b2Vec2> _pointList)
 	m_shapeList.push_back(shape);
 }
 
-void Box2DBody::CreateSegment(std::vector<b2Vec2> _pointList)
+void Box2DBody::CreateSegment(std::vector<b2Vec2> _pointList, bool _sensor)
 {
 	int count = static_cast<int>(_pointList.size());
 
@@ -960,6 +1316,7 @@ void Box2DBody::CreateSegment(std::vector<b2Vec2> _pointList)
 	
 
 	b2ShapeDef shapeDef = b2DefaultShapeDef();
+	shapeDef.isSensor = _sensor;
 	shapeDef.filter.categoryBits = m_filter;
 	shapeDef.filter.maskBits = Box2DBodyManager::GetMaskFilterBit(m_filter);
 
@@ -1892,7 +2249,7 @@ void Box2DBodyManager::Init()
 	irData.SysMemPitch = 0;
 	irData.SysMemSlicePitch = 0;
 
-	DirectX11::m_pDevice->CreateBuffer(&ibDesc, &irData, m_boxIndexBuffer.GetAddressOf());
+	DirectX11::m_pDevice->CreateBuffer(&ibDesc, &irData, RenderManager::m_lineBoxIndexBuffer.GetAddressOf());
 
 	float radius = HALF_OBJECT_SIZE;
 	std::vector<Vertex> vertices;
@@ -2003,7 +2360,7 @@ void Box2DBoxRenderNode::Draw()
 	UINT offsets = 0;
 
 	DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_vertexBuffer.GetAddressOf(), &strides, &offsets);
-	DirectX11::m_pDeviceContext->IASetIndexBuffer(Box2DBodyManager::m_boxIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+	DirectX11::m_pDeviceContext->IASetIndexBuffer(RenderManager::m_lineBoxIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
 
 	static VSObjectConstantBuffer cb;
 
@@ -2168,7 +2525,7 @@ inline void Box2DCapsuleRenderNode::Draw()
 	DirectX11::m_pDeviceContext->DrawIndexed(Box2DBodyManager::numSegments, 0, 0);
 
 	DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_vertexBuffer.GetAddressOf(), &strides, &offsets);
-	DirectX11::m_pDeviceContext->IASetIndexBuffer(Box2DBodyManager::m_boxIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+	DirectX11::m_pDeviceContext->IASetIndexBuffer(RenderManager::m_lineBoxIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
 
 	//胴体のBox描画
 	//======================================================================================================================

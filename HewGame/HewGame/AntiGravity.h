@@ -41,6 +41,12 @@ class AntiGravity : public Component
 			rend->SetColor(enterColor);
 			inCount++;
 		}
+
+		MovePlayer* player = nullptr;
+		if (_other->TryGetComponent<MovePlayer>(&player))
+		{
+			player->inWindow = true;
+		}
 	}
 
 	void OnColliderExit(GameObject* _other) override
@@ -57,6 +63,12 @@ class AntiGravity : public Component
 			{
 				rend->SetColor(exitColor);
 			}
+		}
+
+		MovePlayer* player = nullptr;
+		if (_other->TryGetComponent<MovePlayer>(&player))
+		{
+			player->inWindow = false;
 		}
 	}
 

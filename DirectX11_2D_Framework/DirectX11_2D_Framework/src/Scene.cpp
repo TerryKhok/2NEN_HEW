@@ -96,8 +96,6 @@ void SceneManager::Init()
         SceneManager::RegisterScene<SampleScene>();
     }
     
-    SceneManager::RegisterScene<SampleScene>();
-
     if (m_sceneList.empty())
     {
         MessageBoxA(NULL, "シーンが一つも登録されていません", "エラー", MB_ICONERROR | MB_OK);

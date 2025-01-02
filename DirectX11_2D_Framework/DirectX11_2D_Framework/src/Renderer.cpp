@@ -10,6 +10,8 @@ ComPtr<ID3D11Buffer> RenderManager::m_vertexBuffer = nullptr;
 ComPtr<ID3D11Buffer> RenderManager::m_indexBuffer = nullptr;
 
 #ifdef DEBUG_TRUE
+//box用インデックス
+ComPtr<ID3D11Buffer> RenderManager::m_lineBoxIndexBuffer;
 //当たり判定の描画
 bool RenderManager::drawHitBox = true;
 //rayの描画
@@ -20,6 +22,11 @@ ComPtr<ID3D11Buffer> RenderManager::m_lineVertexBuffer;
 ComPtr<ID3D11Buffer> RenderManager::m_lineIndexBuffer;
 //rayを描画するための要素
 std::vector<RenderManager::DrawRayNode> RenderManager::m_drawRayNode;
+
+//boxの描画
+bool RenderManager::drawBox = true;
+//boxを描画するための要素
+std::vector<RenderManager::DrawBoxNode> RenderManager::m_drawBoxNode;
 #endif
 
 
@@ -230,7 +237,7 @@ inline void RenderNode::Draw()
 		UINT offsets = 0;
 
 		DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_vertexBuffer.GetAddressOf(), &strides, &offsets);
-		DirectX11::m_pDeviceContext->IASetIndexBuffer(Box2DBodyManager::m_boxIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+		DirectX11::m_pDeviceContext->IASetIndexBuffer(RenderManager::m_lineBoxIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
 		DirectX11::m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
 		//テクスチャをピクセルシェーダーに渡す
@@ -332,7 +339,6 @@ inline void UVRenderNode::Draw()
 	//次のポインタにつなぐ
 	NextFunc();
 }
-
 
 
 HRESULT RenderManager::Init()
@@ -503,12 +509,6 @@ void RenderManager::Draw()
 			node.first->NextFunc();
 		}
 #else
-		/*for (int i = 0; i < LAYER::LAYER_BOX2D_DEBUG; i++)
-		{
-			auto& node = m_rendererList[i];
-			node.first->NextFunc();
-		}*/
-
 		for (const auto layer : view.second.second)
 		{
 			auto& node = m_rendererList[layer];
@@ -549,6 +549,37 @@ void RenderManager::Draw()
 			}
 		}
 
+		if (drawBox)
+		{
+			//rayの描画
+			DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_vertexBuffer.GetAddressOf(), &strides, &offsets);
+			
+
+			for (auto& rayNode : m_drawBoxNode)
+			{
+				if (rayNode.fill){
+					DirectX11::m_pDeviceContext->IASetIndexBuffer(RenderManager::m_indexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+				}
+				else{
+					DirectX11::m_pDeviceContext->IASetIndexBuffer(RenderManager::m_lineBoxIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+				}
+
+				//ワールド変換行列の作成
+				//ー＞オブジェクトの位置・大きさ・向きを指定
+				rayCb.world = DirectX::XMMatrixScaling(rayNode.size.x, rayNode.size.y, 1.0f);
+				rayCb.world *= DirectX::XMMatrixRotationZ(rayNode.rad);
+				rayCb.world *= DirectX::XMMatrixTranslation(rayNode.center.x, rayNode.center.y, 0.5f);
+				rayCb.world = DirectX::XMMatrixTranspose(rayCb.world);
+				rayCb.color = rayNode.color;
+
+				//行列をシェーダーに渡す
+				DirectX11::m_pDeviceContext->UpdateSubresource(
+					DirectX11::m_pVSObjectConstantBuffer.Get(), 0, NULL, &rayCb, 0, 0);
+
+				DirectX11::m_pDeviceContext->DrawIndexed(rayNode.fill ? 6 : 8, 0, 0);
+			}
+		}
+
 		//設定戻す
 		//======================================================================================================================
 		DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_vertexBuffer.GetAddressOf(), &strides, &offsets);
@@ -561,6 +592,7 @@ void RenderManager::Draw()
 
 #ifdef DEBUG_TRUE
 	m_drawRayNode.clear();
+	m_drawBoxNode.clear();
 #endif
 
 	// 描画先のキャンバスと使用する深度バッファを指定する

@@ -51,6 +51,7 @@
 #include <io.h>
 #include <stdio.h>
 #include <string>
+#include <sstream>
 #include <vector>
 #include <map>
 #include <unordered_map>
@@ -60,7 +61,6 @@
 #include <memory>
 #include <wrl/client.h>
 #include <time.h>
-#include <io.h>
 #include <Fcntl.h>
 #include <cstdio>
 #include <iostream>
@@ -104,10 +104,11 @@
 #include "../../DirectX11_2D_Framework/inc/TextureAsset.h"
 #include "../../DirectX11_2D_Framework/inc/Box2D.h"
 #include "../../DirectX11_2D_Framework/inc/Component.h"
+#include "../../DirectX11_2D_Framework/inc/Renderer.h"
 #include "../../DirectX11_2D_Framework/inc/Animator.h"
+#include "../../DirectX11_2D_Framework/inc/TileMap.h"
 #include "../../DirectX11_2D_Framework/inc/SFText.h"
 #include "../../DirectX11_2D_Framework/inc/Object.h"
-#include "../../DirectX11_2D_Framework/inc/Renderer.h"
 #include "../../DirectX11_2D_Framework/inc/Camera.h"
 #include "../../DirectX11_2D_Framework/inc/Scene.h"
 #include "../../DirectX11_2D_Framework/inc/Box2DBody.h"

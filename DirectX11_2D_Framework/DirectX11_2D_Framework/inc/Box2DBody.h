@@ -1,6 +1,6 @@
 #pragma once
 
-#define RELEASE_SERIALIZE_VIEW_HITBOX
+//#define RELEASE_SERIALIZE_VIEW_HITBOX
 
 struct Box2DRenderData;
 
@@ -8,6 +8,7 @@ class Box2DBody : public Component
 {
 	friend class GameObject;
 	friend class RenderNode;
+	friend class TileRenderNode;
 	friend class ObjectManager;
 	friend class Box2D::WorldManager;
 
@@ -101,23 +102,23 @@ public:
 	//Boxサイズ指定
 	void CreateBoxShape(Vector2 _size, Vector2 _offset = { 0.0f,0.0f }, float _angle = 0.0f, bool _sensor = false);
 	//当たり判定の作成
-	void CreateCircleShape();
+	void CreateCircleShape(bool _sensor = false);
 	//Circleオフセット指定
-	void CreateCircleShape(Vector2 _offset);
+	void CreateCircleShape(Vector2 _offset, bool _sensor = false);
 	//Circleサイズ指定
-	void CreateCircleShape(float _diameter,Vector2 _offset = { 0.0f,0.0f });
+	void CreateCircleShape(float _diameter,Vector2 _offset = { 0.0f,0.0f }, bool _sensor = false);
 	//当たり判定の作成
-	void CreateCapsuleShape();
+	void CreateCapsuleShape(bool _sensor = false);
 	//オフセットとアングル指定
-	void CreateCapsuleShape(Vector2 _offset, float _angle = 0.0f);
+	void CreateCapsuleShape(Vector2 _offset, float _angle = 0.0f, bool _sensor = false);
 	//Capsuleオフセット指定
-	void CreateCapsuleShape(float _height, Vector2 _offset = { 0.0f,0.0f }, float _angle = 0.0f);
+	void CreateCapsuleShape(float _height, Vector2 _offset = { 0.0f,0.0f }, float _angle = 0.0f, bool _sensor = false);
 	//Capsule作成
-	void CreateCapsuleShape(float _diameter, float _height, float _angle = 0.0f, Vector2 _offset = { 0.0f,0.0f });
+	void CreateCapsuleShape(float _diameter, float _height, float _angle = 0.0f, Vector2 _offset = { 0.0f,0.0f }, bool _sensor = false);
 	//当たり判定の作成
-	void CreatePolygonShape(std::vector<b2Vec2> _pointList);
+	void CreatePolygonShape(std::vector<b2Vec2> _pointList, bool _sensor = false);
 	//当たり判定の作成 
-	void CreateSegment(std::vector<b2Vec2> _pointList);
+	void CreateSegment(std::vector<b2Vec2> _pointList, bool _sensor = false);
 	//当たり判定の作成 (※頂点を四つ以上指定)
 	void CreateChain(std::vector<b2Vec2>& _pointList);
 
@@ -346,13 +347,11 @@ private:
 	//layerのフィルターのビットを格納
 	static std::unordered_map<FILTER, unsigned int> m_layerFilterBit;
 	//bodyIdに対応したオブジェクトの名前を格納
-	static std::unordered_map<int32_t, std::string> m_bodyObjectName;
+	static std::unordered_map<int32_t, const std::string&> m_bodyObjectName;
 
 #ifdef DEBUG_TRUE
 	// More segments = smoother circle
 	static const int numSegments;
-	//box用インデックス
-	static ComPtr<ID3D11Buffer> m_boxIndexBuffer;
 	//Circle用頂点データ
 	static ComPtr<ID3D11Buffer> m_circleVertexBuffer;
 	//Circle用インデックス
@@ -518,6 +517,7 @@ CEREAL_REGISTER_TYPE(Box2DConvexMeshData)
 CEREAL_REGISTER_POLYMORPHIC_RELATION(Box2DRenderData, Box2DConvexMeshData)
 
 #endif
+
 
 #ifdef DEBUG_TRUE
 

@@ -20,10 +20,13 @@ class MovePlayer : public Component
 		rb->SetBullet(true);
 	}
 
+public:
+	bool inWindow = false;
+private:
 	bool jumping = false;
+	int jump_count = 0;
 	bool left_moving = false;
 	bool right_moving = false;
-	int jump_count = 0;
 	int left_count = 0;
 	int right_count = 0;
 	int movement = 0;
@@ -76,13 +79,14 @@ class MovePlayer : public Component
 		}
 		}
 
-		if (Input::Get().KeyTrigger(VK_W) && isGround && !jumping)
+		if (Input::Get().KeyTrigger(VK_W) && isGround && !jumping && !inWindow)
 		{
+			jump_count = 0;
 			jumping = true;
 			rb->AddForce({ 0,10 });
 		}
 
-		if (Input::Get().KeyPress(VK_W) && jumping)
+		if (Input::Get().KeyPress(VK_W) && jumping && !inWindow)
 		{
 			rb->AddForceImpulse({ 0,20.0f - (float)jump_count });
 		}

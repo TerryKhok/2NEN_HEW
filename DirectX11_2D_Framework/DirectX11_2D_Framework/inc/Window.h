@@ -84,7 +84,7 @@ private:
 	static std::atomic<bool> terminateFlag;
 
 	//ウィンドウのハンドルに対応したオブジェクトの名前
-	static std::unordered_map<HWND, std::string> m_hwndObjNames;
+	static std::unordered_map<HWND, const std::string&> m_hwndObjNames;
 public:
 	//ウィンドウ生成
 	static LRESULT WindowMainCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow);
@@ -111,11 +111,11 @@ public:
 	static const HWND& GetMainHWnd();
 	static const bool IsPause();
 public:
-	static thread_local HWND(*pWindowSubCreate)(std::string, std::string, int, int, Vector2);
+	static thread_local HWND(*pWindowSubCreate)(const std::string&, std::string, int, int, Vector2);
 private:	
-	static HWND WindowSubCreate(std::string _objName, std::string _windowName = "SUB", int _width = SUB_SCREEN_WIDTH, int _height = SUB_SCREEN_HEIGHT, Vector2 _pos = { 0,0 });
+	static HWND WindowSubCreate(const std::string& _objName, std::string _windowName = "SUB", int _width = SUB_SCREEN_WIDTH, int _height = SUB_SCREEN_HEIGHT, Vector2 _pos = { 0,0 });
 	//サブウィンドウ作成
-	static HWND WindowSubCreateAsync(std::string _objName, std::string _windowName = "SUB", int _width = SUB_SCREEN_WIDTH, int _height = SUB_SCREEN_HEIGHT, Vector2 _pos = { 0,0 });
+	static HWND WindowSubCreateAsync(const std::string& _objName, std::string _windowName = "SUB", int _width = SUB_SCREEN_WIDTH, int _height = SUB_SCREEN_HEIGHT, Vector2 _pos = { 0,0 });
 	//コールバック関数
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	//サブウィンドウ用コールバック関数

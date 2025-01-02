@@ -183,6 +183,7 @@
     <ClCompile Include="src\SFText.cpp" />
     <ClCompile Include="src\sound.cpp" />
     <ClCompile Include="src\TextureAsset.cpp" />
+    <ClCompile Include="src\TileMap.cpp" />
     <ClCompile Include="src\Utility.cpp" />
     <ClCompile Include="src\Window.cpp" />
   </ItemGroup>
@@ -214,6 +215,7 @@
     <ClInclude Include="inc\SFText.h" />
     <ClInclude Include="inc\sound.h" />
     <ClInclude Include="inc\TextureAsset.h" />
+    <ClInclude Include="inc\TileMap.h" />
     <ClInclude Include="inc\Utility.h" />
     <ClInclude Include="inc\Window.h" />
     <ClInclude Include="inc\SubWindow.h" />

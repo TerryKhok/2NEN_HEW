@@ -1,5 +1,52 @@
 #pragma once
 
+
+class FunctionRegistry {
+
+	friend class Button;
+
+public:
+	using FunctionType = std::function<void()>;
+private:
+	static inline std::unordered_map<std::string, FunctionType> functions;
+
+	// Private constructor to prevent multiple instances
+	FunctionRegistry() = default;
+	FunctionRegistry(const FunctionRegistry&) = delete;
+	FunctionRegistry& operator=(const FunctionRegistry&) = delete;
+public:
+	static FunctionRegistry& getInstance() {
+		static FunctionRegistry instance;
+		return instance;
+	}
+
+	void registerFunction(const std::string& name, FunctionType func) {
+		if (functions.find(name) != functions.end()) {
+			LOG_WARNING("Function with name '%s' already exists.", name.c_str());
+			return;
+		}
+		functions[name] = func;
+	}
+
+	void callFunction(const std::string& name) const {
+		auto it = functions.find(name);
+		if (it == functions.end()) {
+			LOG_WARNING("Function with name '%s' not found.", name.c_str());
+			return;
+		}
+		it->second();
+	}
+
+	FunctionType GetRegisterFunction(std::string& name) const{
+		auto it = functions.find(name);
+		if (it == functions.end()) {
+			LOG_WARNING("Function with name '%s' not found.", name.c_str());
+			return nullptr;
+		}
+		it->second;
+	}
+};
+
 class Button : public Component
 {
 	friend class GameObject;
@@ -17,15 +64,21 @@ public:
 		m_event = _func;
 	}
 
-	void SetAction(BUTTON_ACTION _action);
-private:
-	Button() {}
-	//Button(std::function<void()> _func) {
-	//	SetEvent(std::move(_func));
-	//}
+	void SetEvent(std::string _funcName);
 
-	void Update() { 
-		(this->*pUpdate)(); 
+	void SetAction(BUTTON_ACTION _action);
+
+	void Serialize(SERIALIZE_OUTPUT& ar) override;
+	void Deserialize(SERIALIZE_INPUT& ar) override;
+	void DrawImGui(ImGuiApp::HandleUI& _handle) override;
+private:
+	Button() 
+	{
+		SetEvent("ButtonLog");
+	}
+
+	void Update() {
+		(this->*pUpdate)();
 	}
 
 	void MouseTrigger();
@@ -34,15 +87,21 @@ private:
 private:
 	void(Button::* pUpdate)() = &Button::MouseTrigger;
 private:
-	std::function<void(void)> m_event;
-private:
-	void DrawImGui(ImGuiApp::HandleUI& _handle) override
-	{
-		std::string str = m_event.target_type().name();
-		const char* action = 
-			pUpdate == &Button::MouseTrigger ? "mouseTrigger" :
-			pUpdate == &Button::MouseTrigger ? "mousePress" :  "mouseRelease";
-		ImGui::Text("action : %s", action);
-		ImGui::Text("function :\n %s", str.substr(6).c_str());
-	}
+	FunctionRegistry::FunctionType m_event = {};
+	std::string_view m_funcName = "";
+	BUTTON_ACTION m_action = MOUSE_TRIGGER;
 };
+
+// Macro to automatically register a function
+#define REGISTER_FUNCTION(func)                                      \
+    namespace {                                                           \
+        struct AutoRegister_##func {                                      \
+            AutoRegister_##func() {                                       \
+                FunctionRegistry::getInstance().registerFunction(#func, func); \
+            }                                                             \
+        } autoRegister_##func;                                            \
+    }
+
+void ButtonLog();
+
+REGISTER_FUNCTION(ButtonLog)

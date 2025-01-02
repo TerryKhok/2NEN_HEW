@@ -13,6 +13,11 @@ bool CreateComponent<Renderer>(GameObject* obj, SERIALIZE_INPUT& ar);
 template<>
 bool CreateComponent<Box2DBody>(GameObject* obj, SERIALIZE_INPUT& ar);
 
+template<>
+bool CreateComponent<Animator>(GameObject* obj, SERIALIZE_INPUT& ar);
+
+template<>
+bool CreateComponent<TileMap>(GameObject* obj, SERIALIZE_INPUT& ar);
 
 template<class T>
 class ReflectionComponent final
@@ -54,6 +59,7 @@ SetReflectionComponent(SubWindow)
 SetReflectionComponent(Animator)
 SetReflectionComponent(Button)
 SetReflectionComponent(SFText)
+SetReflectionComponent(TileMap)
 
 template<class T>
 class ReflectionScene final
@@ -82,4 +88,24 @@ public:
 	}
 
 SetReflectionScene(SampleScene)
+//
+//template<class T>
+//class ReflectionFunction final
+//{
+//	ReflectionFunction()
+//	{
+//		ReflectionFunction::assemblies.emplace(typeid(T).name(), RegisterSceneFunc);
+//	}
+//
+//	static void RegisterFunctionFunc()
+//	{
+//		
+//	}
+//public:
+//	static ReflectionFunction& Instance()
+//	{
+//		static ReflectionFunction instance;
+//		return instance;
+//	}
+//};
 

@@ -7,6 +7,8 @@ class TextureAssets final
 	friend class RenderNode;
 	friend class RenderManager;
 	friend class AnimationClip;
+	friend class TileMap;
+	friend struct TileTextureData;
 	friend class ImGuiApp;
 	
 private:

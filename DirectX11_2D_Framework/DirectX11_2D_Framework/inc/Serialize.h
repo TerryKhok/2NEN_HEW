@@ -4,8 +4,10 @@
 #include <cereal/types/polymorphic.hpp>
 #include <cereal/archives/json.hpp>
 #include <cereal/types/vector.hpp>
+#include <cereal/types/string.hpp>
 
 static constexpr int SceneFileIndex = 's';
+static constexpr int ObjectFileIndex = 'o';
 
 #define SERIALIZE_OUTPUT cereal::JSONOutputArchive
 #define SERIALIZE_INPUT cereal::JSONInputArchive

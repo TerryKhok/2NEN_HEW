@@ -492,6 +492,7 @@ void ImGuiApp::DrawOptionGui()
 				{
 					SceneManager::ReloadCurrentScene();
 					ImGuiApp::ClearStack();
+					handleUi.lock = false;
 				}
 				ImGui::SetItemTooltip("reload");
 				
@@ -529,9 +530,9 @@ void ImGuiApp::DrawOptionGui()
 				ImGui::SameLine();
 				if (ImGui::ImageButton("saveScene", imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
 				{
+					ImGui::SetMouseCursor(ImGuiMouseCursor_NotAllowed);
 					if (SceneManager::currentScenePath == "null")
 					{
-						ImGui::SetMouseCursor(ImGuiMouseCursor_NotAllowed);
 						 SaveSceneFileDialog(SceneManager::currentScenePath);
 					}
 
@@ -565,6 +566,8 @@ void ImGuiApp::DrawOptionGui()
 						SaveSceneFileDialog(filePath);
 						std::ofstream ofs(filePath);
 						SERIALIZE_OUTPUT archive(ofs);
+						int index = ObjectFileIndex;
+						archive(CEREAL_NVP(index));
 						archive(CEREAL_NVP(*selectedObject));
 					}
 				}
@@ -583,16 +586,28 @@ void ImGuiApp::DrawOptionGui()
 				}
 				ImGui::SetItemTooltip("unpack object");
 
+				uvX = handleUi.lock ? 17 : 1;
+				uvY = handleUi.lock ? 10 : 18;
+				ImGui::SameLine();
+				if (ImGui::ImageButton("LockHandle", imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
+				{
+					static bool lock = false;
+					lock = !lock;
+					handleUi.LockHandle(lock, "OptionGui");
+				}
+				ImGui::SetItemTooltip("lockHandle");
+
 				ImGui::PopStyleVar();
 
 				ImGui::ColorEdit3("clear color", DirectX11::clearColor); // Edit 3 floats representing a color
 		
 				ImGui::EndTabItem();
 			}
-			if (ImGui::BeginTabItem("Box2D"))
+			if (ImGui::BeginTabItem("Display"))
 			{
-				ImGui::Checkbox("HitBox", &RenderManager::drawHitBox);
+				ImGui::Checkbox("Collider", &RenderManager::drawHitBox);
 				ImGui::Checkbox("Ray", &RenderManager::drawRay);
+				ImGui::Checkbox("Box", &RenderManager::drawBox);
 				ImGui::Checkbox("Filter Table", &showFilterTable);
 				ImGui::EndTabItem();
 			}
@@ -678,13 +693,16 @@ void ImGuiApp::DrawOptionGui()
 			if (ImGui::BeginTabItem("ObjectList"))
 			{
 				ImGui::BeginChild("objectList");
-				for (auto& object : ObjectManager::m_currentList->first) {
+				auto& objectList = ObjectManager::m_currentList;
+				int size = (int)objectList->first.size();
+				for (int i = 0; i < size;i++) {
+					auto& object = objectList->first[i];
 					if (!object->active)
 					{
 						ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 0.4f)); // Set text color to red
 					}
 					bool selected = object->isSelected == GameObject::SELECTED;
-					if (ImGui::Selectable(object->GetName().c_str(),selected))
+					if (ImGui::Selectable(object->GetName().c_str(),selected) && !handleUi.lock)
 					{
 						if (selected)
 						{
@@ -698,6 +716,26 @@ void ImGuiApp::DrawOptionGui()
 							if (selectedObject != nullptr) selectedObject->isSelected = GameObject::SELECTED;
 						}
 					}
+					// Source: Dragging starts here
+					if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
+						ImGui::SetDragDropPayload("DND_SCENE_ITEM", &i, sizeof(int)); // Pass the index
+						ImGui::Text("%s", object->name.c_str());
+						ImGui::EndDragDropSource();
+					}
+					// Target: Dropping ends here
+					if (ImGui::BeginDragDropTarget()) {
+						if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DND_SCENE_ITEM")) {
+							size_t dragged_index = *(const size_t*)payload->Data;
+							if (dragged_index != i) {
+								// Move the dragged item to the target index
+								std::swap(objectList->first[i], objectList->first[dragged_index]);
+								objectList->second[objectList->first[i]->name] = dragged_index;
+								objectList->second[objectList->first[dragged_index]->name] = i;
+							}
+						}
+						ImGui::EndDragDropTarget();
+					}
+
 					if (!object->active)
 					{
 						ImGui::PopStyleColor();
@@ -802,8 +840,10 @@ void ImGuiApp::DrawOptionGui()
 			{
 				ImGui::BeginChild("SceneListChild");
 				int eraseIndex = -1;
+				static int changeSceneIndex = -1;
 				auto& sceneList = SceneManager::m_registerScenePath;
 				int sceneSize = (int)sceneList.size();
+				static bool dont_ask_me_next_time = false;
 				for (int i = 0;i < sceneSize;i++)
 				{
 					auto& scene = sceneList[i];
@@ -825,8 +865,22 @@ void ImGuiApp::DrawOptionGui()
 						bool current = currentSceneName == scene.name;
 						if (ImGui::Selectable(scene.name.c_str(), &current))
 						{
-							SceneManager::LoadScene(scene.name);
-							ImGuiApp::ClearStack();
+							if(!dont_ask_me_next_time){
+								if (IsSceneChange()){
+									ImGui::OpenPopup("SaveScene?");
+									changeSceneIndex = i;
+								}
+								else{
+									SceneManager::LoadScene(scene.name);
+									ImGuiApp::ClearStack();
+									handleUi.lock = false;
+								}
+							}
+							else{ 
+								SceneManager::LoadScene(scene.name);
+								ImGuiApp::ClearStack();
+								handleUi.lock = false;
+							}
 						}
 						// Source: Dragging starts here
 						if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
@@ -849,6 +903,48 @@ void ImGuiApp::DrawOptionGui()
 						}
 						ImGui::EndDragDropTarget();
 					}
+				}
+				// Always center this window when appearing
+				ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+				ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+				if (ImGui::BeginPopupModal("SaveScene?", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+				{
+					ImGui::Text("Do you want to save changes to the scene?");
+					ImGui::Separator();
+
+					//static int unused_i = 0;
+					//ImGui::Combo("Combo", &unused_i, "Delete\0Delete harder\0");
+
+					ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+					ImGui::Checkbox("Don't ask me next time", &dont_ask_me_next_time);
+					ImGui::PopStyleVar();
+
+					if (ImGui::Button("Yes", ImVec2(120, 0))) {
+						if (SceneManager::currentScenePath == "null")
+						{
+							ImGui::SetMouseCursor(ImGuiMouseCursor_NotAllowed);
+							SaveSceneFileDialog(SceneManager::currentScenePath);
+						}
+						if (SceneManager::currentScenePath != "null")
+							SceneManager::SaveScene(SceneManager::currentScenePath);
+						SceneManager::LoadScene(sceneList[changeSceneIndex].name);
+						ImGuiApp::ClearStack();
+						handleUi.lock = false;
+						ImGui::CloseCurrentPopup(); 
+					}
+					ImGui::SetItemDefaultFocus();
+					ImGui::SameLine();
+					if (ImGui::Button("No", ImVec2(120, 0))) { 
+
+						SceneManager::LoadScene(sceneList[changeSceneIndex].name);
+						ImGuiApp::ClearStack();
+						handleUi.lock = false;
+						ImGui::CloseCurrentPopup();
+					}
+					ImGui::SetItemDefaultFocus();
+					ImGui::SameLine();
+					if (ImGui::Button("Cancel", ImVec2(120, 0))) { ImGui::CloseCurrentPopup(); }
+					ImGui::EndPopup();
 				}
 				ImGui::EndChild();
 				if (ImGui::BeginPopupContextItem())
@@ -903,7 +999,9 @@ void ImGuiApp::DrawOptionGui()
 					ImGui::EndPopup();
 				}
 
-				if (eraseIndex > 0)
+			
+
+				if (eraseIndex >= 0)
 				{
 					auto iter = sceneList.begin() + eraseIndex;
 					auto it = SceneManager::m_sceneList.find(iter->name);
@@ -947,7 +1045,7 @@ void ImGuiApp::DrawInspectorGui()
 			{
 				memset(str, '\0', strlen(str));
 				memcpy(str, selectedObject->name.c_str(), selectedObject->name.size());
-				if (ImGui::InputText("Selected", str, sizeof(str), ImGuiInputTextFlags_EnterReturnsTrue) && str[0] != '\0')
+				if (ImGui::InputText("##Selected", str, sizeof(str), ImGuiInputTextFlags_EnterReturnsTrue) && str[0] != '\0')
 				{
 					selectedObject->SetName(str);
 				}
@@ -1013,14 +1111,17 @@ void ImGuiApp::DrawInspectorGui()
 			{
 				std::string componentName = component->getType();
 
-				ImGui::PushID(componentName.c_str());
-				if (ImGui::Button("-"))
+				if (!handleUi.lock)
 				{
-					eraseComponents.push_back(componentName);
+					ImGui::PushID(componentName.c_str());
+					if (ImGui::Button("-"))
+					{
+						eraseComponents.push_back(componentName);
+					}
+					ImGui::SetItemTooltip("remove");
+					ImGui::PopID();
+					ImGui::SameLine();
 				}
-				ImGui::SetItemTooltip("remove");
-				ImGui::PopID();
-				ImGui::SameLine();
 				if (ImGui::CollapsingHeader(componentName.substr(6).c_str(), ImGuiTreeNodeFlags_None))
 				{
 					component->DrawImGui(handleUi);
@@ -1035,10 +1136,46 @@ void ImGuiApp::DrawInspectorGui()
 				{
 					if (Window::IsPause())
 					{
-						auto& component = list.first[iter->second];
+						if (name == typeid(Renderer).name())
+						{
+							auto it = list.second.find(typeid(Animator).name());
+							if (it != list.second.end())
+							{
+								auto& com = list.first[it->second];
 
+								com->SetActive(false);
+								com->Delete();
+
+								willRemoveComponents.push(std::move(com));
+
+								auto& vector = list.first;
+								auto& map = list.second;
+
+								size_t index = it->second;
+								size_t lastIndex = vector.size() - 1;
+
+								// Move the last entity to the position of the entity to be removed
+								if (index != lastIndex) {
+									vector[index] = std::move(vector[lastIndex]);
+									map[vector[index]->getType().c_str()] = index; // Update map for the moved entity
+								}
+
+								// Remove the last element and update map
+								vector.pop_back();
+								map.erase(it);
+
+								changes.emplace(std::bind([](GameObject* obj) {
+									willRemoveComponents.top()->SetActive(true);
+									auto& vec = obj->m_componentList.first;
+									vec.push_back(std::move(willRemoveComponents.top()));
+									obj->m_componentList.second.insert(std::make_pair(vec.back()->getType(), vec.size() - 1));
+									willRemoveComponents.pop();
+									}, selectedObject));
+							}
+						}
+
+						auto& component = list.first[iter->second];
 						component->SetActive(false);
-						//component->Delete();
 
 						willRemoveComponents.push(std::move(component));
 
@@ -1065,44 +1202,6 @@ void ImGuiApp::DrawInspectorGui()
 							obj->m_componentList.second.insert(std::make_pair(vec.back()->getType(),vec.size() - 1));
 							willRemoveComponents.pop();
 							}, selectedObject));
-
-						if (name == typeid(Renderer).name())
-						{
-							auto it = list.second.find(typeid(Animator).name());
-							if (it != list.second.end())
-							{
-								auto& com = list.first[iter->second];
-
-								com->SetActive(false);
-								com->Delete();
-
-								willRemoveComponents.push(std::move(component));
-
-								auto& vector = list.first;
-								auto& map = list.second;
-								
-								size_t index = iter->second;
-								size_t lastIndex = vector.size() - 1;
-
-								// Move the last entity to the position of the entity to be removed
-								if (index != lastIndex) {
-									vector[index] = std::move(vector[lastIndex]);
-									map[vector[index]->getType().c_str()] = index; // Update map for the moved entity
-								}
-
-								// Remove the last element and update map
-								vector.pop_back();
-								map.erase(iter);
-
-								changes.emplace(std::bind([](GameObject* obj) {
-									willRemoveComponents.top()->SetActive(true);
-									auto& vec = obj->m_componentList.first;
-									vec.push_back(std::move(willRemoveComponents.top()));
-									obj->m_componentList.second.insert(std::make_pair(vec.back()->getType(), vec.size() - 1));
-									willRemoveComponents.pop();
-									}, selectedObject));
-							}
-						}
 					}
 					else
 					{
@@ -1599,228 +1698,219 @@ void ImGuiApp::DrawMainGui(ImGuiContext* _mainContext)
 		ImGui::SetNextWindowSize(ImVec2(SCREEN_WIDTH, windowHeight)); // Cover the remaining area
 		if (ImGui::Begin("Work", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 		{
-			if (ImGui::BeginTabBar("hierarchyTab"))
+			static int split[2] = { 1,1 };
+
+			ImGui::BeginChild("AnimationFrameList", ImVec2(ImGui::GetContentRegionAvail().x * 0.7f, ImGui::GetContentRegionAvail().y));
 			{
-				if (ImGui::BeginTabItem("Animation"))
+				ImGui::SeparatorText("Cut Node");
+
+				int uvX = 0;
+				int uvY = 0;
+				std::vector<fs::path> eraseNodes;
+				for (auto& node : textureCutNode)
 				{
-					static int split[2] = {1,1};
+					auto iter = textureSource.find(node.first);
+					if (iter == textureSource.end()) continue;
 
-					ImGui::BeginChild("AnimationFrameList", ImVec2(ImGui::GetContentRegionAvail().x * 0.7f, ImGui::GetContentRegionAvail().y));
+					if (ImGui::TreeNodeEx(node.first.string().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
 					{
-						ImGui::SeparatorText("Cut Node");
+						std::string filename = node.first.filename().string();
 
-						int uvX = 0;
-						int uvY = 0;
-						std::vector<fs::path> eraseNodes;
-						for (auto& node : textureCutNode)
+						std::vector<int> eraseIndex;
+						ImTextureID texId = iter->second.second;
+						int cutCount = 0;
+						for (auto& cuts : node.second)
 						{
-							auto iter = textureSource.find(node.first);
-							if (iter == textureSource.end()) continue;
-
-							if (ImGui::TreeNodeEx(node.first.string().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+							int splitX = cuts % maxTexSplit[0];
+							int splitY = cuts / maxTexSplit[0];
+							float texScaleX = 1.0f / splitX;
+							float texScaleY = 1.0f / splitY;
+							int count = 0;
+							std::string label = std::to_string(splitX) + " : " + std::to_string(splitY);
+							//ImGui::BulletText("%d : %d", splitX, splitY);
+							bool treeOpen = ImGui::TreeNodeEx(label.c_str(), ImGuiTreeNodeFlags_DefaultOpen);
+							if (treeOpen)
 							{
-								std::string filename = node.first.filename().string();
-
-								std::vector<int> eraseIndex;
-								ImTextureID texId = iter->second.second;
-								int cutCount = 0;
-								for (auto& cuts : node.second)
+								ImGui::SameLine();
+								std::string splitId = filename + std::to_string(splitX + splitY * maxTexSplit[0]);
+								ImGui::PushID(splitId.c_str());
+								if (ImGui::Button(" erase "))
 								{
-									int splitX = cuts % maxTexSplit[0];
-									int splitY = cuts / maxTexSplit[0];
-									float texScaleX = 1.0f / splitX;
-									float texScaleY = 1.0f / splitY;
-									int count = 0;
-									std::string label = std::to_string(splitX) + " : " + std::to_string(splitY);
-									//ImGui::BulletText("%d : %d", splitX, splitY);
-									bool treeOpen = ImGui::TreeNodeEx(label.c_str(), ImGuiTreeNodeFlags_DefaultOpen);
-									if (treeOpen)
-									{
-										ImGui::SameLine();
-										std::string splitId = filename + std::to_string(splitX + splitY * maxTexSplit[0]);
-										ImGui::PushID(splitId.c_str());
-										if (ImGui::Button(" erase "))
-										{
-											eraseIndex.push_back(cuts);
-										}
-										ImGui::PopID();
+									eraseIndex.push_back(cuts);
+								}
+								ImGui::PopID();
 
-										for (int y = 0; y < splitY; y++)
-										{
-											ImGui::BulletText("%d", y);
-											if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
-											{
-												willPushFrames.clear();
-												for (int x = 0; x < splitX; x++)
-												{
-													willPushFrames.push_back(
-														{
-															node.first,splitX,splitY,x,y
-														}
-													);
-												}
-
-												ImGui::SetDragDropPayload("CUT_TEXTURE_DRAG", filename.c_str(), filename.size());
-												ImGui::Text("x : %d y : %d", filename.c_str(), splitX, splitY);
-												ImGui::EndDragDropSource();
-											}
-											count = 0;
-											for (int x = 0; x < splitX; x++)
-											{
-												if (count % 10 != 0) ImGui::SameLine();
-												count++;
-												std::string id = filename + std::to_string(cutCount) + std::to_string(x + y * maxTexSplit[0]);
-												ImGui::PushID(id.c_str());
-												if (ImGui::ImageButton("cutTexButton", texId, ImVec2(52, 52), ImVec2(texScaleX * x, texScaleY * y), ImVec2(texScaleX * (x + 1), texScaleY * (y + 1)), windowBgCol))
-												{
-													currentImTexture.id = texId;
-													currentImTexture.uv0 = ImVec2(texScaleX * x, texScaleY * y);
-													currentImTexture.uv1 = ImVec2(texScaleX * (x + 1), texScaleY * (y + 1));
-												}
-												ImGui::SetItemTooltip("%s x : %d y :%d", filename.c_str(), x + 1, y + 1);
-												if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
-												{
-													willPushFrames.clear();
-													willPushFrames.push_back(
-														{ node.first,splitX,splitY,x,y
-														}
-													);
-													ImGui::SetDragDropPayload("CUT_TEXTURE_DRAG", id.c_str(), id.size());
-													ImGui::Text("%s", filename.c_str());
-													ImGui::EndDragDropSource();
-												}
-												ImGui::PopID();
-											}
-											cutCount++;
-										}
-										ImGui::TreePop();
-									}
+								for (int y = 0; y < splitY; y++)
+								{
+									ImGui::BulletText("%d", y);
 									if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
 									{
 										willPushFrames.clear();
 										for (int x = 0; x < splitX; x++)
 										{
-											for (int y = 0; y < splitY; y++)
-											{
-												willPushFrames.push_back(
-													{
-														node.first,splitX,splitY,x,y
-													}
-												);
-											}
+											willPushFrames.push_back(
+												{
+													node.first,splitX,splitY,x,y
+												}
+											);
 										}
 
 										ImGui::SetDragDropPayload("CUT_TEXTURE_DRAG", filename.c_str(), filename.size());
 										ImGui::Text("x : %d y : %d", filename.c_str(), splitX, splitY);
 										ImGui::EndDragDropSource();
 									}
-									if (!treeOpen)
+									count = 0;
+									for (int x = 0; x < splitX; x++)
 									{
-										ImGui::SameLine();
-										std::string splitId = filename + std::to_string(splitX + splitY * maxTexSplit[0]);
-										ImGui::PushID(splitId.c_str());
-										if (ImGui::Button(" erase "))
+										if (count % 10 != 0) ImGui::SameLine();
+										count++;
+										std::string id = filename + std::to_string(cutCount) + std::to_string(x + y * maxTexSplit[0]);
+										ImGui::PushID(id.c_str());
+										if (ImGui::ImageButton("cutTexButton", texId, ImVec2(52, 52), ImVec2(texScaleX * x, texScaleY * y), ImVec2(texScaleX * (x + 1), texScaleY * (y + 1)), windowBgCol))
 										{
-											eraseIndex.push_back(cuts);
+											currentImTexture.id = texId;
+											currentImTexture.uv0 = ImVec2(texScaleX * x, texScaleY * y);
+											currentImTexture.uv1 = ImVec2(texScaleX * (x + 1), texScaleY * (y + 1));
+										}
+										ImGui::SetItemTooltip("%s x : %d y :%d", filename.c_str(), x + 1, y + 1);
+										if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+										{
+											willPushFrames.clear();
+											willPushFrames.push_back(
+												{ node.first,splitX,splitY,x,y
+												}
+											);
+											ImGui::SetDragDropPayload("CUT_TEXTURE_DRAG", id.c_str(), id.size());
+											ImGui::Text("%s", filename.c_str());
+											ImGui::EndDragDropSource();
 										}
 										ImGui::PopID();
 									}
+									cutCount++;
 								}
-
-								for (auto& i : eraseIndex)
+								ImGui::TreePop();
+							}
+							if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_SourceAllowNullID))
+							{
+								willPushFrames.clear();
+								for (int x = 0; x < splitX; x++)
 								{
-									auto it = node.second.find(i);
-									if (it != node.second.end())
+									for (int y = 0; y < splitY; y++)
 									{
-										node.second.erase(it);
-										if (node.second.empty())
-											eraseNodes.push_back(node.first);
+										willPushFrames.push_back(
+											{
+												node.first,splitX,splitY,x,y
+											}
+										);
 									}
 								}
 
-								ImGui::TreePop();
-							}	
+								ImGui::SetDragDropPayload("CUT_TEXTURE_DRAG", filename.c_str(), filename.size());
+								ImGui::Text("x : %d y : %d", filename.c_str(), splitX, splitY);
+								ImGui::EndDragDropSource();
+							}
+							if (!treeOpen)
+							{
+								ImGui::SameLine();
+								std::string splitId = filename + std::to_string(splitX + splitY * maxTexSplit[0]);
+								ImGui::PushID(splitId.c_str());
+								if (ImGui::Button(" erase "))
+								{
+									eraseIndex.push_back(cuts);
+								}
+								ImGui::PopID();
+							}
 						}
-						for (auto& path : eraseNodes)
+
+						for (auto& i : eraseIndex)
 						{
-							auto iter = textureCutNode.find(path);
+							auto it = node.second.find(i);
+							if (it != node.second.end())
+							{
+								node.second.erase(it);
+								if (node.second.empty())
+									eraseNodes.push_back(node.first);
+							}
+						}
+
+						ImGui::TreePop();
+					}
+				}
+				for (auto& path : eraseNodes)
+				{
+					auto iter = textureCutNode.find(path);
+					if (iter != textureCutNode.end())
+					{
+						textureCutNode.erase(iter);
+					}
+				}
+			}
+			ImGui::EndChild();
+			ImGui::SameLine();
+			ImGui::BeginChild("Capture", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y));
+			{
+				ImGui::SeparatorText("tool");
+				ImGui::BeginGroup();
+				{
+					int uvX = 8;
+					int uvY = 14;
+					if (ImGui::ImageButton("cutTexButton", imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
+					{
+						if (selectPath != "")
+						{
+							int splitIndex = split[1] * maxTexSplit[0] + split[0];
+							auto iter = textureCutNode.find(selectPath);
 							if (iter != textureCutNode.end())
 							{
-								textureCutNode.erase(iter);
+								auto it = iter->second.find(splitIndex);
+								if (it == iter->second.end())
+								{
+									iter->second.insert(splitIndex);
+								}
+							}
+							else
+							{
+								std::set<int> cuts;
+								cuts.emplace(splitIndex);
+								textureCutNode.insert(std::make_pair(selectPath, std::move(cuts)));
 							}
 						}
+
 					}
-					ImGui::EndChild();
+					ImGui::SetItemTooltip("cut texture");
 					ImGui::SameLine();
-					ImGui::BeginChild("Capture", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y));
+					ImGui::BeginGroup();
 					{
-						ImGui::SeparatorText("tool");
-						ImGui::BeginGroup();
-						{
-							int uvX = 8;
-							int uvY = 14;
-							if (ImGui::ImageButton("cutTexButton", imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
-							{
-								if (selectPath != "")
-								{
-									int splitIndex = split[1] * maxTexSplit[0] + split[0];
-									auto iter = textureCutNode.find(selectPath);
-									if (iter != textureCutNode.end())
-									{
-										auto it = iter->second.find(splitIndex);
-										if (it == iter->second.end())
-										{
-											iter->second.insert(splitIndex);
-										}
-									}
-									else
-									{
-										std::set<int> cuts;
-										cuts.emplace(splitIndex);
-										textureCutNode.insert(std::make_pair(selectPath, std::move(cuts)));
-									}
-								}
-
-							}
-							ImGui::SetItemTooltip("cut texture");
-							ImGui::SameLine();
-							ImGui::BeginGroup();
-							{
-								ImGui::Text("split : %s", selectPath.filename().string().c_str());
-								ImGui::DragInt("x", split, 0.5f, 1, maxTexSplit[0]);
-								ImGui::DragInt("y", split + 1, 0.5f, 1, maxTexSplit[1]);
-							}
-							ImGui::EndGroup();
-
-							//ImGui::SeparatorText("view");
-							ImGui::Image(currentImTexture.id, ImVec2(240, 240), currentImTexture.uv0, currentImTexture.uv1);
-						}
-						ImGui::EndGroup();
-						if (ImGui::BeginDragDropTarget())
-						{
-							if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TEXTURE_SOURCE_DRAG"))
-							{
-								IM_UNUSED(payload);
-								ImGui::SetMouseCursor(ImGuiMouseCursor_NotAllowed);
-								fs::path path(std::string(static_cast<const char*>(payload->Data), payload->DataSize));
-								auto iter = textureSource.find(path);
-								if (iter != textureSource.end())
-								{
-									currentImTexture.id = iter->second.second;
-									currentImTexture.uv0 = { 0,0 };
-									currentImTexture.uv1 = { 1,1 };
-								}
-								selectPath = std::move(path);
-							}
-							ImGui::EndDragDropTarget();
-						}
+						ImGui::Text("split : %s", selectPath.filename().string().c_str());
+						ImGui::DragInt("x", split, 0.5f, 1, maxTexSplit[0]);
+						ImGui::DragInt("y", split + 1, 0.5f, 1, maxTexSplit[1]);
 					}
-					ImGui::EndChild();
-					ImGui::EndTabItem();
+					ImGui::EndGroup();
+
+					//ImGui::SeparatorText("view");
+					ImGui::Image(currentImTexture.id, ImVec2(240, 240), currentImTexture.uv0, currentImTexture.uv1);
 				}
-				ImGui::EndTabBar();
+				ImGui::EndGroup();
+				if (ImGui::BeginDragDropTarget())
+				{
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("TEXTURE_SOURCE_DRAG"))
+					{
+						IM_UNUSED(payload);
+						ImGui::SetMouseCursor(ImGuiMouseCursor_NotAllowed);
+						fs::path path(std::string(static_cast<const char*>(payload->Data), payload->DataSize));
+						auto iter = textureSource.find(path);
+						if (iter != textureSource.end())
+						{
+							currentImTexture.id = iter->second.second;
+							currentImTexture.uv0 = { 0,0 };
+							currentImTexture.uv1 = { 1,1 };
+						}
+						selectPath = std::move(path);
+					}
+					ImGui::EndDragDropTarget();
+				}
 			}
-			ImGui::Separator();
+			ImGui::EndChild();
 		}
 		ImGui::End();
 
@@ -1912,6 +2002,14 @@ void ImGuiApp::ClearStack()
 	}
 }
 
+bool ImGuiApp::IsSceneChange()
+{
+	if (!updateValues.empty()) return true;
+	if (!willRemoveComponents.empty()) return true;
+	if (!willDeleteObjects.empty()) return true;
+	return false;
+}
+
 void ImGuiApp::RewindChange()
 {
 	if (changes.empty()) return;
@@ -1922,12 +2020,16 @@ void ImGuiApp::RewindChange()
 
 bool ImGuiApp::UpdateHandleUI(Vector2 _targetPos)
 {
-	return handleUi.Update(_targetPos);
+	if (!handleUi.lock)
+		return handleUi.Update(_targetPos);
+
+	return false;
 }
 
 void ImGuiApp::DrawHandleUI(const Vector2& _targetPos)
 {
-	handleUi.Draw(selectedObject, _targetPos);
+	if (!handleUi.lock)
+		handleUi.Draw(selectedObject, _targetPos);
 }
 
 void ImGuiApp::InvalidSelectedObject()
@@ -2682,7 +2784,7 @@ void ImGuiApp::HandleUI::Draw(GameObject* _target,const Vector2 _targetPos)
 	case SCALE:
 	{
 		DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_vertexBuffer.GetAddressOf(), &strides, &offsets);
-		DirectX11::m_pDeviceContext->IASetIndexBuffer(Box2DBodyManager::m_boxIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+		DirectX11::m_pDeviceContext->IASetIndexBuffer(RenderManager::m_lineBoxIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
 
 		//ワールド変換行列の作成
 		//ー＞オブジェクトの位置・大きさ・向きを指定
@@ -2774,6 +2876,29 @@ void ImGuiApp::HandleUI::SetUploadFile(std::string _uploadStr, std::function<voi
 	uploadStr = _uploadStr;
 	linkFunc = _func;
 	extensions = _extensions;
+}
+
+void ImGuiApp::HandleUI::LockHandle(bool _lock, const char* _lockName)
+{
+	std::string name(_lockName);
+
+	if (_lock)
+	{
+		lock = true;
+		if (std::find(lockNames.begin(), lockNames.end(), name) == lockNames.end())
+		{
+			lockNames.push_back(std::move(name));
+		}
+		return;
+	}
+
+	auto iter = std::find(lockNames.begin(), lockNames.end(), name);
+	if (iter != lockNames.end())
+	{
+		lockNames.erase(iter);
+	}
+
+	if (lockNames.empty()) lock = false;
 }
 
 void ImGuiApp::ImGuiSetKeyMap(ImGuiContext* _imguiContext)

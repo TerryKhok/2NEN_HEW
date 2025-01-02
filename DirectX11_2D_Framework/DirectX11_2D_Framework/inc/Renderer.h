@@ -1,6 +1,5 @@
 #pragma once
 
-
 class Renderer : public Component
 {
 	friend class GameObject;
@@ -15,7 +14,7 @@ private:
 	Renderer(GameObject* _pObject, SERIALIZE_INPUT& ar);
 	~Renderer() = default;
 	//アクティブ変更
-	void SetActive(bool _active);
+	void SetActive(bool _active) override;
 	//対応したノードの削除
 	void Delete();
 	//UVRenderNodeへ切り替える
@@ -41,19 +40,7 @@ private:
 	std::shared_ptr<RenderNode> m_node;
 	//描画する順番
 	LAYER m_layer = LAYER::LAYER_01;
-//private:
-//	template<class Archive>
-//	void save(const Archive& archive) const
-//	{
-//		archive(CEREAL_NVP(m_node), CEREAL_NVP(m_layer));
-//	}
-//
-//	template<class Archive>
-//	void load(const Archive& archive) const
-//	{
-//		archive(CEREAL_NVP(m_node), CEREAL_NVP(m_layer));
-//		RenderManager::AddRenderList(m_node, m_layer);
-//	}
+
 };
 
 
@@ -65,6 +52,7 @@ class RenderNode
 	friend class Box2DBody;
 	friend class Box2DBodyChain;
 	friend class Animator;
+	friend class TileMap;
 
 	//描画関連
 protected:
@@ -116,12 +104,6 @@ private:
 	std::shared_ptr<RenderNode> back = nullptr;
 	std::shared_ptr<RenderNode> next = nullptr;
 private:
-	//template<class Archive>
-	//void serialize(Archive& ar) 
-	//{
-	//	ar(CEREAL_NVP(m_color), CEREAL_NVP(active)/*,CEREAL_NVP(texPath)*/);
-	//}
-
 	template <class Archive>
 	void save(Archive& archive) const 
 	{
@@ -163,12 +145,6 @@ private:
 	int m_frameX = 0;
 	int m_frameY = 0;
 private:
-	/*template<class Archive>
-	void serialize(Archive& ar) const
-	{
-		ar(CEREAL_NVP(m_scaleX), CEREAL_NVP(m_scaleY), CEREAL_NVP(m_frameX), CEREAL_NVP(m_frameY));
-	}*/
-
 	template <class Archive>
 	void save(Archive& archive) const
 	{
@@ -188,19 +164,23 @@ private:
 CEREAL_REGISTER_TYPE(UVRenderNode)
 CEREAL_REGISTER_POLYMORPHIC_RELATION(RenderNode, UVRenderNode)
 
+
+
 class RenderManager final
 {
 	friend class Window;
 	friend class RenderNode;
 	friend class UVRenderNode;
+	friend class TileRenderNode;
 	friend class Renderer;
 	friend class SceneManager;
 	friend class Box2D::WorldManager;
 	friend class Box2DBody;
-	friend class Box2DBodyChain;
+	friend class Box2DBodyManager;
 	friend class Box2DBoxRenderNode;
 	friend class Box2DCapsuleRenderNode;
 	friend class Box2DLineRenderNode;
+	friend class TileMap;
 	friend class ImGuiApp;
 
 	using RenderList = std::pair < std::shared_ptr<RenderNode>, std::shared_ptr<RenderNode>>;
@@ -238,12 +218,15 @@ private:
 	//共通のインデックスバッファー
 	static ComPtr<ID3D11Buffer> m_indexBuffer;
 #ifdef DEBUG_TRUE
+	//lineBox用インデックス
+	static ComPtr<ID3D11Buffer> m_lineBoxIndexBuffer;
+
 	struct DrawRayNode
 	{
-		Vector2 center;
-		float length;
-		float radian;
-		XMFLOAT4 color;
+		Vector2 center = { 0.0f,0.0f };
+		float length = DEFAULT_OBJECT_SIZE;
+		float radian = 0.0f;
+		XMFLOAT4 color = { 1.0f,1.0f,1.0f,1.0f };
 	};
 	//当たり判定の描画
 	static bool drawHitBox;
@@ -255,5 +238,19 @@ private:
 	static ComPtr<ID3D11Buffer> m_lineIndexBuffer;
 	//rayを描画するための要素
 	static std::vector<DrawRayNode> m_drawRayNode;
+
+	struct DrawBoxNode
+	{
+		Vector2 center = { 0.0f,0.0f };
+		Vector2 size = { DEFAULT_OBJECT_SIZE,DEFAULT_OBJECT_SIZE };
+		float rad = 0.0f;
+		bool fill = false;
+		XMFLOAT4 color = { 1.0f,1.0f,1.0f,1.0f };
+	};
+
+	//Boxの描画
+	static bool drawBox;
+	//boxを描画するための要素
+	static std::vector<DrawBoxNode> m_drawBoxNode;
 #endif
 };

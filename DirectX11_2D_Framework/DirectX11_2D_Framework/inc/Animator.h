@@ -1,9 +1,6 @@
 #pragma once
 
 
-
-class RenderNode;
-
 struct AnimationFrameData
 {
 	//メモリ確保禁止
@@ -83,6 +80,8 @@ protected:
 	void UpdateCount(long long _count, UVRenderNode* _renderNode);
 	//なにもしない
 	void UpdateVoid(long long, UVRenderNode*) {}
+
+	virtual bool IsLoop() { return false; }
 private:
 	functionPointer pUpdate;
 protected:
@@ -93,6 +92,8 @@ protected:
 	int frameIndex = 0;
 	//現在のカウント
 	long long nowCount = 0;
+	//シリアライズ用
+	std::filesystem::path clipFilePath;
 };
 
 
@@ -105,6 +106,8 @@ private:
 	void Update(long long _count,UVRenderNode* _renderNode);
 	//初期化処理
 	void Awake(UVRenderNode* _renderNode);
+
+	bool IsLoop() override { return true; }
 };
 
 
@@ -114,43 +117,27 @@ class Animator : public Component
 	friend class Renderer;
 
 	Animator(GameObject* _gameObject);
+	Animator(GameObject* _gameObject,SERIALIZE_INPUT& ar);
 	~Animator() = default;
 	void Update() override;
 
 	void SetActive(bool _active);
+	void DrawImGui(ImGuiApp::HandleUI& _handle) override;
+	void Serialize(SERIALIZE_OUTPUT& ar) override;
 public:
-	//デバッグ用
-	//============================================================================
-	void AddClip(std::string _name, std::vector<AnimationFrameData>& _frames, bool _loop = true)
-	{
-		if (m_clip.find(_name) != m_clip.end()) return;
-
-		AnimationClip* clip = _loop ? new AnimationClipLoop() : new AnimationClip();
-
-		for (auto& frame : _frames)
-		{
-			clip->AddFrame(frame);
-		}
-		m_clip.insert(std::make_pair(_name, clip));
-	}
-	//============================================================================
-
 	void AddClip(std::string _name,std::string _path, bool _loop = true);
 
 	void Play(const std::string& _clipName);
 	void Pause();
-	void Resume();
-
-	void DrawImGui(ImGuiApp::HandleUI& _handle) override;
-	
+	void Resume();	
 private:
 	AnimationClip::functionPointer pUpdate = &AnimationClip::Update;
 private:
-	std::unordered_map<std::string, std::shared_ptr<AnimationClip>> m_clip;
+	std::map<std::string, std::shared_ptr<AnimationClip>> m_clip;
 #ifdef DEBUG_TRUE
-	std::string m_currentClipName;
 	std::filesystem::path currentClipPath;
 #endif
+	std::string_view m_currentClipName;
 	std::shared_ptr<AnimationClip> m_currentClip;
 	UVRenderNode* m_uvNode = nullptr;
 };

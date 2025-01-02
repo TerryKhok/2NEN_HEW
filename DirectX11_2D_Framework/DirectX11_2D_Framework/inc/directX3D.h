@@ -16,6 +16,7 @@ using namespace DirectX;
 
 using Microsoft::WRL::ComPtr;
 
+
 // 構造体の定義
 // 頂点データを表す構造体
 struct Vertex final
@@ -64,6 +65,8 @@ class DirectX11 final
 	friend class TextureAssets;
 	friend class RenderNode;
 	friend class UVRenderNode;
+	friend class TileRenderNode;
+	friend class TileMap;
 	friend class RenderManager;
 	friend class CameraManager;
 	friend class SFTextManager;

@@ -56,6 +56,7 @@ private:
 	static void DeleteSelectedObject();
 
 	static void ClearStack();
+	static bool IsSceneChange();
 
 	static void RewindChange();
 
@@ -125,9 +126,13 @@ public:
 	public:
 		//functionの引数であるGameObject*を使用する場合はnullptrかチェックする必要がある
 		void SetUploadFile(std::string _uploadStr, std::function<void(GameObject*, std::filesystem::path)>&& _func, std::vector<std::string>&& _extensions);
+		//ハンドルの機能をロックする
+		void LockHandle(bool _lock,const char* _lockName);
 	private:
 		static ComPtr<ID3D11Buffer> m_arrowVertexBuffer;
 		static ComPtr<ID3D11Buffer> m_arrowIndexBuffer;
+		bool lock = false;
+		std::list<std::string> lockNames;
 		HANDLE_MODE handleMode = POSITION;
 		MOVE_MODE moveMode = NONE;
 		std::string uploadStr = {};

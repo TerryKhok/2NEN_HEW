@@ -76,7 +76,7 @@ void GameObject::SetName(const std::string _name)
 	ObjectManager::ChangeObjectName(name, _name);
 }
 
-const std::string GameObject::GetName() const
+const std::string& GameObject::GetName() const
 {
 	return name;
 }
@@ -172,6 +172,30 @@ SAFE_TYPE(Animator) GameObject::AddComponent<Animator>()
 	}
 
 	return animator;
+}
+
+
+template<>
+SAFE_TYPE(TileMap) GameObject::AddComponent<TileMap>()
+{
+	if (ExistComponent<TileMap>()) return GetComponent<TileMap>();
+
+	Component* component = nullptr;
+	component = new TileMap(this);
+	component->m_this = this;
+
+	//リストに追加(デストラクタ登録)
+	m_componentList.first.emplace_back(
+		std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
+	m_componentList.second[typeid(TileMap).name()] = m_componentList.first.size() - 1;
+
+	TileMap* tileMap = dynamic_cast<TileMap*>(component);
+	if (tileMap == nullptr)
+	{
+		LOG_WARNING("%s component down_cast failed", typeid(TileMap).name());
+	}
+
+	return tileMap;
 }
 
 template<>
@@ -436,6 +460,9 @@ void ObjectManager::AddObject(std::filesystem::path& _path)
 		std::ifstream is(_path.string());
 		cereal::JSONInputArchive archive(is);
 
+		int index = 0;
+		archive(CEREAL_NVP(index));
+		if (index != ObjectFileIndex) return;
 		archive(*object);  // Deserialize polymorphic object
 	}
 
@@ -527,7 +554,7 @@ void ObjectManager::ChangeObjectName(const std::string& _before, const std::stri
 		m_currentList->second.erase(iter);
 		m_currentList->second[uniqueName] = index;
 
-		Box2DBody* rb = nullptr;
+	/*	Box2DBody* rb = nullptr;
 		if (m_currentList->first[index]->TryGetComponent<Box2DBody>(&rb))
 		{
 			auto it = Box2DBodyManager::m_bodyObjectName.find(rb->m_bodyId.index1);
@@ -535,7 +562,7 @@ void ObjectManager::ChangeObjectName(const std::string& _before, const std::stri
 			{
 				it->second = uniqueName;
 			}
-		}
+		}*/
 
 		m_currentList->first[index]->name = uniqueName;
 	}

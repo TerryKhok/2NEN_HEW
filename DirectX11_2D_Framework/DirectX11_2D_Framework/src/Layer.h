@@ -2,6 +2,7 @@
 
 enum LAYER
 {
+	LAYER_BG,
 	LAYER_01,
 	LAYER_02,
 	LAYER_FOG,

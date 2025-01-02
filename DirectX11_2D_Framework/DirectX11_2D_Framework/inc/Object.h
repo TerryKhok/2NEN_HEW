@@ -1,11 +1,5 @@
 #pragma once
 
-//Scale = 1.0f のときの大きさ
-//================================================================
-constexpr float DEFAULT_OBJECT_SIZE = 10.0f;
-constexpr float HALF_OBJECT_SIZE = DEFAULT_OBJECT_SIZE / 2.0f;
-constexpr float QUARTER_OBJECT_SIZE = DEFAULT_OBJECT_SIZE / 4.0f;
-//================================================================
 
 class Renderer;
 class SubWindow;
@@ -37,6 +31,7 @@ class GameObject final
 	friend class CameraManager;
 	friend class RenderNode;
 	friend class UVRenderNode;
+	friend class TileRenderNode;
 	friend class Box2D::WorldManager;
 	friend class Box2DBoxRenderNode;
 	friend class Box2DCircleRenderNode;
@@ -74,7 +69,7 @@ public:
 	//名前の変更
 	void SetName(const std::string _name);
 	//名前の取得
-	const std::string GetName() const;
+	const std::string& GetName() const;
 	//すでにコンポーネントがついてるか確かめる
 	template<typename T>
 	bool ExistComponent()
@@ -150,6 +145,8 @@ public:
 	//Animator完全特殊化
 	template<>
 	SAFE_TYPE(Animator) AddComponent<Animator>();
+	template<>
+	SAFE_TYPE(TileMap) AddComponent<TileMap>();
 	//Box2DBodyComponent完全特殊化
 	template<>
 	SAFE_TYPE(Box2DBody) AddComponent<Box2DBody>();

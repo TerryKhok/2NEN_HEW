@@ -8,6 +8,8 @@ class CameraManager
 {
 	friend class Window;
 	friend class RenderManager;
+	friend class TileMap;
+
 private:
 	CameraManager() = delete;
 	//ƒJƒƒ‰‚Ìs—ñŒvZ‚ğ‚·‚é

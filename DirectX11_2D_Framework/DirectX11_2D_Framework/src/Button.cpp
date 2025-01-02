@@ -1,4 +1,14 @@
 
+void Button::SetEvent(std::string _funcName)
+{
+	auto iter = FunctionRegistry::functions.find(_funcName);
+	if (iter != FunctionRegistry::functions.end())
+	{
+		m_funcName = iter->first;
+		m_event = iter->second;
+	}
+}
+
 void Button::SetAction(BUTTON_ACTION _action)
 {
 	switch (_action)
@@ -15,6 +25,8 @@ void Button::SetAction(BUTTON_ACTION _action)
 	default:
 		break;
 	}
+
+	m_action = _action;
 }
 
 void Button::MouseTrigger()
@@ -69,4 +81,55 @@ void Button::MouseRelease()
 			m_event();
 		}
 	}
+}
+
+void Button::Serialize(SERIALIZE_OUTPUT& ar)
+{
+	std::string funcName(m_funcName);
+	BUTTON_ACTION& action = m_action;
+	ar(CEREAL_NVP(funcName), CEREAL_NVP(action));
+}
+
+void Button::Deserialize(SERIALIZE_INPUT& ar)
+{
+	std::string funcName;
+	BUTTON_ACTION action;
+	ar(CEREAL_NVP(funcName), CEREAL_NVP(action));
+	SetEvent(funcName);
+	SetAction(action);
+}
+
+void Button::DrawImGui(ImGuiApp::HandleUI& _handle)
+{
+	if (ImGui::BeginCombo("action##button", magic_enum::enum_name(m_action).data()))
+	{
+		for (int i = 0; i < ACTION_MAX; i++)
+		{
+			BUTTON_ACTION action = (BUTTON_ACTION)i;
+			bool same = m_action == action;
+			if (ImGui::Selectable(magic_enum::enum_name(action).data(), &same))
+			{
+				SetAction(action);
+			}
+		}
+		ImGui::EndCombo();
+	}
+
+	if (ImGui::BeginCombo("event##button", m_funcName.data()))
+	{
+		for (auto& func : FunctionRegistry::functions)
+		{
+			bool same = m_funcName == func.first;
+			if (ImGui::Selectable(func.first.c_str(),&same))
+			{
+				SetEvent(func.first);
+			}
+		}
+		ImGui::EndCombo();
+	}
+}
+
+void ButtonLog()
+{
+	LOG("Execute");
 }

@@ -108,6 +108,9 @@
     <ClCompile Include="src\Assembly.cpp">
       <Filter>Src</Filter>
     </ClCompile>
+    <ClCompile Include="src\TileMap.cpp">
+      <Filter>component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Box2D.h">
@@ -217,6 +220,9 @@
     </ClInclude>
     <ClInclude Include="inc\Assembly.h">
       <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\TileMap.h">
+      <Filter>component</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

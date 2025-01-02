@@ -64,10 +64,10 @@ long long nowCount = worldOldCount;
 
 std::atomic<bool> Window::terminateFlag(false);
 
-thread_local HWND(*Window::pWindowSubCreate)(std::string, std::string, int, int, Vector2) = WindowSubCreate;
+thread_local HWND(*Window::pWindowSubCreate)(const std::string&, std::string, int, int, Vector2) = WindowSubCreate;
 
 //ウィンドウのハンドルに対応したオブジェクトの名前
-std::unordered_map<HWND, std::string> Window::m_hwndObjNames;
+std::unordered_map<HWND, const std::string&> Window::m_hwndObjNames;
 
 ImGuiContext* mainContext;
 
@@ -181,14 +181,14 @@ LRESULT Window::WindowMainCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, L
 	return LRESULT();
 }
 
-std::string objectName;
 std::string windowName;
+std::string& objectName = windowName;
 int windowWidth;
 int windowHeight;
 
 bool pauseGame = false;
 
-HWND Window::WindowSubCreate(std::string _objName, std::string _windowName, int _width, int _height, Vector2 _pos)
+HWND Window::WindowSubCreate(const std::string& _objName, std::string _windowName, int _width, int _height, Vector2 _pos)
 {
 	HWND hWnd = CreateWindowEx(
 		WS_EX_NOACTIVATE,							// 拡張ウィンドウスタイル
@@ -236,7 +236,7 @@ HWND Window::WindowSubCreate(std::string _objName, std::string _windowName, int 
 
 	DirectX11::CreateWindowSwapChain(hWnd);
 
-	m_hwndObjNames.insert(std::make_pair(hWnd, _objName));
+	m_hwndObjNames.emplace(hWnd, _objName);
 
 #ifdef DEBUG_TRUE
 	if (pauseGame)
@@ -253,7 +253,7 @@ HWND Window::WindowSubCreate(std::string _objName, std::string _windowName, int 
 //まだ表示されていないウィンドウハンドル
 std::vector<HWND> unShowHwnds;
 
-HWND Window::WindowSubCreateAsync(std::string _objName, std::string _windowName, int _width, int _height, Vector2 _pos)
+HWND Window::WindowSubCreateAsync(const std::string& _objName, std::string _windowName, int _width, int _height, Vector2 _pos)
 {
 	// Create a promise and future for window handle
 	std::promise<HWND> handlePromise;
@@ -760,6 +760,8 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					Input::Get().Update();
 
 #ifdef DEBUG_TRUE
+					
+
 					Vector2 mousePos = Input::Get().MousePoint();
 
 					Vector2 worldPos = mousePos;
@@ -768,98 +770,100 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 					bool handleHit = ImGuiApp::UpdateHandleUI(worldPos);
 				
-
 					bool inGameScreen = abs(mousePos.x) <= PROJECTION_WIDTH / 2 && abs(mousePos.y) <= PROJECTION_HEIGHT / 2;
-					//if(abs(mousePos.x) <= PROJECTION_WIDTH / 2 && abs(mousePos.y) <= PROJECTION_HEIGHT / 2)
+					if (!ImGuiApp::handleUi.lock)
 					{
-						std::list<GameObject*> targetObjects;
-						
-						for (auto& object : ObjectManager::m_objectList->first)
+						//if(abs(mousePos.x) <= PROJECTION_WIDTH / 2 && abs(mousePos.y) <= PROJECTION_HEIGHT / 2)
 						{
-							if (!object->active) continue;
+							std::list<GameObject*> targetObjects;
 
-							const Vector2& pos = object->transform.position;
-							Vector2 scale = object->transform.scale;
-							scale *= HALF_OBJECT_SIZE;
-							if ((pos.x - scale.x) < worldPos.x &&
-								(pos.x + scale.x) > worldPos.x &&
-								(pos.y - scale.y) < worldPos.y &&
-								(pos.y + scale.y) > worldPos.y)
+							for (auto& object : ObjectManager::m_objectList->first)
 							{
-								targetObjects.push_back(object.get());
-							}
-						}
-						static GameObject* target = nullptr;
-						if (target != nullptr)
-						{
-							if (target->isSelected != GameObject::SELECTED ||
-								(handleHit && target->isSelected != GameObject::SELECTED))
-							{
-								target->isSelected = GameObject::SELECT_NONE;
-							}
-						}
+								if (!object->active) continue;
 
-						if (!handleHit && inGameScreen)
-						{
-
-							if (targetObjects.empty())
-							{
-								if (Input::Get().MouseLeftTrigger())
+								const Vector2& pos = object->transform.position;
+								Vector2 scale = object->transform.scale;
+								scale *= HALF_OBJECT_SIZE;
+								if ((pos.x - scale.x) < worldPos.x &&
+									(pos.x + scale.x) > worldPos.x &&
+									(pos.y - scale.y) < worldPos.y &&
+									(pos.y + scale.y) > worldPos.y)
 								{
-									ImGuiApp::InvalidSelectedObject();
+									targetObjects.push_back(object.get());
 								}
 							}
-							else
+							static GameObject* target = nullptr;
+							if (target != nullptr)
 							{
-								targetObjects.sort([&](const GameObject* a, const GameObject* b)
-									{return a->selectedNum > b->selectedNum; });
-
-								target = targetObjects.front();
-								if (target != nullptr && target->isSelected != GameObject::SELECTED)
-									target->isSelected = GameObject::ON_MOUSE;
-
-								if (Input::Get().MouseLeftTrigger())
+								if (target->isSelected != GameObject::SELECTED ||
+									(handleHit && target->isSelected != GameObject::SELECTED))
 								{
-									ImGuiApp::InvalidSelectedObject();
-									if (target != nullptr)target->selectedNum = 0;
-									ImGuiApp::SetSelectedObject(target);
-									targetObjects.pop_front();
-									for (auto& object : targetObjects)
+									target->isSelected = GameObject::SELECT_NONE;
+								}
+							}
+
+							if (!handleHit && inGameScreen)
+							{
+
+								if (targetObjects.empty())
+								{
+									if (Input::Get().MouseLeftTrigger())
 									{
-										object->selectedNum++;
+										ImGuiApp::InvalidSelectedObject();
+									}
+								}
+								else
+								{
+									targetObjects.sort([&](const GameObject* a, const GameObject* b)
+										{return a->selectedNum > b->selectedNum; });
+
+									target = targetObjects.front();
+									if (target != nullptr && target->isSelected != GameObject::SELECTED)
+										target->isSelected = GameObject::ON_MOUSE;
+
+									if (Input::Get().MouseLeftTrigger())
+									{
+										ImGuiApp::InvalidSelectedObject();
+										if (target != nullptr)target->selectedNum = 0;
+										ImGuiApp::SetSelectedObject(target);
+										targetObjects.pop_front();
+										for (auto& object : targetObjects)
+										{
+											object->selectedNum++;
+										}
 									}
 								}
 							}
 						}
+
+						if (Input::Get().KeyTrigger(VK_DELETE))
+						{
+							ImGuiApp::DeleteSelectedObject();
+						}
+
+						if (Input::Get().KeyPress(VK_CONTROL) && Input::Get().KeyTrigger(VK_Z))
+						{
+							ImGuiApp::RewindChange();
+						}
+
+						if (Input::Get().KeyTrigger(VK_W))
+						{
+							ImGuiApp::handleUi.handleMode = ImGuiApp::HandleUI::POSITION;
+							ImGuiApp::handleUi.moveMode = ImGuiApp::HandleUI::NONE;
+						}
+						else if (Input::Get().KeyTrigger(VK_E))
+						{
+							ImGuiApp::handleUi.handleMode = ImGuiApp::HandleUI::ROTATION;
+							ImGuiApp::handleUi.moveMode = ImGuiApp::HandleUI::NONE;
+						}
+						else if (Input::Get().KeyTrigger(VK_R))
+						{
+							ImGuiApp::handleUi.handleMode = ImGuiApp::HandleUI::SCALE;
+							ImGuiApp::handleUi.moveMode = ImGuiApp::HandleUI::NONE;
+						}
 					}
 
-					if (Input::Get().KeyTrigger(VK_DELETE))
-					{
-						ImGuiApp::DeleteSelectedObject();
-					}
 
-					if (Input::Get().KeyPress(VK_CONTROL) && Input::Get().KeyTrigger(VK_Z))
-					{
-						ImGuiApp::RewindChange();
-					}
-
-					if (Input::Get().KeyTrigger(VK_W))
-					{
-						ImGuiApp::handleUi.handleMode = ImGuiApp::HandleUI::POSITION;
-						ImGuiApp::handleUi.moveMode = ImGuiApp::HandleUI::NONE;
-					}
-					else if (Input::Get().KeyTrigger(VK_E))
-					{
-						ImGuiApp::handleUi.handleMode = ImGuiApp::HandleUI::ROTATION;
-						ImGuiApp::handleUi.moveMode = ImGuiApp::HandleUI::NONE;
-					}
-					else if (Input::Get().KeyTrigger(VK_R))
-					{
-						ImGuiApp::handleUi.handleMode = ImGuiApp::HandleUI::SCALE;
-						ImGuiApp::handleUi.moveMode = ImGuiApp::HandleUI::NONE;
-					}
-
-					
 					if (inGameScreen)
 					{
 						if (Input::Get().MouseRightTrigger())
@@ -888,6 +892,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 							RenderManager::renderZoom -= RenderManager::renderZoom / 100;
 						}
 					}
+					
 #endif
 
 					//カメラ関連行列セット
@@ -996,7 +1001,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 		DirectX11::CreateWindowSwapChain(hWnd);
 
-		m_hwndObjNames.insert(std::make_pair(hWnd, objectName));
+		m_hwndObjNames.emplace(hWnd, objectName);
 
 		// Fulfill the promise to return the window handle
 		std::promise<HWND>* pPromise = reinterpret_cast<std::promise<HWND>*>(wParam);
