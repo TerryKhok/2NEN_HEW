@@ -82,9 +82,15 @@ private:
 	//ウィンドウを動かしたとき
 	virtual void OnWindowMove(HWND _target, RECT* _rect) {}
 	//シリアライズの際に呼び出す
-	virtual void Serialize(SERIALIZE_OUTPUT& ar){}
+	virtual void Serialize(SERIALIZE_OUTPUT& ar)
+	{
+		//ar(CEREAL_NVP(version));
+	}
 	//デシリアライズの際に呼び出す
-	virtual void Deserialize(SERIALIZE_INPUT& ar) {}
+	virtual void Deserialize(SERIALIZE_INPUT& ar) 
+	{
+		//::cereal::make_optional_nvp(ar, "version", version);
+	}
 private:
 	//============================================
 	// imGuiで描画する
@@ -92,6 +98,8 @@ private:
 	virtual void DrawImGui(ImGuiApp::HandleUI& _handle){
 		ImGui::Text(" not override DrawImGui function!");
 	}
+private:
+	int version = 0;
 };
 
 

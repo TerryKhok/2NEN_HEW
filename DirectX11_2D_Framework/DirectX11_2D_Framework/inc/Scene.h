@@ -216,6 +216,44 @@ public:
 		LoadScene<T>();
 	}
 
+	static void LoadingScene(std::string _sceneName)
+	{
+		//ロード中
+		if (async) return;
+
+		//シーンが登録されているか
+		auto it = m_sceneList.find(_sceneName);
+		if (it != m_sceneList.end()) {
+			async = true;
+			loading = true;
+
+			// Start scene loading asynchronously
+			LOG("Starting scene loading...%s", _sceneName.c_str());
+
+			//スレッドを立てる
+			std::future<void> sceneFuture = std::async(std::launch::async, [&]()
+				{
+					TextureAssets::ChangeNextTextureLib();
+
+					//追加先を新しく変更する
+					Box2D::WorldManager::ChangeNextWorld();
+					RenderManager::ChangeNextRenderList();
+					ObjectManager::ChangeNextObjectList();
+					SFTextManager::ChangeNextTextList();
+					//生成するウィンドウを表示しない
+					Window::WindowSubLoadingBegin();
+					//シーンのロード処理
+					it->second();
+					//古いワールドを削除する
+					Box2D::WorldManager::DeleteOldWorld();
+				});
+			//スレッドが終わるまでループさせる
+			Window::WindowUpdate(sceneFuture, loading);
+
+			return;
+		}
+	}
+
 	//シーンの読み込み(非同期)
 	template<typename T>
 	static void LoadingScene()

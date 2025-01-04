@@ -5,6 +5,7 @@
 #include <cereal/archives/json.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/types/string.hpp>
+#include <cereal/cereal_optional_nvp.h>
 
 static constexpr int SceneFileIndex = 's';
 static constexpr int ObjectFileIndex = 'o';
@@ -61,6 +62,40 @@ template <class Archive>                                    \
 void serialize(Archive& ar) {                               \
     if constexpr (COUNT_ARGS( __VA_ARGS__ ) <= 7) {         \
         ar(SERIALIZE_ARGS(__VA_ARGS__));                    \
+    } else {                                                \
+        ar(__VA_ARGS__);                                    \
+    }                                                       \
+}
+
+// Helper macros to expand and wrap each argument
+#define OPTIONAL_WRAP(arg) CEREAL_OPTIONAL_NVP(ar,arg)
+
+// Recursive macro to process each argument
+#define SERIALIZE_OPTIONAL_1(arg1) OPTIONAL_WRAP(arg1)
+#define SERIALIZE_OPTIONAL_2(arg1, arg2) OPTIONAL_WRAP(arg1);SERIALIZE_OPTIONAL_1(arg2)
+#define SERIALIZE_OPTIONAL_3(arg1, arg2, arg3) OPTIONAL_WRAP(arg1),;SERIALIZE_OPTIONAL_2(arg2, arg3)
+#define SERIALIZE_OPTIONAL_4(arg1, arg2, arg3, arg4) OPTIONAL_WRAP(arg1); SERIALIZE_OPTIONAL_3(arg2, arg3, arg4)
+#define SERIALIZE_OPTIONAL_5(arg1, arg2, arg3, arg4, arg5) OPTIONAL_WRAP(arg1); SERIALIZE_OPTIONAL_4(arg2, arg3, arg4, arg5)
+#define SERIALIZE_OPTIONAL_6(arg1, arg2, arg3, arg4, arg5, arg6) OPTIONAL_WRAP(arg1); SERIALIZE_OPTIONAL_5(arg2, arg3, arg4, arg5, arg6)
+#define SERIALIZE_OPTIONAL_7(arg1, arg2, arg3, arg4, arg5, arg6, arg7) OPTIONAL_WRAP(arg1);SERIALIZE_OPTIONAL_6(arg2, arg3, arg4, arg5, arg6, arg7)
+// Extend as needed for more arguments
+
+// Dispatcher macro to choose the correct expansion
+#define GET_SERIALIZE_OPTIONAL_MACRO(_1, _2, _3, _4, _5, _6, _7, NAME, ...) NAME
+#define SERIALIZE_OPTIONAL(...) EXPAND(GET_SERIALIZE_OPTIONAL_MACRO(__VA_ARGS__, SERIALIZE_OPTIONAL_7, SERIALIZE_OPTIONAL_6, SERIALIZE_OPTIONAL_5, SERIALIZE_OPTIONAL_4, SERIALIZE_OPTIONAL_3, SERIALIZE_OPTIONAL_2, SERIALIZE_OPTIONAL_1)(__VA_ARGS__))
+
+
+#define SERIALIZE_COMPONENT_VALUE(...)                      \
+void Serialize(SERIALIZE_OUTPUT& ar) override{              \
+    if constexpr (COUNT_ARGS( __VA_ARGS__ ) <= 7) {         \
+        SERIALIZE_OPTIONAL(__VA_ARGS__);                    \
+    } else {                                                \
+        ar(__VA_ARGS__);                                    \
+    }                                                       \
+}                                                           \
+void Deserialize(SERIALIZE_INPUT& ar) override{             \
+    if constexpr (COUNT_ARGS( __VA_ARGS__ ) <= 7) {         \
+        SERIALIZE_OPTIONAL(__VA_ARGS__);                    \
     } else {                                                \
         ar(__VA_ARGS__);                                    \
     }                                                       \

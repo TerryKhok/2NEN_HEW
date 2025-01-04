@@ -113,6 +113,9 @@
     <ClCompile Include="Permeation.cpp">
       <Filter>Component</Filter>
     </ClCompile>
+    <ClCompile Include="TestComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="OutlineShader.hlsl" />
