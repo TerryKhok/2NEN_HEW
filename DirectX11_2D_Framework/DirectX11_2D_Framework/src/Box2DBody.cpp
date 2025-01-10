@@ -1325,14 +1325,16 @@ void Box2DBody::CreateSegment(std::vector<b2Vec2> _pointList, bool _sensor)
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pPauseWorldUpdate();
 #endif 
-	for (int i = 0; i < count; i++)
+	for (int i = 0; i < count - 1; i++)
 	{
-		int indexA = i;
-		int indexB = (i + 1) % (count - 1);
 		b2Segment segment1 = { _pointList[i], _pointList[i + 1] };
 		auto shape = b2CreateSegmentShape(m_bodyId, &shapeDef, &segment1);
 		m_shapeList.push_back(shape);
 	}
+
+	b2Segment segment1 = { _pointList[count - 1], _pointList[0] };
+	auto shape = b2CreateSegmentShape(m_bodyId, &shapeDef, &segment1);
+	m_shapeList.push_back(shape);
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pResumeWorldUpdate();
