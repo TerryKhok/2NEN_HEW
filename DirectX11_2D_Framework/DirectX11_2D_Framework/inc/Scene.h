@@ -118,6 +118,8 @@ private:
 	static void UnInit();
 	//次へのシーンの切り替え
 	static void NextScene();
+	
+public:
 	//同期シーン切り替え
 	static void LoadScene(std::string _sceneName)
 	{
@@ -161,7 +163,7 @@ private:
 			LOG("Now Switching to %s", _sceneName.c_str());
 		}
 	}
-public:
+
 	//シーンの読み込み・切り替え(同期)
 	template<typename T>
 	static void LoadScene()

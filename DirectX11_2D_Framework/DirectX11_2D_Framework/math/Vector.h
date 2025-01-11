@@ -39,6 +39,13 @@ public:
 		vec = _v.vec;
 		return *this;
 	}
+
+	Vector2& operator=(const Vector3& _v)
+	{
+		vec.x = _v.vec.x;
+		vec.y = _v.vec.y;
+		return *this;
+	}
 	/// <summary>
 	/// ‰ÁŽZ‰‰ŽZ
 	/// </summary>
@@ -149,6 +156,14 @@ public:
 		vec.x /= _v;
 		vec.y /= _v;
 		return *this;
+	}
+
+	bool operator==(const Vector2& _v)
+	{
+		if (x == _v.x && y == _v.y)
+			return true;
+		
+		return false;
 	}
 
 	void Set(float _x, float _y)
@@ -649,6 +664,14 @@ public:
 	{
 		Div(s);
 		return *this;
+	}
+
+	const bool operator==(const Vector3& vec)
+	{
+		if (x == vec.x && y == vec.y && z == vec.z)
+			return true;
+
+		return false;
 	}
 };
 /// <summary>

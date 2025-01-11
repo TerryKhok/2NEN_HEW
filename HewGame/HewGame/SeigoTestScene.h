@@ -2,6 +2,7 @@
 #include "MovePlayer.h"
 #include "EnemyChaser.h"
 #include "AntiGravity.h"
+#include "Goal.h"
 
 class SeigoTestScene :public Scene
 {

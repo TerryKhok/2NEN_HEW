@@ -147,6 +147,7 @@
     <ClInclude Include="BreakScaffold.h" />
     <ClInclude Include="EnemyChaser.h" />
     <ClInclude Include="Fog.h" />
+    <ClInclude Include="Goal.h" />
     <ClInclude Include="LowGravity.h" />
     <ClInclude Include="MovePlayer.h" />
     <ClInclude Include="Permeation.h" />

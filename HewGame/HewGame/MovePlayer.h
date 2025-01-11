@@ -41,11 +41,6 @@ private:
 			isGround = true;
 		}
 
-		if (Input::Get().KeyPress(VK_E))
-		{
-			DeleteObject(m_this);
-		}
-
 		if (Input::Get().KeyTrigger(VK_D))
 		{
 			right_moving = true;
@@ -63,7 +58,7 @@ private:
 		{
 		case 1:
 		{
-			if (Input::Get().KeyPress(VK_D) && right_moving)
+			if ((Input::Get().KeyPress(VK_D) || Input::Get().ButtonPress(XINPUT_RIGHT) )&& right_moving)
 			{
 				rb->SetVelocityX({ 0 + (float)right_count });
 			}
