@@ -6,8 +6,10 @@
 #include "Rock.h"
 #include "BreakScaffold.h"
 #include "Fog.h"
+#include "Enemy.h"
+#include "EnemyChaser.h"
 
-class SceneGimmick : public Scene
+class YkTestScene : public Scene
 {
 public:
 	SAFE_POINTER(GameObject, player)
@@ -49,7 +51,9 @@ public:
 		box2d->SetFilter(F_OBSTACLE);
 		box2d->CreatePolygonShape(mesh);
 
-
+		//--------------------------------------------------------------
+		// ギミックオブジェクト
+		//--------------------------------------------------------------
 		auto thon = Instantiate("thon", L"asset/pic/hartB.png");
 		thon->transform.position = { -250.0f,-200.0f };
 		thon->transform.scale = { 5.0f,5.0f };
@@ -72,6 +76,16 @@ public:
 		fog->transform.scale = { 50.0f,50.0f };
 		fog->AddComponent<Fog>();
 
+		//-------------------------------------------------------------
+		// エネミーオブジェクト
+		//-------------------------------------------------------------
+		auto enemy = Instantiate("enemy", L"asset/pic/enemy.png");
+		enemy->GetComponent<Renderer>()->SetLayer(LAYER_FOG);
+		enemy->transform.position = { 200.0f,-100.0f };
+		enemy->transform.scale = { 5.0f,5.0f };
+		enemy->AddComponent<Enemy>();
+
+		
 		object = Instantiate("UntiGravityWindow");
 		object->transform.scale = { 30.0f,20.0f };
 		bodyDef2 = b2DefaultBodyDef();
@@ -94,6 +108,7 @@ public:
 		auto window = object->AddComponent<SubWindow>("Permeation");
 		window->DisableDrawLayer(LAYER_FOG);
 		object->AddComponent<Permeation>();
+
 	}
 
 	void Update()

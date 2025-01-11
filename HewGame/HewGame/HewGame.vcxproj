@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="Bounce.h" />
     <ClInclude Include="BreakScaffold.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyChaser.h" />
     <ClInclude Include="Fog.h" />
     <ClInclude Include="Goal.h" />
@@ -152,7 +153,6 @@
     <ClInclude Include="MovePlayer.h" />
     <ClInclude Include="Permeation.h" />
     <ClInclude Include="Rock.h" />
-    <ClInclude Include="Scene_Gimmick.h" />
     <ClInclude Include="Scene_ProtoType.h" />
     <ClInclude Include="Sample_Animation.h" />
     <ClInclude Include="Sample_Box2D.h" />
@@ -162,9 +162,11 @@
     <ClInclude Include="AntiGravity.h" />
     <ClInclude Include="Thon.h" />
     <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="YkTestScene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BreakScaffold.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Fog.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Permeation.cpp" />

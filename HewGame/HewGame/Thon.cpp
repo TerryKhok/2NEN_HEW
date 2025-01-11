@@ -1,4 +1,4 @@
-#include "Scene_Gimmick.h"
+#include "YkTestScene.h"
 #include "Thon.h"
 #include "MovePlayer.h"
 
@@ -20,6 +20,6 @@ void Thon::OnColliderEnter(GameObject* _other)
 	if (_other->TryGetComponent<MovePlayer>(&rb))
 	{
 		LOG(_other->GetName().c_str());
-		SceneManager::LoadScene<SceneGimmick>();
+		SceneManager::LoadScene<YkTestScene>();
 	}
 }

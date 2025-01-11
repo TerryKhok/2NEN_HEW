@@ -1,4 +1,4 @@
-#include "Scene_Gimmick.h"
+#include "YkTestScene.h"
 #include "Rock.h"
 #include "MovePlayer.h"
 
@@ -24,6 +24,6 @@ void Rock::OnCollisionEnter(GameObject* _other)
 	if (_other->TryGetComponent<MovePlayer>(&rb))
 	{
 		LOG(_other->GetName().c_str());
-		SceneManager::LoadScene<SceneGimmick>();
+		SceneManager::LoadScene<YkTestScene>();
 	}
 }

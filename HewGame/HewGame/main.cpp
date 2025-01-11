@@ -2,14 +2,14 @@
 #include "Scene_ProtoType.h"
 #include "SeigoTestScene.h"
 #include "TitleScene.h"
-#include "Scene_Gimmick.h"
+#include "YkTestScene.h"
 
 
 SetReflectionComponent(BreakScaffold)
 SetReflectionComponent(Fog)
 SetReflectionComponent(Rock)
 SetReflectionComponent(Thon)
-SetReflectionScene(SceneGimmick)
+SetReflectionScene(YkTestScene)
 
 //シーンの登録、レイヤーの設定
 //============================================================

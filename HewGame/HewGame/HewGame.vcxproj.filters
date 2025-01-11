@@ -34,6 +34,9 @@
     <Filter Include="Component\GimmickObj\Fog">
       <UniqueIdentifier>{33095a37-c1b3-4f7d-a204-1a24185ad0da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component\Enemy">
+      <UniqueIdentifier>{7070a3ab-6a8c-4015-a917-b3833f6c6b30}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sample_Box2D.h">
@@ -72,9 +75,6 @@
     <ClInclude Include="Bounce.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="Scene_Gimmick.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Thon.h">
       <Filter>Component\GimmickObj\Thon</Filter>
     </ClInclude>
@@ -92,6 +92,12 @@
     </ClInclude>
     <ClInclude Include="Goal.h">
       <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="YkTestScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Component\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +121,9 @@
     </ClCompile>
     <ClCompile Include="Permeation.cpp">
       <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Component\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
