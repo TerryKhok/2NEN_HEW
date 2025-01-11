@@ -40,12 +40,6 @@ public:
 		return *this;
 	}
 
-	Vector2& operator=(const Vector3& _v)
-	{
-		vec.x = _v.vec.x;
-		vec.y = _v.vec.y;
-		return *this;
-	}
 	/// <summary>
 	/// ‰ÁŽZ‰‰ŽZ
 	/// </summary>
