@@ -1,0 +1,751 @@
+{
+    "index": 115,
+    "objectNum": 5,
+    "value0": {
+        "name": "map",
+        "transform": {
+            "position": {
+                "x": 4.168209075927734,
+                "y": -10.448638916015625,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 16.455095291137697,
+                "y": 16.455068588256837,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody"
+        ],
+        "m_filter": 16,
+        "data": {
+            "type": 2,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": -47.21315002441406,
+                "vec.y": -33.64817810058594
+            },
+            "chain.ghost2": {
+                "vec.x": 46.08317947387695,
+                "vec.y": 14.394864082336426
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": -46.68464279174805,
+                    "vec.y": 33.82434844970703
+                },
+                "seg.point2": {
+                    "vec.x": 45.62763214111328,
+                    "vec.y": 34.000511169433597
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": -46.68464279174805,
+                "vec.y": 33.82434844970703
+            },
+            "chain.ghost2": {
+                "vec.x": 32.43317794799805,
+                "vec.y": 14.094863891601563
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": 45.62763214111328,
+                    "vec.y": 34.000511169433597
+                },
+                "seg.point2": {
+                    "vec.x": 46.08317947387695,
+                    "vec.y": 14.394864082336426
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": 45.62763214111328,
+                "vec.y": 34.000511169433597
+            },
+            "chain.ghost2": {
+                "vec.x": 33.033180236816409,
+                "vec.y": -20.255136489868165
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": 46.08317947387695,
+                    "vec.y": 14.394864082336426
+                },
+                "seg.point2": {
+                    "vec.x": 32.43317794799805,
+                    "vec.y": 14.094863891601563
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": 46.08317947387695,
+                "vec.y": 14.394864082336426
+            },
+            "chain.ghost2": {
+                "vec.x": 4.05187463760376,
+                "vec.y": -20.611711502075197
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": 32.43317794799805,
+                    "vec.y": 14.094863891601563
+                },
+                "seg.point2": {
+                    "vec.x": 33.033180236816409,
+                    "vec.y": -20.255136489868165
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": 32.43317794799805,
+                "vec.y": 14.094863891601563
+            },
+            "chain.ghost2": {
+                "vec.x": -8.80842399597168,
+                "vec.y": -20.787878036499025
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": 33.033180236816409,
+                    "vec.y": -20.255136489868165
+                },
+                "seg.point2": {
+                    "vec.x": 4.05187463760376,
+                    "vec.y": -20.611711502075197
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": 33.033180236816409,
+                "vec.y": -20.255136489868165
+            },
+            "chain.ghost2": {
+                "vec.x": -8.632254600524903,
+                "vec.y": -27.834619522094728
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": 4.05187463760376,
+                    "vec.y": -20.611711502075197
+                },
+                "seg.point2": {
+                    "vec.x": -8.80842399597168,
+                    "vec.y": -20.787878036499025
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": 4.05187463760376,
+                "vec.y": -20.611711502075197
+            },
+            "chain.ghost2": {
+                "vec.x": -29.067798614501954,
+                "vec.y": -28.186954498291017
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": -8.80842399597168,
+                    "vec.y": -20.787878036499025
+                },
+                "seg.point2": {
+                    "vec.x": -8.632254600524903,
+                    "vec.y": -27.834619522094728
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": -8.80842399597168,
+                "vec.y": -20.787878036499025
+            },
+            "chain.ghost2": {
+                "vec.x": -29.067798614501954,
+                "vec.y": -33.295841217041019
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": -8.632254600524903,
+                    "vec.y": -27.834619522094728
+                },
+                "seg.point2": {
+                    "vec.x": -29.067798614501954,
+                    "vec.y": -28.186954498291017
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": -8.632254600524903,
+                "vec.y": -27.834619522094728
+            },
+            "chain.ghost2": {
+                "vec.x": -47.21315002441406,
+                "vec.y": -33.64817810058594
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": -29.067798614501954,
+                    "vec.y": -28.186954498291017
+                },
+                "seg.point2": {
+                    "vec.x": -29.067798614501954,
+                    "vec.y": -33.295841217041019
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": -29.067798614501954,
+                "vec.y": -28.186954498291017
+            },
+            "chain.ghost2": {
+                "vec.x": -46.68464279174805,
+                "vec.y": 33.82434844970703
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": -29.067798614501954,
+                    "vec.y": -33.295841217041019
+                },
+                "seg.point2": {
+                    "vec.x": -47.21315002441406,
+                    "vec.y": -33.64817810058594
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": -29.067798614501954,
+                "vec.y": -33.295841217041019
+            },
+            "chain.ghost2": {
+                "vec.x": 45.62763214111328,
+                "vec.y": 34.000511169433597
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": -47.21315002441406,
+                    "vec.y": -33.64817810058594
+                },
+                "seg.point2": {
+                    "vec.x": -46.68464279174805,
+                    "vec.y": 33.82434844970703
+                }
+            }
+        }
+    },
+    "value1": {
+        "name": "platform_main",
+        "transform": {
+            "position": {
+                "x": 69.0,
+                "y": 24.0,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody"
+        ],
+        "m_filter": 1,
+        "data": {
+            "type": 0,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 2500.0,
+            "mass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": 4.034033298492432,
+                "vec.y": -8.141020774841309
+            },
+            "poly.count": 4,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": -0.9982744455337524,
+                    "vec.y": -0.05872202292084694
+                },
+                "value1": {
+                    "vec.x": 0.013887514360249043,
+                    "vec.y": -0.9999035596847534
+                },
+                "value2": {
+                    "vec.x": 0.9922779202461243,
+                    "vec.y": 0.1240348145365715
+                },
+                "value3": {
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": -1.350000023841858,
+                    "vec.y": -6.900000095367432
+                },
+                "value1": {
+                    "vec.x": -1.2000000476837159,
+                    "vec.y": -9.449999809265137
+                },
+                "value2": {
+                    "vec.x": 9.600000381469727,
+                    "vec.y": -9.300000190734864
+                },
+                "value3": {
+                    "vec.x": 9.300000190734864,
+                    "vec.y": -6.900000095367432
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            }
+        }
+    },
+    "value2": {
+        "name": "Player",
+        "transform": {
+            "position": {
+                "x": 118.7811279296875,
+                "y": -7.509915351867676,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class Box2DBody",
+            "class MovePlayer"
+        ],
+        "m_layer": 0,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483649,
+                "data": {
+                    "active": true,
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset/pic/hartR.png"
+                }
+            }
+        },
+        "m_filter": 8,
+        "data": {
+            "type": 2,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": -0.7779690027236939
+            },
+            "angleVec": 0.0,
+            "gravity": 10.0,
+            "mass": 1.0,
+            "bullet": true,
+            "fixRot": true,
+            "awake": true
+        },
+        "types": [
+            1
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "capsule": {
+            "cap.center1": {
+                "vec.x": 0.0,
+                "vec.y": -1.25
+            },
+            "cap.center2": {
+                "vec.x": 0.0,
+                "vec.y": 1.25
+            },
+            "cap.radius": 2.5
+        }
+    },
+    "value3": {
+        "name": "window01",
+        "transform": {
+            "position": {
+                "x": 228.0,
+                "y": 61.5,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 15.0,
+                "y": 15.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class SubWindow",
+            "class Box2DBody",
+            "class LowGravity"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483650,
+                "data": {
+                    "active": true,
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 0.0,
+                        "f.w": 0.20000000298023225
+                    },
+                    "path": "null"
+                }
+            }
+        },
+        "m_filter": 64,
+        "data": {
+            "type": 2,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": true,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "poly.count": 4,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
+                },
+                "value1": {
+                    "vec.x": 1.0,
+                    "vec.y": 0.0
+                },
+                "value2": {
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
+                },
+                "value3": {
+                    "vec.x": -1.0,
+                    "vec.y": 0.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": -7.5,
+                    "vec.y": -7.5
+                },
+                "value1": {
+                    "vec.x": 7.5,
+                    "vec.y": -7.5
+                },
+                "value2": {
+                    "vec.x": 7.5,
+                    "vec.y": 7.5
+                },
+                "value3": {
+                    "vec.x": -7.5,
+                    "vec.y": 7.5
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            }
+        }
+    },
+    "value4": {
+        "name": "goal",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Goal"
+        ],
+        "sceneName": "goal",
+        "waitCount": 60
+    }
+}
