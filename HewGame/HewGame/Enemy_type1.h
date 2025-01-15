@@ -1,6 +1,6 @@
 #pragma once
 
-class Enemy :public Component
+class Enemy_type1 :public Component
 {
 private:
 
@@ -38,4 +38,4 @@ private:
 	};
 };
 
-SetReflectionComponent(Enemy);
+SetReflectionComponent(Enemy_type1);

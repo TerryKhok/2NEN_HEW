@@ -6,8 +6,10 @@
 #include "Rock.h"
 #include "BreakScaffold.h"
 #include "Fog.h"
-#include "Enemy.h"
 #include "EnemyChaser.h"
+#include "Enemy_type1.h"
+#include "Enemy_type2.h"
+#include "Enemy_type3.h"
 
 class YkTestScene : public Scene
 {
@@ -79,13 +81,25 @@ public:
 		//-------------------------------------------------------------
 		// エネミーオブジェクト
 		//-------------------------------------------------------------
-		auto enemy = Instantiate("enemy", L"asset/pic/enemy.png");
-		enemy->GetComponent<Renderer>()->SetLayer(LAYER_FOG);
-		enemy->transform.position = { 200.0f,-100.0f };
-		enemy->transform.scale = { 5.0f,5.0f };
-		enemy->AddComponent<Enemy>();
+		auto enemy_type1 = Instantiate("enemy", L"asset/pic/enemy.png");
+		enemy_type1->GetComponent<Renderer>()->SetLayer(LAYER_FOG);
+		enemy_type1->transform.position = { 200.0f,-100.0f };
+		enemy_type1->transform.scale    = { 5.0f,5.0f };
+		enemy_type1->AddComponent<Enemy_type1>();
 
-		
+		auto enemy_type2 = Instantiate("enemy", L"asset/pic/enemy.png");
+		enemy_type2->GetComponent<Renderer>()->SetLayer(LAYER_FOG);
+		enemy_type2->transform.position = { 250.0f,-200.0f };
+		enemy_type2->transform.scale    = { 5.0f,5.0f };
+		enemy_type2->AddComponent<Enemy_type2>();
+
+		auto enemy_type3 = Instantiate("enemy", L"asset/pic/enemy.png");
+		enemy_type3->GetComponent<Renderer>()->SetLayer(LAYER_FOG);
+		enemy_type3->transform.position = { 250.0f,-200.0f };
+		enemy_type3->transform.scale = { 5.0f,5.0f };
+		enemy_type3->AddComponent<Enemy_type3>();
+
+		//++++++++++++++++++++++ここまで+++++++++++++++++++++++++++++++
 		object = Instantiate("UntiGravityWindow");
 		object->transform.scale = { 30.0f,20.0f };
 		bodyDef2 = b2DefaultBodyDef();

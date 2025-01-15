@@ -1,13 +1,13 @@
 #include "YkTestScene.h"
-#include "Enemy.h"
+#include "Enemy_type1.h"
 #include "MovePlayer.h"
 
-void Enemy::Start()
+void Enemy_type1::Start()
 {
 	rb = m_this->GetComponent<Box2DBody>();
 }
 
-void Enemy::Update()
+void Enemy_type1::Update()
 {
 	searchCount++;
 	if (searchCount > 10)
@@ -36,7 +36,7 @@ void Enemy::Update()
 		
 }
 
-void Enemy::Search(Vector3 targetPos)
+void Enemy_type1::Search(Vector3 targetPos)
 {
 	Vector3 evec;
 
@@ -92,7 +92,7 @@ void Enemy::Search(Vector3 targetPos)
 	}
 }
 
-void Enemy::OnColliderEnter(GameObject* _other)
+void Enemy_type1::OnColliderEnter(GameObject* _other)
 {
 	MovePlayer* rb = nullptr;
 	if (_other->TryGetComponent<MovePlayer>(&rb))
@@ -102,7 +102,7 @@ void Enemy::OnColliderEnter(GameObject* _other)
 	}
 }
 
-void Enemy::DrawImGui(ImGuiApp::HandleUI& _handle)
+void Enemy_type1::DrawImGui(ImGuiApp::HandleUI& _handle)
 {
 	ImGui::InputFloat("speed##Enemy", &speed);
 	ImGui::InputFloat("Renge##Enemy", &searchRenge);
