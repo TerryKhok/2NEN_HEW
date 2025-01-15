@@ -47,12 +47,14 @@ private:
 		{
 			right_moving = true;
 			rb->SetVelocityX({ 0 + (float)right_count });
+			input.SetVibration(1, 1);
 		}
 
 		if ((input.KeyPress(VK_A) || input.LeftAnalogStick().x < -0.1f))
 		{
 			left_moving = true;
 			rb->SetVelocityX({ 0 - (float)left_count });
+			input.SetVibration(1, 1);
 		}
 
 		/*if (input.KeyTrigger(VK_D))

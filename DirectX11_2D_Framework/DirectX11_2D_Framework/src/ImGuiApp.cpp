@@ -163,8 +163,8 @@ HRESULT ImGuiApp::Init(HINSTANCE hInstance)
 		context[type] = ImGui::CreateContext();
 		ImGui::SetCurrentContext(context[type]);
 
-		/*ImGuiIO& io = ImGui::GetIO(); (void)io;
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;*/
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 
 		m_hWndContexts.insert(std::make_pair(hWnd, context[type]));
@@ -373,6 +373,18 @@ void ImGuiApp::Draw()
 		ImGui_ImplWin32_NewFrame();
 		ImGui_ImplDX11_NewFrame();
 		ImGui::NewFrame();
+
+		ImGuiIO& io = ImGui::GetIO();
+
+		// キーボードのキー入力を設定 (必要なキーを追加)
+		io.AddKeyEvent(ImGuiKey_Space, GetAsyncKeyState(VK_SPACE) & 0x8000);
+		io.AddKeyEvent(ImGuiKey_Enter, GetAsyncKeyState(VK_RETURN) & 0x8000);
+		io.AddKeyEvent(ImGuiKey_Escape, GetAsyncKeyState(VK_ESCAPE) & 0x8000);
+		io.AddKeyEvent(ImGuiKey_Backspace, GetAsyncKeyState(VK_BACK) & 0x8000);
+		io.AddKeyEvent(ImGuiKey_LeftArrow, GetAsyncKeyState(VK_LEFT) & 0x8000);
+		io.AddKeyEvent(ImGuiKey_RightArrow, GetAsyncKeyState(VK_RIGHT) & 0x8000);
+		io.AddKeyEvent(ImGuiKey_UpArrow, GetAsyncKeyState(VK_UP) & 0x8000);
+		io.AddKeyEvent(ImGuiKey_DownArrow, GetAsyncKeyState(VK_DOWN) & 0x8000);
 
 		// 描画先キャンバスを塗りつぶす
 		DirectX11::m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetView[type].Get(), clearColor);
