@@ -957,6 +957,15 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	break;
 	case WM_ADJUST_Z_ORDER:
 	{
+#ifdef DEBUG_TRUE
+		/*HWND consoleWindow = GetConsoleWindow();
+		SetWindowPos(consoleWindow, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);*/
+
+		for (auto hwnd : ImGuiApp::m_hWnd)
+		{
+			SetWindowPos(hwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+		}
+#endif
 		if (pauseGame) break;
 
 		for (auto hwnd : m_hwndObjNames)
