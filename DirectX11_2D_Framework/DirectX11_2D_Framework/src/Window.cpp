@@ -394,7 +394,7 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 #ifndef BOX2D_UPDATE_MULTITHREAD
 			Box2D::WorldManager::WorldUpdate();
 #endif
-			TRY_CATCH_LOG(Box2D::WorldManager::ExecuteSensorEvent());
+			TRY_CATCH_LOG(Box2D::WorldManager::ExecuteBodyEvent());
 
 #ifdef DEBUG_TRUE
 			worldFpsounter++;
@@ -494,7 +494,7 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 #ifndef BOX2D_UPDATE_MULTITHREAD
 				Box2D::WorldManager::WorldUpdate();
 #endif
-				TRY_CATCH_LOG(Box2D::WorldManager::ExecuteSensorEvent());
+				TRY_CATCH_LOG(Box2D::WorldManager::ExecuteBodyEvent());
 
 #ifdef DEBUG_TRUE
 				worldFpsounter++;
@@ -674,11 +674,15 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			// Keyboard events
 		case WM_KEYDOWN:
 			if (wParam < 256)
+#ifndef IMGUI_DISABLE_OBSOLETE_KEYIO
 				io.KeysDown[wParam] = 1;
+#endif
 			break;
 		case WM_KEYUP:
 			if (wParam < 256)
+#ifndef IMGUI_DISABLE_OBSOLETE_KEYIO
 				io.KeysDown[wParam] = 0;
+#endif
 			break;
 		case WM_CHAR:
 			if (wParam > 0 && wParam < 0x10000)
@@ -953,6 +957,15 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	break;
 	case WM_ADJUST_Z_ORDER:
 	{
+#ifdef DEBUG_TRUE
+		/*HWND consoleWindow = GetConsoleWindow();
+		SetWindowPos(consoleWindow, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);*/
+
+		for (auto hwnd : ImGuiApp::m_hWnd)
+		{
+			SetWindowPos(hwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+		}
+#endif
 		if (pauseGame) break;
 
 		for (auto hwnd : m_hwndObjNames)
@@ -1207,6 +1220,14 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	switch (uMsg)
 	{
+#ifdef SUBWINDOW_MOVELOCK
+	case WM_SYSCOMMAND:
+		if ((wParam & 0xFFF0) == SC_MOVE) {
+			// 移動を無効化
+			return 0;
+		}
+		break;
+#endif
 	case WM_CLOSE:  // 「x」ボタンが押されたら
 	{
 		auto& swapList = DirectX11::m_pSwapChainList;
@@ -1263,7 +1284,7 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				const auto& list = gameObject->m_componentList;
 				for (auto& component : list.first)
 				{
-					component->OnWindowEnter(hWnd);
+					TRY_CATCH_LOG(component->OnWindowEnter(hWnd));
 				}
 			}
 		}
@@ -1294,7 +1315,7 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					const auto& list = gameObject->m_componentList;
 					for (auto& component : list.first)
 					{
-						component->OnWindowExit(hWnd);
+						TRY_CATCH_LOG(component->OnWindowExit(hWnd));
 					}
 				}
 			}
@@ -1324,7 +1345,7 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					const auto& list = gameObject->m_componentList;
 					for (auto& component : list.first)
 					{
-						component->OnWindowExit(hWnd);
+						TRY_CATCH_LOG(component->OnWindowExit(hWnd));
 					}
 				}
 			}
@@ -1344,7 +1365,7 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				const auto& list = gameObject->m_componentList;
 				for (auto& component : list.first)
 				{
-					component->OnWindowMove(hWnd, rect);
+					TRY_CATCH_LOG(component->OnWindowMove(hWnd, rect));
 				}
 			}
 		}

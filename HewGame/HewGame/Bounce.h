@@ -9,8 +9,7 @@ class Bounce : public Component
 
 	const XMFLOAT4 enterColor = { 1.0f,0.0f,0.0f,0.5f };
 	const XMFLOAT4 exitColor = { 0.8f,0.2f,0.2f,0.4f };
-	const float restitutionPower = 0.8f;
-	const float lowPower = 50.0f;
+	float restitutionPower = 0.8f;
 
 	void Start() override
 	{
@@ -114,6 +113,13 @@ class Bounce : public Component
 
 		enterObjects.clear();
 	}
+
+	void DrawImGui(ImGuiApp::HandleUI& _handleUI) override
+	{
+		ImGui::InputFloat("restitution", &restitutionPower);
+	}
+
+	SERIALIZE_COMPONENT_VALUE(restitutionPower)
 };
 
 SetReflectionComponent(Bounce)

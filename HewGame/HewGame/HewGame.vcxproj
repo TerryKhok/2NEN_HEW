@@ -129,7 +129,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <ForcedIncludeFiles>stdafx.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
-      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <AdditionalIncludeDirectories>$(SolutionDir)../DirectX11_2D_Framework/DirectX11_2D_Framework;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -145,12 +145,15 @@
   <ItemGroup>
     <ClInclude Include="Bounce.h" />
     <ClInclude Include="BreakScaffold.h" />
-    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Enemy_type1.h" />
     <ClInclude Include="EnemyChaser.h" />
+    <ClInclude Include="Enemy_type2.h" />
+    <ClInclude Include="Enemy_type3.h" />
     <ClInclude Include="Fog.h" />
     <ClInclude Include="Goal.h" />
     <ClInclude Include="LowGravity.h" />
     <ClInclude Include="MovePlayer.h" />
+    <ClInclude Include="MoveSubWindow.h" />
     <ClInclude Include="Permeation.h" />
     <ClInclude Include="Rock.h" />
     <ClInclude Include="Scene_ProtoType.h" />
@@ -166,7 +169,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BreakScaffold.cpp" />
-    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Enemy_type1.cpp" />
+    <ClCompile Include="Enemy_type2.cpp" />
+    <ClCompile Include="Enemy_type3.cpp" />
     <ClCompile Include="Fog.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Permeation.cpp" />

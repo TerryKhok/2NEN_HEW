@@ -8,6 +8,8 @@ bool Input::isMouseUpLeft = false;
 bool Input::isMouseUpRight = false;
 int Input::mouseWheelDelta = 0;
 
+//InputState::INPUT_TYPE InputState::iState;
+
 //コンストラクタ
 Input::Input()
 {
@@ -40,8 +42,24 @@ void Input::Update()
 	//キー入力を更新
 	BOOL hr = GetKeyboardState(keyState);
 
+	//for (int type = 0; type < ImGuiApp::TYPE_MAX; type++)
+	//{
+	//	ImGui::SetCurrentContext(ImGuiApp::context[type]);
+
+	//	ImGuiIO& io = ImGui::GetIO();
+
+	//	// キーボードのキー入力を設定 (必要なキーを追加)
+	//	io.AddKeyEvent(ImGuiKey_Space, keyState[VK_SPACE] & 0x8000);
+	//	io.AddKeyEvent(ImGuiKey_Enter, keyState[VK_RETURN] & 0x8000);
+	//	io.AddKeyEvent(ImGuiKey_Escape, keyState[VK_ESCAPE] & 0x8000);
+	//	io.AddKeyEvent(ImGuiKey_LeftArrow, keyState[VK_LEFT] & 0x8000);
+	//	io.AddKeyEvent(ImGuiKey_RightArrow, keyState[VK_RIGHT] & 0x8000);
+	//	io.AddKeyEvent(ImGuiKey_UpArrow, keyState[VK_UP] & 0x8000);
+	//	io.AddKeyEvent(ImGuiKey_DownArrow, keyState[VK_DOWN] & 0x8000);
+	//}
+
 	//コントローラー入力を更新(XInput)
-	XInputGetState(0, &controllerState);
+	controllerConnect = XInputGetState(0, &controllerState);
 
 	//振動継続時間をカウント
 	if (VibrationTime > 0) {
@@ -126,23 +144,23 @@ int Input::MouseWheelDelta()
 
 
 //左アナログスティック
-DirectX::XMFLOAT2 Input::LeftAnalogStick(void)
+Vector2 Input::LeftAnalogStick(void)
 {
 	SHORT x = controllerState.Gamepad.sThumbLX; // -32768～32767
 	SHORT y = controllerState.Gamepad.sThumbLY; // -32768～32767
 
-	DirectX::XMFLOAT2 res;
+	Vector2 res;
 	res.x = x / 32767.0f; //-1～1
 	res.y = y / 32767.0f; //-1～1
 	return res;
 }
 //右アナログスティック
-DirectX::XMFLOAT2 Input::RightAnalogStick(void)
+Vector2 Input::RightAnalogStick(void)
 {
 	SHORT x = controllerState.Gamepad.sThumbRX; // -32768～32767
 	SHORT y = controllerState.Gamepad.sThumbRY; // -32768～32767
 
-	DirectX::XMFLOAT2 res;
+	Vector2 res;
 	res.x = x / 32767.0f; //-1～1
 	res.y = y / 32767.0f; //-1～1
 	return res;
@@ -190,3 +208,32 @@ void Input::SetVibration(int frame, float powor)
 	//振動継続時間を代入
 	VibrationTime = frame;
 }
+
+bool Input::IsConnectController() const
+{
+	return controllerConnect == ERROR_SUCCESS;
+}
+
+//void InputState::AddKeyBoardMap(const char* _name, int _key)
+//{
+//	auto iter = inputMap.find(_name);
+//	if (iter != inputMap.end())
+//	{
+//		iter->second.first = _key;
+//		return;
+//	}
+//
+//	inputMap.emplace(_name, std::make_pair(_key, 0));
+//}
+//
+//void InputState::AddControllerMap(const char* _name, int _btn)
+//{
+//	auto iter = inputMap.find(_name);
+//	if (iter != inputMap.end())
+//	{
+//		iter->second.second = _btn;
+//		return;
+//	}
+//
+//	inputMap.emplace(_name, std::make_pair(0, _btn));
+//}

@@ -283,9 +283,9 @@ private:
 	template <class Archive>
 	void save(Archive& archive) const {
 		std::vector<std::string> comNames;
-		for (auto& com : m_componentList.second)
+		for (auto& com : m_componentList.first)
 		{
-			comNames.push_back(com.first);
+			comNames.push_back(com->getType());
 		}
 		archive(CEREAL_NVP(name), CEREAL_NVP(transform), CEREAL_NVP(active), CEREAL_NVP(comNames));
 		for (auto& com : m_componentList.first)
@@ -321,6 +321,16 @@ private:
 		for (auto& com : m_componentList.first)
 		{
 			com->Deserialize(archive);
+		}
+
+		if (!active)
+		{
+			for (auto& component : m_componentList.first)
+			{
+				component->SetActive(active);
+			}
+			//更新関数ポインターを設定
+			pUpdate = &GameObject::Void;
 		}
 	}
 

@@ -229,7 +229,7 @@ Box2DBody::Box2DBody(GameObject* _object, SERIALIZE_INPUT& ar)
 			else
 			{
 				std::vector<b2Vec2> pointList;
-				pointList.resize(polygon.count);
+				//pointList.resize(polygon.count);
 				for (int i = 0; i < polygon.count; i++)
 				{
 					pointList.push_back(
@@ -726,6 +726,8 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 			}
 		}
 		break;
+
+		
 		case SEGMENT:
 		case POLYGON:
 		case CHAIN:
@@ -782,15 +784,43 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 			}
 			if (editVertex)
 			{
+				bool notLoop = false;
+				static bool out = false;
+				switch (selectType)
+				{
+				case SEGMENT:
+					notLoop = true;
+					break;
+				case POLYGON:
+					break;
+				case CHAIN:
+					ImGui::Checkbox("out", &out);
+					break;
+				}
+
 				if (create)
 				{
 					std::vector<b2Vec2> points;
-					for (auto& point : pointList)
+					if (out)
 					{
-						points.emplace_back(
-							point.x, point.y
-						);
+						for (int i = (int)pointList.size() - 1; i >= 0; i--)
+						{
+							auto& point = pointList[i];
+							points.emplace_back(
+								point.x, point.y
+							);
+						}
 					}
+					else
+					{
+						for (auto& point : pointList)
+						{
+							points.emplace_back(
+								point.x, point.y
+							);
+						}
+					}
+					
 					switch (selectType)
 					{
 					case SEGMENT:
@@ -926,7 +956,7 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 
 				pointNum = (int)pointList.size();
 				const float colorSeg = 1.0f / pointNum;
-				for (int i = 0; i < pointNum; i++)
+				for (int i = 0; i < pointNum - notLoop; i++)
 				{
 					int nextIndex = (i + 1) % pointNum;
 					auto& start = pointList[i];
@@ -947,6 +977,19 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 						boxNode.color = XMFLOAT4(1.0f, colorSeg * i, 1.0f, 1.0f);
 					else
 						boxNode.color = XMFLOAT4(0.6f, colorSeg * i, 0.6f, 1.0f);
+
+					RenderManager::m_drawBoxNode.push_back(std::move(boxNode));
+				}
+
+				if (notLoop)
+				{
+					RenderManager::DrawBoxNode boxNode;
+					boxNode.center = pointList[pointNum - 1] + m_this->transform.position;
+					boxNode.size = { 1.0f / RenderManager::renderZoom.x,1.0f / RenderManager::renderZoom.y };
+					if (selectIndex == pointNum - 1)
+						boxNode.color = XMFLOAT4(1.0f, colorSeg * pointNum - 1, 1.0f, 1.0f);
+					else
+						boxNode.color = XMFLOAT4(0.6f, colorSeg * pointNum - 1, 0.6f, 1.0f);
 
 					RenderManager::m_drawBoxNode.push_back(std::move(boxNode));
 				}
@@ -1275,7 +1318,7 @@ void Box2DBody::CreateSegment(std::vector<b2Vec2> _pointList, bool _sensor)
 
 #ifdef DEBUG_TRUE
 	size_t pointNum = _pointList.size();
-	for (size_t i = 0; i < pointNum; ++i)
+	for (size_t i = 0; i < pointNum - 1; ++i)
 	{
 		size_t j = (i + 1) % pointNum;
 		Vector2 start = { _pointList[i].x,_pointList[i].y };
@@ -1332,9 +1375,10 @@ void Box2DBody::CreateSegment(std::vector<b2Vec2> _pointList, bool _sensor)
 		m_shapeList.push_back(shape);
 	}
 
-	b2Segment segment1 = { _pointList[count - 1], _pointList[0] };
-	auto shape = b2CreateSegmentShape(m_bodyId, &shapeDef, &segment1);
-	m_shapeList.push_back(shape);
+	//ÉãÅ[Évóp
+	//b2Segment segment1 = { _pointList[count - 1], _pointList[0] };
+	//auto shape = b2CreateSegmentShape(m_bodyId, &shapeDef, &segment1);
+	//m_shapeList.push_back(shape);
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pResumeWorldUpdate();

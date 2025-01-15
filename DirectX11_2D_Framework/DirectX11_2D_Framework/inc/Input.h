@@ -96,8 +96,8 @@ public:
 	int MouseWheelDelta();
 
 	//アナログスティック(コントローラー)
-	DirectX::XMFLOAT2 LeftAnalogStick(void);
-	DirectX::XMFLOAT2 RightAnalogStick(void);
+	Vector2 LeftAnalogStick(void);
+	Vector2 RightAnalogStick(void);
 
 	//トリガー(コントローラー)
 	float LeftTrigger(void);
@@ -110,8 +110,11 @@ public:
 
 	//振動(コントローラー)
 	//flame：振動を継続する時間(単位：フレーム)
-	//powoe：振動の強さ(0～1)
+	//power：振動の強さ(0～1)
 	void SetVibration(int frame = 1, float powor = 1);
+
+	//コントローラ―が接続されているか
+	bool IsConnectController() const;
 private:
 	//キー入力情報を保存する変数
 	BYTE keyState[256] = {};
@@ -135,7 +138,27 @@ private:
 	bool mouseRightTrigger = false;
 	bool mouseLeftRelease = false;
 	bool mouseRightRelease = false;
-	
+	DWORD controllerConnect = false;
 };
+
+//class InputState
+//{
+//	enum INPUT_TYPE
+//	{
+//		KEYBOARD,
+//		CONTROLLER,
+//		INPUT_TYPE_MAX
+//	};
+//
+//protected:
+//	void AddKeyBoardMap(const char* _name, int _key);
+//	void AddControllerMap(const char* _name, int _btn);
+//	bool 
+//private:
+//	void(*pInputUpdate)();
+//private:
+//	static INPUT_TYPE iState;
+//	std::unordered_map<std::string, std::pair<int, DWORD>> inputMap;
+//};
 
 #endif

@@ -186,8 +186,10 @@ void SceneManager::RegisterScene(std::filesystem::path& _path)
         return;
     }
 
+#ifdef DEBUG_TRUE
     RegisterSceneNode registerSceneNode(_path.string(), sceneName, REGISTER_SCENE_TYPE_FILE);
     m_registerScenePath.push_back(std::move(registerSceneNode));
+#endif
 
     //ƒ[ƒhŠÖ”‚ğì¬
     std::function<void(void)> createFn = std::bind([](std::filesystem::path scenePath)

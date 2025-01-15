@@ -165,7 +165,7 @@ HRESULT ImGuiApp::Init(HINSTANCE hInstance)
 
 		ImGuiIO& io = ImGui::GetIO(); (void)io;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 
 		m_hWndContexts.insert(std::make_pair(hWnd, context[type]));
 
@@ -373,6 +373,18 @@ void ImGuiApp::Draw()
 		ImGui_ImplWin32_NewFrame();
 		ImGui_ImplDX11_NewFrame();
 		ImGui::NewFrame();
+
+		ImGuiIO& io = ImGui::GetIO();
+
+		// キーボードのキー入力を設定 (必要なキーを追加)
+		io.AddKeyEvent(ImGuiKey_Space, GetAsyncKeyState(VK_SPACE) & 0x8000);
+		io.AddKeyEvent(ImGuiKey_Enter, GetAsyncKeyState(VK_RETURN) & 0x8000);
+		io.AddKeyEvent(ImGuiKey_Escape, GetAsyncKeyState(VK_ESCAPE) & 0x8000);
+		io.AddKeyEvent(ImGuiKey_Backspace, GetAsyncKeyState(VK_BACK) & 0x8000);
+		io.AddKeyEvent(ImGuiKey_LeftArrow, GetAsyncKeyState(VK_LEFT) & 0x8000);
+		io.AddKeyEvent(ImGuiKey_RightArrow, GetAsyncKeyState(VK_RIGHT) & 0x8000);
+		io.AddKeyEvent(ImGuiKey_UpArrow, GetAsyncKeyState(VK_UP) & 0x8000);
+		io.AddKeyEvent(ImGuiKey_DownArrow, GetAsyncKeyState(VK_DOWN) & 0x8000);
 
 		// 描画先キャンバスを塗りつぶす
 		DirectX11::m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetView[type].Get(), clearColor);
@@ -871,13 +883,13 @@ void ImGuiApp::DrawOptionGui()
 									changeSceneIndex = i;
 								}
 								else{
-									SceneManager::LoadScene(scene.name);
+									SceneManager::LoadSceneNotThrow(scene.name);
 									ImGuiApp::ClearStack();
 									handleUi.lock = false;
 								}
 							}
 							else{ 
-								SceneManager::LoadScene(scene.name);
+								SceneManager::LoadSceneNotThrow(scene.name);
 								ImGuiApp::ClearStack();
 								handleUi.lock = false;
 							}
@@ -927,7 +939,7 @@ void ImGuiApp::DrawOptionGui()
 						}
 						if (SceneManager::currentScenePath != "null")
 							SceneManager::SaveScene(SceneManager::currentScenePath);
-						SceneManager::LoadScene(sceneList[changeSceneIndex].name);
+						SceneManager::LoadSceneNotThrow(sceneList[changeSceneIndex].name);
 						ImGuiApp::ClearStack();
 						handleUi.lock = false;
 						ImGui::CloseCurrentPopup(); 
@@ -936,7 +948,7 @@ void ImGuiApp::DrawOptionGui()
 					ImGui::SameLine();
 					if (ImGui::Button("No", ImVec2(120, 0))) { 
 
-						SceneManager::LoadScene(sceneList[changeSceneIndex].name);
+						SceneManager::LoadSceneNotThrow(sceneList[changeSceneIndex].name);
 						ImGuiApp::ClearStack();
 						handleUi.lock = false;
 						ImGui::CloseCurrentPopup();
@@ -1053,7 +1065,7 @@ void ImGuiApp::DrawInspectorGui()
 			else ImGui::Text("%s : Selected", selectedObject->name.c_str());
 
 			ImGui::SeparatorText("Component");
-			
+
 			ImGui::Button("/");
 			ImGui::SetItemTooltip("not remove transform");
 			ImGui::SameLine();
@@ -1107,25 +1119,53 @@ void ImGuiApp::DrawInspectorGui()
 			}
 
 			std::vector<std::string> eraseComponents;
-			for (auto& component : selectedObject->m_componentList.first)
+			auto& comList = selectedObject->m_componentList;
+			for (int i = 0;i < comList.first.size();i++)
 			{
+				auto& component = comList.first[i];
 				std::string componentName = component->getType();
 
 				if (!handleUi.lock)
 				{
-					ImGui::PushID(componentName.c_str());
+					ImGui::PushID(i);
 					if (ImGui::Button("-"))
 					{
 						eraseComponents.push_back(componentName);
 					}
 					ImGui::SetItemTooltip("remove");
+					
 					ImGui::PopID();
+
 					ImGui::SameLine();
 				}
 				if (ImGui::CollapsingHeader(componentName.substr(6).c_str(), ImGuiTreeNodeFlags_None))
 				{
 					component->DrawImGui(handleUi);
 				}
+				else
+				{
+					// Source: Dragging starts here
+					if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
+						ImGui::SetDragDropPayload("DND_COMPONENT_ITEM", &i, sizeof(int)); // Pass the index
+						ImGui::Text("%s", componentName.c_str());
+						ImGui::EndDragDropSource();
+					}
+				}
+
+				// Target: Dropping ends here
+				if (ImGui::BeginDragDropTarget()) {
+					if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("DND_COMPONENT_ITEM")) {
+						size_t dragged_index = *(const size_t*)payload->Data;
+						if (dragged_index != i) {
+							// Move the dragged item to the target index
+							std::swap(comList.first[i], comList.first[dragged_index]);
+							comList.second[comList.first[i]->getType()] = i;
+							comList.second[comList.first[dragged_index]->getType()] = dragged_index;
+						}
+					}
+					ImGui::EndDragDropTarget();
+				}
+
 			}
 
 			for (auto name : eraseComponents)
@@ -2131,11 +2171,19 @@ LRESULT ImGuiApp::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			// Keyboard events
 		case WM_KEYDOWN:
 			if (wParam < 256)
+			{
+#ifndef IMGUI_DISABLE_OBSOLETE_KEYIO
 				io.KeysDown[wParam] = 1;
+#endif
+			}
 			break;
 		case WM_KEYUP:
 			if (wParam < 256)
+			{
+#ifndef IMGUI_DISABLE_OBSOLETE_KEYIO
 				io.KeysDown[wParam] = 0;
+#endif
+			}
 			break;
 		case WM_CHAR:
 			if (wParam > 0 && wParam < 0x10000)
@@ -2753,9 +2801,6 @@ void ImGuiApp::HandleUI::Draw(GameObject* _target,const Vector2 _targetPos)
 			DirectX11::m_pVSObjectConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
 
 		DirectX11::m_pDeviceContext->DrawIndexed(6, 0, 0);
-
-
-		
 	}
 	break;
 	case ROTATION:
@@ -2905,28 +2950,40 @@ void ImGuiApp::ImGuiSetKeyMap(ImGuiContext* _imguiContext)
 {
 	ImGui::SetCurrentContext(_imguiContext);
 	ImGuiIO& io = ImGui::GetIO();
-#ifdef _WIN32
-	io.KeyMap[ImGuiKey_Tab] = VK_TAB;             // Map the Tab key
-	io.KeyMap[ImGuiKey_LeftArrow] = VK_LEFT;      // Map the Left Arrow key
-	io.KeyMap[ImGuiKey_RightArrow] = VK_RIGHT;    // Map the Right Arrow key
-	io.KeyMap[ImGuiKey_UpArrow] = VK_UP;          // Map the Up Arrow key
-	io.KeyMap[ImGuiKey_DownArrow] = VK_DOWN;      // Map the Down Arrow key
-	io.KeyMap[ImGuiKey_PageUp] = VK_PRIOR;        // Map the Page Up key
-	io.KeyMap[ImGuiKey_PageDown] = VK_NEXT;       // Map the Page Down key
-	io.KeyMap[ImGuiKey_Home] = VK_HOME;           // Map the Home key
-	io.KeyMap[ImGuiKey_End] = VK_END;             // Map the End key
-	io.KeyMap[ImGuiKey_Insert] = VK_INSERT;       // Map the Insert key
-	io.KeyMap[ImGuiKey_Delete] = VK_DELETE;       // Map the Delete key
-	io.KeyMap[ImGuiKey_Backspace] = VK_BACK;      // Map the Backspace key
-	io.KeyMap[ImGuiKey_Space] = VK_SPACE;         // Map the Space key
-	io.KeyMap[ImGuiKey_Enter] = VK_RETURN;        // Map the Enter key
-	io.KeyMap[ImGuiKey_Escape] = VK_ESCAPE;       // Map the Escape key
-	io.KeyMap[ImGuiKey_A] = 'A';                  // Map the 'A' key (for Ctrl+A, etc.)
-	io.KeyMap[ImGuiKey_C] = 'C';                  // Map the 'C' key (for Ctrl+C, etc.)
-	io.KeyMap[ImGuiKey_V] = 'V';                  // Map the 'V' key (for Ctrl+V, etc.)
-	io.KeyMap[ImGuiKey_X] = 'X';                  // Map the 'X' key (for Ctrl+X, etc.)
-	io.KeyMap[ImGuiKey_Y] = 'Y';                  // Map the 'Y' key (for Ctrl+Y, etc.)
-	io.KeyMap[ImGuiKey_Z] = 'Z';                  // Map the 'Z' key (for Ctrl+Z, etc.)
+#if defined(_WIN32) && !defined(IMGUI_DISABLE_OBSOLETE_KEYIO)
+	// キーボードの標準キー
+	io.KeyMap[ImGuiKey_Tab] = VK_TAB;
+	io.KeyMap[ImGuiKey_LeftArrow] = VK_LEFT;
+	io.KeyMap[ImGuiKey_RightArrow] = VK_RIGHT;
+	io.KeyMap[ImGuiKey_UpArrow] = VK_UP;
+	io.KeyMap[ImGuiKey_DownArrow] = VK_DOWN;
+	io.KeyMap[ImGuiKey_PageUp] = VK_PRIOR;
+	io.KeyMap[ImGuiKey_PageDown] = VK_NEXT;
+	io.KeyMap[ImGuiKey_Home] = VK_HOME;
+	io.KeyMap[ImGuiKey_End] = VK_END;
+	io.KeyMap[ImGuiKey_Insert] = VK_INSERT;
+	io.KeyMap[ImGuiKey_Delete] = VK_DELETE;
+	io.KeyMap[ImGuiKey_Backspace] = VK_BACK;
+	io.KeyMap[ImGuiKey_Space] = VK_SPACE;
+	io.KeyMap[ImGuiKey_Enter] = VK_RETURN;
+	io.KeyMap[ImGuiKey_Escape] = VK_ESCAPE;
+	io.KeyMap[ImGuiKey_A] = 'A';
+	io.KeyMap[ImGuiKey_C] = 'C';
+	io.KeyMap[ImGuiKey_V] = 'V';
+	io.KeyMap[ImGuiKey_X] = 'X';
+	io.KeyMap[ImGuiKey_Y] = 'Y';
+	io.KeyMap[ImGuiKey_Z] = 'Z';
+
+	// コントローラー入力のマッピング
+	// Aボタン -> Space、Bボタン -> Escape など
+	//io.KeyMap[ImGuiKey_Space] = XINPUT_GAMEPAD_A; // AボタンをSpaceキーとする
+	//io.KeyMap[ImGuiKey_Escape] = XINPUT_GAMEPAD_B; // BボタンをEscapeキーとする
+	//io.KeyMap[ImGuiKey_Enter] = XINPUT_GAMEPAD_START; // StartボタンをEnterキーとする
+	//io.KeyMap[ImGuiKey_Backspace] = XINPUT_GAMEPAD_BACK;  // BackボタンをBackspaceキーとする
+	//io.KeyMap[ImGuiKey_UpArrow] = XINPUT_GAMEPAD_DPAD_UP;
+	//io.KeyMap[ImGuiKey_DownArrow] = XINPUT_GAMEPAD_DPAD_DOWN;
+	//io.KeyMap[ImGuiKey_LeftArrow] = XINPUT_GAMEPAD_DPAD_LEFT;
+	//io.KeyMap[ImGuiKey_RightArrow] = XINPUT_GAMEPAD_DPAD_RIGHT;
 #elif defined(__APPLE__)
 	io.KeyMap[ImGuiKey_Tab] = kVK_Tab;             // Map the Tab key
 	io.KeyMap[ImGuiKey_LeftArrow] = kVK_LEFT;      // Map the Left Arrow key

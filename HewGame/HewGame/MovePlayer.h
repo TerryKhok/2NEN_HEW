@@ -33,6 +33,8 @@ private:
 
 	void Update()
 	{
+		auto& input = Input::Get();
+
 		bool isGround = false;
 		Vector2 rayEnd = m_this->transform.position;
 		rayEnd.y -= 50.0f;
@@ -41,47 +43,62 @@ private:
 			isGround = true;
 		}
 
-		if (Input::Get().KeyTrigger(VK_D))
+		if ((input.KeyPress(VK_D) || input.LeftAnalogStick().x > 0.1f))
+		{
+			right_moving = true;
+			rb->SetVelocityX({ 0 + (float)right_count });
+			input.SetVibration(1, 1);
+		}
+
+		if ((input.KeyPress(VK_A) || input.LeftAnalogStick().x < -0.1f))
+		{
+			left_moving = true;
+			rb->SetVelocityX({ 0 - (float)left_count });
+			input.SetVibration(1, 1);
+		}
+
+		/*if (input.KeyTrigger(VK_D))
 		{
 			right_moving = true;
 			movement = 1;
 		}
 
-		if (Input::Get().KeyTrigger(VK_A))
+		if (input.KeyTrigger(VK_A))
 		{
 			left_moving = true;
 			movement = 2;
 
-		}
+		}*/
 
-		switch (movement)//¶ˆÚ“®‚Ì—Dæ‡ˆÊ‚ª‰EˆÚ“®‚æ‚è‚‚¢–â‘è‚ð’¼‚·
-		{
-		case 1:
-		{
-			if ((Input::Get().KeyPress(VK_D) || Input::Get().ButtonPress(XINPUT_RIGHT) )&& right_moving)
-			{
-				rb->SetVelocityX({ 0 + (float)right_count });
-			}
-			break;
-		}
-		case 2:
-		{
-			if (Input::Get().KeyPress(VK_A) && left_moving)
-			{
-				rb->SetVelocityX({ 0 - (float)left_count });
-			}
-			break;
-		}
-		}
+		//switch (movement)//¶ˆÚ“®‚Ì—Dæ‡ˆÊ‚ª‰EˆÚ“®‚æ‚è‚‚¢–â‘è‚ð’¼‚·
+		//{
+		//case 1:
+		//{
+		//	if ((input.KeyPress(VK_D))&& right_moving)
+		//	{
+		//		rb->SetVelocityX({ 0 + (float)right_count });
+		//		input.SetVibration(1);
+		//	}
+		//	break;
+		//}
+		//case 2:
+		//{
+		//	if ((input.KeyPress(VK_A))&& left_moving)
+		//	{
+		//		rb->SetVelocityX({ 0 - (float)left_count });
+		//	}
+		//	break;
+		//}
+		//}
 
-		if (Input::Get().KeyTrigger(VK_W) && isGround && !jumping && !inWindow)
+		if ((input.KeyTrigger(VK_W) || input.ButtonTrigger(XINPUT_A)) && isGround && !jumping && !inWindow)
 		{
 			jump_count = 0;
 			jumping = true;
 			rb->AddForce({ 0,10 });
 		}
 
-		if (Input::Get().KeyPress(VK_W) && jumping && !inWindow)
+		if ((input.KeyPress(VK_W) || input.ButtonPress(XINPUT_A)) && jumping && !inWindow)
 		{
 			rb->AddForceImpulse({ 0,20.0f - (float)jump_count });
 		}
@@ -106,11 +123,11 @@ private:
 
 		if (left_moving)
 		{
-			if (left_count < 30)
+			if (left_count < 50)
 			{
 				left_count++;
 			}
-			if (Input::Get().KeyRelease(VK_A))
+			if (input.KeyRelease(VK_A) || (input.LeftAnalogStick().x > -0.1f && input.IsConnectController()))
 			{
 				left_count = 0;
 				left_moving = false;
@@ -123,7 +140,7 @@ private:
 			{
 				right_count++;
 			}
-			if (Input::Get().KeyRelease(VK_D))
+			if (input.KeyRelease(VK_D) || (input.LeftAnalogStick().x < 0.1f && input.IsConnectController()))
 			{
 				right_count = 0;
 				right_moving = false;

@@ -69,6 +69,7 @@ void SFText::SetString(std::string _str)
 #endif
 }
 
+#ifdef DEBUG_TRUE
 void SFText::DrawImGui(ImGuiApp::HandleUI& _handle)
 {
 	if (ImGui::InputText("text : %s", text, sizeof(text)))
@@ -81,6 +82,7 @@ void SFText::DrawImGui(ImGuiApp::HandleUI& _handle)
 	ImGui::InputFloat2("offset", m_node->offset.data());
 	ImGui::InputFloat("scale", &m_node->scale);
 }
+#endif
 
 void SFTextNode::Draw()
 {
@@ -100,6 +102,7 @@ void SFTextNode::Draw()
 
 	(this->*pConnectFunc)();
 }
+
 
 void SFTextNode::Delete()
 {

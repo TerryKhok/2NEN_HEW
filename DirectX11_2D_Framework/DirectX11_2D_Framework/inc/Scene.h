@@ -119,6 +119,49 @@ private:
 	//次へのシーンの切り替え
 	static void NextScene();
 	
+	//同期シーン切り替え
+	static void LoadSceneNotThrow(std::string _sceneName)
+	{
+		//非同期にシーンをロードしている場合
+		if (async)
+		{
+			LOG("no loading %s,other scene loading now", _sceneName.c_str());
+		}
+
+		//シーンが登録済みかどうか
+		auto it = m_sceneList.find(_sceneName);
+		if (it != m_sceneList.end()) {
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+			Box2D::WorldManager::DisableWorldUpdate();
+			Box2D::WorldManager::PauseWorldUpdate();
+#endif
+
+#ifdef DEBUG_TRUE
+			ImGuiApp::InvalidSelectedObject();
+#endif
+			TextureAssets::ChangeNextTextureLib();
+
+			//新しいリストに変える
+			RenderManager::GenerateList();
+			ObjectManager::GenerateList();
+			SFTextManager::GenerateList();
+			//対応したシーンのロード処理
+			it->second();
+			//シーン切り替え
+			NextScene();
+			//シーン初期化
+			TRY_CATCH_LOG(m_currentScene->Init());
+
+			TextureAssets::LinkNextTextureLib();
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+			Box2D::WorldManager::EnableWorldUpdate();
+			Box2D::WorldManager::ResumeWorldUpdate();
+#endif	
+			LOG("Now Switching to %s", _sceneName.c_str());
+		}
+	}
 public:
 	//同期シーン切り替え
 	static void LoadScene(std::string _sceneName)
@@ -161,6 +204,8 @@ public:
 			Box2D::WorldManager::ResumeWorldUpdate();
 #endif	
 			LOG("Now Switching to %s", _sceneName.c_str());
+
+			throw "";
 		}
 	}
 
@@ -368,8 +413,10 @@ public:
 			return;
 		}
 
+#ifdef DEBUG_TRUE
 		RegisterSceneNode registerSceneNode(typeid(T).name(), typeid(T).name(), REGISTER_SCENE_TYPE_HEADER);
 		m_registerScenePath.push_back(std::move(registerSceneNode));
+#endif
 			
 		//ロード関数を作成
 		std::function<void(void)> createFn = [&]()
