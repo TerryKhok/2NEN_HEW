@@ -42,6 +42,22 @@ void Input::Update()
 	//キー入力を更新
 	BOOL hr = GetKeyboardState(keyState);
 
+	//for (int type = 0; type < ImGuiApp::TYPE_MAX; type++)
+	//{
+	//	ImGui::SetCurrentContext(ImGuiApp::context[type]);
+
+	//	ImGuiIO& io = ImGui::GetIO();
+
+	//	// キーボードのキー入力を設定 (必要なキーを追加)
+	//	io.AddKeyEvent(ImGuiKey_Space, keyState[VK_SPACE] & 0x8000);
+	//	io.AddKeyEvent(ImGuiKey_Enter, keyState[VK_RETURN] & 0x8000);
+	//	io.AddKeyEvent(ImGuiKey_Escape, keyState[VK_ESCAPE] & 0x8000);
+	//	io.AddKeyEvent(ImGuiKey_LeftArrow, keyState[VK_LEFT] & 0x8000);
+	//	io.AddKeyEvent(ImGuiKey_RightArrow, keyState[VK_RIGHT] & 0x8000);
+	//	io.AddKeyEvent(ImGuiKey_UpArrow, keyState[VK_UP] & 0x8000);
+	//	io.AddKeyEvent(ImGuiKey_DownArrow, keyState[VK_DOWN] & 0x8000);
+	//}
+
 	//コントローラー入力を更新(XInput)
 	controllerConnect = XInputGetState(0, &controllerState);
 

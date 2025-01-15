@@ -163,8 +163,8 @@ HRESULT ImGuiApp::Init(HINSTANCE hInstance)
 		context[type] = ImGui::CreateContext();
 		ImGui::SetCurrentContext(context[type]);
 
-		ImGuiIO& io = ImGui::GetIO(); (void)io;
-		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+		/*ImGuiIO& io = ImGui::GetIO(); (void)io;
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;*/
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 
 		m_hWndContexts.insert(std::make_pair(hWnd, context[type]));
@@ -179,7 +179,7 @@ HRESULT ImGuiApp::Init(HINSTANCE hInstance)
 			ImGui_ImplDX11_CreateDeviceObjects();
 		}*/
 
-		//ImGuiSetKeyMap(context[type]);
+		ImGuiSetKeyMap(context[type]);
 	}
 	
 	ImGui::StyleColorsDark(); // Set ImGui style (optional)
