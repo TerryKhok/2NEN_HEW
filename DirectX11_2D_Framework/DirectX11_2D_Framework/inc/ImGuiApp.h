@@ -2,6 +2,9 @@
 
 #define IMGUI_DEFINE_MATH_OPERATORS
 
+//古いバージョンのキーマップをなくす
+#define IMGUI_DISABLE_OBSOLETE_KEYIO
+
 //imgui
 #include "../../DirectX11_2D_Framework/imgui/imgui.h"
 #include "../../DirectX11_2D_Framework/imgui/imgui_impl_dx11.h"

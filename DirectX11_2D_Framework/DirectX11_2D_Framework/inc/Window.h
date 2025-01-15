@@ -45,6 +45,7 @@ constexpr float DISPALY_ASPECT_HEIGHT = static_cast<float>(SCREEN_HEIGHT) / PROJ
 
 //================================================================
 #define SUBWINDOW_IS_TOP
+//#define SUBWINDOW_MOVELOCK
 //================================================================
 
 #endif

@@ -13,7 +13,10 @@ class AntiGravity : public Component
 	void Start() override
 	{
 		rend = m_this->GetComponent<Renderer>();
-		rend->SetColor(enterColor);
+		if (rend != nullptr)
+		{
+			rend->SetColor(enterColor);
+		}
 
 		if (!m_this->TryGetComponent<Box2DBody>(&rb))
 		{
@@ -107,6 +110,11 @@ class AntiGravity : public Component
 						rend->SetColor(exitColor);
 					}
 				}
+				/*MovePlayer* player = nullptr;
+				if (object.first->TryGetComponent<MovePlayer>(&player))
+				{
+					player->inWindow = false;
+				}*/
 			}
 		}
 		for (auto object : exitObjects)

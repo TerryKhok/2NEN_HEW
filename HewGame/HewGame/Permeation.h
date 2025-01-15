@@ -64,7 +64,7 @@ class Permeation : public Component
 		Box2DBody* rb = nullptr;
 		if (_other->TryGetComponent<Box2DBody>(&rb))
 		{
-			enters.emplace(_other);
+			enters.insert(_other);
 			FILTER filter = rb->GetFilter();
 			switch (filter)
 			{
@@ -102,12 +102,12 @@ class Permeation : public Component
 		}
 	}
 
-	std::unordered_map<GameObject*, b2ShapeId> enterObjects;
+	std::unordered_map<GameObject*, b2ShapeId> insideObjects;
 	Vector2 enterPos;
 
 	void OnWindowEnter(HWND _hWnd) override
 	{
-		rb->GetOverlapObject(enterObjects);
+		rb->GetOverlapObject(insideObjects);
 		enterPos = m_this->transform.position;
 
 		for (auto object : m_barrier)
@@ -126,13 +126,13 @@ class Permeation : public Component
 		Vector2 pos = GetWindowPosition(_hWnd);
 		rb->SetPosition(pos);
 
-		std::unordered_map<GameObject*, b2ShapeId> exitObjects;
-		rb->GetOverlapObject(exitObjects);
+		std::unordered_map<GameObject*, b2ShapeId> enterObjects;
+		rb->GetOverlapObject(enterObjects);
 
-		for (auto object : enterObjects)
+		for (auto object : insideObjects)
 		{
-			auto iter = exitObjects.find(object.first);
-			if (iter == exitObjects.end())
+			auto iter = enterObjects.find(object.first);
+			if (iter == enterObjects.end())
 			{
 				Box2DBody* rb = nullptr;
 				if (object.first->TryGetComponent(&rb))
@@ -155,10 +155,10 @@ class Permeation : public Component
 				}
 			}
 		}
-		for (auto object : exitObjects)
+		for (auto object : enterObjects)
 		{
-			auto iter = enterObjects.find(object.first);
-			if (iter == enterObjects.end())
+			auto iter = insideObjects.find(object.first);
+			if (iter == insideObjects.end())
 			{
 				Box2DBody* rb = nullptr;
 				if (object.first->TryGetComponent<Box2DBody>(&rb))
@@ -177,7 +177,7 @@ class Permeation : public Component
 			}
 		}
 
-		enterObjects.clear();
+		insideObjects.clear();
 	}
 };
 

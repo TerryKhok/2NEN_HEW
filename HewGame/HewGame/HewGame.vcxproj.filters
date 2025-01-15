@@ -105,6 +105,9 @@
     <ClInclude Include="Enemy_type3.h">
       <Filter>Component\Enemy</Filter>
     </ClInclude>
+    <ClInclude Include="MoveSubWindow.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

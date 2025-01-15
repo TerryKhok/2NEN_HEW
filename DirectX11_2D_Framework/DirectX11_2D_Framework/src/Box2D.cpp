@@ -877,7 +877,7 @@ void Box2D::WorldManager::WorldUpdate()
 }
 #endif
 
-void Box2D::WorldManager::ExecuteSensorEvent()
+void Box2D::WorldManager::ExecuteBodyEvent()
 {
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	pPauseWorldUpdate();
@@ -904,11 +904,11 @@ void Box2D::WorldManager::ExecuteSensorEvent()
 					{
 						for (auto& component : contactObjectA->m_componentList.first)
 						{
-							component->OnCollisionEnter(contactObjectB);
+							TRY_CATCH_LOG(component->OnCollisionEnter(contactObjectB));
 						}
 						for (auto& component : contactObjectB->m_componentList.first)
 						{
-							component->OnCollisionEnter(contactObjectA);
+							TRY_CATCH_LOG(component->OnCollisionEnter(contactObjectA));
 						}
 					}
 				}
@@ -930,7 +930,7 @@ void Box2D::WorldManager::ExecuteSensorEvent()
 				GameObject* contactObjectB = ObjectManager::Find(it->second);
 				for (auto& component : contactObjectA->m_componentList.first)
 				{
-					component->OnCollisionExit(contactObjectB);
+					TRY_CATCH_LOG(component->OnCollisionExit(contactObjectB));
 				}
 			}
 		}
@@ -953,7 +953,7 @@ void Box2D::WorldManager::ExecuteSensorEvent()
 					{
 						for (auto& component : sensorObject->m_componentList.first)
 						{
-							component->OnColliderEnter(visitorObject);
+							TRY_CATCH_LOG(component->OnColliderEnter(visitorObject));
 						}
 					}
 				}
@@ -974,7 +974,7 @@ void Box2D::WorldManager::ExecuteSensorEvent()
 				GameObject* visitorObject = ObjectManager::Find(it->second);
 				for (auto& component : sensorObject->m_componentList.first)
 				{
-					component->OnColliderExit(visitorObject);
+					TRY_CATCH_LOG(component->OnColliderExit(visitorObject));
 				}
 			}
 		}

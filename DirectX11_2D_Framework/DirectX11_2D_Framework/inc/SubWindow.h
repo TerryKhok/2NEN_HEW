@@ -20,6 +20,11 @@ public:
 			}
 		}
 	}
+
+	const HWND GeWndHandle() const
+	{
+		return m_hWnd;
+	}
 private:
 	SubWindow(GameObject* _object){
 		Vector2 size = _object->transform.scale;
