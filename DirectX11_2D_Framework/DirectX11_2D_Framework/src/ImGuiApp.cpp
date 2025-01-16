@@ -1995,7 +1995,36 @@ void ImGuiApp::SetSelectedObject(GameObject* _object)
 	if (selectedObject != nullptr)selectedObject->isSelected = GameObject::SELECTED;
 }
 
+void ImGuiApp::CloneSelectedObject()
+{
+	if (selectedObject != nullptr)
+	{
+		ImGui::SetMouseCursor(ImGuiMouseCursor_NotAllowed);
+		ObjectManager::Clone(selectedObject);
+	}
+}
+
 void ImGuiApp::CopySelectedObject()
+{
+	if (selectedObject != nullptr)
+	{
+		ImGui::SetMouseCursor(ImGuiMouseCursor_NotAllowed);
+		ObjectManager::Copy(selectedObject);
+	}
+}
+
+void ImGuiApp::PastSelectedObject()
+{
+	ImGui::SetMouseCursor(ImGuiMouseCursor_NotAllowed);
+	// Handle selection, e.g., highlighting the object or showing more details
+	auto object = ObjectManager::Past();
+	if (object == nullptr) return;
+	if (selectedObject != nullptr) selectedObject->isSelected = GameObject::SELECT_NONE;
+	selectedObject = object;
+	selectedObject->isSelected = GameObject::SELECTED;
+}
+
+void ImGuiApp::CutSelectedObject()
 {
 	if (selectedObject != nullptr)
 	{

@@ -7,6 +7,7 @@ std::unique_ptr<ObjectManager::ObjectList> ObjectManager::m_objectList = std::un
 std::unique_ptr<ObjectManager::ObjectList> ObjectManager::m_nextObjectList = std::unique_ptr<ObjectList>(new ObjectList());
 std::unique_ptr<ObjectManager::ObjectList> ObjectManager::m_eraseObjectList = std::unique_ptr<ObjectList>(new ObjectList());
 std::vector<std::string> ObjectManager::m_delayEraseObjectName;
+std::stringstream ObjectManager::copyBuffer;
 
 GameObject::GameObject(std::string _name)
 {
@@ -394,7 +395,7 @@ SAFE_TYPE(GameObject) ObjectManager::Find(const std::string& _name)
 	return nullptr;
 }
 
-SAFE_TYPE(GameObject) ObjectManager::Copy(GameObject* _object)
+GameObject* ObjectManager::Clone(GameObject* _object)
 {
 	if (_object == nullptr) return nullptr;
 
@@ -409,6 +410,33 @@ SAFE_TYPE(GameObject) ObjectManager::Copy(GameObject* _object)
 	{
 		SERIALIZE_INPUT archive(buffer);
 		archive(*object);  // Deserialize polymorphic object
+	}
+	ObjectManager::AddObject(object);
+	return object;
+}
+
+void ObjectManager::Copy(GameObject* _object)
+{
+	if (_object == nullptr) return;
+
+	copyBuffer.str("");
+	{
+		SERIALIZE_OUTPUT archive(copyBuffer);
+		archive(*_object);
+	}
+}
+
+GameObject* ObjectManager::Past()
+{
+	if (copyBuffer.str().empty() || !copyBuffer.good()) return nullptr;
+
+	// Deserialize from a file
+	GameObject* object = new GameObject;
+	{
+		SERIALIZE_INPUT archive(copyBuffer);
+		archive(*object);  // Deserialize polymorphic object
+		copyBuffer.clear();
+		copyBuffer.seekg(0, std::ios::beg);  // Žn’[‚ÉˆÚ“®
 	}
 	ObjectManager::AddObject(object);
 	return object;

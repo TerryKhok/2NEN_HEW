@@ -49,7 +49,7 @@ class GameObject final
 	friend class Box2DLineRenderNode;
 
 	template<typename T>
-	friend bool CreateComponent(GameObject* obj, SERIALIZE_INPUT& ar);
+	friend bool CreateComponentFunc(GameObject* obj, SERIALIZE_INPUT& ar);
 
 	using functionPointer = void (GameObject::*)();
 	
@@ -93,7 +93,7 @@ private:
 	void UpdateComponent();
 	//なにもしない
 	void Void(){}
-private:
+
 	functionPointer pUpdate = &GameObject::UpdateComponent;
 public:
 	//アクティブを変更する(※処理が多いため頻繁に使用しない)
@@ -124,12 +124,14 @@ public:
 		component = new T();
 		component->m_this = this;
 
-		TRY_CATCH_LOG(component->Start());
+		TRY_CATCH_LOG(component->Awake());
 
 		//リストに追加(デストラクタ登録)
 		m_componentList.first.emplace_back(
 			std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
 		m_componentList.second[typeid(T).name()] = m_componentList.first.size() - 1;
+
+		TRY_CATCH_LOG(component->Start());
 
 		T* downcast = dynamic_cast<T*>(component);
 		if (downcast == nullptr)
@@ -149,12 +151,14 @@ public:
 		component = new T(_arg);
 		component->m_this = this;
 
-		TRY_CATCH_LOG(component->Start());
+		TRY_CATCH_LOG(component->Awake());
 
 		//リストに追加(デストラクタ登録)
 		m_componentList.first.emplace_back(
 			std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
 		m_componentList.second[typeid(T).name()] = m_componentList.first.size() - 1;
+
+		TRY_CATCH_LOG(component->Start());
 
 		T* downcast = dynamic_cast<T*>(component);
 		if (downcast == nullptr)
@@ -311,6 +315,32 @@ private:
 		return;
 	}
 
+	//Start関数を実行しない
+	template<typename T>
+	SAFE_TYPE(T) CreateComponent()
+	{
+		if (ExistComponent<T>()) return GetComponent<T>();
+
+		Component* component = nullptr;
+		component = new T();
+		component->m_this = this;
+
+		TRY_CATCH_LOG(component->Awake());
+
+		//リストに追加(デストラクタ登録)
+		m_componentList.first.emplace_back(
+			std::unique_ptr<Component, void(*)(Component*)>(component, [](Component* p) {delete p; }));
+		m_componentList.second[typeid(T).name()] = m_componentList.first.size() - 1;
+
+		T* downcast = dynamic_cast<T*>(component);
+		if (downcast == nullptr)
+		{
+			LOG_WARNING("%s : %s component down_cast failed", name.c_str(), typeid(T).name());
+		}
+
+		return downcast;
+	}
+
 	// Custom save function
 	template <class Archive>
 	void save(Archive& archive) const {
@@ -354,6 +384,10 @@ private:
 		{
 			com->Deserialize(archive);
 		}
+		for (auto& com : m_componentList.first)
+		{
+			com->Start();
+		}
 
 		if (!active)
 		{
@@ -394,7 +428,12 @@ class ObjectManager final
 public:
 	//オブジェクト一覧から見つける アクセス速度n(1)なのではやい
 	static SAFE_TYPE(GameObject) Find(const std::string& _name);
-	static SAFE_TYPE(GameObject) Copy(GameObject* _object);
+	//コピーとペーストを同時に行う
+	static GameObject* Clone(GameObject* _object);
+	//コピー
+	static void Copy(GameObject* _object);
+	//ペースト
+	static GameObject* Past();
 private:
 	//生成禁止
 	ObjectManager() = delete;
@@ -433,5 +472,7 @@ private:
 	static std::unique_ptr<ObjectList> m_eraseObjectList;
 	//削除を遅延しているオブジェクトを格納
 	static std::vector<std::string> m_delayEraseObjectName;
+	//コピー用バッファ
+	static std::stringstream copyBuffer;
 };
 

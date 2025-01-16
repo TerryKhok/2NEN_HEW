@@ -1,23 +1,29 @@
 #pragma once
 
 template<typename T>
-bool CreateComponent(GameObject* obj, SERIALIZE_INPUT& ar)
+bool CreateComponentFunc(GameObject* obj, SERIALIZE_INPUT& ar)
 {
-	obj->AddComponent<T>();
+	obj->CreateComponent<T>();
 	return false;
 }
 
 template<>
-bool CreateComponent<Renderer>(GameObject* obj, SERIALIZE_INPUT& ar);
+bool CreateComponentFunc<Renderer>(GameObject* obj, SERIALIZE_INPUT& ar);
 
 template<>
-bool CreateComponent<Box2DBody>(GameObject* obj, SERIALIZE_INPUT& ar);
+bool CreateComponentFunc<Box2DBody>(GameObject* obj, SERIALIZE_INPUT& ar);
 
 template<>
-bool CreateComponent<Animator>(GameObject* obj, SERIALIZE_INPUT& ar);
+bool CreateComponentFunc<Animator>(GameObject* obj, SERIALIZE_INPUT& ar);
 
 template<>
-bool CreateComponent<TileMap>(GameObject* obj, SERIALIZE_INPUT& ar);
+bool CreateComponentFunc<TileMap>(GameObject* obj, SERIALIZE_INPUT& ar);
+
+template<>
+bool CreateComponentFunc<SubWindow>(GameObject* obj, SERIALIZE_INPUT& ar);
+
+template<>
+bool CreateComponentFunc<SFText>(GameObject* obj, SERIALIZE_INPUT& ar);
 
 template<class T>
 class ReflectionComponent final
@@ -25,7 +31,7 @@ class ReflectionComponent final
 	ReflectionComponent()
 	{
 #ifdef DEBUG_TRUE
-		AssemblyComponent::IReflection ref(CreateComponent<T>, AddComponentFunc);
+		AssemblyComponent::IReflection ref(CreateComponentFunc<T>, AddComponentFunc);
 		AssemblyComponent::assemblies.emplace(typeid(T).name(),std::move(ref));
 #else
 		AssemblyComponent::assemblies.emplace(typeid(T).name(), CreateComponent<T>);

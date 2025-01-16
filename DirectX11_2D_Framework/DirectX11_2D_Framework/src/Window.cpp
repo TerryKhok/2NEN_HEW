@@ -848,11 +848,6 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 							ImGuiApp::DeleteSelectedObject();
 						}
 
-						if (Input::Get().KeyPress(VK_CONTROL) && Input::Get().KeyTrigger(VK_Z))
-						{
-							ImGuiApp::RewindChange();
-						}
-
 						if (Input::Get().KeyTrigger(VK_W))
 						{
 							ImGuiApp::handleUi.handleMode = ImGuiApp::HandleUI::POSITION;
@@ -871,9 +866,26 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 						if (Input::Get().KeyPress(VK_CONTROL))
 						{
-							if (Input::Get().KeyTrigger(VK_D))
+							if (Input::Get().KeyTrigger(VK_C))
 							{
 								ImGuiApp::CopySelectedObject();
+							}
+							if (Input::Get().KeyTrigger(VK_V))
+							{
+								ImGuiApp::PastSelectedObject();
+							}
+							if (Input::Get().KeyTrigger(VK_X))
+							{
+								ImGuiApp::CopySelectedObject();
+								ImGuiApp::DeleteSelectedObject();
+							}
+							if (Input::Get().KeyTrigger(VK_D))
+							{
+								ImGuiApp::CloneSelectedObject();
+							}
+							if (Input::Get().KeyTrigger(VK_Z))
+							{
+								ImGuiApp::RewindChange();
 							}
 						}
 					}
