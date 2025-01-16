@@ -66,6 +66,7 @@ private:
 	Box2DBody(GameObject* _object, b2BodyDef* _bodyDef);
 	//デシリアライズ用
 	Box2DBody(GameObject* _object, SERIALIZE_INPUT& ar);
+
 	~Box2DBody() = default;
 	//Box2dWorldから位置と角度を受け取る
 	inline void Update() override;

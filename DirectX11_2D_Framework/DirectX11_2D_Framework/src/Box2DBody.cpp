@@ -785,7 +785,7 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 			if (editVertex)
 			{
 				bool notLoop = false;
-				static bool out = false;
+				static bool inside = false;
 				switch (selectType)
 				{
 				case SEGMENT:
@@ -794,14 +794,14 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 				case POLYGON:
 					break;
 				case CHAIN:
-					ImGui::Checkbox("out", &out);
+					ImGui::Checkbox("inside##vertex", &inside);
 					break;
 				}
 
 				if (create)
 				{
 					std::vector<b2Vec2> points;
-					if (out)
+					if (inside)
 					{
 						for (int i = (int)pointList.size() - 1; i >= 0; i--)
 						{
@@ -981,6 +981,11 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 					RenderManager::m_drawBoxNode.push_back(std::move(boxNode));
 				}
 
+				RenderManager::DrawBoxNode boxNode;
+				boxNode.center = m_this->transform.position;
+				boxNode.size = { 1.0f / RenderManager::renderZoom.x,1.0f / RenderManager::renderZoom.y };
+				RenderManager::m_drawBoxNode.push_back(std::move(boxNode));
+
 				if (notLoop)
 				{
 					RenderManager::DrawBoxNode boxNode;
@@ -1057,6 +1062,20 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 			ImGui::EndChild();
 			//ImGui::EndDisabled(); // Re-enable interaction
 			ImGui::TreePop();
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("clear"))
+		{
+			for (auto& shape : m_shapeList)
+			{
+				b2DestroyShape(shape);
+			}
+			for (auto& node : m_nodeList)
+			{
+				node->Delete(LAYER_BOX2D_DEBUG);
+			}
+			m_nodeList.clear();
+			m_shapeList.clear();
 		}
 	}
 #endif

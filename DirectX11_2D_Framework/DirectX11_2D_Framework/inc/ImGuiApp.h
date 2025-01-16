@@ -57,6 +57,7 @@ private:
 	static void DrawMainGui(ImGuiContext* _mainContext);
 	
 	static void SetSelectedObject(GameObject* _object);
+	static void CopySelectedObject();
 	static void DeleteSelectedObject();
 
 	static void ClearStack();

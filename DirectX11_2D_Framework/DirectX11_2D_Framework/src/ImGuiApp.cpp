@@ -374,6 +374,8 @@ void ImGuiApp::Draw()
 		ImGui_ImplDX11_NewFrame();
 		ImGui::NewFrame();
 
+		//ImGui::ShowMetricsWindow(); // メトリクスウィンドウを表示
+
 		ImGuiIO& io = ImGui::GetIO();
 
 		// キーボードのキー入力を設定 (必要なキーを追加)
@@ -1370,6 +1372,20 @@ void ImGuiApp::DrawMainGui(ImGuiContext* _mainContext)
 		ImGui_ImplDX11_NewFrame();
 		ImGui::NewFrame();
 
+		//ImGui::ShowMetricsWindow(); // メトリクスウィンドウを表示
+
+		ImGuiIO& io = ImGui::GetIO();
+
+		// キーボードのキー入力を設定 (必要なキーを追加)
+		io.AddKeyEvent(ImGuiKey_Space, GetAsyncKeyState(VK_SPACE) & 0x8000);
+		io.AddKeyEvent(ImGuiKey_Enter, GetAsyncKeyState(VK_RETURN) & 0x8000);
+		io.AddKeyEvent(ImGuiKey_Escape, GetAsyncKeyState(VK_ESCAPE) & 0x8000);
+		io.AddKeyEvent(ImGuiKey_Backspace, GetAsyncKeyState(VK_BACK) & 0x8000);
+		io.AddKeyEvent(ImGuiKey_LeftArrow, GetAsyncKeyState(VK_LEFT) & 0x8000);
+		io.AddKeyEvent(ImGuiKey_RightArrow, GetAsyncKeyState(VK_RIGHT) & 0x8000);
+		io.AddKeyEvent(ImGuiKey_UpArrow, GetAsyncKeyState(VK_UP) & 0x8000);
+		io.AddKeyEvent(ImGuiKey_DownArrow, GetAsyncKeyState(VK_DOWN) & 0x8000);
+
 		static bool aniPlay = false;
 		static long long deltaCount = 0;
 		static long long waitCount = 0;
@@ -1494,8 +1510,7 @@ void ImGuiApp::DrawMainGui(ImGuiContext* _mainContext)
 			}
 			ImGui::SetItemTooltip("sort");
 			ImGui::EndGroup();
-
-
+			
 			if (!imAniFrames.empty())
 				ImGui::DragFloat("time", &imAniFrames[curFrameIndex].waitTime, 0.01f, 0.0f, 5.0f);
 			else
@@ -1888,7 +1903,7 @@ void ImGuiApp::DrawMainGui(ImGuiContext* _mainContext)
 			ImGui::EndChild();
 			ImGui::SameLine();
 			ImGui::BeginChild("Capture", ImVec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y));
-			{
+			{			
 				ImGui::SeparatorText("tool");
 				ImGui::BeginGroup();
 				{
@@ -1922,7 +1937,10 @@ void ImGuiApp::DrawMainGui(ImGuiContext* _mainContext)
 					ImGui::BeginGroup();
 					{
 						ImGui::Text("split : %s", selectPath.filename().string().c_str());
-						ImGui::DragInt("x", split, 0.5f, 1, maxTexSplit[0]);
+						if (ImGui::DragInt("x", split, 0.5f, 1, maxTexSplit[0]))
+						{
+
+						}
 						ImGui::DragInt("y", split + 1, 0.5f, 1, maxTexSplit[1]);
 					}
 					ImGui::EndGroup();
@@ -1975,6 +1993,15 @@ void ImGuiApp::SetSelectedObject(GameObject* _object)
 {
 	selectedObject = _object;
 	if (selectedObject != nullptr)selectedObject->isSelected = GameObject::SELECTED;
+}
+
+void ImGuiApp::CopySelectedObject()
+{
+	if (selectedObject != nullptr)
+	{
+		ImGui::SetMouseCursor(ImGuiMouseCursor_NotAllowed);
+		ObjectManager::Copy(selectedObject);
+	}
 }
 
 void ImGuiApp::DeleteSelectedObject()
@@ -2168,23 +2195,22 @@ LRESULT ImGuiApp::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			io.MouseWheel += GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? +1.0f : -1.0f;
 			break;
 
+#ifndef IMGUI_DISABLE_OBSOLETE_KEYIO
 			// Keyboard events
 		case WM_KEYDOWN:
 			if (wParam < 256)
 			{
-#ifndef IMGUI_DISABLE_OBSOLETE_KEYIO
 				io.KeysDown[wParam] = 1;
-#endif
 			}
 			break;
 		case WM_KEYUP:
 			if (wParam < 256)
 			{
-#ifndef IMGUI_DISABLE_OBSOLETE_KEYIO
 				io.KeysDown[wParam] = 0;
-#endif
 			}
 			break;
+#endif
+
 		case WM_CHAR:
 			if (wParam > 0 && wParam < 0x10000)
 				io.AddInputCharacter((unsigned short)wParam);

@@ -167,7 +167,7 @@ LRESULT Window::WindowMainCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, L
 
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 
 	ImGui_ImplWin32_Init(mainHwnd); // hWnd is your main window handle
 	ImGui_ImplDX11_Init(DirectX11::m_pDevice.Get(), DirectX11::m_pDeviceContext.Get());
@@ -671,23 +671,26 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			io.MouseWheel += GET_WHEEL_DELTA_WPARAM(wParam) > 0 ? +1.0f : -1.0f;
 			break;
 
+#ifndef IMGUI_DISABLE_OBSOLETE_KEYIO
 			// Keyboard events
 		case WM_KEYDOWN:
 			if (wParam < 256)
-#ifndef IMGUI_DISABLE_OBSOLETE_KEYIO
-				io.KeysDown[wParam] = 1;
-#endif
+
 			break;
 		case WM_KEYUP:
 			if (wParam < 256)
-#ifndef IMGUI_DISABLE_OBSOLETE_KEYIO
 				io.KeysDown[wParam] = 0;
-#endif
 			break;
+#endif
 		case WM_CHAR:
 			if (wParam > 0 && wParam < 0x10000)
 				io.AddInputCharacter((unsigned short)wParam);
 			break;
+		}
+
+		if (ImGui::GetIO().WantCaptureMouse) {
+			// ImGui‚ªƒ}ƒEƒX“ü—Í‚ðˆ—‚·‚éê‡
+			return DefWindowProc(hWnd, uMsg, wParam, lParam);
 		}
 	}
 #endif
@@ -864,6 +867,14 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 						{
 							ImGuiApp::handleUi.handleMode = ImGuiApp::HandleUI::SCALE;
 							ImGuiApp::handleUi.moveMode = ImGuiApp::HandleUI::NONE;
+						}
+
+						if (Input::Get().KeyPress(VK_CONTROL))
+						{
+							if (Input::Get().KeyTrigger(VK_D))
+							{
+								ImGuiApp::CopySelectedObject();
+							}
 						}
 					}
 

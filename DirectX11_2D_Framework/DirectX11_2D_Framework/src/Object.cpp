@@ -394,6 +394,26 @@ SAFE_TYPE(GameObject) ObjectManager::Find(const std::string& _name)
 	return nullptr;
 }
 
+SAFE_TYPE(GameObject) ObjectManager::Copy(GameObject* _object)
+{
+	if (_object == nullptr) return nullptr;
+
+	std::stringstream buffer;
+	{
+		SERIALIZE_OUTPUT archive(buffer);
+		archive(*_object);
+	}
+
+	// Deserialize from a file
+	GameObject* object = new GameObject;
+	{
+		SERIALIZE_INPUT archive(buffer);
+		archive(*object);  // Deserialize polymorphic object
+	}
+	ObjectManager::AddObject(object);
+	return object;
+}
+
 
 void ObjectManager::UnInit()
 {
@@ -458,7 +478,7 @@ void ObjectManager::AddObject(std::filesystem::path& _path)
 	GameObject* object = new GameObject;
 	{
 		std::ifstream is(_path.string());
-		cereal::JSONInputArchive archive(is);
+		SERIALIZE_INPUT archive(is);
 
 		int index = 0;
 		archive(CEREAL_NVP(index));

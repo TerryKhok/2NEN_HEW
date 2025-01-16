@@ -50,35 +50,76 @@ bool Permeation::CreateObstacleSegment()
 		Box2D::WorldManager::RayCastAll(vertices[start], vertices[end], fromStartPos, F_ONLYOBSTACLE);
 		Box2D::WorldManager::RayCastAll(vertices[end], vertices[start], fromEndPos, F_ONLYOBSTACLE);
 
-		if (fromStartPos.size() > fromEndPos.size())
+		auto fromStartSize = fromStartPos.size();
+		auto fromEndSize = fromEndPos.size();
+		if (fromStartSize > 0 || fromEndSize > 0)
 		{
-			fromEndPos.push_back(vertices[end]);
-		}
-		else if (fromStartPos.size() < fromEndPos.size())
-		{
-			fromStartPos.push_back(vertices[start]);
-		}
-
-		for (auto pos : fromStartPos)
-		{
-			hit = true;
-
-			auto object = Instantiate("Barrier");
-			b2BodyDef bodyDef = b2DefaultBodyDef();
-			auto box2d = object->AddComponent<Box2DBody>(&bodyDef);
-			box2d->SetFilter(F_TERRAIN);
-
-			std::vector<b2Vec2> points =
+			if (fromStartSize > fromEndSize)
 			{
-				{pos.x ,pos.y ,},
-				{fromEndPos.back().x ,fromEndPos.back().y,}
-			};
-			/*LOG("start x :%f ,y :%f", pos.x, pos.y);
-			LOG("end   x :%f ,y :%f", fromEndPos.back().x, fromEndPos.back().y);*/
-			fromEndPos.pop_back();
+				fromEndPos.push_back(vertices[end]);
+			}
+			else if (fromStartSize < fromEndSize)
+			{
+				fromStartPos.push_back(vertices[start]);
+			}
+			else
+			{
+				switch (i)
+				{
+				case LEFT_T:
+					if (fromStartPos[fromStartSize - 1].x > fromEndPos[0].x)
+					{
+						fromStartPos.push_back(vertices[start]);
+						fromEndPos.push_back(vertices[end]);
+					}
+					break;
+				case RIGHT_T:
+					if (fromStartPos[fromStartSize - 1].y < fromEndPos[0].y)
+					{
+						fromStartPos.push_back(vertices[start]);
+						fromEndPos.push_back(vertices[end]);
+					}
+					break;
+				case RIGHT_B:
+					if (fromStartPos[fromStartSize - 1].x < fromEndPos[0].x)
+					{
+						fromStartPos.push_back(vertices[start]);
+						fromEndPos.push_back(vertices[end]);
+						std::reverse(fromStartPos.begin(), fromStartPos.end());
+						std::reverse(fromEndPos.begin(), fromEndPos.end());
+					}
+					break;
+				case LEFT_B:
+					if (fromStartPos[fromStartSize - 1].y > fromEndPos[0].y)
+					{
+						fromStartPos.push_back(vertices[start]);
+						fromEndPos.push_back(vertices[end]);
+					}
+					break;
+				}
+			}
 
-			box2d->CreateSegment(points);
-			m_barrier.push_back(object->GetName());
+			for (auto& pos : fromStartPos)
+			{
+				hit = true;
+
+				auto object = Instantiate("Barrier");
+				b2BodyDef bodyDef = b2DefaultBodyDef();
+				auto box2d = object->AddComponent<Box2DBody>(&bodyDef);
+				box2d->SetFilter(F_TERRAIN);
+
+				std::vector<b2Vec2> points =
+				{
+					{pos.x ,pos.y ,},
+					{fromEndPos.back().x ,fromEndPos.back().y,}
+				};
+				LOG("start x :%f ,y :%f", pos.x, pos.y);
+				LOG("end   x :%f ,y :%f", fromEndPos.back().x, fromEndPos.back().y);
+				fromEndPos.pop_back();
+
+				box2d->CreateSegment(points);
+				m_barrier.push_back(object->GetName());
+			}
 		}
 	}
 

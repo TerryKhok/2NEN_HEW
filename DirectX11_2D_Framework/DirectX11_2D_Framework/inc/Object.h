@@ -14,6 +14,15 @@ struct Transform final
 	Vector3 scale =	{ 5.0f,5.0f,1.0f };
 	Angle3D angle = { 0.0f,0.0f,0.0f };
 
+	Transform& operator=(const Transform& _tf)
+	{
+		position = _tf.position;
+		scale = _tf.scale;
+		angle = _tf.angle;
+
+		return *this;
+	}
+
 private:
 	GENERATE_SERIALIZE(position, scale, angle)
 };
@@ -52,6 +61,29 @@ private:
 	GameObject() { transform.gameobject = this; }
 	//名前決定
 	GameObject(std::string _name);
+
+	//コピー用演算子
+	GameObject& operator=(const GameObject& _other)
+	{
+		transform = _other.transform;
+		name = _other.name;
+		active = _other.active;
+		m_componentList.first.clear();
+		for (auto& com : _other.m_componentList.first)
+		{
+			auto iter = AssemblyComponent::assemblies.find(com->getType());
+			if (iter != AssemblyComponent::assemblies.end())
+			{
+				iter->second.addComponent(this);
+				*m_componentList.first.back() = *com;
+			}
+		}
+
+		m_componentList.second = _other.m_componentList.second;
+
+		return *this;
+	}
+
 	//デストラクタ(コンポーネント削除)
 	~GameObject();
 
@@ -362,6 +394,7 @@ class ObjectManager final
 public:
 	//オブジェクト一覧から見つける アクセス速度n(1)なのではやい
 	static SAFE_TYPE(GameObject) Find(const std::string& _name);
+	static SAFE_TYPE(GameObject) Copy(GameObject* _object);
 private:
 	//生成禁止
 	ObjectManager() = delete;

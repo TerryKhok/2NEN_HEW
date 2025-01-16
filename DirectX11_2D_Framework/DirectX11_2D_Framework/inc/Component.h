@@ -91,6 +91,7 @@ private:
 	{
 		//::cereal::make_optional_nvp(ar, "version", version);
 	}
+
 private:
 	//============================================
 	// imGui‚Å•`‰æ‚·‚é
@@ -109,28 +110,21 @@ class AssemblyComponent final
 	friend class ReflectionComponent;
 
 	friend class Window;
+	friend class GameObject;
 	friend class ImGuiApp;
 
 	class IReflection final
 	{
 	public:
-#ifndef DEBUG_TRUE
-		IReflection(std::function<bool(GameObject*, SERIALIZE_INPUT&)>&& _create)
-			:createComponent(_create)
-		{
-		};
-#endif
 		~IReflection() = default;
 
 		std::function<bool(GameObject*,SERIALIZE_INPUT&)> createComponent;
 
-#ifdef DEBUG_TRUE
 		IReflection(std::function<bool(GameObject*, SERIALIZE_INPUT&)>&& _create,std::function<void(GameObject*)>&& _add)
 			:createComponent(_create),addComponent(_add)
 		{};
 		
 		std::function<void(GameObject*)> addComponent;
-#endif
 	};
 private:
 	static inline std::map<std::string, IReflection> assemblies;

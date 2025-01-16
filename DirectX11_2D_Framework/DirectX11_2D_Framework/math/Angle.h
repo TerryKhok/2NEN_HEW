@@ -71,6 +71,8 @@ struct Angle3D
 		this->x = _angles.x;
 		this->y = _angles.y;
 		this->z = _angles.z;
+
+		return *this;
 	}
 
 	Angle3D& operator=(const Vector3& _vec)
@@ -78,6 +80,8 @@ struct Angle3D
 		this->x = _vec.x;
 		this->y = _vec.y;
 		this->z = _vec.z;
+
+		return *this;
 	}
 
 	operator Vector3() const
