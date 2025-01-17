@@ -401,8 +401,8 @@ bool Box2D::WorldManager::RayCastShape(Vector2 _start, Vector2 _end, Box2DBody* 
 	b2Vec2 rayEnd = { _end.x / DEFAULT_OBJECT_SIZE,_end.y / DEFAULT_OBJECT_SIZE };
 	b2Vec2 translation = b2Sub(rayEnd, rayStart);
 	b2Transform originTransform =
-		//{ rayStart,b2Body_GetRotation(_body->m_bodyId) };
-		b2Body_GetTransform(_body->m_bodyId);
+		{ rayStart,b2Body_GetRotation(_body->m_bodyId) };
+		//b2Body_GetTransform(_body->m_bodyId);
 
 	RayCastContext context = { 0 };
 	// Must initialize fractions for sorting
@@ -1043,4 +1043,11 @@ void Box2D::WorldManager::DeleteOldWorld()
 	}
 }
 
+bool Box2D::OverlapResultVectorb2ShapeId(b2ShapeId shapeId, void* context)
+{
+	std::vector<b2ShapeId>* shpeIds = (std::vector<b2ShapeId>*)context;
 
+	shpeIds->push_back(shapeId);
+	// continue the query
+	return true;
+}

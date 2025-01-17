@@ -1,5 +1,8 @@
 #include "Permeation.h"
 
+//共有の元のフィルターを格納したリスト
+std::unordered_map<Box2DBody*, std::pair<FILTER, int>> Permeation::m_box2dFiltersCount;
+
 enum
 {
 	LEFT_T,
@@ -40,6 +43,7 @@ bool Permeation::CreateObstacleSegment()
 	};
 
 	bool hit = false;
+	bool inside = false;
 	for (int i = 0; i < VERTICES_MAX; i++)
 	{
 		const int start = i;
@@ -57,10 +61,12 @@ bool Permeation::CreateObstacleSegment()
 			if (fromStartSize > fromEndSize)
 			{
 				fromEndPos.push_back(vertices[end]);
+				inside = true;
 			}
 			else if (fromStartSize < fromEndSize)
 			{
 				fromStartPos.push_back(vertices[start]);
+				inside = false;
 			}
 			else
 			{
@@ -69,6 +75,7 @@ bool Permeation::CreateObstacleSegment()
 				case LEFT_T:
 					if (fromStartPos[fromStartSize - 1].x > fromEndPos[0].x)
 					{
+						inside = true;
 						fromStartPos.push_back(vertices[start]);
 						fromEndPos.push_back(vertices[end]);
 					}
@@ -76,6 +83,7 @@ bool Permeation::CreateObstacleSegment()
 				case RIGHT_T:
 					if (fromStartPos[fromStartSize - 1].y < fromEndPos[0].y)
 					{
+						inside = true;
 						fromStartPos.push_back(vertices[start]);
 						fromEndPos.push_back(vertices[end]);
 					}
@@ -83,6 +91,7 @@ bool Permeation::CreateObstacleSegment()
 				case RIGHT_B:
 					if (fromStartPos[fromStartSize - 1].x < fromEndPos[0].x)
 					{
+						inside = true;
 						fromStartPos.push_back(vertices[start]);
 						fromEndPos.push_back(vertices[end]);
 						std::reverse(fromStartPos.begin(), fromStartPos.end());
@@ -92,34 +101,63 @@ bool Permeation::CreateObstacleSegment()
 				case LEFT_B:
 					if (fromStartPos[fromStartSize - 1].y > fromEndPos[0].y)
 					{
+						inside = true;
 						fromStartPos.push_back(vertices[start]);
 						fromEndPos.push_back(vertices[end]);
 					}
 					break;
 				}
 			}
+		}
+		else if(inside)
+		{
+			fromStartPos.push_back(vertices[start]);
+			fromEndPos.push_back(vertices[end]);
 
-			for (auto& pos : fromStartPos)
+			/*int hEnd = (i + 2) % VERTICES_MAX;
+			if (Box2D::WorldManager::RayCast(vertices[hEnd], vertices[start], F_ONLYOBSTACLE))
 			{
-				hit = true;
-
-				auto object = Instantiate("Barrier");
-				b2BodyDef bodyDef = b2DefaultBodyDef();
-				auto box2d = object->AddComponent<Box2DBody>(&bodyDef);
-				box2d->SetFilter(F_TERRAIN);
-
-				std::vector<b2Vec2> points =
-				{
-					{pos.x ,pos.y ,},
-					{fromEndPos.back().x ,fromEndPos.back().y,}
-				};
-				LOG("start x :%f ,y :%f", pos.x, pos.y);
-				LOG("end   x :%f ,y :%f", fromEndPos.back().x, fromEndPos.back().y);
-				fromEndPos.pop_back();
-
-				box2d->CreateSegment(points);
-				m_barrier.push_back(object->GetName());
+				fromStartPos.push_back(vertices[start]);
+				fromEndPos.push_back(vertices[end]);
 			}
+			else
+			{
+				const int hStart = (i + 1) % VERTICES_MAX;
+				hEnd = (i + 3) % VERTICES_MAX;
+				if (Box2D::WorldManager::RayCast(vertices[hEnd], vertices[hStart], F_ONLYOBSTACLE))
+				{
+					fromStartPos.push_back(vertices[start]);
+					fromEndPos.push_back(vertices[end]);
+				}
+			}*/
+		}
+
+		for (auto& pos : fromStartPos)
+		{
+			if (pos.x == fromEndPos.back().x && pos.y == fromEndPos.back().y)
+			{
+				fromEndPos.back() -= Vector2(1.0f, 1.0f);
+			}
+
+			hit = true;
+
+			auto object = Instantiate("Barrier");
+			b2BodyDef bodyDef = b2DefaultBodyDef();
+			auto box2d = object->AddComponent<Box2DBody>(&bodyDef);
+			box2d->SetFilter(F_TERRAIN);
+
+			std::vector<b2Vec2> points =
+			{
+				{pos.x ,pos.y ,},
+				{fromEndPos.back().x ,fromEndPos.back().y,}
+			};
+
+			/*LOG("start x :%f ,y :%f", pos.x, pos.y);
+			LOG("end   x :%f ,y :%f", fromEndPos.back().x, fromEndPos.back().y);*/
+			fromEndPos.pop_back();
+
+			box2d->CreateSegment(points);
+			m_barrier.push_back(object->GetName());
 		}
 	}
 

@@ -9,8 +9,39 @@ class Permeation : public Component
 
 	const XMFLOAT4 enterColor = { 0.2f,0.2f,0.2f,0.5f };
 	const XMFLOAT4 exitColor = { 0.2f,0.2f,0.2f,0.2f };
+	
+	//共有の元のフィルターを格納したリスト
+	static std::unordered_map<Box2DBody*, std::pair<FILTER,int>> m_box2dFiltersCount;
 
-	std::unordered_map<Box2DBody*, FILTER> m_enterBox2dFilters;
+	//std::vector<Box2DBody*> m_enterBox2d;
+
+	void EnterInsideBox2dObject(Box2DBody* _rb)
+	{
+		auto iter = m_box2dFiltersCount.find(_rb);
+		if (iter != m_box2dFiltersCount.end())
+		{
+			auto& count = iter->second.second;
+			count++;
+			return;
+		}
+
+		m_box2dFiltersCount.emplace(_rb, std::make_pair(_rb->GetFilter(), 1));
+	}
+
+	void ExitInsideBox2dObject(Box2DBody* _rb)
+	{
+		auto iter = m_box2dFiltersCount.find(_rb);
+		if (iter != m_box2dFiltersCount.end())
+		{
+			auto& count = iter->second.second;
+			count--;
+			if (count <= 0)
+			{
+				_rb->SetFilter(iter->second.first);
+				m_box2dFiltersCount.erase(iter);
+			}
+		}
+	}
 
 	void Start() override
 	{
@@ -30,9 +61,9 @@ class Permeation : public Component
 
 		CreateObstacleSegment();
 
-		std::unordered_map<GameObject*, b2ShapeId> exitObjects;
-		rb->GetOverlapObject(exitObjects);
-		for (auto object : exitObjects)
+		std::unordered_map<GameObject*, b2ShapeId> enterObjects;
+		rb->GetOverlapObject(enterObjects);
+		for (auto object : enterObjects)
 		{
 			Box2DBody* rb = nullptr;
 			if (object.first->TryGetComponent<Box2DBody>(&rb))
@@ -40,8 +71,8 @@ class Permeation : public Component
 				switch (rb->GetFilter())
 				{
 				case F_OBSTACLE:
+					EnterInsideBox2dObject(rb);
 					rb->SetFilter(F_PEROBSTACLE);
-					m_enterBox2dFilters.insert(std::make_pair(rb, F_OBSTACLE));
 					break;
 				default:
 					rb->SetAwake(true);
@@ -66,16 +97,16 @@ class Permeation : public Component
 		{
 			enters.insert(_other);
 			FILTER filter = rb->GetFilter();
+			EnterInsideBox2dObject(rb);
 			switch (filter)
 			{
 			case F_OBSTACLE:
-				rb->SetFilter(F_PEROBSTACLE);
+				//rb->SetFilter(F_PEROBSTACLE);
 				break;
 			default:
 				rb->SetFilter(F_PERMEATION);
 				break;
 			}
-			m_enterBox2dFilters.insert(std::make_pair(rb, filter));
 			
 			rend->SetColor(enterColor);
 			inCount++;
@@ -87,12 +118,7 @@ class Permeation : public Component
 		Box2DBody* rb = nullptr;
 		if (_other->TryGetComponent(&rb))
 		{
-			auto iter = m_enterBox2dFilters.find(rb);
-			if (iter != m_enterBox2dFilters.end())
-			{
-				rb->SetFilter(iter->second);
-				m_enterBox2dFilters.erase(iter);
-			}
+			ExitInsideBox2dObject(rb);
 			enters.erase(enters.find(_other));
 			inCount--;
 			if (inCount <= 0)
@@ -103,12 +129,10 @@ class Permeation : public Component
 	}
 
 	std::unordered_map<GameObject*, b2ShapeId> insideObjects;
-	Vector2 enterPos;
 
 	void OnWindowEnter(HWND _hWnd) override
 	{
 		rb->GetOverlapObject(insideObjects);
-		enterPos = m_this->transform.position;
 
 		for (auto object : m_barrier)
 		{
@@ -137,12 +161,7 @@ class Permeation : public Component
 				Box2DBody* rb = nullptr;
 				if (object.first->TryGetComponent(&rb))
 				{
-					auto iter = m_enterBox2dFilters.find(rb);
-					if (iter != m_enterBox2dFilters.end())
-					{
-						rb->SetFilter(iter->second);
-						m_enterBox2dFilters.erase(iter);
-					}
+					ExitInsideBox2dObject(rb);
 
 					auto iterator = enters.find(object.first);
 					if (iterator != enters.end()) enters.erase(iterator);
@@ -166,8 +185,8 @@ class Permeation : public Component
 					switch (rb->GetFilter())
 					{
 					case F_OBSTACLE:
+						EnterInsideBox2dObject(rb);
 						rb->SetFilter(F_PEROBSTACLE);
-						m_enterBox2dFilters.insert(std::make_pair(rb, F_OBSTACLE));
 						break;
 					default:
 						rb->SetAwake(true);

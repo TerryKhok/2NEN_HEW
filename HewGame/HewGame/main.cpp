@@ -26,6 +26,7 @@ void MainInit()
 	Box2DBodyManager::DisableCollisionFilter(F_MAPRAY, F_WINDOW);
 	Box2DBodyManager::DisableCollisionFilter(F_MAPRAY, F_PERWINDOW);
 	Box2DBodyManager::DisableCollisionFilter(F_MAPRAY, F_PLAYER);
+	Box2DBodyManager::DisableCollisionFilter(F_MAPRAY, F_PEROBSTACLE);
 	Box2DBodyManager::OnlyCollisionFilter(F_ONLYOBSTACLE, F_OBSTACLE);
 	Box2DBodyManager::EnableCollisionFilter(F_ONLYOBSTACLE, F_PEROBSTACLE);
 }

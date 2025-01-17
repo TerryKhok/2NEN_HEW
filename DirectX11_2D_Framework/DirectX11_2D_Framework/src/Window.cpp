@@ -784,9 +784,48 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 						{
 							std::list<GameObject*> targetObjects;
 
+							//Box2D‚ÌShape‚É“–‚½‚é‚©‚Ç‚¤‚©
+							//========================================================================================
+							static float range = 0.8f;
+							b2AABB aabb;
+							aabb.lowerBound =
+							{ worldPos.x / DEFAULT_OBJECT_SIZE - range,worldPos.y / DEFAULT_OBJECT_SIZE - range };
+							aabb.upperBound =
+							{ worldPos.x / DEFAULT_OBJECT_SIZE + range,worldPos.y / DEFAULT_OBJECT_SIZE + range };
+							/*	b2Circle circle;
+							circle.center = { 0.0f,0.0f};
+							circle.radius = 1.0f;
+							b2Transform tf;
+							tf.p = { worldPos.x / DEFAULT_OBJECT_SIZE,worldPos.y / DEFAULT_OBJECT_SIZE };
+							tf.q = b2Rot_identity;*/
+							std::vector<b2ShapeId> outputShape;
+							b2World_OverlapAABB(*Box2D::WorldManager::currentWorldId, aabb,
+								b2DefaultQueryFilter(), Box2D::OverlapResultVectorb2ShapeId, &outputShape);
+							for (auto& shape : outputShape)
+							{
+								b2BodyId bodyId = b2Shape_GetBody(shape);
+								auto iter = Box2DBodyManager::m_bodyObjectName.find(bodyId.index1);
+								if (iter != Box2DBodyManager::m_bodyObjectName.end())
+								{
+									auto object = ObjectManager::Find(iter->second);
+									if (object != nullptr)
+									{
+										auto it = std::find(targetObjects.begin(), targetObjects.end(), object);
+										if (it == targetObjects.end())
+											targetObjects.push_back(object);
+									}
+								}
+							}
+							//========================================================================================
+
 							for (auto& object : ObjectManager::m_objectList->first)
 							{
 								if (!object->active) continue;
+
+								if (object->ExistComponent<Box2DBody>()) continue;
+
+								auto it = std::find(targetObjects.begin(), targetObjects.end(), object.get());
+								if (it != targetObjects.end()) continue;
 
 								const Vector2& pos = object->transform.position;
 								Vector2 scale = object->transform.scale;

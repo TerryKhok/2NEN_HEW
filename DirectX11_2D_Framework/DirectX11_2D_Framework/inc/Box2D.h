@@ -45,6 +45,8 @@ namespace Box2D
 	constexpr int subStepCount = 4;
 	//======================================
 
+	bool OverlapResultVectorb2ShapeId(b2ShapeId shapeId, void* context);
+
 	class WorldManager
 	{
 		friend class Window;

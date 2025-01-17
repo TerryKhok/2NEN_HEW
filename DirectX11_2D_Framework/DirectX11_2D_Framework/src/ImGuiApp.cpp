@@ -23,7 +23,7 @@ std::stack<std::function<void()>> changes;
 std::stack<std::pair<std::unique_ptr<GameObject, void(*)(GameObject*)>,std::pair<std::string,size_t>>> willDeleteObjects;
 std::stack<std::unique_ptr<Component, void(*)(Component*)>> willRemoveComponents;
 std::vector<const char*> filterNames;
-constexpr long long numFilter = magic_enum::enum_count<FILTER>() - 1;
+constexpr long long numFilter = magic_enum::enum_count<FILTER>();
 ImVec4 windowBgCol;
 
 std::map<std::filesystem::path, std::pair<ComPtr<ID3D11ShaderResourceView>, ImTextureID>> textureSource;
@@ -472,14 +472,14 @@ void ImGuiApp::DrawOptionGui()
 							if (object == nullptr) continue;
 
 							try {
-								if (pair.second[BOX2D_POSITION] > 0)
+								/*if (pair.second[BOX2D_POSITION] > 0)
 								{
 									object->GetComponent<Box2DBody>()->SetPosition(object->transform.position);
 								}
 								if (pair.second[BOX2D_ROTATION] > 0)
 								{
 									object->GetComponent<Box2DBody>()->SetAngle(object->transform.angle.z);
-								}
+								}*/
 								if (pair.second[WINDOW_POSITION] > 0)
 								{
 									auto windowRect = object->GetComponent<SubWindow>();
@@ -2578,13 +2578,38 @@ bool ImGuiApp::HandleUI::Update(Vector2 _targetPos)
 			}
 			if (Input::Get().MouseLeftRelease())
 			{
-				changes.emplace(std::bind([](GameObject* obj, Vector2 pos,std::function<void()> func) {
+				Box2DBody* rb = nullptr;
+				if (selectedObject->TryGetComponent<Box2DBody>(&rb))
+				{
+					rb->SetPosition(selectedObject->transform.position);
+				}
+				SubWindow* subWnd = nullptr;
+				if (selectedObject->TryGetComponent<SubWindow>(&subWnd))
+				{
+					SetWindowPosition(subWnd->GeWndHandle(), selectedObject->transform.position);
+				}
+				changes.emplace(std::bind([](GameObject* obj, Vector2 pos)
+					{
+						obj->transform.position = pos;
+						Box2DBody* rb = nullptr;
+						if (obj->TryGetComponent<Box2DBody>(&rb))
+						{
+							rb->SetPosition(pos);
+						}
+						SubWindow* subWnd = nullptr;
+						if (obj->TryGetComponent<SubWindow>(&subWnd))
+						{
+							SetWindowPosition(subWnd->GeWndHandle(), pos);
+						}
+
+					}, selectedObject, beforePos));
+		/*		changes.emplace(std::bind([](GameObject* obj, Vector2 pos,std::function<void()> func) {
 					if (obj != nullptr)
 					{
 						obj->transform.position = pos;
 						func();
 					}
-					}, selectedObject, beforePos,std::move(SetChangeValue(selectedObject, moveMode))));
+					}, selectedObject, beforePos,std::move(SetChangeValue(selectedObject, moveMode))));*/
 				moveMode = NONE;
 			}
 
@@ -2599,13 +2624,39 @@ bool ImGuiApp::HandleUI::Update(Vector2 _targetPos)
 			}
 			if (Input::Get().MouseLeftRelease())
 			{
+				Box2DBody* rb = nullptr;
+				if (selectedObject->TryGetComponent<Box2DBody>(&rb))
+				{
+					rb->SetPosition(selectedObject->transform.position);
+				}
+				SubWindow* subWnd = nullptr;
+				if (selectedObject->TryGetComponent<SubWindow>(&subWnd))
+				{
+					SetWindowPosition(subWnd->GeWndHandle(), selectedObject->transform.position);
+				}
+				changes.emplace(std::bind([](GameObject* obj, Vector2 pos)
+					{
+						obj->transform.position = pos;
+						Box2DBody* rb = nullptr;
+						if (obj->TryGetComponent<Box2DBody>(&rb))
+						{
+							rb->SetPosition(pos);
+						}
+						SubWindow* subWnd = nullptr;
+						if (obj->TryGetComponent<SubWindow>(&subWnd))
+						{
+							SetWindowPosition(subWnd->GeWndHandle(), pos);
+						}
+
+					}, selectedObject, beforePos));
+				/*
 				changes.emplace(std::bind([](GameObject* obj, Vector2 pos, std::function<void()> func) {
 					if (obj != nullptr)
 					{
 						obj->transform.position = pos;
 						func();
 					}
-					}, selectedObject, beforePos, std::move(SetChangeValue(selectedObject, moveMode))));
+					}, selectedObject, beforePos, std::move(SetChangeValue(selectedObject, moveMode))));*/
 				moveMode = NONE;
 			}
 
@@ -2620,13 +2671,39 @@ bool ImGuiApp::HandleUI::Update(Vector2 _targetPos)
 			}
 			if (Input::Get().MouseLeftRelease())
 			{
-				changes.emplace(std::bind([](GameObject* obj, Vector2 pos, std::function<void()> func) {
+				//selectedObject->transform.position = beforePos;
+				Box2DBody* rb = nullptr;
+				if (selectedObject->TryGetComponent<Box2DBody>(&rb))
+				{
+					rb->SetPosition(selectedObject->transform.position);
+				}
+				SubWindow* subWnd = nullptr;
+				if (selectedObject->TryGetComponent<SubWindow>(&subWnd))
+				{
+					SetWindowPosition(subWnd->GeWndHandle(), selectedObject->transform.position);
+				}
+				changes.emplace(std::bind([](GameObject* obj, Vector2 pos)
+					{
+						obj->transform.position = pos;
+						Box2DBody* rb = nullptr;
+						if (obj->TryGetComponent<Box2DBody>(&rb))
+						{
+							rb->SetPosition(pos);
+						}
+						SubWindow* subWnd = nullptr;
+						if (obj->TryGetComponent<SubWindow>(&subWnd))
+						{
+							SetWindowPosition(subWnd->GeWndHandle(), pos);
+						}
+
+					}, selectedObject, beforePos));
+				/*changes.emplace(std::bind([](GameObject* obj, Vector2 pos, std::function<void()> func) {
 					if (obj != nullptr)
 					{
 						obj->transform.position = pos;
 						func();
 					}
-					}, selectedObject, beforePos, std::move(SetChangeValue(selectedObject, moveMode))));
+					}, selectedObject, beforePos, std::move(SetChangeValue(selectedObject, moveMode))));*/
 				moveMode = NONE;
 			}
 
@@ -2679,13 +2756,13 @@ bool ImGuiApp::HandleUI::Update(Vector2 _targetPos)
 			}
 			if (Input::Get().MouseLeftRelease())
 			{
-				changes.emplace(std::bind([](GameObject* obj, double rad, std::function<void()> func) {
+				changes.emplace(std::bind([](GameObject* obj, double rad/*, std::function<void()> func*/) {
 					if (obj != nullptr)
 					{
 						obj->transform.angle.z.Set(rad);
-						func();
+						//func();
 					}
-					}, selectedObject, beforeRad, std::move(SetChangeValue(selectedObject, moveMode))));
+					}, selectedObject, beforeRad/*, std::move(SetChangeValue(selectedObject, moveMode))*/));
 				moveMode = NONE;
 			}
 
@@ -2939,14 +3016,14 @@ std::function<void()> ImGuiApp::HandleUI::SetChangeValue(GameObject* _object, MO
 	case VERTICAL_POS:
 	case HORIZON_POS:
 	case MOVE_POS:
-		if (_object->ExistComponent<Box2DBody>())
-			types.emplace_back(BOX2D_POSITION);
+		/*if (_object->ExistComponent<Box2DBody>())
+			types.emplace_back(BOX2D_POSITION);*/
 		if (_object->ExistComponent<SubWindow>())
 			types.emplace_back(WINDOW_POSITION);
 		break;
 	case MOVE_ROTATION:
-		if (_object->ExistComponent<Box2DBody>())
-			types.emplace_back(BOX2D_ROTATION);
+		/*if (_object->ExistComponent<Box2DBody>())
+			types.emplace_back(BOX2D_ROTATION);*/
 		break;
 	}
 

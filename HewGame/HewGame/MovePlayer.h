@@ -36,9 +36,11 @@ private:
 		auto& input = Input::Get();
 
 		bool isGround = false;
-		Vector2 rayEnd = m_this->transform.position;
+		Vector2 rayStart = m_this->transform.position;
+		rayStart.y += 50.0f;
+		Vector2 rayEnd = rayStart;
 		rayEnd.y -= 50.0f;
-		if (Box2D::WorldManager::RayCast(m_this->transform.position, rayEnd, F_MAPRAY))
+		if (Box2D::WorldManager::RayCastShape(rayStart, rayEnd, rb, F_MAPRAY))
 		{
 			isGround = true;
 		}

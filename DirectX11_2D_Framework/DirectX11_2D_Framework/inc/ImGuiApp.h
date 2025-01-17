@@ -11,7 +11,7 @@
 #include "../../DirectX11_2D_Framework/imgui/imgui_impl_win32.h"
 
 #define MAGIC_ENUM_RANGE_MIN 0  // Å¬’l‚É‡‚í‚¹‚Ä’²®
-#define MAGIC_ENUM_RANGE_MAX 0x00000800   // Å‘å’l‚É‡‚í‚¹‚Ä’²®
+#define MAGIC_ENUM_RANGE_MAX 1 << 11   // Å‘å’l‚É‡‚í‚¹‚Ä’²®
 
 #include "../../DirectX11_2D_Framework/magic_enum/magic_enum.hpp"
 
@@ -39,8 +39,8 @@ class ImGuiApp
 
 	enum UPDATE_VALUE_TYPE
 	{
-		BOX2D_POSITION,
-		BOX2D_ROTATION,
+		/*BOX2D_POSITION,
+		BOX2D_ROTATION,*/
 		WINDOW_POSITION,
 		VALUE_TYPE_MAX
 	};

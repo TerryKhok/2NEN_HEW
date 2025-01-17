@@ -18,6 +18,7 @@ class Box2DBody : public Component
 		b2Vec2 lineVec;
 		float angleVec;
 		float gravity;
+		float autoMass;
 		float mass;
 		bool bullet;
 		bool fixRot;
@@ -28,7 +29,8 @@ class Box2DBody : public Component
 		void serialize(Archive& ar)
 		{
 			ar(CEREAL_NVP(type), CEREAL_NVP(lineVec), CEREAL_NVP(angleVec), CEREAL_NVP(gravity),
-				CEREAL_NVP(mass), CEREAL_NVP(bullet), CEREAL_NVP(fixRot),CEREAL_NVP(awake));
+				CEREAL_NVP(mass),CEREAL_NVP(bullet), CEREAL_NVP(fixRot), CEREAL_NVP(awake));
+			CEREAL_OPTIONAL_NVP(ar, autoMass);
 		}
 
 		friend class cereal::access;

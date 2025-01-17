@@ -65,9 +65,9 @@ Box2DBody::Box2DBody(GameObject* _object, SERIALIZE_INPUT& ar)
 	bodyDef.position = { position.x / DEFAULT_OBJECT_SIZE, position.y / DEFAULT_OBJECT_SIZE };
 	bodyDef.rotation = b2MakeRot(static_cast<float>(_object->transform.angle.z.Get()));
 	bodyDef.linearVelocity = data.lineVec;
+	bodyDef.automaticMass = data.autoMass;
 	bodyDef.angularVelocity = data.angleVec;
 	bodyDef.gravityScale = data.gravity;
-	bodyDef.automaticMass = data.mass;
 	bodyDef.isBullet = data.bullet;
 	bodyDef.fixedRotation = data.fixRot;
 	bodyDef.isAwake = data.awake;
@@ -315,6 +315,10 @@ Box2DBody::Box2DBody(GameObject* _object, SERIALIZE_INPUT& ar)
 		}
 	}
 
+	/*auto massData = b2Body_GetMassData(m_bodyId);
+	massData.mass = data.mass;
+	b2Body_SetMassData(m_bodyId, massData);*/
+
 #ifdef RELEASE_SERIALIZE_VIEW_HITBOX
 	ar(CEREAL_NVP(renderData));
 
@@ -409,7 +413,8 @@ void Box2DBody::Serialize(SERIALIZE_OUTPUT& ar)
 	data.lineVec = b2Body_GetLinearVelocity(m_bodyId);
 	data.angleVec = b2Body_GetAngularVelocity(m_bodyId);
 	data.gravity = b2Body_GetGravityScale(m_bodyId);
-	data.mass = b2Body_GetAutomaticMass(m_bodyId);
+	data.autoMass = b2Body_GetAutomaticMass(m_bodyId);
+	data.mass = b2Body_GetMass(m_bodyId);
 	data.bullet = b2Body_IsBullet(m_bodyId);
 	data.fixRot = b2Body_IsFixedRotation(m_bodyId);
 	data.awake = b2Body_IsAwake(m_bodyId);
@@ -504,7 +509,7 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 
 	if (ImGui::BeginPopup("changeFilter"))
 	{
-		static long long numFilter = magic_enum::enum_count<FILTER>() - 1;
+		static long long numFilter = magic_enum::enum_count<FILTER>();
 		for (int i = 0; i < numFilter; i++)
 		{
 			FILTER filter = (FILTER)pow(2, i);
@@ -538,7 +543,7 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 	}
 
 	float gravity = b2Body_GetGravityScale(m_bodyId);
-	if (ImGui::InputFloat(" Gravity", &gravity))
+	if (ImGui::InputFloat("Gravity", &gravity))
 	{
 		b2Body_SetGravityScale(m_bodyId, gravity);
 	}
@@ -785,7 +790,7 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 			if (editVertex)
 			{
 				bool notLoop = false;
-				static bool inside = false;
+				static bool out = false;
 				switch (selectType)
 				{
 				case SEGMENT:
@@ -794,14 +799,14 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 				case POLYGON:
 					break;
 				case CHAIN:
-					ImGui::Checkbox("inside##vertex", &inside);
+					ImGui::Checkbox("out##vertex", &out);
 					break;
 				}
 
 				if (create)
 				{
 					std::vector<b2Vec2> points;
-					if (inside)
+					if (out)
 					{
 						for (int i = (int)pointList.size() - 1; i >= 0; i--)
 						{
@@ -1678,14 +1683,6 @@ void Box2DBody::SetAwake(bool _awake)
 #endif
 }
 
-bool OverlapResultFcn(b2ShapeId shapeId, void* context)
-{
-	std::vector<b2ShapeId>* shpeIds = (std::vector<b2ShapeId>*)context;
-
-	shpeIds->push_back(shapeId);
-	// continue the query
-	return true;
-}
 
 
 void Box2DBody::GetOverlapObject(std::vector<GameObject*>& _objects)
@@ -1710,19 +1707,22 @@ void Box2DBody::GetOverlapObject(std::vector<GameObject*>& _objects, b2Transform
 		case b2_polygonShape:
 		{
 			auto polygon = b2Shape_GetPolygon(shpeId);
-			b2World_OverlapPolygon(*Box2D::WorldManager::currentWorldId, &polygon, _tf, filter, OverlapResultFcn, &shpeIds);
+			b2World_OverlapPolygon(*Box2D::WorldManager::currentWorldId, &polygon, _tf, filter,
+				Box2D::OverlapResultVectorb2ShapeId, &shpeIds);
 		}
 		break;
 		case b2_circleShape:
 		{
 			auto circle = b2Shape_GetCircle(shpeId);
-			b2World_OverlapCircle(*Box2D::WorldManager::currentWorldId, &circle, _tf, filter, OverlapResultFcn, &shpeIds);
+			b2World_OverlapCircle(*Box2D::WorldManager::currentWorldId, &circle, _tf, filter,
+				Box2D::OverlapResultVectorb2ShapeId, &shpeIds);
 		}
 		break;
 		case b2_capsuleShape:
 		{
 			auto causule = b2Shape_GetCapsule(shpeId);
-			b2World_OverlapCapsule(*Box2D::WorldManager::currentWorldId, &causule, _tf, filter, OverlapResultFcn, &shpeIds);
+			b2World_OverlapCapsule(*Box2D::WorldManager::currentWorldId, &causule, _tf, filter,
+				Box2D::OverlapResultVectorb2ShapeId, &shpeIds);
 		}
 		break;
 		}
@@ -1774,19 +1774,22 @@ void Box2DBody::GetOverlapObject(std::unordered_map<GameObject*, b2ShapeId>& _ob
 		case b2_polygonShape:
 		{
 			auto polygon = b2Shape_GetPolygon(shpeId);
-			b2World_OverlapPolygon(*Box2D::WorldManager::currentWorldId, &polygon, _tf, filter, OverlapResultFcn, &shpeIds);
+			b2World_OverlapPolygon(*Box2D::WorldManager::currentWorldId, &polygon, _tf, filter, 
+				Box2D::OverlapResultVectorb2ShapeId, &shpeIds);
 		}
 		break;
 		case b2_circleShape:
 		{
 			auto circle = b2Shape_GetCircle(shpeId);
-			b2World_OverlapCircle(*Box2D::WorldManager::currentWorldId, &circle, _tf, filter, OverlapResultFcn, &shpeIds);
+			b2World_OverlapCircle(*Box2D::WorldManager::currentWorldId, &circle, _tf, filter,
+				Box2D::OverlapResultVectorb2ShapeId, &shpeIds);
 		}
 		break;
 		case b2_capsuleShape:
 		{
 			auto causule = b2Shape_GetCapsule(shpeId);
-			b2World_OverlapCapsule(*Box2D::WorldManager::currentWorldId, &causule, _tf, filter, OverlapResultFcn, &shpeIds);
+			b2World_OverlapCapsule(*Box2D::WorldManager::currentWorldId, &causule, _tf, filter, 
+				Box2D::OverlapResultVectorb2ShapeId, &shpeIds);
 		}
 		break;
 		}
