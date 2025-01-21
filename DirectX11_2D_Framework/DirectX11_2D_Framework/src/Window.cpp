@@ -628,6 +628,14 @@ const bool Window::IsPause()
 // Declare isDragging as a static or global variable
 bool isDragging = false;
 
+// ウィンドウのZオーダーを取得するためのコールバック
+BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam) {
+	std::vector<HWND>* windowList = reinterpret_cast<std::vector<HWND>*>(lParam);
+	if (IsWindowVisible(hwnd)) {
+		windowList->push_back(hwnd);
+	}
+	return TRUE;
+}
 
 LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1023,17 +1031,22 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		/*HWND consoleWindow = GetConsoleWindow();
 		SetWindowPos(consoleWindow, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);*/
 
+		HWND hNextWnd = GetNextWindow(mainHwnd, GW_HWNDNEXT);
 		for (auto hwnd : ImGuiApp::m_hWnd)
 		{
-			SetWindowPos(hwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+			if (hNextWnd != hwnd) {
+				SetWindowPos(hwnd, mainHwnd, 0, 0, 0, 0,
+					SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+			}
 		}
-#endif
+
 		if (pauseGame) break;
 
 		for (auto hwnd : m_hwndObjNames)
 		{
 			SetWindowPos(hwnd.first, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 		}
+#endif
 	}
 	break;
 #endif
@@ -1471,6 +1484,9 @@ Vector2 GetWindowPosition(HWND _hWnd)
 		static_cast<float>(rect.left + rect.right) / 2 - Window::MONITER_HALF_WIDTH,
 		static_cast<float>(rect.top + rect.bottom) / -2 + Window::MONITER_HALF_HEIGHT
 	};
+
+	pos.x *= PROJECTION_ASPECT_WIDTH;
+	pos.y *= PROJECTION_ASPECT_HEIGHT;
 
 //#ifdef CAMERA_ON_WINDOW
 //	pos += RenderManager::renderOffset;

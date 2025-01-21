@@ -44,6 +44,8 @@ bool Permeation::CreateObstacleSegment()
 
 	bool hit = false;
 	bool inside = false;
+	bool insideList[VERTICES_MAX] = { false };
+	bool unHit[VERTICES_MAX] = { false };
 	for (int i = 0; i < VERTICES_MAX; i++)
 	{
 		const int start = i;
@@ -109,10 +111,11 @@ bool Permeation::CreateObstacleSegment()
 				}
 			}
 		}
-		else if(inside)
+		else 
 		{
-			fromStartPos.push_back(vertices[start]);
-			fromEndPos.push_back(vertices[end]);
+			unHit[i] = true;
+			/*fromStartPos.push_back(vertices[start]);
+			fromEndPos.push_back(vertices[end]);*/
 
 			/*int hEnd = (i + 2) % VERTICES_MAX;
 			if (Box2D::WorldManager::RayCast(vertices[hEnd], vertices[start], F_ONLYOBSTACLE))
@@ -131,6 +134,8 @@ bool Permeation::CreateObstacleSegment()
 				}
 			}*/
 		}
+
+		insideList[end] = inside;
 
 		for (auto& pos : fromStartPos)
 		{
@@ -155,6 +160,35 @@ bool Permeation::CreateObstacleSegment()
 			/*LOG("start x :%f ,y :%f", pos.x, pos.y);
 			LOG("end   x :%f ,y :%f", fromEndPos.back().x, fromEndPos.back().y);*/
 			fromEndPos.pop_back();
+
+			box2d->CreateSegment(points);
+			m_barrier.push_back(object->GetName());
+		}
+	}
+
+	for (int i = 0; i < VERTICES_MAX; i++)
+	{
+		if (insideList[i] && unHit[i])
+		{
+			int nextIndex = (i + 1) % VERTICES_MAX;
+			if (unHit[nextIndex])
+			{
+				insideList[nextIndex] = true;
+			}
+
+			auto& startPos = vertices[i];
+			auto& endPos = vertices[nextIndex];
+
+			auto object = Instantiate("Barrier");
+			b2BodyDef bodyDef = b2DefaultBodyDef();
+			auto box2d = object->AddComponent<Box2DBody>(&bodyDef);
+			box2d->SetFilter(F_TERRAIN);
+
+			std::vector<b2Vec2> points =
+			{
+				{startPos.x ,startPos.y ,},
+				{endPos.x ,endPos.y,}
+			};
 
 			box2d->CreateSegment(points);
 			m_barrier.push_back(object->GetName());

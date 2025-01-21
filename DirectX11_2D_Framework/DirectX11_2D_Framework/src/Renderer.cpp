@@ -327,8 +327,16 @@ inline void UVRenderNode::Draw()
 	//テクスチャをピクセルシェーダーに渡す
 	DirectX11::m_pDeviceContext->PSSetShaderResources(0, 1, m_pTextureView.GetAddressOf());
 
-	cb.uvScale = XMFLOAT2(m_scaleX, m_scaleY);
-	cb.uvOffset = XMFLOAT2(m_frameX * m_scaleX, m_frameY * m_scaleY);
+	if (reverse)
+	{
+		cb.uvScale = XMFLOAT2(-m_scaleX, m_scaleY);
+		cb.uvOffset = XMFLOAT2(m_frameX * m_scaleX + m_scaleX, m_frameY * m_scaleY);
+	}
+	else
+	{
+		cb.uvScale = XMFLOAT2(m_scaleX, m_scaleY);
+		cb.uvOffset = XMFLOAT2(m_frameX * m_scaleX, m_frameY * m_scaleY);
+	}
 
 	//行列をシェーダーに渡す
 	DirectX11::m_pDeviceContext->UpdateSubresource(
@@ -483,8 +491,10 @@ void RenderManager::Draw()
 		if (GetWindowRect(view.first, &rect))
 		{
 			CameraManager::cameraPosition = { 
-				(static_cast<float>(rect.left + rect.right) / 2 - Window::MONITER_HALF_WIDTH) / renderZoom.x + renderOffset.x,
-				(static_cast<float>(rect.top + rect.bottom) / -2 + Window::MONITER_HALF_HEIGHT) / renderZoom.y + renderOffset.y
+				(static_cast<float>(rect.left + rect.right) / 2 - Window::MONITER_HALF_WIDTH) 
+				* PROJECTION_ASPECT_WIDTH / renderZoom.x + renderOffset.x,
+				(static_cast<float>(rect.top + rect.bottom) / -2 + Window::MONITER_HALF_HEIGHT) 
+				* PROJECTION_ASPECT_HEIGHT / renderZoom.y + renderOffset.y
 			};
 		}
 
@@ -492,8 +502,8 @@ void RenderManager::Draw()
 		{
 			rect.right = max(rect.right, 1);
 			rect.bottom = max(rect.bottom, 1);
-			CameraManager::cameraZoom.x = PROJECTION_WIDTH / static_cast<float>(rect.right) * renderZoom.x;
-			CameraManager::cameraZoom.y = PROJECTION_HEIGHT / static_cast<float>(rect.bottom) * renderZoom.y;
+			CameraManager::cameraZoom.x = PROJECTION_WINDOW_WIDTH / static_cast<float>(rect.right) * renderZoom.x;
+			CameraManager::cameraZoom.y = PROJECTION_WINDOW_HEIGHT / static_cast<float>(rect.bottom) * renderZoom.y;
 		}
 
 		CameraManager::SetCameraMatrix();

@@ -127,6 +127,7 @@ class Animator : public Component
 public:
 	void AddClip(std::string _name,std::string _path, bool _loop = true);
 
+	void Reverse(bool _reverse);
 	void Play(const std::string& _clipName);
 	void Pause();
 	void Resume();	

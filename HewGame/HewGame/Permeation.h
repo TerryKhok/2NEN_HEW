@@ -1,5 +1,7 @@
 #pragma once
 
+#include "MovePlayer.h"
+
 class Permeation : public Component
 {
 	SAFE_POINTER(Renderer, rend)
@@ -7,8 +9,8 @@ class Permeation : public Component
 
 	int inCount = 0;
 
-	const XMFLOAT4 enterColor = { 0.2f,0.2f,0.2f,0.5f };
-	const XMFLOAT4 exitColor = { 0.2f,0.2f,0.2f,0.2f };
+	const XMFLOAT4 enterColor = { 1.0f,1.0f,1.0f,1.0f };
+	const XMFLOAT4 exitColor = { 1.0f,1.0f,1.0f,0.2f };
 	
 	//共有の元のフィルターを格納したリスト
 	static std::unordered_map<Box2DBody*, std::pair<FILTER,int>> m_box2dFiltersCount;
@@ -103,6 +105,25 @@ class Permeation : public Component
 			case F_OBSTACLE:
 				//rb->SetFilter(F_PEROBSTACLE);
 				break;
+			case F_PLAYER:
+			{
+				rb->SetFilter(F_PERMEATION);
+				MovePlayer* player = nullptr;
+				if (_other->TryGetComponent<MovePlayer>(&player))
+				{
+					player->SetMode(PERMEATION);
+				}
+				break;
+			}
+			case F_PERMEATION:
+			{
+				MovePlayer* player = nullptr;
+				if (_other->TryGetComponent<MovePlayer>(&player))
+				{
+					player->SetMode(PERMEATION);
+				}
+				break;
+			}
 			default:
 				rb->SetFilter(F_PERMEATION);
 				break;
@@ -125,6 +146,11 @@ class Permeation : public Component
 			{
 				rend->SetColor(exitColor);
 			}
+		}
+		MovePlayer* player = nullptr;
+		if (_other->TryGetComponent(&player))
+		{
+			player->BackMode();
 		}
 	}
 
@@ -172,6 +198,11 @@ class Permeation : public Component
 						rend->SetColor(exitColor);
 					}
 				}
+				MovePlayer* player = nullptr;
+				if (object.first->TryGetComponent<MovePlayer>(&player))
+				{
+					player->BackMode();
+				}
 			}
 		}
 		for (auto object : enterObjects)
@@ -188,6 +219,16 @@ class Permeation : public Component
 						EnterInsideBox2dObject(rb);
 						rb->SetFilter(F_PEROBSTACLE);
 						break;
+					/*case F_PLAYER:
+					{
+						rb->SetAwake(true);
+						MovePlayer* player = nullptr;
+						if (object.first->TryGetComponent<MovePlayer>(&player))
+						{
+							player->SetMode(PERMEATION);
+						}
+						break;
+					}*/
 					default:
 						rb->SetAwake(true);
 						break;

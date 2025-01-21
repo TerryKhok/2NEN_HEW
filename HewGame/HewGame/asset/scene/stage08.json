@@ -2,16 +2,16 @@
     "index": 115,
     "objectNum": 14,
     "value0": {
-        "name": "Player",
+        "name": "LowGravityWindow2",
         "transform": {
             "position": {
-                "x": -438.7047424316406,
-                "y": 128.49008178710938,
+                "x": -88.5,
+                "y": -207.0,
                 "z": 0.5
             },
             "scale": {
-                "x": 5.0,
-                "y": 5.0,
+                "x": 15.0,
+                "y": 15.0,
                 "z": 1.0
             },
             "angle": {
@@ -28,10 +28,111 @@
         },
         "active": true,
         "comNames": [
-            "class Renderer",
             "class Box2DBody",
-            "class MovePlayer"
+            "class Renderer",
+            "class SubWindow",
+            "class LowGravity"
         ],
+        "m_filter": 1024,
+        "data": {
+            "type": 1,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 0.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": false,
+            "autoMass": 1.0
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": true,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "poly.count": 4,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
+                },
+                "value1": {
+                    "vec.x": 1.0,
+                    "vec.y": 0.0
+                },
+                "value2": {
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
+                },
+                "value3": {
+                    "vec.x": -1.0,
+                    "vec.y": 0.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": -7.5,
+                    "vec.y": -7.5
+                },
+                "value1": {
+                    "vec.x": 7.5,
+                    "vec.y": -7.5
+                },
+                "value2": {
+                    "vec.x": 7.5,
+                    "vec.y": 7.5
+                },
+                "value3": {
+                    "vec.x": -7.5,
+                    "vec.y": 7.5
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            }
+        },
         "m_layer": 1,
         "m_node": {
             "polymorphic_id": 1073741824,
@@ -42,46 +143,12 @@
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
-                        "f.z": 1.0,
-                        "f.w": 1.0
+                        "f.z": 0.0,
+                        "f.w": 0.5
                     },
-                    "path": "asset/pic/hartR.png"
+                    "path": "null"
                 }
             }
-        },
-        "m_filter": 8,
-        "data": {
-            "type": 2,
-            "lineVec": {
-                "vec.x": 0.0,
-                "vec.y": -0.7779690027236939
-            },
-            "angleVec": 0.0,
-            "gravity": 10.0,
-            "mass": 1.0,
-            "bullet": true,
-            "fixRot": true,
-            "awake": true
-        },
-        "types": [
-            1
-        ],
-        "shapeData": {
-            "sensor": false,
-            "friction": 0.6000000238418579,
-            "density": 1.0,
-            "restitution": 0.0
-        },
-        "capsule": {
-            "cap.center1": {
-                "vec.x": 0.0,
-                "vec.y": -1.25
-            },
-            "cap.center2": {
-                "vec.x": 0.0,
-                "vec.y": 1.25
-            },
-            "cap.radius": 2.5
         }
     },
     "value1": {
@@ -122,10 +189,11 @@
             },
             "angleVec": 0.0,
             "gravity": 0.0,
-            "mass": 1.0,
+            "mass": 0.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false
+            "awake": false,
+            "autoMass": 1.0
         },
         "types": [
             4,
@@ -283,10 +351,11 @@
             },
             "angleVec": 0.0,
             "gravity": 1.0,
-            "mass": 1.0,
+            "mass": 0.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false
+            "awake": false,
+            "autoMass": 1.0
         },
         "types": [
             3
@@ -430,10 +499,11 @@
             },
             "angleVec": 0.0,
             "gravity": 1.0,
-            "mass": 1.0,
+            "mass": 0.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false
+            "awake": false,
+            "autoMass": 1.0
         },
         "types": [
             3
@@ -577,10 +647,11 @@
             },
             "angleVec": 0.0,
             "gravity": 1.0,
-            "mass": 1.0,
+            "mass": 0.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false
+            "awake": false,
+            "autoMass": 1.0
         },
         "types": [
             3
@@ -724,10 +795,11 @@
             },
             "angleVec": 0.0,
             "gravity": 1.0,
-            "mass": 1.0,
+            "mass": 0.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false
+            "awake": false,
+            "autoMass": 1.0
         },
         "types": [
             3
@@ -871,10 +943,11 @@
             },
             "angleVec": 0.0,
             "gravity": -2.0,
-            "mass": 1.0,
+            "mass": 0.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false
+            "awake": false,
+            "autoMass": 1.0
         },
         "types": [
             3
@@ -1018,10 +1091,11 @@
             },
             "angleVec": 0.0,
             "gravity": 1.0,
-            "mass": 1.0,
+            "mass": 0.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false
+            "awake": false,
+            "autoMass": 1.0
         },
         "types": [
             3
@@ -1165,10 +1239,11 @@
             },
             "angleVec": 0.0,
             "gravity": 1.0,
-            "mass": 1.0,
+            "mass": 0.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false
+            "awake": false,
+            "autoMass": 1.0
         },
         "types": [
             3
@@ -1312,10 +1387,11 @@
             },
             "angleVec": 0.0,
             "gravity": 1.0,
-            "mass": 1.0,
+            "mass": 0.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false
+            "awake": false,
+            "autoMass": 1.0
         },
         "types": [
             3
@@ -1508,10 +1584,11 @@
             },
             "angleVec": 0.0,
             "gravity": 1.0,
-            "mass": 1.0,
+            "mass": 0.0,
             "bullet": true,
             "fixRot": false,
-            "awake": false
+            "awake": false,
+            "autoMass": 1.0
         },
         "types": [
             3
@@ -1654,10 +1731,11 @@
             },
             "angleVec": 0.0,
             "gravity": 1.0,
-            "mass": 1.0,
+            "mass": 0.0,
             "bullet": true,
             "fixRot": false,
-            "awake": false
+            "awake": false,
+            "autoMass": 1.0
         },
         "types": [
             3
@@ -1753,9 +1831,9 @@
                     "active": true,
                     "m_color": {
                         "f.x": 1.0,
-                        "f.y": 0.0,
+                        "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 0.5
+                        "f.w": 0.20000000298023225
                     },
                     "path": "null"
                 }
@@ -1763,16 +1841,16 @@
         }
     },
     "value13": {
-        "name": "LowGravityWindow2",
+        "name": "Player",
         "transform": {
             "position": {
-                "x": -88.5,
-                "y": -207.0,
+                "x": -425.069580078125,
+                "y": 155.53390502929688,
                 "z": 0.5
             },
             "scale": {
-                "x": 15.0,
-                "y": 15.0,
+                "x": 7.0,
+                "y": 14.0,
                 "z": 1.0
             },
             "angle": {
@@ -1789,30 +1867,167 @@
         },
         "active": true,
         "comNames": [
-            "class Box2DBody",
             "class Renderer",
-            "class SubWindow",
-            "class LowGravity"
+            "class Animator",
+            "class Box2DBody",
+            "class MovePlayer"
         ],
-        "m_filter": 1024,
+        "m_layer": 2,
+        "m_node": {
+            "polymorphic_id": 1,
+            "ptr_wrapper": {
+                "id": 2147483661,
+                "data": {
+                    "m_scaleX": 0.125,
+                    "m_scaleY": 0.3333333432674408,
+                    "m_frameX": 0,
+                    "m_frameY": 0
+                }
+            }
+        },
+        "clipSize": 40,
+        "name": "bounceBlink",
+        "path": "asset\\animationClip\\player_bounce_blink.amcp",
+        "loop": true,
+        "name": "bounceDamage",
+        "path": "asset\\animationClip\\player_bounce_damage.amcp",
+        "loop": false,
+        "name": "bounceFloat",
+        "path": "asset\\animationClip\\player_bounce_float.amcp",
+        "loop": true,
+        "name": "bounceGoal",
+        "path": "asset\\animationClip\\player_bounce_goal.amcp",
+        "loop": true,
+        "name": "bounceJump",
+        "path": "asset\\animationClip\\player_bounce_jump.amcp",
+        "loop": false,
+        "name": "bounceLanding",
+        "path": "asset\\animationClip\\player_bounce_landing.amcp",
+        "loop": false,
+        "name": "bounceStandBy",
+        "path": "asset\\animationClip\\player_bounce_standby.amcp",
+        "loop": true,
+        "name": "bounceWalk",
+        "path": "asset\\animationClip\\player_bounce_walk.amcp",
+        "loop": true,
+        "name": "floatBlink",
+        "path": "asset\\animationClip\\player_float_blink.amcp",
+        "loop": true,
+        "name": "floatDamage",
+        "path": "asset\\animationClip\\player_float_damage.amcp",
+        "loop": false,
+        "name": "floatFloat",
+        "path": "asset\\animationClip\\player_float_float.amcp",
+        "loop": true,
+        "name": "floatGoal",
+        "path": "asset\\animationClip\\player_float_goal.amcp",
+        "loop": true,
+        "name": "floatJump",
+        "path": "asset\\animationClip\\player_float_jump.amcp",
+        "loop": false,
+        "name": "floatLanding",
+        "path": "asset\\animationClip\\player_float_landing.amcp",
+        "loop": false,
+        "name": "floatStandBy",
+        "path": "asset\\animationClip\\player_float_standby.amcp",
+        "loop": true,
+        "name": "floatWalk",
+        "path": "asset\\animationClip\\player_float_walk.amcp",
+        "loop": true,
+        "name": "lowgravityBlink",
+        "path": "asset\\animationClip\\player_lowgravity_blink.amcp",
+        "loop": true,
+        "name": "lowgravityDamage",
+        "path": "asset\\animationClip\\player_lowgravity_damage.amcp",
+        "loop": false,
+        "name": "lowgravityFloat",
+        "path": "asset\\animationClip\\player_lowgravity_float.amcp",
+        "loop": true,
+        "name": "lowgravityGoal",
+        "path": "asset\\animationClip\\player_lowgravity_goal.amcp",
+        "loop": true,
+        "name": "lowgravityJump",
+        "path": "asset\\animationClip\\player_lowgravity_jump.amcp",
+        "loop": false,
+        "name": "lowgravityLanding",
+        "path": "asset\\animationClip\\player_lowgravity_landing.amcp",
+        "loop": false,
+        "name": "lowgravityStandBy",
+        "path": "asset\\animationClip\\player_lowgravity_standby.amcp",
+        "loop": true,
+        "name": "lowgravityWalk",
+        "path": "asset\\animationClip\\player_lowgravity_walk.amcp",
+        "loop": true,
+        "name": "normalBlink",
+        "path": "asset\\animationClip\\player_normal_blink.amcp",
+        "loop": true,
+        "name": "normalDamage",
+        "path": "asset\\animationClip\\player_normal_damage.amcp",
+        "loop": false,
+        "name": "normalFloat",
+        "path": "asset\\animationClip\\player_normal_float.amcp",
+        "loop": true,
+        "name": "normalGoal",
+        "path": "asset\\animationClip\\player_normal_goal.amcp",
+        "loop": true,
+        "name": "normalJump",
+        "path": "asset\\animationClip\\player_normal_jump.amcp",
+        "loop": false,
+        "name": "normalLanding",
+        "path": "asset\\animationClip\\player_normal_landing.amcp",
+        "loop": false,
+        "name": "normalStandBy",
+        "path": "asset\\animationClip\\player_normal_standby.amcp",
+        "loop": true,
+        "name": "normalWalk",
+        "path": "asset\\animationClip\\player_normal_walk.amcp",
+        "loop": true,
+        "name": "transparentBlink",
+        "path": "asset\\animationClip\\player_transparent_blink.amcp",
+        "loop": true,
+        "name": "transparentDamage",
+        "path": "asset\\animationClip\\player_transparent_damage.amcp",
+        "loop": false,
+        "name": "transparentFloat",
+        "path": "asset\\animationClip\\player_transparent_float.amcp",
+        "loop": true,
+        "name": "transparentGoal",
+        "path": "asset\\animationClip\\player_transparent_goal.amcp",
+        "loop": true,
+        "name": "transparentJump",
+        "path": "asset\\animationClip\\player_transparent_jump.amcp",
+        "loop": false,
+        "name": "transparentLanding",
+        "path": "asset\\animationClip\\player_transparent_landing.amcp",
+        "loop": false,
+        "name": "transparentStandBy",
+        "path": "asset\\animationClip\\player_transparent_standby.amcp",
+        "loop": true,
+        "name": "transparentWalk",
+        "path": "asset\\animationClip\\player_transparent_walk.amcp",
+        "loop": true,
+        "currentClipName": "normalStandBy",
+        "pause": false,
+        "m_filter": 8,
         "data": {
-            "type": 1,
+            "type": 2,
             "lineVec": {
                 "vec.x": 0.0,
-                "vec.y": 0.0
+                "vec.y": -0.8333333730697632
             },
             "angleVec": 0.0,
-            "gravity": 1.0,
-            "mass": 1.0,
-            "bullet": false,
-            "fixRot": false,
-            "awake": false
+            "gravity": 10.0,
+            "mass": 30.0,
+            "bullet": true,
+            "fixRot": true,
+            "awake": true,
+            "autoMass": 1.0
         },
         "types": [
             3
         ],
         "shapeData": {
-            "sensor": true,
+            "sensor": false,
             "friction": 0.6000000238418579,
             "density": 1.0,
             "restitution": 0.0
@@ -1820,7 +2035,7 @@
         "polygon": {
             "poly.centroid": {
                 "vec.x": 0.0,
-                "vec.y": 0.0
+                "vec.y": -1.100000023841858
             },
             "poly.count": 4,
             "poly.normals": {
@@ -1860,20 +2075,20 @@
             "poly.radius": 0.0,
             "poly.vertices": {
                 "value0": {
-                    "vec.x": -7.5,
-                    "vec.y": -7.5
+                    "vec.x": -2.5,
+                    "vec.y": -6.599999904632568
                 },
                 "value1": {
-                    "vec.x": 7.5,
-                    "vec.y": -7.5
+                    "vec.x": 2.5,
+                    "vec.y": -6.599999904632568
                 },
                 "value2": {
-                    "vec.x": 7.5,
-                    "vec.y": 7.5
+                    "vec.x": 2.5,
+                    "vec.y": 4.400000095367432
                 },
                 "value3": {
-                    "vec.x": -7.5,
-                    "vec.y": 7.5
+                    "vec.x": -2.5,
+                    "vec.y": 4.400000095367432
                 },
                 "value4": {
                     "vec.x": 0.0,
@@ -1890,23 +2105,6 @@
                 "value7": {
                     "vec.x": 0.0,
                     "vec.y": 0.0
-                }
-            }
-        },
-        "m_layer": 1,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483661,
-                "data": {
-                    "active": true,
-                    "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
-                        "f.z": 0.0,
-                        "f.w": 0.5
-                    },
-                    "path": "null"
                 }
             }
         }

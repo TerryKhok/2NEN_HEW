@@ -141,6 +141,9 @@ void SFTextManager::Init()
 	currentList = &textNodeList;
 	textNodeList.first.reset(new SFTextNode(nullptr));
 	textNodeList.second = textNodeList.first;
+
+	nextTextNodeList.first.reset(new SFTextNode(nullptr));
+	nextTextNodeList.second = nextTextNodeList.first;
 }
 
 void SFTextManager::Draw()

@@ -130,6 +130,7 @@ private:
 class UVRenderNode : public RenderNode
 {
 	friend class Renderer;
+	friend class Animator;
 	friend class AnimationClip;
 	friend class AnimationClipLoop;
 
@@ -144,6 +145,7 @@ private:
 	float m_scaleY = 0.5f;
 	int m_frameX = 0;
 	int m_frameY = 0;
+	bool reverse = false;
 private:
 	template <class Archive>
 	void save(Archive& archive) const

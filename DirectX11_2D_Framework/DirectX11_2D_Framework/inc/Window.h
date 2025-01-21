@@ -30,9 +30,19 @@
 #define PROJECTION_HEIGHT (240)
 //================================================================
 
+//画面に対する物体の大きさ
+//================================================================
+constexpr float PROJECTION_WINDOW_WIDTH = SCREEN_WIDTH / 3.0f;
+constexpr float PROJECTION_WINDOW_HEIGHT = SCREEN_HEIGHT / 3.0f;
+//================================================================
+
 //画面の大きさと座標の大きさの比
 constexpr float DISPALY_ASPECT_WIDTH = static_cast<float>(SCREEN_WIDTH) / PROJECTION_WIDTH;
 constexpr float DISPALY_ASPECT_HEIGHT = static_cast<float>(SCREEN_HEIGHT) / PROJECTION_HEIGHT;
+
+//画面の大きさと座標の大きさの比
+constexpr float PROJECTION_ASPECT_WIDTH = static_cast<float>(PROJECTION_WIDTH) / PROJECTION_WINDOW_WIDTH;
+constexpr float PROJECTION_ASPECT_HEIGHT = static_cast<float>(PROJECTION_WIDTH) / PROJECTION_WINDOW_WIDTH;
 
 //メインウィンドウを動かせないようにする
 //================================================================

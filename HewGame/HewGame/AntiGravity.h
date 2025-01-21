@@ -1,5 +1,7 @@
 #pragma once
 
+#include "MovePlayer.h"
+
 class AntiGravity : public Component
 {
 	SAFE_POINTER(Renderer, rend)
@@ -7,15 +9,15 @@ class AntiGravity : public Component
 
 	int inCount = 0;
 
-	const XMFLOAT4 enterColor = { 1.0f,0.0f,1.0f,0.5f };
-	const XMFLOAT4 exitColor = { 1.0f,0.0f,1.0f,0.2f };
+	const XMFLOAT4 enterColor = { 1.0f,1.0f,1.0f,1.0f };
+	const XMFLOAT4 exitColor = { 1.0f,1.0f,1.0f,0.2f };
 
 	void Start() override
 	{
 		rend = m_this->GetComponent<Renderer>();
 		if (rend != nullptr)
 		{
-			rend->SetColor(enterColor);
+			rend->SetColor(exitColor);
 		}
 
 		if (!m_this->TryGetComponent<Box2DBody>(&rb))
@@ -49,6 +51,7 @@ class AntiGravity : public Component
 		if (_other->TryGetComponent<MovePlayer>(&player))
 		{
 			player->inWindow = true;
+			player->SetMode(UNTI_GRAVITY);
 		}
 	}
 
@@ -72,6 +75,7 @@ class AntiGravity : public Component
 		if (_other->TryGetComponent<MovePlayer>(&player))
 		{
 			player->inWindow = false;
+			player->BackMode();
 		}
 	}
 
@@ -110,11 +114,12 @@ class AntiGravity : public Component
 						rend->SetColor(exitColor);
 					}
 				}
-				/*MovePlayer* player = nullptr;
+				MovePlayer* player = nullptr;
 				if (object.first->TryGetComponent<MovePlayer>(&player))
 				{
 					player->inWindow = false;
-				}*/
+					player->BackMode();
+				}
 			}
 		}
 		for (auto object : exitObjects)

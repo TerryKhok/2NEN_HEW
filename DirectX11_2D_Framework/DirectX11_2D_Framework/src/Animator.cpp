@@ -194,6 +194,11 @@ clip->AddFrame(frame);
 	}
 }
 
+void Animator::Reverse(bool _reverse)
+{
+	m_uvNode->reverse = _reverse;
+}
+
 void Animator::Play(const std::string& _clipName)
 {
 	//ÄŠJŠJn

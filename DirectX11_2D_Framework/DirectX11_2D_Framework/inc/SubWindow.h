@@ -28,16 +28,22 @@ public:
 private:
 	SubWindow(GameObject* _object){
 		Vector2 size = _object->transform.scale;
-		int width = static_cast<int>(size.x * DEFAULT_OBJECT_SIZE);
-		int height = static_cast<int>(size.y * DEFAULT_OBJECT_SIZE);
-		m_hWnd = Window::pWindowSubCreate(_object->GetName(), _object->GetName(), width, height, _object->transform.position);
+		int width = static_cast<int>(size.x * DEFAULT_OBJECT_SIZE / PROJECTION_ASPECT_WIDTH);
+		int height = static_cast<int>(size.y * DEFAULT_OBJECT_SIZE / PROJECTION_ASPECT_HEIGHT);
+		Vector2 pos = _object->transform.position;
+		pos.x /= PROJECTION_ASPECT_WIDTH;
+		pos.y /= PROJECTION_ASPECT_HEIGHT;
+		m_hWnd = Window::pWindowSubCreate(_object->GetName(), _object->GetName(), width, height, pos);
 	}
 
 	SubWindow(GameObject* _object,const char* _windowName) {
 		Vector2 size = _object->transform.scale;
-		int width = static_cast<int>(size.x * DEFAULT_OBJECT_SIZE);
-		int height = static_cast<int>(size.y * DEFAULT_OBJECT_SIZE);
-		m_hWnd = Window::pWindowSubCreate(_object->GetName(), _windowName, width, height, _object->transform.position);
+		int width = static_cast<int>(size.x * DEFAULT_OBJECT_SIZE / PROJECTION_ASPECT_WIDTH);
+		int height = static_cast<int>(size.y * DEFAULT_OBJECT_SIZE / PROJECTION_ASPECT_HEIGHT);
+		Vector2 pos = _object->transform.position;
+		pos.x /= PROJECTION_ASPECT_WIDTH;
+		pos.y /= PROJECTION_ASPECT_HEIGHT;
+		m_hWnd = Window::pWindowSubCreate(_object->GetName(), _windowName, width, height, pos);
 	}
 
 	void Delete() override

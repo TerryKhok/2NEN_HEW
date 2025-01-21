@@ -315,9 +315,9 @@ Box2DBody::Box2DBody(GameObject* _object, SERIALIZE_INPUT& ar)
 		}
 	}
 
-	/*auto massData = b2Body_GetMassData(m_bodyId);
+	auto massData = b2Body_GetMassData(m_bodyId);
 	massData.mass = data.mass;
-	b2Body_SetMassData(m_bodyId, massData);*/
+	b2Body_SetMassData(m_bodyId, massData);
 
 #ifdef RELEASE_SERIALIZE_VIEW_HITBOX
 	ar(CEREAL_NVP(renderData));
