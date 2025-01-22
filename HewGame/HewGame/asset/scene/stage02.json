@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 20,
+    "objectNum": 23,
     "value0": {
         "name": "map",
         "transform": {
@@ -58,7 +58,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -45.0,
                 "vec.y": -30.0
@@ -85,7 +85,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -45.0,
                 "vec.y": 10.0
@@ -112,7 +112,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 45.0,
                 "vec.y": 10.0
@@ -139,7 +139,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 45.0,
                 "vec.y": -30.0
@@ -270,7 +270,7 @@
         "comNames": [
             "class Box2DBody"
         ],
-        "m_filter": 512,
+        "m_filter": 32,
         "data": {
             "type": 0,
             "lineVec": {
@@ -400,7 +400,7 @@
         "comNames": [
             "class Box2DBody"
         ],
-        "m_filter": 512,
+        "m_filter": 32,
         "data": {
             "type": 0,
             "lineVec": {
@@ -530,7 +530,7 @@
         "comNames": [
             "class Box2DBody"
         ],
-        "m_filter": 512,
+        "m_filter": 32,
         "data": {
             "type": 0,
             "lineVec": {
@@ -660,7 +660,7 @@
         "comNames": [
             "class Box2DBody"
         ],
-        "m_filter": 512,
+        "m_filter": 32,
         "data": {
             "type": 0,
             "lineVec": {
@@ -790,7 +790,7 @@
         "comNames": [
             "class Box2DBody"
         ],
-        "m_filter": 512,
+        "m_filter": 32,
         "data": {
             "type": 0,
             "lineVec": {
@@ -1634,6 +1634,134 @@
         }
     },
     "value17": {
+        "name": "Barrier_10",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody"
+        ],
+        "m_filter": 16,
+        "data": {
+            "type": 0,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 0.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": false,
+            "autoMass": 1.0
+        },
+        "types": [
+            2
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "segment": {
+            "seg.point1": {
+                "vec.x": -29.200008392333986,
+                "vec.y": -8.049999237060547
+            },
+            "seg.point2": {
+                "vec.x": -24.200008392333986,
+                "vec.y": -8.05000114440918
+            }
+        }
+    },
+    "value18": {
+        "name": "Barrier_11",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody"
+        ],
+        "m_filter": 16,
+        "data": {
+            "type": 0,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 0.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": false,
+            "autoMass": 1.0
+        },
+        "types": [
+            2
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "segment": {
+            "seg.point1": {
+                "vec.x": -24.20000457763672,
+                "vec.y": -23.049999237060548
+            },
+            "seg.point2": {
+                "vec.x": -29.20000648498535,
+                "vec.y": -23.049999237060548
+            }
+        }
+    },
+    "value19": {
         "name": "permeation",
         "transform": {
             "position": {
@@ -1783,7 +1911,7 @@
             }
         }
     },
-    "value18": {
+    "value20": {
         "name": "Barrier_2_1",
         "transform": {
             "position": {
@@ -1864,12 +1992,12 @@
             }
         }
     },
-    "value19": {
-        "name": "Player",
+    "value21": {
+        "name": "Player_1",
         "transform": {
             "position": {
-                "x": -407.069580078125,
-                "y": -225.46609497070313,
+                "x": -410.6648254394531,
+                "y": -223.0113983154297,
                 "z": 0.5
             },
             "scale": {
@@ -2038,18 +2166,18 @@
             "type": 2,
             "lineVec": {
                 "vec.x": 0.0,
-                "vec.y": -0.8333333730697632
+                "vec.y": -1.0
             },
             "angleVec": 0.0,
             "gravity": 10.0,
-            "mass": 30.0,
+            "mass": 25.0,
             "bullet": true,
             "fixRot": true,
             "awake": true,
             "autoMass": 1.0
         },
         "types": [
-            3
+            1
         ],
         "shapeData": {
             "sensor": false,
@@ -2057,81 +2185,48 @@
             "density": 1.0,
             "restitution": 0.0
         },
-        "polygon": {
-            "poly.centroid": {
+        "capsule": {
+            "cap.center1": {
                 "vec.x": 0.0,
-                "vec.y": -1.100000023841858
+                "vec.y": -4.300000190734863
             },
-            "poly.count": 4,
-            "poly.normals": {
-                "value0": {
-                    "vec.x": 0.0,
-                    "vec.y": -1.0
-                },
-                "value1": {
-                    "vec.x": 1.0,
-                    "vec.y": 0.0
-                },
-                "value2": {
-                    "vec.x": 0.0,
-                    "vec.y": 1.0
-                },
-                "value3": {
-                    "vec.x": -1.0,
-                    "vec.y": 0.0
-                },
-                "value4": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value5": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value6": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value7": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                }
+            "cap.center2": {
+                "vec.x": 0.0,
+                "vec.y": 1.7000000476837159
             },
-            "poly.radius": 0.0,
-            "poly.vertices": {
-                "value0": {
-                    "vec.x": -2.5,
-                    "vec.y": -6.599999904632568
+            "cap.radius": 2.5
+        },
+        "reverse": false
+    },
+    "value22": {
+        "name": "subWindowManager",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
                 },
-                "value1": {
-                    "vec.x": 2.5,
-                    "vec.y": -6.599999904632568
+                "y": {
+                    "radians": 0.0
                 },
-                "value2": {
-                    "vec.x": 2.5,
-                    "vec.y": 4.400000095367432
-                },
-                "value3": {
-                    "vec.x": -2.5,
-                    "vec.y": 4.400000095367432
-                },
-                "value4": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value5": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value6": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value7": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
+                "z": {
+                    "radians": 0.0
                 }
             }
-        }
+        },
+        "active": true,
+        "comNames": [
+            "class MoveSubWindowManager"
+        ],
+        "selectIndex": 0
     }
 }

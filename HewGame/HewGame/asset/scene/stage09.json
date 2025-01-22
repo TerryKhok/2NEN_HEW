@@ -535,7 +535,7 @@
             "class Box2DBody",
             "class Renderer"
         ],
-        "m_filter": 512,
+        "m_filter": 32,
         "data": {
             "type": 0,
             "lineVec": {
@@ -807,7 +807,7 @@
             "position": {
                 "x": 10.0,
                 "y": -142.0,
-                "z": 0.0
+                "z": 0.5
             },
             "scale": {
                 "x": 10.0,
@@ -1980,8 +1980,8 @@
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
-                        "f.z": 0.0,
-                        "f.w": 0.5
+                        "f.z": 1.0,
+                        "f.w": 0.20000000298023225
                     },
                     "path": "null"
                 }
@@ -1992,8 +1992,8 @@
         "name": "Player",
         "transform": {
             "position": {
-                "x": -437.069580078125,
-                "y": 101.53390502929688,
+                "x": -419.1479797363281,
+                "y": -144.004638671875,
                 "z": 0.5
             },
             "scale": {
@@ -2027,8 +2027,8 @@
                 "id": 2147483662,
                 "data": {
                     "m_scaleX": 0.125,
-                    "m_scaleY": 0.3333333432674408,
-                    "m_frameX": 0,
+                    "m_scaleY": 0.5,
+                    "m_frameX": 4,
                     "m_frameY": 0
                 }
             }
@@ -2154,14 +2154,14 @@
         "name": "transparentWalk",
         "path": "asset\\animationClip\\player_transparent_walk.amcp",
         "loop": true,
-        "currentClipName": "normalStandBy",
+        "currentClipName": "normalFloat",
         "pause": false,
         "m_filter": 8,
         "data": {
             "type": 2,
             "lineVec": {
                 "vec.x": 0.0,
-                "vec.y": -0.8333333730697632
+                "vec.y": 1.1641532182693482e-10
             },
             "angleVec": 0.0,
             "gravity": 10.0,
@@ -2255,6 +2255,7 @@
                     "vec.y": 0.0
                 }
             }
-        }
+        },
+        "reverse": true
     }
 }

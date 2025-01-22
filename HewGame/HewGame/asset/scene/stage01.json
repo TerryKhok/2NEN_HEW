@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 5,
+    "objectNum": 11,
     "value0": {
         "name": "map",
         "transform": {
@@ -385,7 +385,7 @@
         "comNames": [
             "class Box2DBody"
         ],
-        "m_filter": 1,
+        "m_filter": 32,
         "data": {
             "type": 0,
             "lineVec": {
@@ -411,22 +411,22 @@
         },
         "polygon": {
             "poly.centroid": {
-                "vec.x": 4.034033298492432,
-                "vec.y": -8.141020774841309
+                "vec.x": 5.000000476837158,
+                "vec.y": -8.5
             },
             "poly.count": 4,
             "poly.normals": {
                 "value0": {
-                    "vec.x": -0.9982744455337524,
-                    "vec.y": -0.05872202292084694
+                    "vec.x": -1.0,
+                    "vec.y": -0.0
                 },
                 "value1": {
-                    "vec.x": 0.013887514360249043,
-                    "vec.y": -0.9999035596847534
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
                 },
                 "value2": {
-                    "vec.x": 0.9922779202461243,
-                    "vec.y": 0.1240348145365715
+                    "vec.x": 1.0,
+                    "vec.y": -0.0
                 },
                 "value3": {
                     "vec.x": 0.0,
@@ -452,20 +452,20 @@
             "poly.radius": 0.0,
             "poly.vertices": {
                 "value0": {
-                    "vec.x": -1.350000023841858,
-                    "vec.y": -6.900000095367432
+                    "vec.x": 0.0,
+                    "vec.y": -7.0
                 },
                 "value1": {
-                    "vec.x": -1.2000000476837159,
-                    "vec.y": -9.449999809265137
+                    "vec.x": 0.0,
+                    "vec.y": -10.0
                 },
                 "value2": {
-                    "vec.x": 9.600000381469727,
-                    "vec.y": -9.300000190734864
+                    "vec.x": 10.0,
+                    "vec.y": -10.0
                 },
                 "value3": {
-                    "vec.x": 9.300000190734864,
-                    "vec.y": -6.900000095367432
+                    "vec.x": 10.0,
+                    "vec.y": -7.0
                 },
                 "value4": {
                     "vec.x": 0.0,
@@ -487,11 +487,11 @@
         }
     },
     "value2": {
-        "name": "Player_1",
+        "name": "Player_1_1",
         "transform": {
             "position": {
-                "x": -410.069580078125,
-                "y": -273.4660949707031,
+                "x": -389.7143249511719,
+                "y": -277.45001220703127,
                 "z": 0.5
             },
             "scale": {
@@ -527,7 +527,7 @@
                 "data": {
                     "m_scaleX": 0.125,
                     "m_scaleY": 0.3333333432674408,
-                    "m_frameX": 0,
+                    "m_frameX": 7,
                     "m_frameY": 0
                 }
             }
@@ -653,25 +653,25 @@
         "name": "transparentWalk",
         "path": "asset\\animationClip\\player_transparent_walk.amcp",
         "loop": true,
-        "currentClipName": "normalStandBy",
+        "currentClipName": "normalBlink",
         "pause": false,
         "m_filter": 8,
         "data": {
             "type": 2,
             "lineVec": {
-                "vec.x": 0.0,
-                "vec.y": -0.8333333730697632
+                "vec.x": 2.9103830456733706e-11,
+                "vec.y": -1.0
             },
             "angleVec": 0.0,
             "gravity": 10.0,
-            "mass": 30.0,
+            "mass": 25.0,
             "bullet": true,
             "fixRot": true,
             "awake": true,
             "autoMass": 1.0
         },
         "types": [
-            3
+            1
         ],
         "shapeData": {
             "sensor": false,
@@ -679,89 +679,25 @@
             "density": 1.0,
             "restitution": 0.0
         },
-        "polygon": {
-            "poly.centroid": {
+        "capsule": {
+            "cap.center1": {
                 "vec.x": 0.0,
-                "vec.y": -1.100000023841858
+                "vec.y": -4.300000190734863
             },
-            "poly.count": 4,
-            "poly.normals": {
-                "value0": {
-                    "vec.x": 0.0,
-                    "vec.y": -1.0
-                },
-                "value1": {
-                    "vec.x": 1.0,
-                    "vec.y": 0.0
-                },
-                "value2": {
-                    "vec.x": 0.0,
-                    "vec.y": 1.0
-                },
-                "value3": {
-                    "vec.x": -1.0,
-                    "vec.y": 0.0
-                },
-                "value4": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value5": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value6": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value7": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                }
+            "cap.center2": {
+                "vec.x": 0.0,
+                "vec.y": 1.7000000476837159
             },
-            "poly.radius": 0.0,
-            "poly.vertices": {
-                "value0": {
-                    "vec.x": -2.5,
-                    "vec.y": -6.599999904632568
-                },
-                "value1": {
-                    "vec.x": 2.5,
-                    "vec.y": -6.599999904632568
-                },
-                "value2": {
-                    "vec.x": 2.5,
-                    "vec.y": 4.400000095367432
-                },
-                "value3": {
-                    "vec.x": -2.5,
-                    "vec.y": 4.400000095367432
-                },
-                "value4": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value5": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value6": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value7": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                }
-            }
-        }
+            "cap.radius": 2.5
+        },
+        "reverse": true
     },
     "value3": {
-        "name": "window01",
+        "name": "lowgravity",
         "transform": {
             "position": {
-                "x": -40.0,
-                "y": -117.5,
+                "x": 241.0,
+                "y": 51.0,
                 "z": 0.5
             },
             "scale": {
@@ -783,39 +719,23 @@
         },
         "active": true,
         "comNames": [
-            "class Renderer",
-            "class SubWindow",
             "class Box2DBody",
-            "class LowGravity"
+            "class SubWindow",
+            "class Renderer",
+            "class LowGravity",
+            "class MoveSubWindow"
         ],
-        "m_layer": 1,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483650,
-                "data": {
-                    "active": true,
-                    "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
-                        "f.z": 0.0,
-                        "f.w": 0.5
-                    },
-                    "path": "null"
-                }
-            }
-        },
         "m_filter": 64,
         "data": {
-            "type": 2,
+            "type": 1,
             "lineVec": {
                 "vec.x": 0.0,
                 "vec.y": 0.0
             },
             "angleVec": 0.0,
             "gravity": 1.0,
-            "mass": 225.0,
-            "bullet": false,
+            "mass": 0.0,
+            "bullet": true,
             "fixRot": false,
             "awake": false,
             "autoMass": 1.0
@@ -904,7 +824,26 @@
                     "vec.y": 0.0
                 }
             }
-        }
+        },
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483650,
+                "data": {
+                    "active": true,
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 0.20000000298023225
+                    },
+                    "path": "asset\\sign\\sign_lowgravity.png"
+                }
+            }
+        },
+        "confirmed": true,
+        "selfIndex": 0
     },
     "value4": {
         "name": "goal",
@@ -933,12 +872,10 @@
         },
         "active": true,
         "comNames": [
-            "class Goal",
-            "class Box2DBody"
+            "class Box2DBody",
+            "class Goal"
         ],
-        "sceneName": "goal",
-        "waitCount": 60,
-        "m_filter": 1,
+        "m_filter": 64,
         "data": {
             "type": 0,
             "lineVec": {
@@ -1035,6 +972,380 @@
                 "value7": {
                     "vec.x": 0.0,
                     "vec.y": 0.0
+                }
+            }
+        },
+        "sceneName": "goal",
+        "waitCount": 60
+    },
+    "value5": {
+        "name": "lowgravity_1",
+        "transform": {
+            "position": {
+                "x": -24.0,
+                "y": -119.0,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 15.0,
+                "y": 15.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody",
+            "class SubWindow",
+            "class Renderer",
+            "class LowGravity",
+            "class MoveSubWindow"
+        ],
+        "m_filter": 64,
+        "data": {
+            "type": 1,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 0.0,
+            "bullet": true,
+            "fixRot": false,
+            "awake": false,
+            "autoMass": 1.0
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": true,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "poly.count": 4,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
+                },
+                "value1": {
+                    "vec.x": 1.0,
+                    "vec.y": 0.0
+                },
+                "value2": {
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
+                },
+                "value3": {
+                    "vec.x": -1.0,
+                    "vec.y": 0.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": -7.5,
+                    "vec.y": -7.5
+                },
+                "value1": {
+                    "vec.x": 7.5,
+                    "vec.y": -7.5
+                },
+                "value2": {
+                    "vec.x": 7.5,
+                    "vec.y": 7.5
+                },
+                "value3": {
+                    "vec.x": -7.5,
+                    "vec.y": 7.5
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            }
+        },
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483651,
+                "data": {
+                    "active": true,
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 0.20000000298023225
+                    },
+                    "path": "asset\\sign\\sign_lowgravity.png"
+                }
+            }
+        },
+        "confirmed": true,
+        "selfIndex": 1
+    },
+    "value6": {
+        "name": "checkIcon_1",
+        "transform": {
+            "position": {
+                "x": 291.0,
+                "y": 1.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483652,
+                "data": {
+                    "active": true,
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset/pic/checkmark.png"
+                }
+            }
+        }
+    },
+    "value7": {
+        "name": "moveObject",
+        "transform": {
+            "position": {
+                "x": 136.0777130126953,
+                "y": 93.53885650634766,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 3.0,
+                "y": 3.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer"
+        ],
+        "m_layer": 4,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483653,
+                "data": {
+                    "active": true,
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\hand_move.png"
+                }
+            }
+        }
+    },
+    "value8": {
+        "name": "playObject",
+        "transform": {
+            "position": {
+                "x": 136.0777130126953,
+                "y": 93.53885650634766,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 3.0,
+                "y": 3.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": false,
+        "comNames": [
+            "class Renderer"
+        ],
+        "m_layer": 4,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483654,
+                "data": {
+                    "active": false,
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\arrow_play.png"
+                }
+            }
+        }
+    },
+    "value9": {
+        "name": "subWindowManager",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class MoveSubWindowManager"
+        ],
+        "selectIndex": 0
+    },
+    "value10": {
+        "name": "checkIcon",
+        "transform": {
+            "position": {
+                "x": 26.0,
+                "y": -169.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483655,
+                "data": {
+                    "active": true,
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset/pic/checkmark.png"
                 }
             }
         }

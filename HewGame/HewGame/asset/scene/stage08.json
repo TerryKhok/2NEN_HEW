@@ -638,7 +638,7 @@
             "class Box2DBody",
             "class Renderer"
         ],
-        "m_filter": 512,
+        "m_filter": 32,
         "data": {
             "type": 0,
             "lineVec": {
@@ -786,7 +786,7 @@
             "class Box2DBody",
             "class Renderer"
         ],
-        "m_filter": 512,
+        "m_filter": 32,
         "data": {
             "type": 0,
             "lineVec": {
@@ -934,7 +934,7 @@
             "class Box2DBody",
             "class Renderer"
         ],
-        "m_filter": 512,
+        "m_filter": 32,
         "data": {
             "type": 0,
             "lineVec": {
@@ -1082,7 +1082,7 @@
             "class Box2DBody",
             "class Renderer"
         ],
-        "m_filter": 512,
+        "m_filter": 128,
         "data": {
             "type": 0,
             "lineVec": {
@@ -1378,7 +1378,7 @@
             "class Box2DBody",
             "class Renderer"
         ],
-        "m_filter": 512,
+        "m_filter": 32,
         "data": {
             "type": 0,
             "lineVec": {

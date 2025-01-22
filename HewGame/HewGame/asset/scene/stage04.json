@@ -452,7 +452,7 @@
         "comNames": [
             "class Box2DBody"
         ],
-        "m_filter": 512,
+        "m_filter": 32,
         "data": {
             "type": 0,
             "lineVec": {
@@ -615,11 +615,11 @@
         }
     },
     "value4": {
-        "name": "Player",
+        "name": "Player_1",
         "transform": {
             "position": {
-                "x": -380.069580078125,
-                "y": -24.466094970703126,
+                "x": -395.6648254394531,
+                "y": -28.011398315429689,
                 "z": 0.5
             },
             "scale": {
@@ -788,18 +788,18 @@
             "type": 2,
             "lineVec": {
                 "vec.x": 0.0,
-                "vec.y": -0.8333333730697632
+                "vec.y": -1.0
             },
             "angleVec": 0.0,
             "gravity": 10.0,
-            "mass": 30.0,
+            "mass": 25.0,
             "bullet": true,
             "fixRot": true,
             "awake": true,
             "autoMass": 1.0
         },
         "types": [
-            3
+            1
         ],
         "shapeData": {
             "sensor": false,
@@ -807,81 +807,16 @@
             "density": 1.0,
             "restitution": 0.0
         },
-        "polygon": {
-            "poly.centroid": {
+        "capsule": {
+            "cap.center1": {
                 "vec.x": 0.0,
-                "vec.y": -1.100000023841858
+                "vec.y": -4.300000190734863
             },
-            "poly.count": 4,
-            "poly.normals": {
-                "value0": {
-                    "vec.x": 0.0,
-                    "vec.y": -1.0
-                },
-                "value1": {
-                    "vec.x": 1.0,
-                    "vec.y": 0.0
-                },
-                "value2": {
-                    "vec.x": 0.0,
-                    "vec.y": 1.0
-                },
-                "value3": {
-                    "vec.x": -1.0,
-                    "vec.y": 0.0
-                },
-                "value4": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value5": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value6": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value7": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                }
+            "cap.center2": {
+                "vec.x": 0.0,
+                "vec.y": 1.7000000476837159
             },
-            "poly.radius": 0.0,
-            "poly.vertices": {
-                "value0": {
-                    "vec.x": -2.5,
-                    "vec.y": -6.599999904632568
-                },
-                "value1": {
-                    "vec.x": 2.5,
-                    "vec.y": -6.599999904632568
-                },
-                "value2": {
-                    "vec.x": 2.5,
-                    "vec.y": 4.400000095367432
-                },
-                "value3": {
-                    "vec.x": -2.5,
-                    "vec.y": 4.400000095367432
-                },
-                "value4": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value5": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value6": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value7": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                }
-            }
+            "cap.radius": 2.5
         }
     }
 }
