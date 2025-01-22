@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BigRock.h" />
     <ClInclude Include="Bounce.h" />
     <ClInclude Include="BreakScaffold.h" />
     <ClInclude Include="CrushRock.h" />

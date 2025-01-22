@@ -132,6 +132,9 @@
     <ClInclude Include="tSltScene.h">
       <Filter>Scene\Title</Filter>
     </ClInclude>
+    <ClInclude Include="BigRock.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
