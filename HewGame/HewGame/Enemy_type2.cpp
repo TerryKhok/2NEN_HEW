@@ -9,6 +9,23 @@ void Enemy_type2::Start()
 
 void Enemy_type2::Update()
 {
+	if (!fly)
+	{
+		bool isGround = false;
+		Vector2 rayEnd = m_this->transform.position;
+		rayEnd.y -= 50.0f;
+		if (Box2D::WorldManager::RayCast(m_this->transform.position, rayEnd, F_MAPRAY))
+		{
+			isGround = true;
+		}
+
+		if (!isGround) { return; }
+	}
+	else
+	{
+		rb->SetGravityScale(0.0f);
+	}
+
 	disCount++;
 
 	// ‚·‚Å‚ÉÅ‘åˆÚ“®‹——£‚Ü‚Åi‚ñ‚Å‚¢‚½‚çÜ‚è•Ô‚·‚æ‚¤‚É‚·‚é
@@ -37,15 +54,22 @@ void Enemy_type2::Update()
 		switch (direction)
 		{
 		case 0:
-			m_this->transform.position.x -= speed;
+			rb->AddForceImpulse({ speed * -1.0f,0.0f });
 			break;
 
 		case 1:
-			m_this->transform.position.x += speed;
+			rb->AddForceImpulse({ speed,0.0f });
 			break;
 
 		}
 	}
+}
+
+void Enemy_type2::DrawImGui(ImGuiApp::HandleUI& _handle)
+{
+	ImGui::InputFloat("speed##Enemy", &speed);
+	ImGui::InputFloat("distance##Enemy", &distance);
+	ImGui::Checkbox("fly##Enemy", &fly);
 }
 
 void Enemy_type2::OnColliderEnter(GameObject* _other)

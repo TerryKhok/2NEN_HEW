@@ -37,15 +37,21 @@ void Enemy_type3::Update()
 		switch (direction)
 		{
 		case 0:
-			m_this->transform.position.y += speed;
+			rb->AddForceImpulse({ 0.0f, speed });
 			break;
 
 		case 1:
-			m_this->transform.position.y -= speed;
+			rb->AddForceImpulse({ 0.0f, speed * -1.0f });
 			break;
 
 		}
 	}
+}
+
+void Enemy_type3::DrawImGui(ImGuiApp::HandleUI& _handle)
+{
+	ImGui::InputFloat("speed##Enemy", &speed);
+	ImGui::InputFloat("distance##Enemy", &distance);
 }
 
 void Enemy_type3::OnColliderEnter(GameObject* _other)

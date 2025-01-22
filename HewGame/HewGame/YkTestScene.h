@@ -61,7 +61,7 @@ public:
 		thon->transform.scale = { 5.0f,5.0f };
 		thon->AddComponent<Thon>();
 
-		auto rock = Instantiate("rock", L"asset/pic/hartG.png");
+		auto rock = Instantiate("rock", L"asset/pic/rock.png");
 		rock->transform.position = { 250.0f,-150.0f };
 		rock->transform.scale = { 15.0f,15.0 };
 		rock->AddComponent<Rock>();
@@ -78,6 +78,8 @@ public:
 		fog->transform.scale = { 50.0f,50.0f };
 		fog->AddComponent<Fog>();
 
+		//++++++++++++++++++++++ここまで+++++++++++++++++++++++++++++++
+		
 		//-------------------------------------------------------------
 		// エネミーオブジェクト
 		//-------------------------------------------------------------
@@ -86,6 +88,7 @@ public:
 		enemy_type1->transform.position = { 200.0f,-100.0f };
 		enemy_type1->transform.scale    = { 5.0f,5.0f };
 		enemy_type1->AddComponent<Enemy_type1>();
+		
 
 		auto enemy_type2 = Instantiate("enemy", L"asset/pic/enemy.png");
 		enemy_type2->GetComponent<Renderer>()->SetLayer(LAYER_FOG);
@@ -100,6 +103,7 @@ public:
 		enemy_type3->AddComponent<Enemy_type3>();
 
 		//++++++++++++++++++++++ここまで+++++++++++++++++++++++++++++++
+
 		object = Instantiate("UntiGravityWindow");
 		object->transform.scale = { 30.0f,20.0f };
 		bodyDef2 = b2DefaultBodyDef();

@@ -146,6 +146,9 @@
     <ClInclude Include="Bounce.h" />
     <ClInclude Include="BreakScaffold.h" />
     <ClInclude Include="CrushRock.h" />
+    <ClInclude Include="Obj.h" />
+    <ClInclude Include="ObjMH.h" />
+    <ClInclude Include="ObjMW.h" />
     <ClInclude Include="Enemy_type1.h" />
     <ClInclude Include="EnemyChaser.h" />
     <ClInclude Include="Enemy_type2.h" />
@@ -167,6 +170,7 @@
     <ClInclude Include="AntiGravity.h" />
     <ClInclude Include="Thon.h" />
     <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="tSltScene.h" />
     <ClInclude Include="YkTestScene.h" />
   </ItemGroup>
   <ItemGroup>

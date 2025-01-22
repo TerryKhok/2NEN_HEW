@@ -1,0 +1,37 @@
+{
+    "index": 115,
+    "objectNum": 1,
+    "value0": {
+        "name": "object",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class SFText",
+            "class Button"
+        ],
+        "funcName": "ButtonLog",
+        "action": 0
+    }
+}

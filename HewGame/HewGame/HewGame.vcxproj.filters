@@ -37,6 +37,12 @@
     <Filter Include="Component\Enemy">
       <UniqueIdentifier>{7070a3ab-6a8c-4015-a917-b3833f6c6b30}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Component\ObjM">
+      <UniqueIdentifier>{9fac9a45-451f-48b1-93a7-fc54f6181134}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Title">
+      <UniqueIdentifier>{acf7860e-4d36-4e68-b048-7348dabd8523}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sample_Box2D.h">
@@ -67,9 +73,6 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="SeigoTestScene.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="TitleScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="Bounce.h">
@@ -113,6 +116,21 @@
     </ClInclude>
     <ClInclude Include="CrushRock.h">
       <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjMW.h">
+      <Filter>Component\ObjM</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjMH.h">
+      <Filter>Component\ObjM</Filter>
+    </ClInclude>
+    <ClInclude Include="Obj.h">
+      <Filter>Component\ObjM</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>Scene\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="tSltScene.h">
+      <Filter>Scene\Title</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
