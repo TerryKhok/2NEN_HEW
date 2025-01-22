@@ -34,7 +34,8 @@ class ReflectionComponent final
 		AssemblyComponent::IReflection ref(CreateComponentFunc<T>, AddComponentFunc);
 		AssemblyComponent::assemblies.emplace(typeid(T).name(),std::move(ref));
 #else
-		AssemblyComponent::assemblies.emplace(typeid(T).name(), CreateComponent<T>);
+		AssemblyComponent::IReflection ref(CreateComponentFunc<T>, AddComponentFunc);
+		AssemblyComponent::assemblies.emplace(typeid(T).name(), std::move(ref));
 #endif
 	}
 

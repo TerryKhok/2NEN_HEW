@@ -23,6 +23,8 @@ protected:
 	//オブジェクト生成(名前,テクスチャ指定)
 	GameObject* Instantiate(std::string _name, const wchar_t* _texPath);
 
+	GameObject* LoadObject(std::filesystem::path _path);
+
 	//Updateの中で削除できないように遅延する
 	//================================================================================
 	//オブジェクトの削除(ポインタ指定)
@@ -61,10 +63,14 @@ private:
 	virtual void Awake() {}
 	//コンポーネントがすべて付き終わった時呼び出す
 	virtual void Start() {}
+	//シーンのオブジェクトがすべて生成した時呼び出す
+	virtual void Proceed() {}
 	//アクティブになったときに呼び出す
 	virtual void OnEnable() {}
 	//毎フレーム呼び出す
 	virtual inline void Update() {}
+	//ゲーム停止中毎フレーム呼び出す
+	virtual inline void PauseUpdate() {}
 	//非アクティブになったときに呼び出す
 	virtual void OnDisable() {}
 	//オブジェクトのセンサーに侵入したとき

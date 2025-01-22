@@ -79,7 +79,7 @@ class AntiGravity : public Component
 		}
 	}
 
-	std::unordered_map<GameObject*, b2ShapeId> enterObjects;
+	/*std::unordered_map<GameObject*, b2ShapeId> enterObjects;
 	Vector2 enterPos;
 
 	void OnWindowEnter(HWND _hWnd) override
@@ -136,7 +136,7 @@ class AntiGravity : public Component
 		}
 
 		enterObjects.clear();
-	}
+	}*/
 };
 
 SetReflectionComponent(AntiGravity)

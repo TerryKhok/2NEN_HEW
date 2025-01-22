@@ -61,7 +61,7 @@ class Permeation : public Component
 		if (rb->GetType() != b2_kinematicBody)
 			rb->SetType(b2_kinematicBody);
 
-		CreateObstacleSegment();
+		/*CreateObstacleSegment();
 
 		std::unordered_map<GameObject*, b2ShapeId> enterObjects;
 		rb->GetOverlapObject(enterObjects);
@@ -81,7 +81,7 @@ class Permeation : public Component
 					break;
 				}
 			}
-		}
+		}*/
 	}
 
 	std::vector<std::string> m_barrier;
@@ -154,91 +154,91 @@ class Permeation : public Component
 		}
 	}
 
-	std::unordered_map<GameObject*, b2ShapeId> insideObjects;
+	//std::unordered_map<GameObject*, b2ShapeId> insideObjects;
 
-	void OnWindowEnter(HWND _hWnd) override
-	{
-		rb->GetOverlapObject(insideObjects);
+	//void OnWindowEnter(HWND _hWnd) override
+	//{
+	//	rb->GetOverlapObject(insideObjects);
 
-		for (auto object : m_barrier)
-		{
-			DeleteObject(object);
-		}
+	//	for (auto object : m_barrier)
+	//	{
+	//		DeleteObject(object);
+	//	}
 
-		m_barrier.clear();
-	}
+	//	m_barrier.clear();
+	//}
 
 
-	void OnWindowExit(HWND _hWnd) override
-	{
-		CreateObstacleSegment();
-		
-		Vector2 pos = GetWindowPosition(_hWnd);
-		rb->SetPosition(pos);
+	//void OnWindowExit(HWND _hWnd) override
+	//{
+	//	CreateObstacleSegment();
+	//	
+	//	Vector2 pos = GetWindowPosition(_hWnd);
+	//	rb->SetPosition(pos);
 
-		std::unordered_map<GameObject*, b2ShapeId> enterObjects;
-		rb->GetOverlapObject(enterObjects);
+	//	std::unordered_map<GameObject*, b2ShapeId> enterObjects;
+	//	rb->GetOverlapObject(enterObjects);
 
-		for (auto object : insideObjects)
-		{
-			auto iter = enterObjects.find(object.first);
-			if (iter == enterObjects.end())
-			{
-				Box2DBody* rb = nullptr;
-				if (object.first->TryGetComponent(&rb))
-				{
-					ExitInsideBox2dObject(rb);
+	//	for (auto object : insideObjects)
+	//	{
+	//		auto iter = enterObjects.find(object.first);
+	//		if (iter == enterObjects.end())
+	//		{
+	//			Box2DBody* rb = nullptr;
+	//			if (object.first->TryGetComponent(&rb))
+	//			{
+	//				ExitInsideBox2dObject(rb);
 
-					auto iterator = enters.find(object.first);
-					if (iterator != enters.end()) enters.erase(iterator);
+	//				auto iterator = enters.find(object.first);
+	//				if (iterator != enters.end()) enters.erase(iterator);
 
-					inCount--;
-					if (inCount <= 0)
-					{
-						rend->SetColor(exitColor);
-					}
-				}
-				MovePlayer* player = nullptr;
-				if (object.first->TryGetComponent<MovePlayer>(&player))
-				{
-					player->BackMode();
-				}
-			}
-		}
-		for (auto object : enterObjects)
-		{
-			auto iter = insideObjects.find(object.first);
-			if (iter == insideObjects.end())
-			{
-				Box2DBody* rb = nullptr;
-				if (object.first->TryGetComponent<Box2DBody>(&rb))
-				{
-					switch (rb->GetFilter())
-					{
-					case F_OBSTACLE:
-						EnterInsideBox2dObject(rb);
-						rb->SetFilter(F_PEROBSTACLE);
-						break;
-					/*case F_PLAYER:
-					{
-						rb->SetAwake(true);
-						MovePlayer* player = nullptr;
-						if (object.first->TryGetComponent<MovePlayer>(&player))
-						{
-							player->SetMode(PERMEATION);
-						}
-						break;
-					}*/
-					default:
-						rb->SetAwake(true);
-						break;
-					}
-				}
-			}
-		}
+	//				inCount--;
+	//				if (inCount <= 0)
+	//				{
+	//					rend->SetColor(exitColor);
+	//				}
+	//			}
+	//			MovePlayer* player = nullptr;
+	//			if (object.first->TryGetComponent<MovePlayer>(&player))
+	//			{
+	//				player->BackMode();
+	//			}
+	//		}
+	//	}
+	//	for (auto object : enterObjects)
+	//	{
+	//		auto iter = insideObjects.find(object.first);
+	//		if (iter == insideObjects.end())
+	//		{
+	//			Box2DBody* rb = nullptr;
+	//			if (object.first->TryGetComponent<Box2DBody>(&rb))
+	//			{
+	//				switch (rb->GetFilter())
+	//				{
+	//				case F_OBSTACLE:
+	//					EnterInsideBox2dObject(rb);
+	//					rb->SetFilter(F_PEROBSTACLE);
+	//					break;
+	//				/*case F_PLAYER:
+	//				{
+	//					rb->SetAwake(true);
+	//					MovePlayer* player = nullptr;
+	//					if (object.first->TryGetComponent<MovePlayer>(&player))
+	//					{
+	//						player->SetMode(PERMEATION);
+	//					}
+	//					break;
+	//				}*/
+	//				default:
+	//					rb->SetAwake(true);
+	//					break;
+	//				}
+	//			}
+	//		}
+	//	}
 
-		insideObjects.clear();
-	}
+	//	insideObjects.clear();
+	//}
 };
 
 SetReflectionComponent(Permeation)

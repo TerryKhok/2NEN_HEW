@@ -3,14 +3,6 @@
 #ifndef PCH_H
 #define PCH_H
 
-//デバッグフラグ
-//================================================================
-#define DEBUG_TRUE
-//================================================================
-
-#ifndef DEBUG_TRUE
-#define NDEBUG
-#endif
 
 #include <d3d11.h>  // DirectX11を使うためのヘッダーファイル
 #include <dxgi.h>

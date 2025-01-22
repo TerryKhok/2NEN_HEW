@@ -80,6 +80,9 @@ private:
 	void Update() {
 		(this->*pUpdate)();
 	}
+	void PauseUpdate() override{
+		(this->*pUpdate)();
+	}
 
 	void MouseTrigger();
 	void MousePress();

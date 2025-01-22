@@ -91,7 +91,7 @@ void SFTextNode::Draw()
 	SFTextManager::spriteFont->DrawString(
 		SFTextManager::spriteBatch.get(),
 		str.c_str(),
-		XMFLOAT2(tf.position.x * DISPALY_ASPECT_WIDTH, tf.position.y * -DISPALY_ASPECT_WIDTH),
+		XMFLOAT2(tf.position.x /** DISPALY_ASPECT_WIDTH*/, -tf.position.y /** -DISPALY_ASPECT_WIDTH*/),
 		color,					
 		static_cast<float>(tf.angle.z.Get()),                 
 		XMFLOAT2(origin.x + offset.x, origin.y + offset.y),				

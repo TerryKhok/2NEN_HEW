@@ -222,6 +222,7 @@ class MovePlayer : public Component
 		if (m_this->TryGetComponent<Animator>(&anim))
 		{
 			ChangeState(PLAYER_IDLE);
+			anim->Reverse(reverse);
 		}
 	}
 	PLAYER_MODE mode = NORMAL;
@@ -248,6 +249,11 @@ public:
 		}
 		state->ModeChange(mode, anim);
 	}
+
+	void GameOver()
+	{
+		LOG("GameOver");
+	}
 private:
 	bool isGround = false;
 	bool jumping = false;
@@ -258,6 +264,7 @@ private:
 	int airCount = 0;
 	bool landing = false;
 	int landCount = 0;
+	bool reverse = false;
 
 	void Update()
 	{
@@ -303,7 +310,8 @@ private:
 		{
 			if (move_count == 1)
 			{
-				anim->Reverse(true);
+				reverse = true;
+				anim->Reverse(reverse);
 				if (!jumping && !inAir)
 					ChangeState(PLAYER_WALK);
 			}
@@ -345,7 +353,8 @@ private:
 		{
 			if (move_count == -1) 
 			{
-				anim->Reverse(false);
+				reverse = false;
+				anim->Reverse(reverse);
 				if (!jumping && !inAir)
 					ChangeState(PLAYER_WALK);
 			}
@@ -438,6 +447,8 @@ private:
 			}
 		}
 	}
+
+	SERIALIZE_COMPONENT_VALUE(reverse)
 };
 
 SetReflectionComponent(MovePlayer)

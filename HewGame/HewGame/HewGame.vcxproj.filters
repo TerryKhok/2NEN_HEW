@@ -108,6 +108,12 @@
     <ClInclude Include="MoveSubWindow.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="RockGenerator.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="CrushRock.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -139,6 +145,9 @@
     </ClCompile>
     <ClCompile Include="Enemy_type3.cpp">
       <Filter>Component\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveSubWIndow.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

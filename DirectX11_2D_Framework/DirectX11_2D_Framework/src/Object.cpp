@@ -47,11 +47,33 @@ VSObjectConstantBuffer& GameObject::GetConstantBuffer()
 	return m_cb;
 }
 
+void GameObject::ProceedComponent()
+{
+	auto& list = m_componentList.first;
+	for (size_t i = 0; i < list.size(); ++i)
+	{
+		auto& component = list[i];
+		component->Proceed();
+	}
+}
+
 void GameObject::UpdateComponent()
 {
-	for (auto& component : m_componentList.first)
+	auto& list = m_componentList.first;
+	for (size_t i = 0;i < list.size();++i)
 	{
+		auto& component = list[i];
 		component->Update();
+	}
+}
+
+void GameObject::PauseUpdateComponent()
+{
+	auto& list = m_componentList.first;
+	for (size_t i = 0; i < list.size(); ++i)
+	{
+		auto& component = list[i];
+		component->PauseUpdate();
 	}
 }
 
@@ -66,6 +88,7 @@ void GameObject::SetActive(bool _active)
 	}
 	//更新関数ポインターを設定
 	pUpdate = _active ? &GameObject::UpdateComponent : &GameObject::Void;
+	pPauseUpdate = _active ? &GameObject::PauseUpdateComponent : &GameObject::Void;
 
 #ifdef DEBUG_TRUE
 	if (!active)isSelected = SELECT_NONE;
@@ -383,7 +406,7 @@ bool GameObject::TryGetComponent(Transform** _output)
 	return true;
 }
 
-SAFE_TYPE(GameObject) ObjectManager::Find(const std::string& _name)
+GameObject* ObjectManager::Find(const std::string& _name)
 {
 	auto iter = m_currentList->second.find(_name);
 	if (iter != m_currentList->second.end())
@@ -453,11 +476,47 @@ void ObjectManager::UnInit()
 
 void ObjectManager::UpdateObjectComponent()
 {
-	for (auto& object : m_objectList->first)
+	auto& list = m_objectList->first;
+	for (size_t i = 0;i < list.size();++i)
 	{
+		auto& object = list[i];
 		//参照を剥がして関数ポインタに直接アクセス
 		//(しかし、関数を介して関数ポインタにアクセスするのと速度はあまり変わらない)
 		(object.get()->*object->pUpdate)();
+	}
+
+	for (auto& name : m_delayEraseObjectName)
+	{
+		DeleteObject(name);
+	}
+	m_delayEraseObjectName.clear();
+}
+
+void ObjectManager::PauseUpdateObjectComponent()
+{
+	auto& list = m_objectList->first;
+	for (size_t i = 0; i < list.size(); ++i)
+	{
+		auto& object = list[i];
+		//参照を剥がして関数ポインタに直接アクセス
+		//(しかし、関数を介して関数ポインタにアクセスするのと速度はあまり変わらない)
+		(object.get()->*object->pPauseUpdate)();
+	}
+
+	for (auto& name : m_delayEraseObjectName)
+	{
+		DeleteObject(name);
+	}
+	m_delayEraseObjectName.clear();
+}
+
+void ObjectManager::ProceedObjectComponent()
+{
+	auto& list = m_currentList->first;
+	for (size_t i = 0; i < list.size(); ++i)
+	{
+		auto& object = list[i];
+		object->ProceedComponent();
 	}
 
 	for (auto& name : m_delayEraseObjectName)
@@ -500,10 +559,9 @@ void ObjectManager::AddObject(GameObject* _gameObject)
 	//return m_currentList->first.back().get();
 }
 
-void ObjectManager::AddObject(std::filesystem::path& _path)
+void ObjectManager::AddObject(GameObject* _object ,std::filesystem::path& _path)
 {
 	// Deserialize from a file
-	GameObject* object = new GameObject;
 	{
 		std::ifstream is(_path.string());
 		SERIALIZE_INPUT archive(is);
@@ -511,14 +569,14 @@ void ObjectManager::AddObject(std::filesystem::path& _path)
 		int index = 0;
 		archive(CEREAL_NVP(index));
 		if (index != ObjectFileIndex) return;
-		archive(*object);  // Deserialize polymorphic object
+		archive(*_object);  // Deserialize polymorphic object
 	}
 
 	//デストラクタと一緒にスマートポインタに登録
 	m_currentList->first.push_back(std::unique_ptr<GameObject, void(*)(GameObject*)>
-		(object, [](GameObject* p) {delete p; }));
+		(_object, [](GameObject* p) {delete p; }));
 
-	m_currentList->second[object->GetName()] = m_currentList->first.size() - 1;
+	m_currentList->second[_object->GetName()] = m_currentList->first.size() - 1;
 }
 
 void ObjectManager::DeleteObject(ObjectListMap::iterator& _iter)

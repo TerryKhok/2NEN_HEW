@@ -36,6 +36,7 @@ class GameObject final
 	friend class FileScene;
 	friend class ImGuiApp;
 	friend class Component;
+	friend class SceneManager;
 	friend class ObjectManager;
 	friend class CameraManager;
 	friend class RenderNode;
@@ -89,12 +90,17 @@ private:
 
 	//プロジェクション行列変換までして渡す（描画以外では基本使わない）
 	VSObjectConstantBuffer& GetConstantBuffer();
+	//Proceed関数実行
+	void ProceedComponent();
 	//コンポーネントの更新
 	void UpdateComponent();
+	//停止中のコンポーネントの更新
+	void PauseUpdateComponent();
 	//なにもしない
 	void Void(){}
 
 	functionPointer pUpdate = &GameObject::UpdateComponent;
+	functionPointer pPauseUpdate = &GameObject::PauseUpdateComponent;
 public:
 	//アクティブを変更する(※処理が多いため頻繁に使用しない)
 	void SetActive(bool _active);
@@ -427,7 +433,7 @@ class ObjectManager final
 
 public:
 	//オブジェクト一覧から見つける アクセス速度n(1)なのではやい
-	static SAFE_TYPE(GameObject) Find(const std::string& _name);
+	static GameObject* Find(const std::string& _name);
 	//コピーとペーストを同時に行う
 	static GameObject* Clone(GameObject* _object);
 	//コピー
@@ -443,10 +449,14 @@ private:
 	static void UnInit();
 	//オブジェクトについたコンポーネント更新
 	static void UpdateObjectComponent();
+	//停止中にオブジェクトについたコンポーネント更新
+	static void PauseUpdateObjectComponent();
+	//全てのオブジェクトのProceed関数を呼び出す
+	static void ProceedObjectComponent();
 	//オブジェクトの追加・名前の重複禁止
 	static void AddObject(GameObject* _gameObject);
 	//オブジェクトをファイルから読み込む
-	static void AddObject(std::filesystem::path& _path);
+	static void AddObject(GameObject* _gameObject, std::filesystem::path& _path);
 	//オブジェクトの削除
 	static void DeleteObject(ObjectListMap::iterator& _iter);
 	static void DeleteObject(std::string _name);

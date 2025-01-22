@@ -455,13 +455,13 @@ void ImGuiApp::DrawOptionGui()
 				if(ImGui::ImageButton("PauseGame",imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)),windowBgCol))
 				{
 					if (pauseGame){
-						PostMessage(Window::GetMainHWnd(), WM_PAUSE_GAME, 0, 0);
+						PostMessage(Window::GetMainHWnd(), WM_PAUSE_DEBUG, 0, 0);
 						//float color[4] = { 0.1f,0.1f,0.1f,1.0f };
 						float color[4] = { 0.1f,0.1f,0.1f,1.0f };
 						memcpy(DirectX11::clearColor, color, sizeof(color));
 					}
 					else{
-						PostMessage(Window::GetMainHWnd(), WM_RESUME_GAME, 0, 0);
+						PostMessage(Window::GetMainHWnd(), WM_RESUME_DEBUG, 0, 0);
 						//float color[4] = { 0.0f,0.25f,0.25f,1.0f };
 						float color[4] = { 0.0f,0.5f,0.5f,1.0f };
 						memcpy(DirectX11::clearColor, color, sizeof(color));
@@ -595,7 +595,8 @@ void ImGuiApp::DrawOptionGui()
 					handleUi.SetUploadFile("object file",
 						[](GameObject* obj, std::filesystem::path path)
 						{
-							ObjectManager::AddObject(path);
+							GameObject* object = new GameObject;
+							ObjectManager::AddObject(object, path);
 						}, { ".json" });
 				}
 				ImGui::SetItemTooltip("unpack object");
@@ -730,6 +731,10 @@ void ImGuiApp::DrawOptionGui()
 							if (selectedObject != nullptr) selectedObject->isSelected = GameObject::SELECTED;
 						}
 					}
+					if (!object->active)
+					{
+						ImGui::PopStyleColor();
+					}
 					// Source: Dragging starts here
 					if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
 						ImGui::SetDragDropPayload("DND_SCENE_ITEM", &i, sizeof(int)); // Pass the index
@@ -748,11 +753,6 @@ void ImGuiApp::DrawOptionGui()
 							}
 						}
 						ImGui::EndDragDropTarget();
-					}
-
-					if (!object->active)
-					{
-						ImGui::PopStyleColor();
 					}
 				}
 				ImGui::EndChild();
@@ -1055,7 +1055,7 @@ void ImGuiApp::DrawInspectorGui()
 			ImGui::SameLine();
 
 			static char str[128] = {};
-			if (Window::IsPause())
+			if (Window::IsPauseDebug())
 			{
 				memset(str, '\0', strlen(str));
 				memcpy(str, selectedObject->name.c_str(), selectedObject->name.size());
@@ -1176,7 +1176,7 @@ void ImGuiApp::DrawInspectorGui()
 				auto iter = list.second.find(name.c_str());
 				if (iter != list.second.end())
 				{
-					if (Window::IsPause())
+					if (Window::IsPauseDebug())
 					{
 						if (name == typeid(Renderer).name())
 						{
@@ -2042,7 +2042,7 @@ void ImGuiApp::DeleteSelectedObject()
 		auto iter = list->second.find(selectedObject->name);
 		if (iter != list->second.end())
 		{
-			if (Window::IsPause())
+			if (Window::IsPauseDebug())
 			{
 				willDeleteObjects.push(std::make_pair(std::move(list->first[iter->second]), std::move(*iter)));
 				willDeleteObjects.top().first->SetActive(false);

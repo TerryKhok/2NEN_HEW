@@ -1,0 +1,134 @@
+{
+    "index": 111,
+    "*selectedObject": {
+        "name": "rock",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody",
+            "class CrushRock"
+        ],
+        "m_filter": 128,
+        "data": {
+            "type": 2,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 10.0,
+            "mass": 67.36500549316406,
+            "bullet": false,
+            "fixRot": false,
+            "awake": true,
+            "autoMass": 1.0
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": -0.18817615509033204,
+                "vec.y": -0.02344679832458496
+            },
+            "poly.count": 5,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": 0.9945054054260254,
+                    "vec.y": -0.10468485206365586
+                },
+                "value1": {
+                    "vec.x": 0.32852062582969668,
+                    "vec.y": 0.944496750831604
+                },
+                "value2": {
+                    "vec.x": -0.7943578362464905,
+                    "vec.y": 0.6074500679969788
+                },
+                "value3": {
+                    "vec.x": -0.7071068286895752,
+                    "vec.y": -0.7071068286895752
+                },
+                "value4": {
+                    "vec.x": 0.1961161345243454,
+                    "vec.y": -0.9805806875228882
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": 4.199999809265137,
+                    "vec.y": -3.299999952316284
+                },
+                "value1": {
+                    "vec.x": 4.800000190734863,
+                    "vec.y": 2.4000000953674318
+                },
+                "value2": {
+                    "vec.x": -2.0999999046325685,
+                    "vec.y": 4.800000190734863
+                },
+                "value3": {
+                    "vec.x": -6.0,
+                    "vec.y": -0.30000001192092898
+                },
+                "value4": {
+                    "vec.x": -1.7999999523162842,
+                    "vec.y": -4.5
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            }
+        }
+    }
+}

@@ -44,9 +44,7 @@ Renderer::Renderer(GameObject* _pObject,const wchar_t* _texPath)
 	node->m_object = _pObject;
 	m_node = std::shared_ptr<RenderNode>(node);
 	RenderManager::AddRenderList(m_node, m_layer);
-#ifdef DEBUG_TRUE
 	m_node->texPath = _texPath;
-#endif
 }
 
 Renderer::Renderer(GameObject* _pObject,Animator* _animator)

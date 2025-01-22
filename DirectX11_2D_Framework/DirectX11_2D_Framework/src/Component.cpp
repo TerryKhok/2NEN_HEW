@@ -21,6 +21,13 @@ GameObject* Component::Instantiate(std::string _name, const wchar_t* _texPath)
     return object;
 }
 
+GameObject* Component::LoadObject(std::filesystem::path _path)
+{
+    GameObject* object = new GameObject;
+    ObjectManager::AddObject(object, _path);
+    return object;
+}
+
 void Component::DeleteObject(GameObject* _object)
 {
     DeleteObject(_object->name);

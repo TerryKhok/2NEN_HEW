@@ -7,14 +7,14 @@ class Bounce : public Component
 
 	int inCount = 0;
 
-	const XMFLOAT4 enterColor = { 1.0f,0.0f,0.0f,0.5f };
-	const XMFLOAT4 exitColor = { 0.8f,0.2f,0.2f,0.4f };
+	const XMFLOAT4 enterColor = { 1.0f,1.0f,1.0f,1.0f };
+	const XMFLOAT4 exitColor = { 1.0f,1.0f,1.0f,0.2f };
 	float restitutionPower = 0.8f;
 
 	void Start() override
 	{
 		rend = m_this->GetComponent<Renderer>();
-		rend->SetColor(enterColor);
+		rend->SetColor(exitColor);
 
 		if (!m_this->TryGetComponent<Box2DBody>(&rb))
 		{
@@ -42,6 +42,12 @@ class Bounce : public Component
 			rend->SetColor(enterColor);
 			inCount++;
 		}
+
+		MovePlayer* player = nullptr;
+		if (_other->TryGetComponent<MovePlayer>(&player))
+		{
+			player->SetMode(BOUNCE);
+		}
 	}
 
 	void OnColliderExit(GameObject* _other) override
@@ -59,9 +65,15 @@ class Bounce : public Component
 				rend->SetColor(exitColor);
 			}
 		}
+
+		MovePlayer* player = nullptr;
+		if (_other->TryGetComponent<MovePlayer>(&player))
+		{
+			player->BackMode();
+		}
 	}
 
-	std::unordered_map<GameObject*, b2ShapeId> enterObjects;
+	/*std::unordered_map<GameObject*, b2ShapeId> enterObjects;
 	Vector2 enterPos;
 
 	void OnWindowEnter(HWND _hWnd) override
@@ -112,7 +124,7 @@ class Bounce : public Component
 		}
 
 		enterObjects.clear();
-	}
+	}*/
 
 	void DrawImGui(ImGuiApp::HandleUI& _handleUI) override
 	{

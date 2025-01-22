@@ -120,94 +120,13 @@ private:
 	static void NextScene();
 	
 	//同期シーン切り替え
-	static void LoadSceneNotThrow(std::string _sceneName)
-	{
-		//非同期にシーンをロードしている場合
-		if (async)
-		{
-			LOG("no loading %s,other scene loading now", _sceneName.c_str());
-		}
-
-		//シーンが登録済みかどうか
-		auto it = m_sceneList.find(_sceneName);
-		if (it != m_sceneList.end()) {
-
-#ifdef BOX2D_UPDATE_MULTITHREAD
-			Box2D::WorldManager::DisableWorldUpdate();
-			Box2D::WorldManager::PauseWorldUpdate();
-#endif
-
-#ifdef DEBUG_TRUE
-			ImGuiApp::InvalidSelectedObject();
-#endif
-			TextureAssets::ChangeNextTextureLib();
-
-			//新しいリストに変える
-			RenderManager::GenerateList();
-			ObjectManager::GenerateList();
-			SFTextManager::GenerateList();
-			//対応したシーンのロード処理
-			it->second();
-			//シーン切り替え
-			NextScene();
-			//シーン初期化
-			TRY_CATCH_LOG(m_currentScene->Init());
-
-			TextureAssets::LinkNextTextureLib();
-
-#ifdef BOX2D_UPDATE_MULTITHREAD
-			Box2D::WorldManager::EnableWorldUpdate();
-			Box2D::WorldManager::ResumeWorldUpdate();
-#endif	
-			LOG("Now Switching to %s", _sceneName.c_str());
-		}
-	}
+	static void LoadSceneNotThrow(std::string _sceneName);
+	
 public:
 	//同期シーン切り替え
-	static void LoadScene(std::string _sceneName)
-	{
-		//非同期にシーンをロードしている場合
-		if (async)
-		{
-			LOG("no loading %s,other scene loading now", _sceneName.c_str());
-		}
+	static void LoadScene(std::string _sceneName);
 
-		//シーンが登録済みかどうか
-		auto it = m_sceneList.find(_sceneName);
-		if (it != m_sceneList.end()) {
-
-#ifdef BOX2D_UPDATE_MULTITHREAD
-			Box2D::WorldManager::DisableWorldUpdate();
-			Box2D::WorldManager::PauseWorldUpdate();
-#endif
-
-#ifdef DEBUG_TRUE
-			ImGuiApp::InvalidSelectedObject();
-#endif
-			TextureAssets::ChangeNextTextureLib();
-
-			//新しいリストに変える
-			RenderManager::GenerateList();
-			ObjectManager::GenerateList();
-			SFTextManager::GenerateList();
-			//対応したシーンのロード処理
-			it->second();
-			//シーン切り替え
-			NextScene();
-			//シーン初期化
-			TRY_CATCH_LOG(m_currentScene->Init());
-
-			TextureAssets::LinkNextTextureLib();
-
-#ifdef BOX2D_UPDATE_MULTITHREAD
-			Box2D::WorldManager::EnableWorldUpdate();
-			Box2D::WorldManager::ResumeWorldUpdate();
-#endif	
-			LOG("Now Switching to %s", _sceneName.c_str());
-
-			throw "";
-		}
-	}
+	static void LoadScene(std::stringstream& _buffer);
 
 	//シーンの読み込み・切り替え(同期)
 	template<typename T>
@@ -263,43 +182,7 @@ public:
 		LoadScene<T>();
 	}
 
-	static void LoadingScene(std::string _sceneName)
-	{
-		//ロード中
-		if (async) return;
-
-		//シーンが登録されているか
-		auto it = m_sceneList.find(_sceneName);
-		if (it != m_sceneList.end()) {
-			async = true;
-			loading = true;
-
-			// Start scene loading asynchronously
-			LOG("Starting scene loading...%s", _sceneName.c_str());
-
-			//スレッドを立てる
-			std::future<void> sceneFuture = std::async(std::launch::async, [&]()
-				{
-					TextureAssets::ChangeNextTextureLib();
-
-					//追加先を新しく変更する
-					Box2D::WorldManager::ChangeNextWorld();
-					RenderManager::ChangeNextRenderList();
-					ObjectManager::ChangeNextObjectList();
-					SFTextManager::ChangeNextTextList();
-					//生成するウィンドウを表示しない
-					Window::WindowSubLoadingBegin();
-					//シーンのロード処理
-					it->second();
-					//古いワールドを削除する
-					Box2D::WorldManager::DeleteOldWorld();
-				});
-			//スレッドが終わるまでループさせる
-			Window::WindowUpdate(sceneFuture, loading);
-
-			return;
-		}
-	}
+	static void LoadingScene(std::string _sceneName);
 
 	//シーンの読み込み(非同期)
 	template<typename T>
@@ -349,51 +232,7 @@ public:
 	}
 
 	//シーンの切り替え(ロードが終わってからじゃないと反映されない)
-	static void ChangeScene()
-	{
-		//非同期でロードが終わっている場合
-		if (async && !loading)
-		{
-#ifdef DEBUG_TRUE
-			ImGuiApp::InvalidSelectedObject();
-#endif
-			//シーンの切り替え
-			NextScene();
-
-			//ロードしておいたリストに切り替える
-			RenderManager::LinkNextRenderList();
-
-			//現在あるサブウィンドウオブジェクトを隠す
-			Window::WindowSubHide();
-
-#ifdef BOX2D_UPDATE_MULTITHREAD
-			//ワールドの更新を一時停止
-			Box2D::WorldManager::PauseWorldUpdate();
-#endif
-			ObjectManager::LinkNextObjectList();
-			Box2D::WorldManager::LinkNextWorld();
-
-			SFTextManager::LinkNextTextList();
-
-			TextureAssets::LinkNextTextureLib();
-
-#ifdef BOX2D_UPDATE_MULTITHREAD
-			//ワールドの更新を再開
-			Box2D::WorldManager::ResumeWorldUpdate();
-#endif
-			//すべてのウィンドウを表示
-			Window::WindowSubLoadingEnd();
-
-			async = false;
-
-			//シーン初期化
-			TRY_CATCH_LOG(m_currentScene->Init());
-
-			LOG("Now Switching to the New Scene...");
-
-			throw "";
-		}
-	}
+	static void ChangeScene();
 
 	//シーンクラスをリストに登録する
 	template<typename T>
@@ -429,6 +268,7 @@ public:
 #ifdef DEBUG_TRUE
 				try{
 					m_nextScene->Load();
+					ObjectManager::ProceedObjectComponent();
 				}
 				//例外キャッチ(nullptr参照とか)
 				catch (const std::exception& e) {
@@ -437,6 +277,7 @@ public:
 #else
 				try{
 					m_nextScene->Load();
+					ObjectManager::ProceedObjectComponent();
 				}
 				catch(...){}
 #endif
@@ -448,39 +289,10 @@ public:
 
 	//現在のシーンをリロード(非同期)
 	//※処理を戻さないので呼び出してもその後の処理は継続する
-	static void ReloadCurrentScene()
-	{
-		//シーンが登録済みかどうか
-		auto it = m_sceneList.find(m_currentScene->getType());
-		if (it != m_sceneList.end()) {
-
-#ifdef DEBUG_TRUE
-			ImGuiApp::InvalidSelectedObject();
-#endif
-
-#ifdef BOX2D_UPDATE_MULTITHREAD
-			Box2D::WorldManager::DisableWorldUpdate();
-			Box2D::WorldManager::PauseWorldUpdate();
-#endif
-			//新しいリストに変える
-			RenderManager::GenerateList();
-			ObjectManager::GenerateList();
-			SFTextManager::GenerateList();
-			//対応したシーンのロード処理
-			it->second();
-			//シーン切り替え
-			NextScene();
-			//シーン初期化
-			TRY_CATCH_LOG(m_currentScene->Init());
-
-#ifdef BOX2D_UPDATE_MULTITHREAD
-			Box2D::WorldManager::EnableWorldUpdate();
-			Box2D::WorldManager::ResumeWorldUpdate();
-#endif	
-		}
-	}
+	static void ReloadCurrentScene();
 
 	static void SaveScene(std::filesystem::path& _path);
+	static void SaveScene(std::stringstream& _buffer);
 	static void RegisterScene(std::filesystem::path& _path);
 
 private:

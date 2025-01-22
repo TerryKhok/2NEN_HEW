@@ -3,6 +3,9 @@
 #include "EnemyChaser.h"
 #include "AntiGravity.h"
 #include "Goal.h"
+#include "MoveSubWindow.h"
+#include "RockGenerator.h"
+#include "CrushRock.h"
 
 class SeigoTestScene :public Scene
 {

@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 8,
+    "objectNum": 13,
     "value0": {
         "name": "Map",
         "transform": {
@@ -62,7 +62,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -18.798641204833986,
                 "vec.y": 33.520469665527347
@@ -89,7 +89,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 12.456930160522461,
                 "vec.y": 23.101943969726564
@@ -116,7 +116,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 50.28070068359375,
                 "vec.y": 31.255573272705079
@@ -143,7 +143,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 50.733680725097659,
                 "vec.y": -9.059585571289063
@@ -170,7 +170,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 17.66619300842285,
                 "vec.y": -8.833096504211426
@@ -197,7 +197,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 17.213212966918947,
                 "vec.y": -30.80259132385254
@@ -224,7 +224,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -41.674095153808597,
                 "vec.y": -29.89663314819336
@@ -251,7 +251,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -40.31515884399414,
                 "vec.y": 12.683420181274414
@@ -276,8 +276,8 @@
         "name": "Player",
         "transform": {
             "position": {
-                "x": -182.06956481933595,
-                "y": 53.533905029296878,
+                "x": -120.47726440429688,
+                "y": 17.8547306060791,
                 "z": 0.5
             },
             "scale": {
@@ -313,7 +313,7 @@
                 "data": {
                     "m_scaleX": 0.125,
                     "m_scaleY": 0.3333333432674408,
-                    "m_frameX": 2,
+                    "m_frameX": 0,
                     "m_frameY": 0
                 }
             }
@@ -445,7 +445,7 @@
         "data": {
             "type": 2,
             "lineVec": {
-                "vec.x": 0.0,
+                "vec.x": 8.149072527885437e-10,
                 "vec.y": -0.8333333730697632
             },
             "angleVec": 0.0,
@@ -540,7 +540,8 @@
                     "vec.y": 0.0
                 }
             }
-        }
+        },
+        "reverse": false
     },
     "value2": {
         "name": "testChain_1",
@@ -563,7 +564,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": -0.024466026574373246
+                    "radians": -0.02990640141069889
                 }
             }
         },
@@ -722,7 +723,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": -0.024055853486061097
+                    "radians": -0.029414694756269456
                 }
             }
         },
@@ -832,16 +833,316 @@
         }
     },
     "value4": {
-        "name": "perWindow",
+        "name": "testChain_2",
         "transform": {
             "position": {
-                "x": -189.5,
-                "y": 194.0,
+                "x": -278.56500244140627,
+                "y": -198.97726440429688,
                 "z": 0.5
             },
             "scale": {
-                "x": 18.30036163330078,
-                "y": 15.394465446472168,
+                "x": 15.394477844238282,
+                "y": 13.697418212890625,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": -0.029414694756269456
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody"
+        ],
+        "m_filter": 32,
+        "data": {
+            "type": 0,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 0.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": false,
+            "autoMass": 1.0
+        },
+        "types": [
+            4,
+            4,
+            4,
+            4
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": -12.943499565124512,
+                "vec.y": 29.497726440429689
+            },
+            "chain.ghost2": {
+                "vec.x": 17.956501007080079,
+                "vec.y": 12.697726249694825
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": -10.0,
+                    "vec.y": -10.0
+                },
+                "seg.point2": {
+                    "vec.x": 10.0,
+                    "vec.y": -10.0
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": -10.0,
+                "vec.y": -10.0
+            },
+            "chain.ghost2": {
+                "vec.x": -12.943499565124512,
+                "vec.y": 29.497726440429689
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": 10.0,
+                    "vec.y": -10.0
+                },
+                "seg.point2": {
+                    "vec.x": 17.956501007080079,
+                    "vec.y": 12.697726249694825
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": 10.0,
+                "vec.y": -10.0
+            },
+            "chain.ghost2": {
+                "vec.x": -10.0,
+                "vec.y": -10.0
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": 17.956501007080079,
+                    "vec.y": 12.697726249694825
+                },
+                "seg.point2": {
+                    "vec.x": -12.943499565124512,
+                    "vec.y": 29.497726440429689
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": 17.956501007080079,
+                "vec.y": 12.697726249694825
+            },
+            "chain.ghost2": {
+                "vec.x": 10.0,
+                "vec.y": -10.0
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": -12.943499565124512,
+                    "vec.y": 29.497726440429689
+                },
+                "seg.point2": {
+                    "vec.x": -10.0,
+                    "vec.y": -10.0
+                }
+            }
+        }
+    },
+    "value5": {
+        "name": "moveObject",
+        "transform": {
+            "position": {
+                "x": 136.0777130126953,
+                "y": 93.53885650634766,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 3.0,
+                "y": 3.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": false,
+        "comNames": [
+            "class Renderer"
+        ],
+        "m_layer": 4,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483650,
+                "data": {
+                    "active": false,
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\hand_move.png"
+                }
+            }
+        }
+    },
+    "value6": {
+        "name": "handObject",
+        "transform": {
+            "position": {
+                "x": -201.99819946289063,
+                "y": 146.02767944335938,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer"
+        ],
+        "m_layer": 2,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483651,
+                "data": {
+                    "active": true,
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\hand.png"
+                }
+            }
+        }
+    },
+    "value7": {
+        "name": "playObject",
+        "transform": {
+            "position": {
+                "x": 136.0777130126953,
+                "y": 93.53885650634766,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 3.0,
+                "y": 3.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer"
+        ],
+        "m_layer": 4,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483652,
+                "data": {
+                    "active": true,
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\arrow_play.png"
+                }
+            }
+        }
+    },
+    "value8": {
+        "name": "LowGravity",
+        "transform": {
+            "position": {
+                "x": 627.4390869140625,
+                "y": 190.6140594482422,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 15.182334899902344,
+                "y": 12.636751174926758,
                 "z": 1.0
             },
             "angle": {
@@ -860,14 +1161,15 @@
         "comNames": [
             "class Renderer",
             "class Box2DBody",
-            "class Permeation",
-            "class SubWindow"
+            "class SubWindow",
+            "class MoveSubWindow",
+            "class LowGravity"
         ],
         "m_layer": 1,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483650,
+                "id": 2147483653,
                 "data": {
                     "active": true,
                     "m_color": {
@@ -876,11 +1178,11 @@
                         "f.z": 1.0,
                         "f.w": 0.20000000298023225
                     },
-                    "path": "asset\\sign\\sign_transparent.png"
+                    "path": "asset\\sign\\sign_lowgravity.png"
                 }
             }
         },
-        "m_filter": 1024,
+        "m_filter": 64,
         "data": {
             "type": 1,
             "lineVec": {
@@ -888,7 +1190,7 @@
                 "vec.y": 0.0
             },
             "angleVec": 0.0,
-            "gravity": 0.0,
+            "gravity": 1.0,
             "mass": 0.0,
             "bullet": true,
             "fixRot": false,
@@ -947,20 +1249,20 @@
             "poly.radius": 0.0,
             "poly.vertices": {
                 "value0": {
-                    "vec.x": -8.5,
-                    "vec.y": -7.0
+                    "vec.x": -7.591167449951172,
+                    "vec.y": -6.318375587463379
                 },
                 "value1": {
-                    "vec.x": 8.5,
-                    "vec.y": -7.0
+                    "vec.x": 7.591167449951172,
+                    "vec.y": -6.318375587463379
                 },
                 "value2": {
-                    "vec.x": 8.5,
-                    "vec.y": 7.0
+                    "vec.x": 7.591167449951172,
+                    "vec.y": 6.318375587463379
                 },
                 "value3": {
-                    "vec.x": -8.5,
-                    "vec.y": 7.0
+                    "vec.x": -7.591167449951172,
+                    "vec.y": 6.318375587463379
                 },
                 "value4": {
                     "vec.x": 0.0,
@@ -979,173 +1281,16 @@
                     "vec.y": 0.0
                 }
             }
-        }
+        },
+        "confirmed": false,
+        "selfIndex": 0
     },
-    "value5": {
-        "name": "testChain_2",
+    "value9": {
+        "name": "Float",
         "transform": {
             "position": {
-                "x": -278.56500244140627,
-                "y": -198.97726440429688,
-                "z": 0.5
-            },
-            "scale": {
-                "x": 15.394477844238282,
-                "y": 13.697418212890625,
-                "z": 1.0
-            },
-            "angle": {
-                "x": {
-                    "radians": 0.0
-                },
-                "y": {
-                    "radians": 0.0
-                },
-                "z": {
-                    "radians": -0.024055853486061097
-                }
-            }
-        },
-        "active": true,
-        "comNames": [
-            "class Box2DBody"
-        ],
-        "m_filter": 32,
-        "data": {
-            "type": 0,
-            "lineVec": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
-            },
-            "angleVec": 0.0,
-            "gravity": 1.0,
-            "mass": 0.0,
-            "bullet": false,
-            "fixRot": false,
-            "awake": false,
-            "autoMass": 1.0
-        },
-        "types": [
-            4,
-            4,
-            4,
-            4
-        ],
-        "shapeData": {
-            "sensor": false,
-            "friction": 0.6000000238418579,
-            "density": 1.0,
-            "restitution": 0.0
-        },
-        "chainSegment": {
-            "chain.chainId": 2,
-            "chain.ghost1": {
-                "vec.x": -12.943499565124512,
-                "vec.y": 29.497726440429689
-            },
-            "chain.ghost2": {
-                "vec.x": 17.956501007080079,
-                "vec.y": 12.697726249694825
-            },
-            "chain.segment": {
-                "seg.point1": {
-                    "vec.x": -10.0,
-                    "vec.y": -10.0
-                },
-                "seg.point2": {
-                    "vec.x": 10.0,
-                    "vec.y": -10.0
-                }
-            }
-        },
-        "shapeData": {
-            "sensor": false,
-            "friction": 0.6000000238418579,
-            "density": 1.0,
-            "restitution": 0.0
-        },
-        "chainSegment": {
-            "chain.chainId": 2,
-            "chain.ghost1": {
-                "vec.x": -10.0,
-                "vec.y": -10.0
-            },
-            "chain.ghost2": {
-                "vec.x": -12.943499565124512,
-                "vec.y": 29.497726440429689
-            },
-            "chain.segment": {
-                "seg.point1": {
-                    "vec.x": 10.0,
-                    "vec.y": -10.0
-                },
-                "seg.point2": {
-                    "vec.x": 17.956501007080079,
-                    "vec.y": 12.697726249694825
-                }
-            }
-        },
-        "shapeData": {
-            "sensor": false,
-            "friction": 0.6000000238418579,
-            "density": 1.0,
-            "restitution": 0.0
-        },
-        "chainSegment": {
-            "chain.chainId": 2,
-            "chain.ghost1": {
-                "vec.x": 10.0,
-                "vec.y": -10.0
-            },
-            "chain.ghost2": {
-                "vec.x": -10.0,
-                "vec.y": -10.0
-            },
-            "chain.segment": {
-                "seg.point1": {
-                    "vec.x": 17.956501007080079,
-                    "vec.y": 12.697726249694825
-                },
-                "seg.point2": {
-                    "vec.x": -12.943499565124512,
-                    "vec.y": 29.497726440429689
-                }
-            }
-        },
-        "shapeData": {
-            "sensor": false,
-            "friction": 0.6000000238418579,
-            "density": 1.0,
-            "restitution": 0.0
-        },
-        "chainSegment": {
-            "chain.chainId": 2,
-            "chain.ghost1": {
-                "vec.x": 17.956501007080079,
-                "vec.y": 12.697726249694825
-            },
-            "chain.ghost2": {
-                "vec.x": 10.0,
-                "vec.y": -10.0
-            },
-            "chain.segment": {
-                "seg.point1": {
-                    "vec.x": -12.943499565124512,
-                    "vec.y": 29.497726440429689
-                },
-                "seg.point2": {
-                    "vec.x": -10.0,
-                    "vec.y": -10.0
-                }
-            }
-        }
-    },
-    "value6": {
-        "name": "untiGravityWindow",
-        "transform": {
-            "position": {
-                "x": 367.5,
-                "y": 266.5,
+                "x": 624.8978881835938,
+                "y": -162.04115295410157,
                 "z": 0.5
             },
             "scale": {
@@ -1170,13 +1315,14 @@
             "class Renderer",
             "class Box2DBody",
             "class SubWindow",
-            "class AntiGravity"
+            "class AntiGravity",
+            "class MoveSubWindow"
         ],
         "m_layer": 1,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483651,
+                "id": 2147483654,
                 "data": {
                     "active": true,
                     "m_color": {
@@ -1288,14 +1434,16 @@
                     "vec.y": 0.0
                 }
             }
-        }
+        },
+        "confirmed": false,
+        "selfIndex": 1
     },
-    "value7": {
-        "name": "perWindow_1",
+    "value10": {
+        "name": "Transparent",
         "transform": {
             "position": {
-                "x": 152.5,
-                "y": 42.0,
+                "x": -602.526611328125,
+                "y": 222.74270629882813,
                 "z": 0.5
             },
             "scale": {
@@ -1320,13 +1468,14 @@
             "class Renderer",
             "class Box2DBody",
             "class Permeation",
-            "class SubWindow"
+            "class SubWindow",
+            "class MoveSubWindow"
         ],
         "m_layer": 1,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483652,
+                "id": 2147483655,
                 "data": {
                     "active": true,
                     "m_color": {
@@ -1438,6 +1587,193 @@
                     "vec.y": 0.0
                 }
             }
-        }
+        },
+        "confirmed": false,
+        "selfIndex": 2
+    },
+    "value11": {
+        "name": "Bounce",
+        "transform": {
+            "position": {
+                "x": -632.5240478515625,
+                "y": -160.95626831054688,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 15.182334899902344,
+                "y": 12.636751174926758,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class Box2DBody",
+            "class SubWindow",
+            "class MoveSubWindow",
+            "class Bounce"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483656,
+                "data": {
+                    "active": true,
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 0.20000000298023225
+                    },
+                    "path": "asset\\sign\\sign_bounce.png"
+                }
+            }
+        },
+        "m_filter": 64,
+        "data": {
+            "type": 1,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 0.0,
+            "bullet": true,
+            "fixRot": false,
+            "awake": false,
+            "autoMass": 1.0
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": true,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "poly.count": 4,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
+                },
+                "value1": {
+                    "vec.x": 1.0,
+                    "vec.y": 0.0
+                },
+                "value2": {
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
+                },
+                "value3": {
+                    "vec.x": -1.0,
+                    "vec.y": 0.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": -7.591167449951172,
+                    "vec.y": -6.318375587463379
+                },
+                "value1": {
+                    "vec.x": 7.591167449951172,
+                    "vec.y": -6.318375587463379
+                },
+                "value2": {
+                    "vec.x": 7.591167449951172,
+                    "vec.y": 6.318375587463379
+                },
+                "value3": {
+                    "vec.x": -7.591167449951172,
+                    "vec.y": 6.318375587463379
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            }
+        },
+        "confirmed": false,
+        "selfIndex": 3,
+        "restitutionPower": 0.800000011920929
+    },
+    "value12": {
+        "name": "subWindowManager",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class MoveSubWindowManager"
+        ],
+        "selectIndex": 2
     }
 }

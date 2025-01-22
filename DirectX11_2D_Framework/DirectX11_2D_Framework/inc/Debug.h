@@ -1,5 +1,14 @@
 #pragma once
 
+#ifdef _DEBUG
+
+//デバッグフラグ
+//===============================================================
+#define DEBUG_TRUE
+//================================================================
+
+#endif
+
 const char* relativePath(const char* _fullPath);
 void setConsoleTextColor(unsigned int _color);
 

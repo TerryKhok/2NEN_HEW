@@ -55,7 +55,7 @@ constexpr float PROJECTION_ASPECT_HEIGHT = static_cast<float>(PROJECTION_WIDTH) 
 
 //================================================================
 #define SUBWINDOW_IS_TOP
-//#define SUBWINDOW_MOVELOCK
+#define SUBWINDOW_MOVELOCK
 //================================================================
 
 #endif
@@ -68,8 +68,14 @@ constexpr float PROJECTION_ASPECT_HEIGHT = static_cast<float>(PROJECTION_WIDTH) 
 #define WM_CREATE_NEW_WINDOW (WM_USER + 1)
 #define WM_DELETE_WINDOW (WM_USER + 2)
 #define WM_ADJUST_Z_ORDER (WM_USER + 3)
+
 #define WM_PAUSE_GAME (WM_USER + 4)
 #define WM_RESUME_GAME (WM_USER + 5)
+
+#ifdef DEBUG_TRUE
+#define WM_PAUSE_DEBUG (WM_USER + 6)
+#define WM_RESUME_DEBUG (WM_USER + 7)
+#endif
 
 //ウィンドウの位置を取得する
 Vector2 GetWindowPosition(HWND _hWnd);
@@ -120,7 +126,15 @@ public:
 	static int WindowEnd();
 	//メインのウィンドウハンドル取得
 	static const HWND& GetMainHWnd();
+	//ゲームを一時停止する
+	static void PauseGame();
+	//ゲームを再開する
+	static void ResumeGame();
+	//ゲーム停止中かどうか
 	static const bool IsPause();
+#ifdef DEBUG_TRUE
+	static const bool IsPauseDebug();
+#endif
 public:
 	static thread_local HWND(*pWindowSubCreate)(const std::string&, std::string, int, int, Vector2);
 private:	

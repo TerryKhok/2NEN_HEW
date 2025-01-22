@@ -187,6 +187,7 @@ int windowWidth;
 int windowHeight;
 
 bool pauseGame = false;
+bool pauseDebug = false;
 
 HWND Window::WindowSubCreate(const std::string& _objName, std::string _windowName, int _width, int _height, Vector2 _pos)
 {
@@ -239,7 +240,7 @@ HWND Window::WindowSubCreate(const std::string& _objName, std::string _windowNam
 	m_hwndObjNames.emplace(hWnd, _objName);
 
 #ifdef DEBUG_TRUE
-	if (pauseGame)
+	if (pauseDebug)
 	{
 		SetWindowMovable(hWnd, false);
 		SetWindowPos(hWnd, HWND_BOTTOM, 0, 0, 0, 0,
@@ -274,7 +275,7 @@ HWND Window::WindowSubCreateAsync(const std::string& _objName, std::string _wind
 	SetWindowPosition(hNewWindow, _pos);
 
 #ifdef DEBUG_TRUE
-	if (pauseGame) SetWindowMovable(hNewWindow, false);
+	if (pauseDebug) SetWindowMovable(hNewWindow, false);
 #endif
 
 	return hNewWindow;
@@ -317,7 +318,7 @@ void Window::WindowSubHide(HWND _hWnd)
 {
 	ShowWindow(_hWnd, SW_HIDE);
 #ifdef DEBUG_TRUE
-	if (pauseGame)
+	if (pauseDebug)
 		SetWindowPos(_hWnd, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
 #endif
 }
@@ -349,7 +350,9 @@ LRESULT Window::WindowInit(void(*p_mainInitFunc)(void))
 	SFTextManager::Init();
 #endif
 
-	PostMessage(mainHwnd, WM_PAUSE_GAME, 0, 0);
+#ifdef DEBUG_TRUE
+	PostMessage(mainHwnd, WM_PAUSE_DEBUG, 0, 0);
+#endif
 	//=================================================
 
 	return LRESULT();
@@ -621,10 +624,30 @@ const HWND& Window::GetMainHWnd()
 	return mainHwnd;
 }
 
+void Window::PauseGame()
+{
+	if (!pauseGame)
+		PostMessage(Window::GetMainHWnd(), WM_PAUSE_GAME, 0, 0);
+}
+
+void Window::ResumeGame()
+{
+	if (pauseGame)
+		PostMessage(Window::GetMainHWnd(), WM_RESUME_GAME, 0, 0);
+}
+
 const bool Window::IsPause()
 {
 	return pauseGame;
 }
+
+#ifdef DEBUG_TRUE
+const bool Window::IsPauseDebug()
+{
+	return pauseDebug;
+}
+#endif
+
 // Declare isDragging as a static or global variable
 bool isDragging = false;
 
@@ -741,13 +764,6 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 		Vector2 oldMousePos;
 
-		for (auto hWnd : m_hwndObjNames)
-		{
-			SetWindowMovable(hWnd.first, false);
-		}
-
-		SetWindowPos(mainHwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-
 		pauseGame = true;
 		while (pauseGame)
 		{
@@ -774,8 +790,96 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 					Input::Get().Update();
 
+					TRY_CATCH_LOG(ObjectManager::PauseUpdateObjectComponent());
+
+					//カメラ関連行列セット
+					CameraManager::SetCameraMatrix();
+
+					DirectX11::D3D_StartRender();
+
+					RenderManager::Draw();
+#ifdef SFTEXT_TRUE
+					SFTextManager::Draw();
+#endif
 #ifdef DEBUG_TRUE
-					
+					ImGuiApp::DrawMainGui(mainContext);
+
+					ImGuiApp::Draw();
+#endif
+					DirectX11::D3D_FinishRender();
+
+#ifdef DEBUG_TRUE
+					updateFpsCounter++;
+					nowTick = GetTickCount64();
+
+					if (nowTick >= oldTick + 1000)
+					{
+						ImGuiApp::updateFpsCounter = updateFpsCounter;
+						updateFpsCounter = 0;
+						oldTick = nowTick;
+					}
+#endif
+				}
+			}
+		}
+	}
+	break;
+
+	case WM_RESUME_GAME:
+		pauseGame = false;
+		//現在時間を取得
+		QueryPerformanceCounter(&liWork);
+		nowCount = liWork.QuadPart;
+		worldOldCount = nowCount;
+		updateOldCount = nowCount;
+
+		break;
+
+#ifdef DEBUG_TRUE
+	case WM_PAUSE_DEBUG:
+	{
+		QueryPerformanceCounter(&liWork);
+		long long pauseNowCount = liWork.QuadPart;
+		long long pauseOldCount = pauseNowCount;
+		long long pauseFrameCount = frequency / 60;
+
+		//Animator用のカウント更新
+		AnimatorManager::deltaCount = pauseFrameCount;
+
+		Vector2 oldMousePos;
+
+		for (auto hWnd : m_hwndObjNames)
+		{
+			SetWindowMovable(hWnd.first, false);
+		}
+
+		SetWindowPos(mainHwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
+
+		pauseDebug = true;
+		while (pauseDebug)
+		{
+			// 新たにメッセージがあれば
+			if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+			{
+				TranslateMessage(&msg);
+				// ウィンドウプロシージャにメッセージを送る
+				DispatchMessage(&msg);
+
+				// 「WM_QUIT」メッセージを受け取ったらループを抜ける
+				if (msg.message == WM_QUIT) {
+					break;
+				}
+			}
+			else
+			{
+				QueryPerformanceCounter(&liWork);
+				pauseNowCount = liWork.QuadPart;
+
+				if (pauseNowCount > pauseOldCount + pauseFrameCount)
+				{
+					pauseOldCount = pauseNowCount;
+
+					Input::Get().Update();					
 
 					Vector2 mousePos = Input::Get().MousePoint();
 
@@ -966,8 +1070,6 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 							RenderManager::renderZoom -= RenderManager::renderZoom / 100;
 						}
 					}
-					
-#endif
 
 					//カメラ関連行列セット
 					CameraManager::SetCameraMatrix();
@@ -975,17 +1077,14 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					DirectX11::D3D_StartRender();
 
 					RenderManager::Draw();
-#ifdef DEBUG_TRUE
+
 					ImGuiApp::DrawHandleUI(worldPos);
-#endif
 #ifdef SFTEXT_TRUE
 					SFTextManager::Draw();
 #endif
-#ifdef DEBUG_TRUE
 					ImGuiApp::DrawMainGui(mainContext);
 
 					ImGuiApp::Draw();
-#endif
 					DirectX11::D3D_FinishRender();
 				}
 			}
@@ -1002,8 +1101,8 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	}
 	break;
 
-	case WM_RESUME_GAME:
-		pauseGame = false;
+	case WM_RESUME_DEBUG:
+		pauseDebug = false;
 		//現在時間を取得
 		QueryPerformanceCounter(&liWork);
 		nowCount = liWork.QuadPart;
@@ -1013,6 +1112,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		RenderManager::renderOffset = { 0,0 };
 		RenderManager::renderZoom = { 1.0f,1.0f };
 		break;
+#endif
 
 #ifdef SUBWINDOW_IS_TOP
 
@@ -1040,7 +1140,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			}
 		}
 
-		if (pauseGame) break;
+		if (pauseDebug) break;
 
 		for (auto hwnd : m_hwndObjNames)
 		{
