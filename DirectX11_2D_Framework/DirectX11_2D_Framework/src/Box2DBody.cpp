@@ -62,8 +62,8 @@ Box2DBody::Box2DBody(GameObject* _object, SERIALIZE_INPUT& ar)
 	//ボディ定義とワールドIDを使ってグラウンド・ボディを作成する
 	b2BodyDef bodyDef = b2DefaultBodyDef();
 	bodyDef.type = data.type;
-	bodyDef.position = { position.x / DEFAULT_OBJECT_SIZE, position.y / DEFAULT_OBJECT_SIZE };
-	bodyDef.rotation = b2MakeRot(static_cast<float>(_object->transform.angle.z.Get()));
+	bodyDef.position = data.pos;
+	bodyDef.rotation = data.rot;
 	bodyDef.linearVelocity = data.lineVec;
 	bodyDef.automaticMass = data.autoMass;
 	bodyDef.angularVelocity = data.angleVec;
@@ -409,6 +409,8 @@ void Box2DBody::SetActive(bool _active)
 void Box2DBody::Serialize(SERIALIZE_OUTPUT& ar)
 {
 	BodySaveData data;
+	data.pos = b2Body_GetPosition(m_bodyId);
+	data.rot = b2Body_GetRotation(m_bodyId);
 	data.type = b2Body_GetType(m_bodyId);
 	data.lineVec = b2Body_GetLinearVelocity(m_bodyId);
 	data.angleVec = b2Body_GetAngularVelocity(m_bodyId);

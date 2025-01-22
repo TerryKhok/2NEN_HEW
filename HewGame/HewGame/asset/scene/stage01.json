@@ -32,6 +32,14 @@
         ],
         "m_filter": 16,
         "data": {
+            "pos": {
+                "vec.x": 0.4168209135532379,
+                "vec.y": -1.0448639392852784
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
             "type": 2,
             "lineVec": {
                 "vec.x": 0.0,
@@ -65,7 +73,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -47.21315002441406,
                 "vec.y": -33.64817810058594
@@ -92,7 +100,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -46.68464279174805,
                 "vec.y": 33.82434844970703
@@ -119,7 +127,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 45.62763214111328,
                 "vec.y": 34.000511169433597
@@ -146,7 +154,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 46.08317947387695,
                 "vec.y": 14.394864082336426
@@ -173,7 +181,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 32.43317794799805,
                 "vec.y": 14.094863891601563
@@ -200,7 +208,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 33.033180236816409,
                 "vec.y": -20.255136489868165
@@ -227,7 +235,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 4.05187463760376,
                 "vec.y": -20.611711502075197
@@ -254,7 +262,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -8.80842399597168,
                 "vec.y": -20.787878036499025
@@ -281,7 +289,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -8.632254600524903,
                 "vec.y": -27.834619522094728
@@ -308,7 +316,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -29.067798614501954,
                 "vec.y": -28.186954498291017
@@ -335,7 +343,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -29.067798614501954,
                 "vec.y": -33.295841217041019
@@ -387,6 +395,14 @@
         ],
         "m_filter": 32,
         "data": {
+            "pos": {
+                "vec.x": 6.900000095367432,
+                "vec.y": 2.4000000953674318
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
             "type": 0,
             "lineVec": {
                 "vec.x": 0.0,
@@ -527,7 +543,7 @@
                 "data": {
                     "m_scaleX": 0.125,
                     "m_scaleY": 0.3333333432674408,
-                    "m_frameX": 7,
+                    "m_frameX": 0,
                     "m_frameY": 0
                 }
             }
@@ -653,10 +669,18 @@
         "name": "transparentWalk",
         "path": "asset\\animationClip\\player_transparent_walk.amcp",
         "loop": true,
-        "currentClipName": "normalBlink",
+        "currentClipName": "normalStandBy",
         "pause": false,
         "m_filter": 8,
         "data": {
+            "pos": {
+                "vec.x": -38.971431732177737,
+                "vec.y": -27.7450008392334
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
             "type": 2,
             "lineVec": {
                 "vec.x": 2.9103830456733706e-11,
@@ -727,6 +751,14 @@
         ],
         "m_filter": 64,
         "data": {
+            "pos": {
+                "vec.x": 24.100000381469728,
+                "vec.y": 5.099999904632568
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
             "type": 1,
             "lineVec": {
                 "vec.x": 0.0,
@@ -877,6 +909,14 @@
         ],
         "m_filter": 64,
         "data": {
+            "pos": {
+                "vec.x": 40.349998474121097,
+                "vec.y": 21.126171112060548
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
             "type": 0,
             "lineVec": {
                 "vec.x": 0.0,
@@ -1013,6 +1053,14 @@
         ],
         "m_filter": 64,
         "data": {
+            "pos": {
+                "vec.x": -2.4000000953674318,
+                "vec.y": -11.899999618530274
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
             "type": 1,
             "lineVec": {
                 "vec.x": 0.0,
@@ -1203,7 +1251,7 @@
                 }
             }
         },
-        "active": true,
+        "active": false,
         "comNames": [
             "class Renderer"
         ],
@@ -1213,7 +1261,7 @@
             "ptr_wrapper": {
                 "id": 2147483653,
                 "data": {
-                    "active": true,
+                    "active": false,
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
@@ -1250,7 +1298,7 @@
                 }
             }
         },
-        "active": false,
+        "active": true,
         "comNames": [
             "class Renderer"
         ],
@@ -1260,7 +1308,7 @@
             "ptr_wrapper": {
                 "id": 2147483654,
                 "data": {
-                    "active": false,
+                    "active": true,
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,

@@ -84,14 +84,20 @@ public:
 	bool MouseLeftPress();
 	//マウス右ボタンプレス
 	bool MouseRightPress();
+	//マウス中央ボタンプレス
+	bool MouseMiddlePress();
 	//マウス左ボタントリガー
 	bool MouseLeftTrigger();
 	//マウス右ボタントリガー
 	bool MouseRightTrigger();
+	//マウス中央ボタントリガー
+	bool MouseMiddleTrigger();
 	//マウス右ボタンリリース
 	bool MouseLeftRelease();
 	//マウス右ボタンリリース
 	bool MouseRightRelease();
+	//マウス中央ボタンリリース
+	bool MouseMiddleRelease();
 	//マウスホイール移動距離
 	int MouseWheelDelta();
 
@@ -129,15 +135,20 @@ private:
 	static POINT mousePoint;
 	static bool isMouseLeft;
 	static bool isMouseRight;
+	static bool isMouseMiddle;
 	static bool isMouseDownLeft;
 	static bool isMouseDownRight;
+	static bool isMouseDownMiddle;
 	static bool isMouseUpLeft;
 	static bool isMouseUpRight;
+	static bool isMouseUpMiddle;
 	static int mouseWheelDelta;
 	bool mouseLeftTrigger = false;
 	bool mouseRightTrigger = false;
+	bool mouseMiddleTrigger = false;
 	bool mouseLeftRelease = false;
 	bool mouseRightRelease = false;
+	bool mouseMiddleRelease = false;
 	DWORD controllerConnect = false;
 };
 

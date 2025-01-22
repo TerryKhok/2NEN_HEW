@@ -33,6 +33,14 @@
         ],
         "m_filter": 1,
         "data": {
+            "pos": {
+                "vec.x": 41.87709045410156,
+                "vec.y": -22.045978546142579
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
             "type": 0,
             "lineVec": {
                 "vec.x": 0.0,
@@ -181,6 +189,14 @@
         ],
         "m_filter": 1,
         "data": {
+            "pos": {
+                "vec.x": -0.15501902997493745,
+                "vec.y": 28.790756225585939
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
             "type": 0,
             "lineVec": {
                 "vec.x": 0.0,
@@ -328,6 +344,14 @@
         ],
         "m_filter": 16,
         "data": {
+            "pos": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
             "type": 0,
             "lineVec": {
                 "vec.x": 0.0,
@@ -409,6 +433,14 @@
         ],
         "m_filter": 16,
         "data": {
+            "pos": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
             "type": 0,
             "lineVec": {
                 "vec.x": 0.0,
@@ -493,6 +525,14 @@
         ],
         "m_filter": 1,
         "data": {
+            "pos": {
+                "vec.x": -25.299999237060548,
+                "vec.y": 12.850000381469727
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
             "type": 2,
             "lineVec": {
                 "vec.x": 0.0,
@@ -517,8 +557,8 @@
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
-                        "f.z": 0.0,
-                        "f.w": 0.5
+                        "f.z": 1.0,
+                        "f.w": 0.20000000298023225
                     },
                     "path": "null"
                 }
@@ -559,6 +599,14 @@
         ],
         "m_filter": 64,
         "data": {
+            "pos": {
+                "vec.x": 4.5,
+                "vec.y": 7.449999809265137
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
             "type": 1,
             "lineVec": {
                 "vec.x": 0.0,
@@ -667,8 +715,8 @@
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
-                        "f.z": 0.0,
-                        "f.w": 0.5
+                        "f.z": 1.0,
+                        "f.w": 0.20000000298023225
                     },
                     "path": "null"
                 }
@@ -707,6 +755,14 @@
         ],
         "m_filter": 1,
         "data": {
+            "pos": {
+                "vec.x": 17.61159896850586,
+                "vec.y": 5.007218837738037
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
             "type": 0,
             "lineVec": {
                 "vec.x": 0.0,
@@ -855,6 +911,14 @@
         ],
         "m_filter": 1,
         "data": {
+            "pos": {
+                "vec.x": -11.568400382995606,
+                "vec.y": 5.179882049560547
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
             "type": 0,
             "lineVec": {
                 "vec.x": 0.0,
@@ -1002,6 +1066,14 @@
         ],
         "m_filter": 16,
         "data": {
+            "pos": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
             "type": 0,
             "lineVec": {
                 "vec.x": 0.0,
@@ -1084,6 +1156,14 @@
         ],
         "m_filter": 1,
         "data": {
+            "pos": {
+                "vec.x": -0.15502090752124787,
+                "vec.y": 0.0
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
             "type": 2,
             "lineVec": {
                 "vec.x": 0.0,
@@ -1126,7 +1206,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": 36.0
@@ -1153,7 +1233,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": 36.0
@@ -1180,7 +1260,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": -36.0
@@ -1207,7 +1287,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": -36.0
@@ -1342,7 +1422,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 2,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": 36.0
@@ -1369,7 +1449,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 2,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": 36.0
@@ -1396,7 +1476,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 2,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": -36.0
@@ -1423,7 +1503,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 2,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": -36.0
@@ -1709,10 +1789,18 @@
         ],
         "m_filter": 1,
         "data": {
+            "pos": {
+                "vec.x": -0.1550263613462448,
+                "vec.y": -33.500221252441409
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": -9.714045745568e-7
+            },
             "type": 2,
             "lineVec": {
                 "vec.x": -1.8801863177486667e-7,
-                "vec.y": 0.0000037551587865891635
+                "vec.y": 0.000003755159013962839
             },
             "angleVec": 7.521146017097635e-8,
             "gravity": 1.0,
@@ -1857,6 +1945,14 @@
         ],
         "m_filter": 1,
         "data": {
+            "pos": {
+                "vec.x": -40.55609893798828,
+                "vec.y": 14.737493515014649
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
             "type": 0,
             "lineVec": {
                 "vec.x": 0.0,
@@ -2144,6 +2240,14 @@
         "pause": false,
         "m_filter": 8,
         "data": {
+            "pos": {
+                "vec.x": -41.0069580078125,
+                "vec.y": 2.0533905029296877
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
             "type": 2,
             "lineVec": {
                 "vec.x": 0.0,
@@ -2241,6 +2345,7 @@
                     "vec.y": 0.0
                 }
             }
-        }
+        },
+        "reverse": false
     }
 }

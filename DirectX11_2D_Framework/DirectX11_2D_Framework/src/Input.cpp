@@ -2,10 +2,13 @@
 POINT Input::mousePoint = {};
 bool Input::isMouseLeft = false;
 bool Input::isMouseRight = false;
+bool Input::isMouseMiddle = false;
 bool Input::isMouseDownLeft = false;
 bool Input::isMouseDownRight = false;
+bool Input::isMouseDownMiddle = false;
 bool Input::isMouseUpLeft = false;
 bool Input::isMouseUpRight = false;
+bool Input::isMouseUpMiddle = false;
 int Input::mouseWheelDelta = 0;
 
 //InputState::INPUT_TYPE InputState::iState;
@@ -76,13 +79,17 @@ void Input::Update()
 	//マウス情報更新
 	mouseLeftTrigger = isMouseDownLeft;
 	mouseRightTrigger = isMouseDownRight;
+	mouseMiddleTrigger = isMouseDownMiddle;
 	mouseLeftRelease = isMouseUpLeft;
 	mouseRightRelease = isMouseUpRight;
+	mouseMiddleRelease = isMouseUpMiddle;
 
 	isMouseDownLeft = false;
 	isMouseDownRight = false;
+	isMouseDownMiddle = false;
 	isMouseUpLeft = false;
 	isMouseUpRight = false;
+	isMouseUpMiddle = false;
 
 	//ゼロに近づける
 	mouseWheelDelta -= (mouseWheelDelta > 0) * 8 - (mouseWheelDelta < 0) * 8;
@@ -117,6 +124,11 @@ bool Input::MouseRightPress()
 	return isMouseRight;
 }
 
+bool Input::MouseMiddlePress()
+{
+	return isMouseMiddle;
+}
+
 bool Input::MouseLeftTrigger()
 {
 	return mouseLeftTrigger;
@@ -127,6 +139,11 @@ bool Input::MouseRightTrigger()
 	return mouseRightTrigger;
 }
 
+bool Input::MouseMiddleTrigger()
+{
+	return mouseMiddleTrigger;
+}
+
 bool Input::MouseLeftRelease()
 {
 	return mouseLeftRelease;
@@ -135,6 +152,11 @@ bool Input::MouseLeftRelease()
 bool Input::MouseRightRelease()
 {
 	return mouseRightRelease;
+}
+
+bool Input::MouseMiddleRelease()
+{
+	return mouseMiddleRelease;
 }
 
 int Input::MouseWheelDelta()
