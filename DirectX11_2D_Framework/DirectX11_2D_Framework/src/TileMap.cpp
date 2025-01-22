@@ -103,6 +103,18 @@ void TileMap::DrawImGui(ImGuiApp::HandleUI& _handle)
 				selectTexPath = erasePath;
 			}
 		}
+		ImGui::SameLine();
+		if (ImGui::Button("Load##texPath"))
+		{
+			for (auto& tex : m_node->textureList)
+			{
+				auto iter = workTextures.find(tex.path);
+				if (iter == workTextures.end())
+				{
+					workTextures.emplace(tex.path, tex.texture);
+				}
+			}
+		}
 
 		ImGui::SeparatorText("Tile");
 
@@ -180,7 +192,6 @@ void TileMap::DrawImGui(ImGuiApp::HandleUI& _handle)
 			currentIndex[0] = indexX;
 			currentIndex[1] = indexY;
 		}
-
 		if (Input::Get().MouseLeftPress())
 		{
 			int indexX = (int)std::round((worldPos.x - m_this->transform.position.x) / tileSize.x);
@@ -200,6 +211,31 @@ void TileMap::DrawImGui(ImGuiApp::HandleUI& _handle)
 
 					currentIndex[0] = indexX;
 					currentIndex[1] = indexY;
+				}
+			}
+		}
+
+		if (Input::Get().MouseMiddleTrigger())
+		{
+			int indexX = (int)std::round((worldPos.x - m_this->transform.position.x) / tileSize.x);
+			int indexY = (int)std::round((worldPos.y - m_this->transform.position.y) / tileSize.y);
+
+			Vector2 pos = { indexX * DEFAULT_OBJECT_SIZE,indexY * DEFAULT_OBJECT_SIZE };
+
+			auto& tipList = m_node->tileTips;
+			auto iter = std::find(tipList.begin(), tipList.end(), pos);
+			if (iter != tipList.end())
+			{
+				auto& data = m_node->textureList[iter->texIndex];
+				auto iter = workTextures.find(data.path);
+				if (iter == workTextures.end())
+				{
+					workTextures.emplace(data.path, data.texture);
+					selectTexPath = data.path;
+				}
+				else
+				{
+					selectTexPath = iter->first;
 				}
 			}
 		}

@@ -1349,6 +1349,15 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		Input::isMouseUpRight = true;
 		break;
 
+	case WM_MBUTTONDOWN:
+		Input::isMouseMiddle = true;
+		Input::isMouseDownMiddle = true;
+		break;
+	case WM_MBUTTONUP:
+		Input::isMouseMiddle = false;
+		Input::isMouseUpMiddle = true;
+		break;
+
 	case WM_MOUSEWHEEL:
 		Input::mouseWheelDelta = GET_WHEEL_DELTA_WPARAM(wParam);
 		break;

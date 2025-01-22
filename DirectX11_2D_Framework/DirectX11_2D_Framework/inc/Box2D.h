@@ -164,6 +164,12 @@ namespace cereal
 	}
 
 	template<class Archive>
+	void serialize(Archive& ar, b2Rot& rot)
+	{
+		ar(CEREAL_NVP(rot.c), CEREAL_NVP(rot.s));
+	}
+
+	template<class Archive>
 	void serialize(Archive& ar, b2Polygon& poly)
 	{
 		ar(CEREAL_NVP(poly.centroid), CEREAL_NVP(poly.count), 

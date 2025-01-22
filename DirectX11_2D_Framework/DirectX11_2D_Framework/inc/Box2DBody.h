@@ -14,12 +14,14 @@ class Box2DBody : public Component
 
 	struct BodySaveData
 	{
+		b2Vec2 pos;
+		b2Rot rot;
 		b2BodyType type;
 		b2Vec2 lineVec;
 		float angleVec;
 		float gravity;
-		float autoMass;
 		float mass;
+		float autoMass;
 		bool bullet;
 		bool fixRot;
 		bool awake;
@@ -28,9 +30,8 @@ class Box2DBody : public Component
 		template<class Archive>
 		void serialize(Archive& ar)
 		{
-			ar(CEREAL_NVP(type), CEREAL_NVP(lineVec), CEREAL_NVP(angleVec), CEREAL_NVP(gravity),
-				CEREAL_NVP(mass),CEREAL_NVP(bullet), CEREAL_NVP(fixRot), CEREAL_NVP(awake));
-			CEREAL_OPTIONAL_NVP(ar, autoMass);
+			ar(CEREAL_NVP(pos), CEREAL_NVP(rot),CEREAL_NVP(type), CEREAL_NVP(lineVec), CEREAL_NVP(angleVec), 
+				CEREAL_NVP(gravity),CEREAL_NVP(mass), CEREAL_NVP(autoMass),CEREAL_NVP(bullet), CEREAL_NVP(fixRot), CEREAL_NVP(awake));
 		}
 
 		friend class cereal::access;

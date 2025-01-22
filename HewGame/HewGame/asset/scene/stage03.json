@@ -35,6 +35,14 @@
         ],
         "m_filter": 64,
         "data": {
+            "pos": {
+                "vec.x": 19.200000762939454,
+                "vec.y": -2.8499999046325685
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
             "type": 1,
             "lineVec": {
                 "vec.x": 0.0,
@@ -182,6 +190,14 @@
         ],
         "m_filter": 1,
         "data": {
+            "pos": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
             "type": 0,
             "lineVec": {
                 "vec.x": 0.0,
@@ -218,7 +234,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -43.0,
                 "vec.y": 8.0
@@ -245,7 +261,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 10.0,
                 "vec.y": 8.0
@@ -272,7 +288,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 10.0,
                 "vec.y": 25.0
@@ -299,7 +315,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 42.0,
                 "vec.y": 25.0
@@ -326,7 +342,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 42.0,
                 "vec.y": 6.5
@@ -353,7 +369,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 32.0,
                 "vec.y": 6.5
@@ -380,7 +396,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 32.0,
                 "vec.y": -16.0
@@ -407,7 +423,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 7.0,
                 "vec.y": -16.0
@@ -434,7 +450,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 7.0,
                 "vec.y": -4.5
@@ -461,7 +477,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 0.0,
                 "vec.y": -4.5
@@ -488,7 +504,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 0.0,
                 "vec.y": -22.0
@@ -515,7 +531,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -27.0,
                 "vec.y": -22.0
@@ -542,7 +558,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -27.0,
                 "vec.y": -5.0
@@ -569,7 +585,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -43.0,
                 "vec.y": -5.0
@@ -624,6 +640,14 @@
         ],
         "m_filter": 64,
         "data": {
+            "pos": {
+                "vec.x": -13.649999618530274,
+                "vec.y": -6.900000095367432
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
             "type": 1,
             "lineVec": {
                 "vec.x": 0.0,
@@ -911,6 +935,14 @@
         "pause": false,
         "m_filter": 8,
         "data": {
+            "pos": {
+                "vec.x": -39.56648254394531,
+                "vec.y": 2.598860263824463
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
             "type": 2,
             "lineVec": {
                 "vec.x": 0.0,
