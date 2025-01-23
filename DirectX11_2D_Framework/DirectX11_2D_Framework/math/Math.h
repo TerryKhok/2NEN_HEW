@@ -8,6 +8,7 @@ public:
 	static constexpr float hPI = 3.14159265358979323846f / 2.0f;
 	//‰~ü—¦
 	static constexpr float PI = 3.14159265358979323846f;
+	static constexpr float M_PI = 3.14159265358979323846f;
 	//‰~ü—¦‚Ì‚Qæ
 	static constexpr float PI2 = PI * 2.0f;
 
