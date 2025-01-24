@@ -197,9 +197,6 @@
     <ClInclude Include="inc\Serialize.h">
       <Filter>Inc</Filter>
     </ClInclude>
-    <ClInclude Include="inc\sound.h">
-      <Filter>Inc</Filter>
-    </ClInclude>
     <ClInclude Include="inc\Animator.h">
       <Filter>component</Filter>
     </ClInclude>
@@ -223,6 +220,9 @@
     </ClInclude>
     <ClInclude Include="inc\TileMap.h">
       <Filter>component</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\sound.h">
+      <Filter>Inc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
