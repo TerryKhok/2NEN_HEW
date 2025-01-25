@@ -312,9 +312,9 @@ private:
 
 		bool rightHit = false;
 		rayStart = m_this->transform.position;
-		rayStart += {-50.0f, 5.0f};
+		rayStart += {-40.0f, 10.0f};
 		rayEnd = rayStart;
-		rayEnd.x += 50.0f;
+		rayEnd.x += 40.0f;
 		if (Box2D::WorldManager::RayCastShape(rayStart, rayEnd,rb, F_MAPRAY)) {
 			rightHit = true;
 		}
@@ -336,7 +336,7 @@ private:
 			if (!rightHit)
 				rb->SetVelocityX((float)move_count);
 			else
-				rb->SetVelocityX((float)move_count / rb->GetGravityScale());
+				rb->SetVelocityX(0.0f);
 		}
 		else if (move_count > 0)
 		{
@@ -357,9 +357,9 @@ private:
 
 		bool leftHit = false;
 		rayStart = m_this->transform.position;
-		rayStart += { 50.0f, 5.0f};
+		rayStart += { 40.0f, 10.0f};
 		rayEnd = rayStart;
-		rayEnd.x -= 50.0f;
+		rayEnd.x -= 40.0f;
 		if (Box2D::WorldManager::RayCastShape(rayStart, rayEnd, rb, F_MAPRAY)) {
 			leftHit = true;
 		}
@@ -379,7 +379,7 @@ private:
 			if (!leftHit)
 				rb->SetVelocityX((float)move_count);
 			else
-				rb->SetVelocityX((float)move_count / rb->GetGravityScale());
+				rb->SetVelocityX(0.0f);
 		}
 		else if (move_count < 0)
 		{

@@ -256,8 +256,8 @@
                 "data": {
                     "m_scaleX": 0.125,
                     "m_scaleY": 0.3333333432674408,
-                    "m_frameX": 3,
-                    "m_frameY": 2
+                    "m_frameX": 0,
+                    "m_frameY": 0
                 }
             }
         },
@@ -524,7 +524,7 @@
             "class Box2DBody",
             "class Renderer"
         ],
-        "m_filter": 512,
+        "m_filter": 32,
         "data": {
             "pos": {
                 "vec.x": 0.0,
@@ -1590,8 +1590,8 @@
         "name": "LowGravity",
         "transform": {
             "position": {
-                "x": 567.0763549804688,
-                "y": 242.96417236328126,
+                "x": 597.0763549804688,
+                "y": 262.96417236328127,
                 "z": 0.5
             },
             "scale": {
@@ -1745,7 +1745,7 @@
             }
         },
         "confirmed": false,
-        "selfIndex": 3
+        "selfIndex": 0
     },
     "value11": {
         "name": "LowGravity_1",
@@ -1906,7 +1906,7 @@
             }
         },
         "confirmed": false,
-        "selfIndex": 3
+        "selfIndex": 1
     },
     "value12": {
         "name": "FloatWindow_1",
@@ -2067,7 +2067,7 @@
             }
         },
         "confirmed": false,
-        "selfIndex": -1
+        "selfIndex": 2
     },
     "value13": {
         "name": "FloatWindow_1_1",
@@ -2228,7 +2228,7 @@
             }
         },
         "confirmed": false,
-        "selfIndex": -1
+        "selfIndex": 3
     },
     "value14": {
         "name": "subWindowManager",
@@ -2359,8 +2359,8 @@
         "name": "handObject",
         "transform": {
             "position": {
-                "x": -557.526611328125,
-                "y": 175.24639892578126,
+                "x": 647.0763549804688,
+                "y": 212.96417236328126,
                 "z": 0.5
             },
             "scale": {

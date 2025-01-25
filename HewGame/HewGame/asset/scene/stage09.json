@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 19,
+    "objectNum": 20,
     "value0": {
         "name": "Goal",
         "transform": {
@@ -216,7 +216,7 @@
         }
     },
     "value2": {
-        "name": "Player_1_1",
+        "name": "Player",
         "transform": {
             "position": {
                 "x": -398.2325439453125,
@@ -2492,5 +2492,79 @@
         },
         "confirmed": false,
         "selfIndex": 3
+    },
+    "value19": {
+        "name": "teki",
+        "transform": {
+            "position": {
+                "x": 162.0,
+                "y": 138.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody",
+            "class Enemy_type1"
+        ],
+        "m_filter": 1,
+        "data": {
+            "pos": {
+                "vec.x": 16.200000762939454,
+                "vec.y": 13.800000190734864
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
+            "type": 1,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 0.0,
+            "mass": 0.0,
+            "autoMass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": true
+        },
+        "types": [
+            0
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "circle": {
+            "circle.center": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "circle.radius": 2.5
+        },
+        "searchAngle": 10.0,
+        "searchDis": 20.0,
+        "searchRenge": 300.0,
+        "speed": 3.0
     }
 }
