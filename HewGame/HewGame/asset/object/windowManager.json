@@ -1,0 +1,34 @@
+{
+    "index": 111,
+    "*selectedObject": {
+        "name": "subWindowManager",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class MoveSubWindowManager"
+        ],
+        "selectIndex": 0
+    }
+}

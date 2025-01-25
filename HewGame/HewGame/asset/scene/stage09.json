@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 15,
+    "objectNum": 19,
     "value0": {
         "name": "Goal",
         "transform": {
@@ -95,10 +95,10 @@
             "angleVec": 0.0,
             "gravity": 0.0,
             "mass": 0.0,
+            "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false,
-            "autoMass": 1.0
+            "awake": false
         },
         "types": [
             4,
@@ -113,7 +113,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 2,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": -36.0
@@ -140,7 +140,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 2,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": 36.0
@@ -167,7 +167,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 2,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": 36.0
@@ -194,7 +194,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 2,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": -36.0
@@ -216,16 +216,16 @@
         }
     },
     "value2": {
-        "name": "PermeationWindow",
+        "name": "Player_1_1",
         "transform": {
             "position": {
-                "x": -304.5,
-                "y": -41.5,
+                "x": -398.2325439453125,
+                "y": -128.18478393554688,
                 "z": 0.5
             },
             "scale": {
-                "x": 15.0,
-                "y": 15.0,
+                "x": 7.0,
+                "y": 14.0,
                 "z": 1.0
             },
             "angle": {
@@ -242,136 +242,192 @@
         },
         "active": true,
         "comNames": [
-            "class Box2DBody",
             "class Renderer",
-            "class SubWindow",
-            "class Permeation"
+            "class Animator",
+            "class Box2DBody",
+            "class MovePlayer"
         ],
-        "m_filter": 1024,
+        "m_layer": 2,
+        "m_node": {
+            "polymorphic_id": 2147483649,
+            "polymorphic_name": "UVRenderNode",
+            "ptr_wrapper": {
+                "id": 2147483650,
+                "data": {
+                    "m_scaleX": 0.125,
+                    "m_scaleY": 0.3333333432674408,
+                    "m_frameX": 0,
+                    "m_frameY": 0
+                }
+            }
+        },
+        "clipSize": 40,
+        "name": "bounceBlink",
+        "path": "asset\\animationClip\\player_bounce_blink.amcp",
+        "loop": true,
+        "name": "bounceDamage",
+        "path": "asset\\animationClip\\player_bounce_damage.amcp",
+        "loop": false,
+        "name": "bounceFloat",
+        "path": "asset\\animationClip\\player_bounce_float.amcp",
+        "loop": true,
+        "name": "bounceGoal",
+        "path": "asset\\animationClip\\player_bounce_goal.amcp",
+        "loop": true,
+        "name": "bounceJump",
+        "path": "asset\\animationClip\\player_bounce_jump.amcp",
+        "loop": false,
+        "name": "bounceLanding",
+        "path": "asset\\animationClip\\player_bounce_landing.amcp",
+        "loop": false,
+        "name": "bounceStandBy",
+        "path": "asset\\animationClip\\player_bounce_standby.amcp",
+        "loop": true,
+        "name": "bounceWalk",
+        "path": "asset\\animationClip\\player_bounce_walk.amcp",
+        "loop": true,
+        "name": "floatBlink",
+        "path": "asset\\animationClip\\player_float_blink.amcp",
+        "loop": true,
+        "name": "floatDamage",
+        "path": "asset\\animationClip\\player_float_damage.amcp",
+        "loop": false,
+        "name": "floatFloat",
+        "path": "asset\\animationClip\\player_float_float.amcp",
+        "loop": true,
+        "name": "floatGoal",
+        "path": "asset\\animationClip\\player_float_goal.amcp",
+        "loop": true,
+        "name": "floatJump",
+        "path": "asset\\animationClip\\player_float_jump.amcp",
+        "loop": false,
+        "name": "floatLanding",
+        "path": "asset\\animationClip\\player_float_landing.amcp",
+        "loop": false,
+        "name": "floatStandBy",
+        "path": "asset\\animationClip\\player_float_standby.amcp",
+        "loop": true,
+        "name": "floatWalk",
+        "path": "asset\\animationClip\\player_float_walk.amcp",
+        "loop": true,
+        "name": "lowgravityBlink",
+        "path": "asset\\animationClip\\player_lowgravity_blink.amcp",
+        "loop": true,
+        "name": "lowgravityDamage",
+        "path": "asset\\animationClip\\player_lowgravity_damage.amcp",
+        "loop": false,
+        "name": "lowgravityFloat",
+        "path": "asset\\animationClip\\player_lowgravity_float.amcp",
+        "loop": true,
+        "name": "lowgravityGoal",
+        "path": "asset\\animationClip\\player_lowgravity_goal.amcp",
+        "loop": true,
+        "name": "lowgravityJump",
+        "path": "asset\\animationClip\\player_lowgravity_jump.amcp",
+        "loop": false,
+        "name": "lowgravityLanding",
+        "path": "asset\\animationClip\\player_lowgravity_landing.amcp",
+        "loop": false,
+        "name": "lowgravityStandBy",
+        "path": "asset\\animationClip\\player_lowgravity_standby.amcp",
+        "loop": true,
+        "name": "lowgravityWalk",
+        "path": "asset\\animationClip\\player_lowgravity_walk.amcp",
+        "loop": true,
+        "name": "normalBlink",
+        "path": "asset\\animationClip\\player_normal_blink.amcp",
+        "loop": true,
+        "name": "normalDamage",
+        "path": "asset\\animationClip\\player_normal_damage.amcp",
+        "loop": false,
+        "name": "normalFloat",
+        "path": "asset\\animationClip\\player_normal_float.amcp",
+        "loop": true,
+        "name": "normalGoal",
+        "path": "asset\\animationClip\\player_normal_goal.amcp",
+        "loop": true,
+        "name": "normalJump",
+        "path": "asset\\animationClip\\player_normal_jump.amcp",
+        "loop": false,
+        "name": "normalLanding",
+        "path": "asset\\animationClip\\player_normal_landing.amcp",
+        "loop": false,
+        "name": "normalStandBy",
+        "path": "asset\\animationClip\\player_normal_standby.amcp",
+        "loop": true,
+        "name": "normalWalk",
+        "path": "asset\\animationClip\\player_normal_walk.amcp",
+        "loop": true,
+        "name": "transparentBlink",
+        "path": "asset\\animationClip\\player_transparent_blink.amcp",
+        "loop": true,
+        "name": "transparentDamage",
+        "path": "asset\\animationClip\\player_transparent_damage.amcp",
+        "loop": false,
+        "name": "transparentFloat",
+        "path": "asset\\animationClip\\player_transparent_float.amcp",
+        "loop": true,
+        "name": "transparentGoal",
+        "path": "asset\\animationClip\\player_transparent_goal.amcp",
+        "loop": true,
+        "name": "transparentJump",
+        "path": "asset\\animationClip\\player_transparent_jump.amcp",
+        "loop": false,
+        "name": "transparentLanding",
+        "path": "asset\\animationClip\\player_transparent_landing.amcp",
+        "loop": false,
+        "name": "transparentStandBy",
+        "path": "asset\\animationClip\\player_transparent_standby.amcp",
+        "loop": true,
+        "name": "transparentWalk",
+        "path": "asset\\animationClip\\player_transparent_walk.amcp",
+        "loop": true,
+        "currentClipName": "normalStandBy",
+        "pause": false,
+        "m_filter": 8,
         "data": {
             "pos": {
-                "vec.x": -30.450000762939454,
-                "vec.y": -4.150000095367432
+                "vec.x": -39.8232536315918,
+                "vec.y": -12.81847858428955
             },
             "rot": {
                 "rot.c": 1.0,
                 "rot.s": 0.0
             },
-            "type": 1,
+            "type": 2,
             "lineVec": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
+                "vec.x": 4.3655745685100558e-11,
+                "vec.y": -1.0
             },
             "angleVec": 0.0,
-            "gravity": 1.0,
-            "mass": 0.0,
+            "gravity": 10.0,
+            "mass": 25.0,
+            "autoMass": 1.0,
             "bullet": true,
-            "fixRot": false,
-            "awake": false,
-            "autoMass": 1.0
+            "fixRot": true,
+            "awake": true
         },
         "types": [
-            3
+            1
         ],
         "shapeData": {
-            "sensor": true,
+            "sensor": false,
             "friction": 0.6000000238418579,
             "density": 1.0,
             "restitution": 0.0
         },
-        "polygon": {
-            "poly.centroid": {
+        "capsule": {
+            "cap.center1": {
                 "vec.x": 0.0,
-                "vec.y": 0.0
+                "vec.y": -4.300000190734863
             },
-            "poly.count": 4,
-            "poly.normals": {
-                "value0": {
-                    "vec.x": 0.0,
-                    "vec.y": -1.0
-                },
-                "value1": {
-                    "vec.x": 1.0,
-                    "vec.y": 0.0
-                },
-                "value2": {
-                    "vec.x": 0.0,
-                    "vec.y": 1.0
-                },
-                "value3": {
-                    "vec.x": -1.0,
-                    "vec.y": 0.0
-                },
-                "value4": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value5": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value6": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value7": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                }
+            "cap.center2": {
+                "vec.x": 0.0,
+                "vec.y": 1.7000000476837159
             },
-            "poly.radius": 0.0,
-            "poly.vertices": {
-                "value0": {
-                    "vec.x": -7.5,
-                    "vec.y": -7.5
-                },
-                "value1": {
-                    "vec.x": 7.5,
-                    "vec.y": -7.5
-                },
-                "value2": {
-                    "vec.x": 7.5,
-                    "vec.y": 7.5
-                },
-                "value3": {
-                    "vec.x": -7.5,
-                    "vec.y": 7.5
-                },
-                "value4": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value5": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value6": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value7": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                }
-            }
+            "cap.radius": 2.5
         },
-        "m_layer": 1,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483650,
-                "data": {
-                    "active": true,
-                    "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
-                        "f.z": 1.0,
-                        "f.w": 0.20000000298023225
-                    },
-                    "path": "null"
-                }
-            }
-        }
+        "reverse": true
     },
     "value3": {
         "name": "StaticBox_Ground",
@@ -403,7 +459,7 @@
             "class Box2DBody",
             "class Renderer"
         ],
-        "m_filter": 512,
+        "m_filter": 32,
         "data": {
             "pos": {
                 "vec.x": 0.0,
@@ -421,10 +477,10 @@
             "angleVec": 0.0,
             "gravity": 1.0,
             "mass": 0.0,
+            "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false,
-            "autoMass": 1.0
+            "awake": false
         },
         "types": [
             3
@@ -577,10 +633,10 @@
             "angleVec": 0.0,
             "gravity": 1.0,
             "mass": 0.0,
+            "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false,
-            "autoMass": 1.0
+            "awake": false
         },
         "types": [
             3
@@ -715,7 +771,7 @@
             "class Box2DBody",
             "class Renderer"
         ],
-        "m_filter": 512,
+        "m_filter": 32,
         "data": {
             "pos": {
                 "vec.x": 13.5,
@@ -733,10 +789,10 @@
             "angleVec": 0.0,
             "gravity": 1.0,
             "mass": 0.0,
+            "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false,
-            "autoMass": 1.0
+            "awake": false
         },
         "types": [
             3
@@ -871,7 +927,7 @@
             "class Box2DBody",
             "class Renderer"
         ],
-        "m_filter": 512,
+        "m_filter": 32,
         "data": {
             "pos": {
                 "vec.x": 1.0,
@@ -889,10 +945,10 @@
             "angleVec": 0.0,
             "gravity": 1.0,
             "mass": 0.0,
+            "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false,
-            "autoMass": 1.0
+            "awake": false
         },
         "types": [
             3
@@ -1027,7 +1083,7 @@
             "class Box2DBody",
             "class Renderer"
         ],
-        "m_filter": 512,
+        "m_filter": 32,
         "data": {
             "pos": {
                 "vec.x": 40.54999923706055,
@@ -1045,10 +1101,10 @@
             "angleVec": 0.0,
             "gravity": -2.0,
             "mass": 0.0,
+            "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false,
-            "autoMass": 1.0
+            "awake": false
         },
         "types": [
             3
@@ -1201,10 +1257,10 @@
             "angleVec": 0.0,
             "gravity": 1.0,
             "mass": 0.0,
+            "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false,
-            "autoMass": 1.0
+            "awake": false
         },
         "types": [
             3
@@ -1339,7 +1395,7 @@
             "class Box2DBody",
             "class Renderer"
         ],
-        "m_filter": 512,
+        "m_filter": 32,
         "data": {
             "pos": {
                 "vec.x": 6.0,
@@ -1357,10 +1413,10 @@
             "angleVec": 0.0,
             "gravity": 1.0,
             "mass": 0.0,
+            "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false,
-            "autoMass": 1.0
+            "awake": false
         },
         "types": [
             3
@@ -1495,7 +1551,7 @@
             "class Box2DBody",
             "class Renderer"
         ],
-        "m_filter": 512,
+        "m_filter": 32,
         "data": {
             "pos": {
                 "vec.x": -4.0,
@@ -1513,10 +1569,10 @@
             "angleVec": 0.0,
             "gravity": 1.0,
             "mass": 0.0,
+            "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false,
-            "autoMass": 1.0
+            "awake": false
         },
         "types": [
             3
@@ -1622,11 +1678,11 @@
         }
     },
     "value11": {
-        "name": "AntiGravityWindow",
+        "name": "FloatWindow_1",
         "transform": {
             "position": {
-                "x": 305.5,
-                "y": -172.0,
+                "x": 576.3563232421875,
+                "y": 248.51722717285157,
                 "z": 0.5
             },
             "scale": {
@@ -1649,15 +1705,16 @@
         "active": true,
         "comNames": [
             "class Box2DBody",
-            "class Renderer",
+            "class SubWindow",
             "class AntiGravity",
-            "class SubWindow"
+            "class Renderer",
+            "class MoveSubWindow"
         ],
-        "m_filter": 1024,
+        "m_filter": 64,
         "data": {
             "pos": {
-                "vec.x": 30.549999237060548,
-                "vec.y": -17.200000762939454
+                "vec.x": 56.1356315612793,
+                "vec.y": 24.851722717285158
             },
             "rot": {
                 "rot.c": 1.0,
@@ -1671,10 +1728,10 @@
             "angleVec": 0.0,
             "gravity": 1.0,
             "mass": 0.0,
+            "autoMass": 1.0,
             "bullet": true,
             "fixRot": false,
-            "awake": false,
-            "autoMass": 1.0
+            "awake": false
         },
         "types": [
             3
@@ -1763,30 +1820,35 @@
         },
         "m_layer": 1,
         "m_node": {
-            "polymorphic_id": 2147483649,
-            "polymorphic_name": "UVRenderNode",
+            "polymorphic_id": 1073741824,
             "ptr_wrapper": {
                 "id": 2147483659,
                 "data": {
-                    "m_scaleX": 0.5,
-                    "m_scaleY": 0.5,
-                    "m_frameX": 0,
-                    "m_frameY": 0
+                    "active": true,
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 0.20000000298023225
+                    },
+                    "path": "asset\\sign\\sign_float.png"
                 }
             }
-        }
+        },
+        "confirmed": false,
+        "selfIndex": 0
     },
     "value12": {
-        "name": "AntiGravityWindow2",
+        "name": "subWindowManager",
         "transform": {
             "position": {
-                "x": 208.0,
-                "y": 197.0,
-                "z": 0.5
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "scale": {
-                "x": 15.0,
-                "y": 15.0,
+                "x": 5.0,
+                "y": 5.0,
                 "z": 1.0
             },
             "angle": {
@@ -1803,120 +1865,40 @@
         },
         "active": true,
         "comNames": [
-            "class Box2DBody",
-            "class Renderer",
-            "class AntiGravity",
-            "class SubWindow"
+            "class MoveSubWindowManager"
         ],
-        "m_filter": 1024,
-        "data": {
-            "pos": {
-                "vec.x": 20.799999237060548,
-                "vec.y": 19.700000762939454
+        "selectIndex": 0
+    },
+    "value13": {
+        "name": "playObject",
+        "transform": {
+            "position": {
+                "x": 136.0777130126953,
+                "y": 93.53885650634766,
+                "z": 0.0
             },
-            "rot": {
-                "rot.c": 1.0,
-                "rot.s": 0.0
+            "scale": {
+                "x": 3.0,
+                "y": 3.0,
+                "z": 1.0
             },
-            "type": 1,
-            "lineVec": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
-            },
-            "angleVec": 0.0,
-            "gravity": 1.0,
-            "mass": 0.0,
-            "bullet": true,
-            "fixRot": false,
-            "awake": false,
-            "autoMass": 1.0
-        },
-        "types": [
-            3
-        ],
-        "shapeData": {
-            "sensor": true,
-            "friction": 0.6000000238418579,
-            "density": 1.0,
-            "restitution": 0.0
-        },
-        "polygon": {
-            "poly.centroid": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
-            },
-            "poly.count": 4,
-            "poly.normals": {
-                "value0": {
-                    "vec.x": 0.0,
-                    "vec.y": -1.0
+            "angle": {
+                "x": {
+                    "radians": 0.0
                 },
-                "value1": {
-                    "vec.x": 1.0,
-                    "vec.y": 0.0
+                "y": {
+                    "radians": 0.0
                 },
-                "value2": {
-                    "vec.x": 0.0,
-                    "vec.y": 1.0
-                },
-                "value3": {
-                    "vec.x": -1.0,
-                    "vec.y": 0.0
-                },
-                "value4": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value5": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value6": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value7": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                }
-            },
-            "poly.radius": 0.0,
-            "poly.vertices": {
-                "value0": {
-                    "vec.x": -7.5,
-                    "vec.y": -7.5
-                },
-                "value1": {
-                    "vec.x": 7.5,
-                    "vec.y": -7.5
-                },
-                "value2": {
-                    "vec.x": 7.5,
-                    "vec.y": 7.5
-                },
-                "value3": {
-                    "vec.x": -7.5,
-                    "vec.y": 7.5
-                },
-                "value4": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value5": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value6": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value7": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
+                "z": {
+                    "radians": 0.0
                 }
             }
         },
-        "m_layer": 1,
+        "active": true,
+        "comNames": [
+            "class Renderer"
+        ],
+        "m_layer": 4,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -1927,19 +1909,274 @@
                         "f.x": 1.0,
                         "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 0.20000000298023225
+                        "f.w": 1.0
                     },
-                    "path": "null"
+                    "path": "asset\\pic\\arrow_play.png"
                 }
             }
         }
     },
-    "value13": {
-        "name": "LowGravityWindow2",
+    "value14": {
+        "name": "handObject",
         "transform": {
             "position": {
-                "x": -169.5,
-                "y": -226.5,
+                "x": 626.3563232421875,
+                "y": 198.51722717285157,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer"
+        ],
+        "m_layer": 2,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483661,
+                "data": {
+                    "active": true,
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\hand.png"
+                }
+            }
+        }
+    },
+    "value15": {
+        "name": "moveObject",
+        "transform": {
+            "position": {
+                "x": 136.0777130126953,
+                "y": 93.53885650634766,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 3.0,
+                "y": 3.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": false,
+        "comNames": [
+            "class Renderer"
+        ],
+        "m_layer": 4,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483662,
+                "data": {
+                    "active": false,
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\hand_move.png"
+                }
+            }
+        }
+    },
+    "value16": {
+        "name": "LowGravity",
+        "transform": {
+            "position": {
+                "x": -601.4541625976563,
+                "y": 221.64060974121095,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 15.0,
+                "y": 15.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class Box2DBody",
+            "class SubWindow",
+            "class LowGravity",
+            "class MoveSubWindow"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483663,
+                "data": {
+                    "active": true,
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 0.20000000298023225
+                    },
+                    "path": "asset\\sign\\sign_lowgravity.png"
+                }
+            }
+        },
+        "m_filter": 64,
+        "data": {
+            "pos": {
+                "vec.x": -60.145416259765628,
+                "vec.y": 22.164060592651368
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
+            "type": 1,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 0.0,
+            "autoMass": 1.0,
+            "bullet": true,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": true,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "poly.count": 4,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
+                },
+                "value1": {
+                    "vec.x": 1.0,
+                    "vec.y": 0.0
+                },
+                "value2": {
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
+                },
+                "value3": {
+                    "vec.x": -1.0,
+                    "vec.y": 0.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": -7.5,
+                    "vec.y": -7.5
+                },
+                "value1": {
+                    "vec.x": 7.5,
+                    "vec.y": -7.5
+                },
+                "value2": {
+                    "vec.x": 7.5,
+                    "vec.y": 7.5
+                },
+                "value3": {
+                    "vec.x": -7.5,
+                    "vec.y": 7.5
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            }
+        },
+        "confirmed": false,
+        "selfIndex": 1
+    },
+    "value17": {
+        "name": "FloatWindow_1_1",
+        "transform": {
+            "position": {
+                "x": 574.1504516601563,
+                "y": 18.222888946533204,
                 "z": 0.5
             },
             "scale": {
@@ -1962,15 +2199,16 @@
         "active": true,
         "comNames": [
             "class Box2DBody",
-            "class Renderer",
             "class SubWindow",
-            "class LowGravity"
+            "class AntiGravity",
+            "class Renderer",
+            "class MoveSubWindow"
         ],
-        "m_filter": 1024,
+        "m_filter": 64,
         "data": {
             "pos": {
-                "vec.x": -16.950000762939454,
-                "vec.y": -22.649999618530275
+                "vec.x": 57.41504669189453,
+                "vec.y": 1.8222888708114625
             },
             "rot": {
                 "rot.c": 1.0,
@@ -1984,10 +2222,10 @@
             "angleVec": 0.0,
             "gravity": 1.0,
             "mass": 0.0,
-            "bullet": false,
+            "autoMass": 1.0,
+            "bullet": true,
             "fixRot": false,
-            "awake": false,
-            "autoMass": 1.0
+            "awake": false
         },
         "types": [
             3
@@ -2078,7 +2316,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483661,
+                "id": 2147483664,
                 "data": {
                     "active": true,
                     "m_color": {
@@ -2087,22 +2325,24 @@
                         "f.z": 1.0,
                         "f.w": 0.20000000298023225
                     },
-                    "path": "null"
+                    "path": "asset\\sign\\sign_float.png"
                 }
             }
-        }
+        },
+        "confirmed": false,
+        "selfIndex": 2
     },
-    "value14": {
-        "name": "Player",
+    "value18": {
+        "name": "Transparent",
         "transform": {
             "position": {
-                "x": -419.1479797363281,
-                "y": -144.004638671875,
+                "x": -608.0126953125,
+                "y": -3.5765380859375,
                 "z": 0.5
             },
             "scale": {
-                "x": 7.0,
-                "y": 14.0,
+                "x": 15.0,
+                "y": 15.0,
                 "z": 1.0
             },
             "angle": {
@@ -2120,174 +2360,56 @@
         "active": true,
         "comNames": [
             "class Renderer",
-            "class Animator",
             "class Box2DBody",
-            "class MovePlayer"
+            "class Permeation",
+            "class SubWindow",
+            "class MoveSubWindow"
         ],
-        "m_layer": 2,
+        "m_layer": 1,
         "m_node": {
-            "polymorphic_id": 1,
+            "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483662,
+                "id": 2147483665,
                 "data": {
-                    "m_scaleX": 0.125,
-                    "m_scaleY": 0.3333333432674408,
-                    "m_frameX": 0,
-                    "m_frameY": 0
+                    "active": true,
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 0.20000000298023225
+                    },
+                    "path": "asset\\sign\\sign_transparent.png"
                 }
             }
         },
-        "clipSize": 40,
-        "name": "bounceBlink",
-        "path": "asset\\animationClip\\player_bounce_blink.amcp",
-        "loop": true,
-        "name": "bounceDamage",
-        "path": "asset\\animationClip\\player_bounce_damage.amcp",
-        "loop": false,
-        "name": "bounceFloat",
-        "path": "asset\\animationClip\\player_bounce_float.amcp",
-        "loop": true,
-        "name": "bounceGoal",
-        "path": "asset\\animationClip\\player_bounce_goal.amcp",
-        "loop": true,
-        "name": "bounceJump",
-        "path": "asset\\animationClip\\player_bounce_jump.amcp",
-        "loop": false,
-        "name": "bounceLanding",
-        "path": "asset\\animationClip\\player_bounce_landing.amcp",
-        "loop": false,
-        "name": "bounceStandBy",
-        "path": "asset\\animationClip\\player_bounce_standby.amcp",
-        "loop": true,
-        "name": "bounceWalk",
-        "path": "asset\\animationClip\\player_bounce_walk.amcp",
-        "loop": true,
-        "name": "floatBlink",
-        "path": "asset\\animationClip\\player_float_blink.amcp",
-        "loop": true,
-        "name": "floatDamage",
-        "path": "asset\\animationClip\\player_float_damage.amcp",
-        "loop": false,
-        "name": "floatFloat",
-        "path": "asset\\animationClip\\player_float_float.amcp",
-        "loop": true,
-        "name": "floatGoal",
-        "path": "asset\\animationClip\\player_float_goal.amcp",
-        "loop": true,
-        "name": "floatJump",
-        "path": "asset\\animationClip\\player_float_jump.amcp",
-        "loop": false,
-        "name": "floatLanding",
-        "path": "asset\\animationClip\\player_float_landing.amcp",
-        "loop": false,
-        "name": "floatStandBy",
-        "path": "asset\\animationClip\\player_float_standby.amcp",
-        "loop": true,
-        "name": "floatWalk",
-        "path": "asset\\animationClip\\player_float_walk.amcp",
-        "loop": true,
-        "name": "lowgravityBlink",
-        "path": "asset\\animationClip\\player_lowgravity_blink.amcp",
-        "loop": true,
-        "name": "lowgravityDamage",
-        "path": "asset\\animationClip\\player_lowgravity_damage.amcp",
-        "loop": false,
-        "name": "lowgravityFloat",
-        "path": "asset\\animationClip\\player_lowgravity_float.amcp",
-        "loop": true,
-        "name": "lowgravityGoal",
-        "path": "asset\\animationClip\\player_lowgravity_goal.amcp",
-        "loop": true,
-        "name": "lowgravityJump",
-        "path": "asset\\animationClip\\player_lowgravity_jump.amcp",
-        "loop": false,
-        "name": "lowgravityLanding",
-        "path": "asset\\animationClip\\player_lowgravity_landing.amcp",
-        "loop": false,
-        "name": "lowgravityStandBy",
-        "path": "asset\\animationClip\\player_lowgravity_standby.amcp",
-        "loop": true,
-        "name": "lowgravityWalk",
-        "path": "asset\\animationClip\\player_lowgravity_walk.amcp",
-        "loop": true,
-        "name": "normalBlink",
-        "path": "asset\\animationClip\\player_normal_blink.amcp",
-        "loop": true,
-        "name": "normalDamage",
-        "path": "asset\\animationClip\\player_normal_damage.amcp",
-        "loop": false,
-        "name": "normalFloat",
-        "path": "asset\\animationClip\\player_normal_float.amcp",
-        "loop": true,
-        "name": "normalGoal",
-        "path": "asset\\animationClip\\player_normal_goal.amcp",
-        "loop": true,
-        "name": "normalJump",
-        "path": "asset\\animationClip\\player_normal_jump.amcp",
-        "loop": false,
-        "name": "normalLanding",
-        "path": "asset\\animationClip\\player_normal_landing.amcp",
-        "loop": false,
-        "name": "normalStandBy",
-        "path": "asset\\animationClip\\player_normal_standby.amcp",
-        "loop": true,
-        "name": "normalWalk",
-        "path": "asset\\animationClip\\player_normal_walk.amcp",
-        "loop": true,
-        "name": "transparentBlink",
-        "path": "asset\\animationClip\\player_transparent_blink.amcp",
-        "loop": true,
-        "name": "transparentDamage",
-        "path": "asset\\animationClip\\player_transparent_damage.amcp",
-        "loop": false,
-        "name": "transparentFloat",
-        "path": "asset\\animationClip\\player_transparent_float.amcp",
-        "loop": true,
-        "name": "transparentGoal",
-        "path": "asset\\animationClip\\player_transparent_goal.amcp",
-        "loop": true,
-        "name": "transparentJump",
-        "path": "asset\\animationClip\\player_transparent_jump.amcp",
-        "loop": false,
-        "name": "transparentLanding",
-        "path": "asset\\animationClip\\player_transparent_landing.amcp",
-        "loop": false,
-        "name": "transparentStandBy",
-        "path": "asset\\animationClip\\player_transparent_standby.amcp",
-        "loop": true,
-        "name": "transparentWalk",
-        "path": "asset\\animationClip\\player_transparent_walk.amcp",
-        "loop": true,
-        "currentClipName": "normalStandBy",
-        "pause": false,
-        "m_filter": 8,
+        "m_filter": 64,
         "data": {
             "pos": {
-                "vec.x": -41.914798736572269,
-                "vec.y": -14.400464057922364
+                "vec.x": -61.80126953125,
+                "vec.y": 2.1423466205596926
             },
             "rot": {
                 "rot.c": 1.0,
                 "rot.s": 0.0
             },
-            "type": 2,
+            "type": 1,
             "lineVec": {
                 "vec.x": 0.0,
-                "vec.y": 1.1641532182693482e-10
+                "vec.y": 0.0
             },
             "angleVec": 0.0,
-            "gravity": 10.0,
-            "mass": 30.0,
+            "gravity": 0.0,
+            "mass": 0.0,
+            "autoMass": 1.0,
             "bullet": true,
-            "fixRot": true,
-            "awake": true,
-            "autoMass": 1.0
+            "fixRot": false,
+            "awake": false
         },
         "types": [
             3
         ],
         "shapeData": {
-            "sensor": false,
+            "sensor": true,
             "friction": 0.6000000238418579,
             "density": 1.0,
             "restitution": 0.0
@@ -2295,7 +2417,7 @@
         "polygon": {
             "poly.centroid": {
                 "vec.x": 0.0,
-                "vec.y": -1.100000023841858
+                "vec.y": 0.0
             },
             "poly.count": 4,
             "poly.normals": {
@@ -2335,20 +2457,20 @@
             "poly.radius": 0.0,
             "poly.vertices": {
                 "value0": {
-                    "vec.x": -2.5,
-                    "vec.y": -6.599999904632568
+                    "vec.x": -7.5,
+                    "vec.y": -7.5
                 },
                 "value1": {
-                    "vec.x": 2.5,
-                    "vec.y": -6.599999904632568
+                    "vec.x": 7.5,
+                    "vec.y": -7.5
                 },
                 "value2": {
-                    "vec.x": 2.5,
-                    "vec.y": 4.400000095367432
+                    "vec.x": 7.5,
+                    "vec.y": 7.5
                 },
                 "value3": {
-                    "vec.x": -2.5,
-                    "vec.y": 4.400000095367432
+                    "vec.x": -7.5,
+                    "vec.y": 7.5
                 },
                 "value4": {
                     "vec.x": 0.0,
@@ -2368,6 +2490,7 @@
                 }
             }
         },
-        "reverse": true
+        "confirmed": false,
+        "selfIndex": 3
     }
 }

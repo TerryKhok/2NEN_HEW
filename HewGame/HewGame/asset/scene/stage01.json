@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 11,
+    "objectNum": 10,
     "value0": {
         "name": "map",
         "transform": {
@@ -48,10 +48,10 @@
             "angleVec": 0.0,
             "gravity": 1.0,
             "mass": 0.0,
+            "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": true,
-            "autoMass": 1.0
+            "awake": true
         },
         "types": [
             4,
@@ -411,10 +411,10 @@
             "angleVec": 0.0,
             "gravity": 2500.0,
             "mass": 0.0,
+            "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false,
-            "autoMass": 1.0
+            "awake": false
         },
         "types": [
             3
@@ -506,8 +506,8 @@
         "name": "Player_1_1",
         "transform": {
             "position": {
-                "x": -389.7143249511719,
-                "y": -277.45001220703127,
+                "x": -389.703125,
+                "y": -277.4496154785156,
                 "z": 0.5
             },
             "scale": {
@@ -543,8 +543,8 @@
                 "data": {
                     "m_scaleX": 0.125,
                     "m_scaleY": 0.3333333432674408,
-                    "m_frameX": 0,
-                    "m_frameY": 0
+                    "m_frameX": 4,
+                    "m_frameY": 1
                 }
             }
         },
@@ -674,8 +674,8 @@
         "m_filter": 8,
         "data": {
             "pos": {
-                "vec.x": -38.971431732177737,
-                "vec.y": -27.7450008392334
+                "vec.x": -38.970314025878909,
+                "vec.y": -27.74496078491211
             },
             "rot": {
                 "rot.c": 1.0,
@@ -683,16 +683,16 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": 2.9103830456733706e-11,
+                "vec.x": 4.3655745685100558e-11,
                 "vec.y": -1.0
             },
             "angleVec": 0.0,
             "gravity": 10.0,
             "mass": 25.0,
+            "autoMass": 1.0,
             "bullet": true,
             "fixRot": true,
-            "awake": true,
-            "autoMass": 1.0
+            "awake": true
         },
         "types": [
             1
@@ -720,8 +720,8 @@
         "name": "lowgravity",
         "transform": {
             "position": {
-                "x": 241.0,
-                "y": 51.0,
+                "x": 577.912109375,
+                "y": 238.64724731445313,
                 "z": 0.5
             },
             "scale": {
@@ -752,8 +752,8 @@
         "m_filter": 64,
         "data": {
             "pos": {
-                "vec.x": 24.100000381469728,
-                "vec.y": 5.099999904632568
+                "vec.x": 57.79121017456055,
+                "vec.y": 23.86472511291504
             },
             "rot": {
                 "rot.c": 1.0,
@@ -767,10 +767,10 @@
             "angleVec": 0.0,
             "gravity": 1.0,
             "mass": 0.0,
+            "autoMass": 1.0,
             "bullet": true,
             "fixRot": false,
-            "awake": false,
-            "autoMass": 1.0
+            "awake": false
         },
         "types": [
             3
@@ -874,8 +874,8 @@
                 }
             }
         },
-        "confirmed": true,
-        "selfIndex": 0
+        "confirmed": false,
+        "selfIndex": -1
     },
     "value4": {
         "name": "goal",
@@ -925,10 +925,10 @@
             "angleVec": 0.0,
             "gravity": 1.0,
             "mass": 0.0,
+            "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false,
-            "autoMass": 1.0
+            "awake": false
         },
         "types": [
             3
@@ -1022,8 +1022,8 @@
         "name": "lowgravity_1",
         "transform": {
             "position": {
-                "x": -24.0,
-                "y": -119.0,
+                "x": -586.9417114257813,
+                "y": 188.05911254882813,
                 "z": 0.5
             },
             "scale": {
@@ -1054,8 +1054,8 @@
         "m_filter": 64,
         "data": {
             "pos": {
-                "vec.x": -2.4000000953674318,
-                "vec.y": -11.899999618530274
+                "vec.x": -58.69417190551758,
+                "vec.y": 18.805912017822267
             },
             "rot": {
                 "rot.c": 1.0,
@@ -1069,10 +1069,10 @@
             "angleVec": 0.0,
             "gravity": 1.0,
             "mass": 0.0,
+            "autoMass": 1.0,
             "bullet": true,
             "fixRot": false,
-            "awake": false,
-            "autoMass": 1.0
+            "awake": false
         },
         "types": [
             3
@@ -1176,15 +1176,15 @@
                 }
             }
         },
-        "confirmed": true,
-        "selfIndex": 1
+        "confirmed": false,
+        "selfIndex": -1
     },
     "value6": {
-        "name": "checkIcon_1",
+        "name": "subWindowManager",
         "transform": {
             "position": {
-                "x": 291.0,
-                "y": 1.0,
+                "x": 0.0,
+                "y": 0.0,
                 "z": 0.0
             },
             "scale": {
@@ -1206,25 +1206,9 @@
         },
         "active": true,
         "comNames": [
-            "class Renderer"
+            "class MoveSubWindowManager"
         ],
-        "m_layer": 1,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483652,
-                "data": {
-                    "active": true,
-                    "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
-                        "f.z": 1.0,
-                        "f.w": 1.0
-                    },
-                    "path": "asset/pic/checkmark.png"
-                }
-            }
-        }
+        "selectIndex": 0
     },
     "value7": {
         "name": "moveObject",
@@ -1259,7 +1243,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483653,
+                "id": 2147483652,
                 "data": {
                     "active": false,
                     "m_color": {
@@ -1306,7 +1290,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483654,
+                "id": 2147483653,
                 "data": {
                     "active": true,
                     "m_color": {
@@ -1321,12 +1305,12 @@
         }
     },
     "value9": {
-        "name": "subWindowManager",
+        "name": "handObject",
         "transform": {
             "position": {
-                "x": 0.0,
-                "y": 0.0,
-                "z": 0.0
+                "x": -536.0247802734375,
+                "y": 158.2740478515625,
+                "z": 0.5
             },
             "scale": {
                 "x": 5.0,
@@ -1345,55 +1329,24 @@
                 }
             }
         },
-        "active": true,
-        "comNames": [
-            "class MoveSubWindowManager"
-        ],
-        "selectIndex": 0
-    },
-    "value10": {
-        "name": "checkIcon",
-        "transform": {
-            "position": {
-                "x": 26.0,
-                "y": -169.0,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 5.0,
-                "y": 5.0,
-                "z": 1.0
-            },
-            "angle": {
-                "x": {
-                    "radians": 0.0
-                },
-                "y": {
-                    "radians": 0.0
-                },
-                "z": {
-                    "radians": 0.0
-                }
-            }
-        },
-        "active": true,
+        "active": false,
         "comNames": [
             "class Renderer"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483655,
+                "id": 2147483654,
                 "data": {
-                    "active": true,
+                    "active": false,
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
-                    "path": "asset/pic/checkmark.png"
+                    "path": "asset\\pic\\hand.png"
                 }
             }
         }
