@@ -76,10 +76,15 @@
 #include <exception>
 #include <limits>
 
+
 #define _CRTDBG_MAP_ALLOC
 #include <stdlib.h>
 #include <crtdbg.h>
 
+//#define _USE_MATH_DEFINES
+//#include <winsdkver.h>
+//#define _WIN32_WINNT 0x0A00
+//#include <sdkddkver.h>
 
 #include "../../DirectX11_2D_Framework/math/Math.h"
 #include "../../DirectX11_2D_Framework/inc/Serialize.h"
@@ -107,6 +112,7 @@
 #include "../../DirectX11_2D_Framework/inc/SubWindow.h"
 #include "../../DirectX11_2D_Framework/inc/Button.h"
 #include "../../DirectX11_2D_Framework/inc/Assembly.h"
+#include "../../DirectX11_2D_Framework/directxtk/include/directxtk/Audio.h"
 #endif
 
 

@@ -182,7 +182,9 @@
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\SFText.cpp" />
-    <ClCompile Include="src\sound.cpp" />
+    <ClCompile Include="src\sound.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="src\TextureAsset.cpp" />
     <ClCompile Include="src\TileMap.cpp" />
     <ClCompile Include="src\Utility.cpp" />
@@ -214,7 +216,9 @@
     <ClInclude Include="inc\Renderer.h" />
     <ClInclude Include="inc\Scene.h" />
     <ClInclude Include="inc\SFText.h" />
-    <ClInclude Include="inc\sound.h" />
+    <ClInclude Include="inc\sound.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="inc\TextureAsset.h" />
     <ClInclude Include="inc\TileMap.h" />
     <ClInclude Include="inc\Utility.h" />

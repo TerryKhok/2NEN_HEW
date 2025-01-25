@@ -159,6 +159,7 @@ struct PlayerGoal : public PlayerState
 	}
 };
 
+
 class MovePlayer : public Component
 {
 	enum PLAYER_STATE
@@ -172,8 +173,9 @@ class MovePlayer : public Component
 		PLAYER_STATE_MAX
 	};
 
+
 	SAFE_POINTER(Box2DBody, rb)
-	SAFE_POINTER(Animator, anim)
+		SAFE_POINTER(Animator, anim)
 
 	std::unique_ptr<PlayerState> state;
 
@@ -204,6 +206,8 @@ class MovePlayer : public Component
 		state->Start(mode, anim);
 	}
 
+	Sound sound;
+
 	void Start()
 	{
 		if (!m_this->TryGetComponent<Box2DBody>(&rb))
@@ -224,6 +228,7 @@ class MovePlayer : public Component
 			ChangeState(PLAYER_IDLE);
 			anim->Reverse(reverse);
 		}
+		sound.PlayWaveSound(BGM_Game01, 1.0f);
 	}
 	PLAYER_MODE mode = NORMAL;
 	std::vector<PLAYER_MODE> modeLayer;
@@ -308,6 +313,7 @@ private:
 
 		if ((input.KeyPress(VK_D) || input.LeftAnalogStick().x > 0.1f))
 		{
+			//if(isGround&&!sound.IsPlaying()){sound.PlayWaveSound(L"asset/sound/se/SFX_Walk01.wav", &waveData, false); }
 			if (move_count == 1)
 			{
 				reverse = true;
@@ -408,7 +414,11 @@ private:
 
 		if (jumping)
 		{
+			if (jump_count == 1) {
+				sound.PlayWaveSound(SFX_Jump, 1.0f);
+			}
 			jump_count++;
+			
 			if (jump_count == 10)
 			{
 				rb->AddForceImpulse({ 0,50.0f });
@@ -424,7 +434,8 @@ private:
 		if (inAir && isGround)
 		{
 			inAir = false;
-			
+			sound.PlayWaveSound(SFX_Land, 1.0f);
+
 			if (move_count != 0)
 			{
 				ChangeState(PLAYER_WALK);
