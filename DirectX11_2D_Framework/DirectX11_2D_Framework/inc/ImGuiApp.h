@@ -135,12 +135,13 @@ public:
 		//functionの引数であるGameObject*を使用する場合はnullptrかチェックする必要がある
 		void SetUploadFile(std::string _uploadStr, std::function<void(GameObject*, std::filesystem::path)>&& _func, std::vector<std::string>&& _extensions);
 		//ハンドルの機能をロックする
-		void LockHandle(bool _lock,const char* _lockName);
+		//void LockHandle(bool _lock,const char* _lockName);
+		bool DrawLockButton(const char* _lockName);
 	private:
 		static ComPtr<ID3D11Buffer> m_arrowVertexBuffer;
 		static ComPtr<ID3D11Buffer> m_arrowIndexBuffer;
 		bool lock = false;
-		std::list<std::string> lockNames;
+		std::string lockName = "null";
 		HANDLE_MODE handleMode = POSITION;
 		MOVE_MODE moveMode = NONE;
 		std::string uploadStr = {};

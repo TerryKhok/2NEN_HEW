@@ -1,7 +1,4 @@
 
-#ifdef DEBUG_TRUE
-bool editTileMap = false;
-#endif
 
 TileMap::TileMap(GameObject* _object)
 {
@@ -69,10 +66,11 @@ void TileMap::DrawImGui(ImGuiApp::HandleUI& _handle)
 		ImGui::EndPopup();
 	}
 
-	if (ImGui::Checkbox("EditLock##tileMap", &editTileMap))
+	bool editTileMap = _handle.DrawLockButton("editTileMap");
+	/*if (ImGui::Checkbox("EditLock##tileMap", &editTileMap))
 	{
 		_handle.LockHandle(editTileMap, "editTileMap");
-	}
+	}*/
 	if (editTileMap)
 	{
 		Vector2 tileSize = m_node->tileSize * DEFAULT_OBJECT_SIZE;

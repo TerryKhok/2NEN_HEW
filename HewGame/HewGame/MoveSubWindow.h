@@ -17,7 +17,7 @@ class MoveSubWindow : public Component
 		return m_this->transform.position;
 	}
 
-	void SetPosition(Vector2 _pos);
+	void BackPosition();
 
 	void Confirmed();
 	
@@ -40,11 +40,6 @@ class MoveSubWindowManager : public Component
 
 	void Proceed() override
 	{
-		for (auto& window : moveWindows)
-		{
-			startWindowPos.push_back(window->GetStartPos());
-		}
-
 		GameObject* handObject = ObjectManager::Find("handObject");
 		if (handObject != nullptr)
 		{
@@ -68,30 +63,42 @@ class MoveSubWindowManager : public Component
 
 	void Update() override
 	{
-		if (Input::Get().KeyTrigger(VK_E))
+		auto& input = Input::Get();
+		if (input.KeyTrigger(VK_E) || input.ButtonTrigger(XINPUT_X))
 		{
 			MoveSubWindowMode();
 		}
-		if (Input::Get().KeyTrigger(VK_R))
+		if (input.KeyTrigger(VK_R) || input.ButtonTrigger(XINPUT_B))
 		{
 			UndoGameSubWindow();
 		}
 	}
 	void PauseUpdate() override
 	{
-		if (Input::Get().KeyTrigger(VK_C))
+		auto& input = Input::Get();
+		if (input.KeyTrigger(VK_C) || input.ButtonTrigger(XINPUT_RIGHT_SHOULDER))
 		{
-			if (moveWindows.size() > 0)
+			int size = (int)moveWindows.size();
+			if (size > 0)
 			{
 				auto& index = selectIndex;
-				index = (index + 1) % moveWindows.size();
+				index = (index + 1) % size;
 			}
 		}
-		if (Input::Get().KeyTrigger(VK_E))
+		if (input.KeyTrigger(VK_X) || input.ButtonTrigger(XINPUT_LEFT_SHOULDER))
+		{
+			int size = (int)moveWindows.size();
+			if (size > 0)
+			{
+				auto& index = selectIndex;
+				index = (index + size - 1) % size;
+			}
+		}
+		if (input.KeyTrigger(VK_E) || input.ButtonTrigger(XINPUT_X))
 		{
 			PlayGameSubWindow();
 		}
-		if (Input::Get().KeyTrigger(VK_F))
+		if (input.KeyTrigger(VK_F) || input.ButtonTrigger(XINPUT_A))
 		{
 			if (selectIndex < moveWindows.size())
 			{
@@ -101,7 +108,6 @@ class MoveSubWindowManager : public Component
 
 				moveWindows[selectIndex]->Confirmed();
 				moveWindows.erase(moveWindows.begin() + selectIndex);
-				startWindowPos.erase(startWindowPos.begin() + selectIndex);
 				for (int i = 0;i < (int)moveWindows.size();i++)
 				{
 					moveWindows[i]->selfIndex = i;
@@ -117,7 +123,7 @@ class MoveSubWindowManager : public Component
 				}
 			}
 		}
-		if (Input::Get().KeyTrigger(VK_R))
+		if (input.KeyTrigger(VK_R) || input.ButtonTrigger(XINPUT_B))
 		{
 			UndoGameSubWindow();
 		}
@@ -139,7 +145,6 @@ class MoveSubWindowManager : public Component
 public:
 	int selectIndex = 0;
 	std::vector<MoveSubWindow*> moveWindows;
-	std::vector<Vector2> startWindowPos;
 
 private:
 	SERIALIZE_COMPONENT_VALUE(selectIndex)

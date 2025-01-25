@@ -754,6 +754,12 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 	case WM_PAUSE_GAME:
 	{
+		pauseGame = true;
+
+#ifdef DEBUG_TRUE
+		if (pauseDebug) break;
+#endif
+
 		QueryPerformanceCounter(&liWork);
 		long long pauseNowCount = liWork.QuadPart;
 		long long pauseOldCount = pauseNowCount;
@@ -764,7 +770,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 		Vector2 oldMousePos;
 
-		pauseGame = true;
+		
 		while (pauseGame)
 		{
 			// 新たにメッセージがあれば
@@ -911,8 +917,10 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 							tf.p = { worldPos.x / DEFAULT_OBJECT_SIZE,worldPos.y / DEFAULT_OBJECT_SIZE };
 							tf.q = b2Rot_identity;*/
 							std::vector<b2ShapeId> outputShape;
+							auto filter = b2DefaultQueryFilter();
+							filter.categoryBits = ALL_BITS;
 							b2World_OverlapAABB(*Box2D::WorldManager::currentWorldId, aabb,
-								b2DefaultQueryFilter(), Box2D::OverlapResultVectorb2ShapeId, &outputShape);
+								filter, Box2D::OverlapResultVectorb2ShapeId, &outputShape);
 							for (auto& shape : outputShape)
 							{
 								b2BodyId bodyId = b2Shape_GetBody(shape);
@@ -922,6 +930,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 									auto object = ObjectManager::Find(iter->second);
 									if (object != nullptr)
 									{
+										if (!object->selectable) continue;
 										auto it = std::find(targetObjects.begin(), targetObjects.end(), object);
 										if (it == targetObjects.end())
 											targetObjects.push_back(object);
@@ -932,7 +941,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 							for (auto& object : ObjectManager::m_objectList->first)
 							{
-								if (!object->active) continue;
+								if (!object->active || !object->selectable) continue;
 
 								if (object->ExistComponent<Box2DBody>()) continue;
 
@@ -1097,6 +1106,11 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 #ifdef SUBWINDOW_IS_TOP
 			SetWindowPos(hwnd.first, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 #endif
+		}
+
+		if (pauseGame)
+		{
+			PostMessage(Window::GetMainHWnd(), WM_PAUSE_GAME, 0, 0);
 		}
 	}
 	break;

@@ -785,10 +785,11 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 				}
 			}
 
-			if (ImGui::Checkbox("EditLock##vertex", &editVertex))
+			editVertex = _handle.DrawLockButton("editVertex");
+			/*if (ImGui::Checkbox("EditLock##vertex", &editVertex))
 			{
 				_handle.LockHandle(editVertex, "editVertex");
-			}
+			}*/
 			if (editVertex)
 			{
 				bool notLoop = false;
@@ -1090,6 +1091,8 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 
 void Box2DBody::SetFilter(const FILTER _filter)
 {
+	if (m_filter == _filter) return;
+
 	m_filter = _filter;
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
@@ -1103,6 +1106,69 @@ void Box2DBody::SetFilter(const FILTER _filter)
 		b2Shape_SetFilter(shape, filter);
 	}
 	
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pResumeWorldUpdate();
+#endif 
+}
+
+void Box2DBody::ChangeFilter(const FILTER _filter)
+{
+	if (m_filter == _filter) return;
+
+	m_filter = _filter;
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pPauseWorldUpdate();
+#endif 
+	for (auto& shape : m_shapeList)
+	{
+		auto def = b2DefaultShapeDef();
+		def.filter.categoryBits = m_filter;
+		def.filter.maskBits = Box2DBodyManager::GetMaskFilterBit(m_filter);
+		def.density = b2Shape_GetDensity(shape);
+		def.friction = b2Shape_GetFriction(shape);
+		def.isSensor = b2Shape_IsSensor(shape);
+		def.restitution = b2Shape_GetRestitution(shape);
+
+		auto type = b2Shape_GetType(shape);
+		switch (type)
+		{
+		case b2_circleShape:
+		{
+			auto circle = b2Shape_GetCircle(shape);
+			b2DestroyShape(shape);
+			shape = b2CreateCircleShape(m_bodyId, &def, &circle);
+		}
+			break;
+		case b2_capsuleShape:
+		{
+			auto capsule = b2Shape_GetCapsule(shape);
+			b2DestroyShape(shape);
+			shape = b2CreateCapsuleShape(m_bodyId, &def, &capsule);
+		}
+		break;
+		case b2_polygonShape:
+		{
+			auto polygon = b2Shape_GetPolygon(shape);
+			b2DestroyShape(shape);
+			shape = b2CreatePolygonShape(m_bodyId, &def, &polygon);
+		}
+		break;
+		case b2_segmentShape:
+		{
+			auto segment = b2Shape_GetSegment(shape);
+			b2DestroyShape(shape);
+			shape = b2CreateSegmentShape(m_bodyId, &def, &segment);
+		}
+			break;
+		case b2_chainSegmentShape:
+		{
+			b2Shape_SetFilter(shape, def.filter);
+		}
+		break;
+		}
+	}
+
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pResumeWorldUpdate();
 #endif 
@@ -1489,6 +1555,23 @@ void Box2DBody::CreateChain(std::vector<b2Vec2>& _pointList)
 	}
 }
 
+void Box2DBody::ClearShape()
+{
+#ifdef DEBUG_TRUE
+	for (auto& node : m_nodeList)
+	{
+		node->Delete(LAYER_BOX2D_DEBUG);
+	}
+	m_nodeList.clear();
+#endif
+
+	for (auto& shape : m_shapeList)
+	{
+		b2DestroyShape(shape);
+	}
+	m_shapeList.clear();
+}
+
 void Box2DBody::SetPosition(Vector2 _pos)
 {
 #ifdef BOX2D_UPDATE_MULTITHREAD
@@ -1503,6 +1586,12 @@ void Box2DBody::SetPosition(Vector2 _pos)
 	b2Vec2 pos = { _pos.x / DEFAULT_OBJECT_SIZE,_pos.y / DEFAULT_OBJECT_SIZE };
 	b2Body_SetTransform(m_bodyId, pos, b2Body_GetRotation(m_bodyId));
 #endif
+}
+
+const Vector2 Box2DBody::GetPosition() const
+{
+	b2Vec2 pos = b2Body_GetPosition(m_bodyId);
+	return { pos.x * DEFAULT_OBJECT_SIZE,pos.y * DEFAULT_OBJECT_SIZE };
 }
 
 void Box2DBody::SetAngle(float _deg)
@@ -1690,15 +1779,21 @@ void Box2DBody::SetAwake(bool _awake)
 void Box2DBody::GetOverlapObject(std::vector<GameObject*>& _objects)
 {
 	const b2Transform b2tf = b2Body_GetTransform(m_bodyId);
-	GetOverlapObject(_objects, b2tf);
+	GetOverlapObject(_objects, m_filter, b2tf);
 }
 
-void Box2DBody::GetOverlapObject(std::vector<GameObject*>& _objects, b2Transform _tf)
+void Box2DBody::GetOverlapObject(std::vector<GameObject*>& _objects, FILTER _filter)
+{
+	const b2Transform b2tf = b2Body_GetTransform(m_bodyId);
+	GetOverlapObject(_objects, _filter, b2tf);
+}
+
+void Box2DBody::GetOverlapObject(std::vector<GameObject*>& _objects, FILTER _filter,b2Transform _tf)
 {
 	std::vector<b2ShapeId> shpeIds;
 	b2QueryFilter filter;
-	filter.categoryBits = m_filter;
-	filter.maskBits = Box2DBodyManager::GetMaskFilterBit(m_filter);
+	filter.categoryBits = _filter;
+	filter.maskBits = Box2DBodyManager::GetMaskFilterBit(_filter);
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pPauseWorldUpdate();
 #endif 

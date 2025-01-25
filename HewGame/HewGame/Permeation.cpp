@@ -1,7 +1,5 @@
 #include "Permeation.h"
-
-//共有の元のフィルターを格納したリスト
-std::unordered_map<Box2DBody*, std::pair<FILTER, int>> Permeation::m_box2dFiltersCount;
+#include "clipper2/clipper.h"
 
 enum
 {
@@ -196,4 +194,135 @@ bool Permeation::CreateObstacleSegment()
 	}
 
 	return hit;
+}
+
+void Permeation::ClipObject()
+{
+	using namespace Clipper2Lib;
+
+	Vector2 center = m_this->transform.position;
+	int64_t centerX = (int64_t)center.x;
+	int64_t centerY = (int64_t)center.y;
+	Vector2 halfScale = m_this->transform.scale * DEFAULT_OBJECT_SIZE / 2;
+	int64_t halfScaleX = (int64_t)halfScale.x;
+	int64_t halfScaleY = (int64_t)halfScale.y;
+	// 四角形の切り抜き領域を定義
+	Paths64 clip = {
+		{{centerX - halfScaleX,centerY + halfScaleY},
+		{centerX + halfScaleX,centerY + halfScaleY},
+		{centerX + halfScaleX,centerY - halfScaleY},
+		{centerX - halfScaleX,centerY - halfScaleY}} // 切り抜き領域
+	};
+
+	rb->SetFilter(F_WINDOW);
+
+	std::vector<GameObject*> overlapList;
+	rb->GetOverlapObject(overlapList, F_ONLYOBSTACLE);
+
+	if (overlapList.empty())
+	{
+		rb->ChangeFilter(F_PERWINDOW);
+		return;
+	}
+
+	overlapList.erase(std::unique(overlapList.begin(), overlapList.end()), overlapList.end());
+
+	std::vector<Permeation*> perWindows;
+
+	for (auto& object : overlapList)
+	{
+		Permeation* perWnd;
+		if (object->TryGetComponent<Permeation>(&perWnd))
+		{
+			perWindows.push_back(perWnd);
+			continue;
+		}
+
+		std::vector<Vector2> vertices;
+
+		Box2DBody* box2d = object->GetComponent<Box2DBody>();
+		auto& shapeList = box2d->GetShapeId();
+		for (auto& shape : shapeList)
+		{
+			auto shapeType = b2Shape_GetType(shape);
+			switch (shapeType)
+			{
+			case b2_polygonShape:
+			{
+				auto polygon = b2Shape_GetPolygon(shape);
+				for (int i = 0; i < polygon.count; i++)
+				{
+					auto& pos = polygon.vertices[i];
+					vertices.emplace_back(pos.x * DEFAULT_OBJECT_SIZE, pos.y * DEFAULT_OBJECT_SIZE);
+				}
+			}
+				break;
+			case b2_segmentShape:
+			{
+				auto segment = b2Shape_GetSegment(shape);
+				auto& pos = segment.point1;
+				vertices.emplace_back(pos.x * DEFAULT_OBJECT_SIZE, pos.y * DEFAULT_OBJECT_SIZE);
+			}
+				break;
+			case b2_chainSegmentShape:
+			{
+				auto chainSegment = b2Shape_GetChainSegment(shape);
+				auto& pos = chainSegment.segment.point1;
+				vertices.push_back({ pos.x * DEFAULT_OBJECT_SIZE, pos.y * DEFAULT_OBJECT_SIZE });
+			}
+				break;
+			}
+		}
+
+		// 元のポリゴンを定義 (例: 四角形)
+		Paths64 subject;
+
+		//ローカル座標に中心点を加える
+		Vector2 center = box2d->GetPosition();
+		Path64 path;
+		for (auto& pos : vertices)
+		{
+			pos += center;
+			path.emplace_back((int)pos.x, (int)pos.y);
+		}
+		subject.push_back(path);
+
+		// 結果を格納するための変数
+		Paths64 solution;
+
+		Clipper64 clipper;
+		clipper.AddSubject(subject);
+		clipper.AddClip(clip);
+		clipper.Execute(ClipType::Difference, FillRule::EvenOdd, solution);  // 差分操作
+
+		std::vector<b2Vec2> points;
+		for (const auto& path : solution) {
+			auto instance = Instantiate("clipped");
+			instance->transform.position = center;
+			b2BodyDef bodyDef = b2DefaultBodyDef();;
+			auto iBox2D = instance->AddComponent<Box2DBody>(&bodyDef);
+			iBox2D->SetFilter(box2d->GetFilter());
+
+			for (const auto& point : path) {
+				Vector2 pos = { (float)point.x, (float)point.y };
+				pos -= center;
+				points.emplace_back(pos.x, pos.y);
+			}
+			if (points.size() > 3)
+				iBox2D->CreateChain(points);
+			else
+			{
+				points.push_back(points.front());
+				iBox2D->CreateSegment(points);
+			}
+			points.clear();
+		}
+
+		object->RemoveComponent<Box2DBody>();
+	}
+
+	for (auto& perWnd : perWindows)
+	{
+		perWnd->ClipObject();
+	}
 }

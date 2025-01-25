@@ -6,6 +6,8 @@
 #include "MoveSubWindow.h"
 #include "RockGenerator.h"
 #include "CrushRock.h"
+#include "RunFixedRoute.h"
+#include "MoveRect.h"
 
 class SeigoTestScene :public Scene
 {

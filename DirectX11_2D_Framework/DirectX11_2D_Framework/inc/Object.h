@@ -299,6 +299,7 @@ private:
 
 	SELECT_TYPE isSelected = SELECT_NONE;
 	size_t selectedNum = 0;
+	bool selectable = true;
 #endif
 	
 private:

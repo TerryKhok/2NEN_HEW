@@ -606,9 +606,11 @@ void ImGuiApp::DrawOptionGui()
 				ImGui::SameLine();
 				if (ImGui::ImageButton("LockHandle", imIconTexture, ImVec2(50, 50), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
 				{
-					static bool lock = false;
-					lock = !lock;
-					handleUi.LockHandle(lock, "OptionGui");
+					if (handleUi.lock)
+					{
+						handleUi.lock = false;
+						handleUi.lockName = "null";
+					}
 				}
 				ImGui::SetItemTooltip("lockHandle");
 
@@ -1065,6 +1067,16 @@ void ImGuiApp::DrawInspectorGui()
 				}
 			}
 			else ImGui::Text("%s : Selected", selectedObject->name.c_str());
+
+			ImGui::SameLine();
+			int uvX = selectedObject->selectable ? 19 : 1;
+			int uvY = selectedObject->selectable ? 7 : 8;
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+			if (ImGui::ImageButton("PauseGame", imIconTexture, ImVec2(25, 25), ImVec2(iconTexScale * uvX, iconTexScale * uvY), ImVec2(iconTexScale * (uvX + 1), iconTexScale * (uvY + 1)), windowBgCol))
+			{
+				selectedObject->selectable = !selectedObject->selectable;
+			}
+			ImGui::PopStyleVar();
 
 			ImGui::SeparatorText("Component");
 
@@ -3055,27 +3067,53 @@ void ImGuiApp::HandleUI::SetUploadFile(std::string _uploadStr, std::function<voi
 	extensions = _extensions;
 }
 
-void ImGuiApp::HandleUI::LockHandle(bool _lock, const char* _lockName)
+//void ImGuiApp::HandleUI::LockHandle(bool _lock, const char* _lockName)
+//{
+//	std::string name(_lockName);
+//
+//	if (_lock)
+//	{
+//		lock = true;
+//		if (std::find(lockNames.begin(), lockNames.end(), name) == lockNames.end())
+//		{
+//			lockNames.push_back(std::move(name));
+//		}
+//		return;
+//	}
+//
+//	auto iter = std::find(lockNames.begin(), lockNames.end(), name);
+//	if (iter != lockNames.end())
+//	{
+//		lockNames.erase(iter);
+//	}
+//
+//	if (lockNames.empty()) lock = false;
+//}
+
+bool ImGuiApp::HandleUI::DrawLockButton(const char* _lockName)
 {
-	std::string name(_lockName);
-
-	if (_lock)
+	std::string checkBoxName = "EditLock##";
+	checkBoxName += _lockName;
+	bool same = lockName == _lockName;
+	bool isLock = same;
+	if (ImGui::Checkbox(checkBoxName.c_str(), &isLock))
 	{
-		lock = true;
-		if (std::find(lockNames.begin(), lockNames.end(), name) == lockNames.end())
+		if (isLock)
 		{
-			lockNames.push_back(std::move(name));
+			if (!lock)
+			{
+				lock = true;
+				lockName = _lockName;
+			}
 		}
-		return;
+		else if(same)
+		{
+			lock = false;
+			lockName = "null";
+		}
 	}
 
-	auto iter = std::find(lockNames.begin(), lockNames.end(), name);
-	if (iter != lockNames.end())
-	{
-		lockNames.erase(iter);
-	}
-
-	if (lockNames.empty()) lock = false;
+	return same;
 }
 
 void ImGuiApp::ImGuiSetKeyMap(ImGuiContext* _imguiContext)

@@ -138,6 +138,12 @@
     <ClInclude Include="SoundSaino.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="MoveRect.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="RunFixedRoute.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

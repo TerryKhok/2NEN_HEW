@@ -1,7 +1,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "../../DirectX11_2D_Framework/inc/stb_image.h"
 
-ComPtr<IWICImagingFactory> TextureAssets::m_pWICFactory = nullptr;
 std::unordered_map<std::wstring, ComPtr<ID3D11ShaderResourceView>> TextureAssets::m_textureLib;
 std::unordered_map<std::wstring, ComPtr<ID3D11ShaderResourceView>> TextureAssets::m_nextTextureLib;
 thread_local HRESULT(*TextureAssets::pLoadTexture)(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texName) = DDSWICLoad;
@@ -9,14 +8,17 @@ thread_local HRESULT(*TextureAssets::pLoadTexture)(ComPtr<ID3D11ShaderResourceVi
 
 HRESULT TextureAssets::Init()
 {
-	HRESULT hr = CoInitialize(NULL);
+	/*HRESULT hr = CoInitialize(NULL);
 	hr = CoCreateInstance(CLSID_WICImagingFactory, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&m_pWICFactory));
 	return hr;
+	*/
+
+	return S_OK;
 }
 
 void TextureAssets::UnInit()
 {
-	CoUninitialize();
+	//CoUninitialize();
 }
 
 HRESULT TextureAssets::DDSWICLoad(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texPath)

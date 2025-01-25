@@ -15,20 +15,16 @@ SetReflectionScene(YkTestScene)
 //============================================================
 void MainInit()
 {	
-	//LAYER_01Ç∆LAYER_02Ç™è’ìÀÇµÇ»Ç¢ÇÊÇ§Ç…Ç∑ÇÈ
 	Box2DBodyManager::DisableCollisionFilter(F_WINDOW, F_TERRAIN);
 	Box2DBodyManager::DisableCollisionFilter(F_WINDOW, F_WINDOW);
 	Box2DBodyManager::DisableCollisionFilter(F_WINDOW, F_OBSTACLE);
-	Box2DBodyManager::DisableCollisionFilter(F_PERMEATION, F_PEROBSTACLE);
-	Box2DBodyManager::DisableCollisionFilter(F_PERWINDOW, F_TERRAIN);
-	Box2DBodyManager::DisableCollisionFilter(F_PERWINDOW, F_WINDOW);
-	Box2DBodyManager::DisableCollisionFilter(F_PERWINDOW, F_PERWINDOW);
+	Box2DBodyManager::DisableCollisionFilter(F_WINDOW, F_PERWINDOW);
 	Box2DBodyManager::DisableCollisionFilter(F_MAPRAY, F_WINDOW);
-	Box2DBodyManager::DisableCollisionFilter(F_MAPRAY, F_PERWINDOW);
 	Box2DBodyManager::DisableCollisionFilter(F_MAPRAY, F_PLAYER);
-	Box2DBodyManager::DisableCollisionFilter(F_MAPRAY, F_PEROBSTACLE);
+	Box2DBodyManager::DisableCollisionFilter(F_MAPRAY, F_PERWINDOW);
+	Box2DBodyManager::OnlyCollisionFilter(F_PERWINDOW, F_ONLYOBSTACLE);
 	Box2DBodyManager::OnlyCollisionFilter(F_ONLYOBSTACLE, F_OBSTACLE);
-	Box2DBodyManager::EnableCollisionFilter(F_ONLYOBSTACLE, F_PEROBSTACLE);
+	Box2DBodyManager::EnableCollisionFilter(F_ONLYOBSTACLE, F_PERWINDOW);
 }
 //============================================================
 

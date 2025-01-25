@@ -182,6 +182,11 @@ public:
 		x = v0.x + (v1.x - v0.x) * t;
 		y = v0.y + (v1.y - v0.y) * t;
 	}
+
+	float Distance(const Vector2& v)
+	{
+		return sqrt(powf((x - v.x), 2) + powf((y - v.y), 2));
+	}
 	/// <summary>
 	/// ê≥ãKâªÅB
 	/// </summary>

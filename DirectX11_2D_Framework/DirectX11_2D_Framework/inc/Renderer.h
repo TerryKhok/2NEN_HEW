@@ -223,6 +223,7 @@ private:
 	//lineBox—pƒCƒ“ƒfƒbƒNƒX
 	static ComPtr<ID3D11Buffer> m_lineBoxIndexBuffer;
 
+public:
 	struct DrawRayNode
 	{
 		Vector2 center = { 0.0f,0.0f };
@@ -230,6 +231,12 @@ private:
 		float radian = 0.0f;
 		XMFLOAT4 color = { 1.0f,1.0f,1.0f,1.0f };
 	};
+
+	static void AddDrawRayNode(DrawRayNode&& node)
+	{
+		m_drawRayNode.push_back(node);
+	}
+private:
 	//“–‚½‚è”»’è‚Ì•`‰æ
 	static bool drawHitBox;
 	//ray‚Ì•`‰æ
@@ -241,6 +248,7 @@ private:
 	//ray‚ð•`‰æ‚·‚é‚½‚ß‚Ì—v‘f
 	static std::vector<DrawRayNode> m_drawRayNode;
 
+public:
 	struct DrawBoxNode
 	{
 		Vector2 center = { 0.0f,0.0f };
@@ -250,6 +258,11 @@ private:
 		XMFLOAT4 color = { 1.0f,1.0f,1.0f,1.0f };
 	};
 
+	static void AddDrawBoxNode(DrawBoxNode&& node)
+	{
+		m_drawBoxNode.push_back(node);
+	}
+private:
 	//Box‚Ì•`‰æ
 	static bool drawBox;
 	//box‚ð•`‰æ‚·‚é‚½‚ß‚Ì—v‘f

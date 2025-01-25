@@ -1,4 +1,5 @@
 #include "MoveSubWindow.h"
+#include "Permeation.h"
 
 std::vector<std::stringstream> saveBuffer;
 
@@ -58,13 +59,38 @@ void MoveSubWindow::PauseUpdate()
 			pos.x += moveSpeed;
 			SetWindowPosition(subWindow->GeWndHandle(), pos);
 		}
+
+		if (input.IsConnectController())
+		{
+			Vector2 vec = input.LeftAnalogStick();
+			if (vec.y > 0.1f && pos.y < Window::MONITER_HALF_HEIGHT)
+			{
+				pos.y += moveSpeed * vec.y;
+				SetWindowPosition(subWindow->GeWndHandle(), pos);
+			}
+			if (vec.x < -0.1f && pos.x > -Window::MONITER_HALF_WIDTH)
+			{
+				pos.x += moveSpeed * vec.x;
+				SetWindowPosition(subWindow->GeWndHandle(), pos);
+			}
+			if (vec.y < -0.1f && pos.y > -Window::MONITER_HALF_HEIGHT)
+			{
+				pos.y += moveSpeed * vec.y;
+				SetWindowPosition(subWindow->GeWndHandle(), pos);
+			}
+			if (vec.x > 0.1f && pos.x < Window::MONITER_HALF_WIDTH)
+			{
+				pos.x += moveSpeed * vec.x;
+				SetWindowPosition(subWindow->GeWndHandle(), pos);
+			}
+		}
 	}
 }
 
-void MoveSubWindow::SetPosition(Vector2 _pos)
+void MoveSubWindow::BackPosition()
 {
 	auto& pos = m_this->transform.position;
-	pos = _pos;
+	pos = rb->GetPosition();
 	SetWindowPosition(subWindow->GeWndHandle(), pos);
 	if (selfIndex == subWndManager->selectIndex)
 	{
@@ -84,7 +110,7 @@ void MoveSubWindow::SetPosition(Vector2 _pos)
 void MoveSubWindow::Confirmed()
 {
 	confirmed = true;
-	auto check = Instantiate("checkIcon",L"asset/pic/checkmark.png");
+	auto check = Instantiate("checkIcon", L"asset/pic/checkmark.png");
 	if (check != nullptr)
 	{
 		Vector2 pos = m_this->transform.position;
@@ -95,16 +121,28 @@ void MoveSubWindow::Confirmed()
 		check->transform.position = pos;
 	}
 	rb->SetPosition(m_this->transform.position);
+
+	std::vector<GameObject*> overlap;
+	rb->GetOverlapObject(overlap);
+	for (auto& obj : overlap)
+	{
+		Box2DBody* box2d = nullptr;
+		if (obj->TryGetComponent<Box2DBody>(&box2d))
+		{
+			box2d->SetAwake(true);
+		}
+	}
+
+	Permeation* permeation = nullptr;
+	if (m_this->TryGetComponent <Permeation>(&permeation))
+	{
+		permeation->ClipObject();
+	}
 }
 
 void MoveSubWindowManager::MoveSubWindowMode()
 {
 	if (Window::IsPause()) return;
-
-	for (auto& window : moveWindows)
-	{
-		startWindowPos.push_back(window->GetStartPos());
-	}
 
 	GameObject* handObject = ObjectManager::Find("handObject");
 	if (handObject != nullptr)
@@ -142,8 +180,7 @@ void MoveSubWindowManager::PlayGameSubWindow()
 	for (int i = (int)moveWindows.size() - 1;i >= 0;i--)
 	{
 		auto& window = moveWindows[i];
-		window->SetPosition(startWindowPos.back());
-		startWindowPos.pop_back();
+		window->BackPosition();
 	}
 
 	GameObject* handObject = ObjectManager::Find("handObject");

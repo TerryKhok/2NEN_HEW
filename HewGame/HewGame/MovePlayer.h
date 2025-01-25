@@ -235,25 +235,33 @@ class MovePlayer : public Component
 public:
 	bool inWindow = false;
 	
-	void SetMode(PLAYER_MODE _mode)
+	void PushMode(PLAYER_MODE _mode)
 	{
 		mode = _mode;
 		modeLayer.push_back(mode);
 		state->ModeChange(mode, anim);
 	}
-	void BackMode()
+	void PopMode(PLAYER_MODE _mode)
 	{
+		PLAYER_MODE oldMode = mode;
 		if (!modeLayer.empty())
-			modeLayer.pop_back();
+		{
+			auto iter = std::find(modeLayer.begin(), modeLayer.end(), _mode);
+			if (iter == modeLayer.end()) return;
 
-		if (modeLayer.empty()){
+			modeLayer.erase(iter);
+		}
+
+		if (modeLayer.empty()) {
 			mode = NORMAL;
 		}
-		else{
+		else {
 			mode = modeLayer.back();
 		}
-		state->ModeChange(mode, anim);
+		if (mode != oldMode)
+			state->ModeChange(mode, anim);
 	}
+
 
 	void GameOver()
 	{

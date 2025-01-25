@@ -84,8 +84,10 @@ private:
 public:
 	//bodyIdの取得
 	const b2BodyId GetBodyId() { return m_bodyId; }
-	// フィルターの変更
-	void SetFilter(const FILTER _layer);
+	// フィルターの変更(高処理)
+	void SetFilter(const FILTER _filter);
+	//フィルターを変更して当たり判定を入れ替える(高処理)
+	void ChangeFilter(const FILTER _filter);
 	//フィルターの取得
 	const FILTER GetFilter() const
 	{
@@ -95,9 +97,13 @@ public:
 	{
 		return (int)m_shapeList.size();
 	}
+	const std::vector<b2ShapeId>& GetShapeId() const
+	{
+		return m_shapeList;
+	}
 
 	//=================================
-	// ヒットボックス生成
+	// ヒットボックス制御
 	//=================================
 	//当たり判定の作成(Box)
 	void CreateBoxShape(bool _sensor = false);
@@ -125,12 +131,15 @@ public:
 	void CreateSegment(std::vector<b2Vec2> _pointList, bool _sensor = false);
 	//当たり判定の作成 (※頂点を四つ以上指定)
 	void CreateChain(std::vector<b2Vec2>& _pointList);
-
+	//当たり判定のすべて削除
+	void ClearShape();
 	//=================================
 	//bodyの制御
 	//=================================
 	//positionのテレポート(高処理)
 	void SetPosition(Vector2 _pos);
+	//positionの取得
+	const Vector2 GetPosition() const;
 	//angleの強制変更(高処理)
 	void SetAngle(float _deg);
 	void SetAngle(double _rad);
@@ -172,8 +181,10 @@ public:
 
 	//現在重なっているオブジェクトの詮索
 	void GetOverlapObject(std::vector<GameObject*>& _objects);
+	//現在重なっているオブジェクトの詮索
+	void GetOverlapObject(std::vector<GameObject*>& _objects, FILTER _filter);
 	//現在重なっているオブジェクトの詮索(Transform指定)
-	void GetOverlapObject(std::vector<GameObject*>& _objects,b2Transform _tf);
+	void GetOverlapObject(std::vector<GameObject*>& _objects, FILTER _filter, b2Transform _tf);
 	//現在重なっているオブジェクトの詮索
 	void GetOverlapObject(std::unordered_map<GameObject*,b2ShapeId>& _objects);
 	//現在重なっているオブジェクトの詮索(Transform指定)

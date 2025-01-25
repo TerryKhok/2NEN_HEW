@@ -30,35 +30,34 @@ class Bounce : public Component
 
 	std::unordered_set<GameObject*> enters;
 
-	void OnColliderEnter(GameObject* _other) override
+	void EnterEvent(GameObject* target)
 	{
-		if (enters.find(_other) != enters.end()) return;
-
 		Box2DBody* rb = nullptr;
-		if (_other->TryGetComponent<Box2DBody>(&rb))
+		if (target->TryGetComponent<Box2DBody>(&rb))
 		{
-			enters.insert(_other);
+			enters.insert(target);
+			//=======================================================
 			rb->SetRestitution(restitutionPower);
+			//=======================================================
 			rend->SetColor(enterColor);
 			inCount++;
 		}
 
 		MovePlayer* player = nullptr;
-		if (_other->TryGetComponent<MovePlayer>(&player))
+		if (target->TryGetComponent<MovePlayer>(&player))
 		{
-			player->SetMode(BOUNCE);
+			player->PushMode(BOUNCE);
 		}
 	}
 
-	void OnColliderExit(GameObject* _other) override
+	void ExitEvent(GameObject* target)
 	{
 		Box2DBody* rb = nullptr;
-		if (_other->TryGetComponent(&rb))
+		if (target->TryGetComponent(&rb))
 		{
-			auto iter = enters.find(_other);
-			if (iter != enters.end()) enters.erase(iter);
-
+			//=======================================================
 			rb->SetRestitution(0.0f);
+			//=======================================================
 			inCount--;
 			if (inCount <= 0)
 			{
@@ -67,64 +66,53 @@ class Bounce : public Component
 		}
 
 		MovePlayer* player = nullptr;
-		if (_other->TryGetComponent<MovePlayer>(&player))
+		if (target->TryGetComponent<MovePlayer>(&player))
 		{
-			player->BackMode();
+			player->PopMode(BOUNCE);
 		}
 	}
 
-	/*std::unordered_map<GameObject*, b2ShapeId> enterObjects;
-	Vector2 enterPos;
-
-	void OnWindowEnter(HWND _hWnd) override
+	int overlapCount = 0;
+	void Update() override
 	{
-		rb->GetOverlapObject(enterObjects);
-		enterPos = m_this->transform.position;
+		overlapCount++;
+		if (overlapCount > 4)
+		{
+			overlapCount = 0;
+			std::unordered_map<GameObject*, b2ShapeId> insideObjects;
+			rb->GetOverlapObject(insideObjects);
+
+			for (auto iter = enters.begin(); iter != enters.end();)
+			{
+				auto it = insideObjects.find(*iter);
+				if (it == insideObjects.end())
+				{
+					ExitEvent(*iter);
+					iter = enters.erase(iter);
+					continue;
+				}
+				iter++;
+			}
+		}
 	}
 
-	void OnWindowExit(HWND _hWnd) override
+	void OnColliderEnter(GameObject* _other) override
 	{
-		Vector2 pos = GetWindowPosition(_hWnd);
-		rb->SetPosition(pos);
+		if (enters.find(_other) != enters.end()) return;
 
-		std::unordered_map<GameObject*, b2ShapeId> exitObjects;
-		rb->GetOverlapObject(exitObjects);
+		EnterEvent(_other);
+	}
 
-		for (auto object : enterObjects)
+	void OnColliderExit(GameObject* _other) override
+	{
+		auto iter = enters.find(_other);
+		if (iter != enters.end())
 		{
-			auto iter = exitObjects.find(object.first);
-			if (iter == exitObjects.end())
-			{
-				Box2DBody* rb = nullptr;
-				if (object.first->TryGetComponent(&rb))
-				{
-					auto iterator = enters.find(object.first);
-					if (iterator != enters.end()) enters.erase(iterator);
+			enters.erase(iter);
 
-					rb->SetRestitution(0.0f);
-					inCount--;
-					if (inCount <= 0)
-					{
-						rend->SetColor(exitColor);
-					}
-				}
-			}
+			ExitEvent(_other);
 		}
-		for (auto object : exitObjects)
-		{
-			auto iter = enterObjects.find(object.first);
-			if (iter == enterObjects.end())
-			{
-				Box2DBody* rb = nullptr;
-				if (object.first->TryGetComponent<Box2DBody>(&rb))
-				{
-					rb->SetAwake(true);
-				}
-			}
-		}
-
-		enterObjects.clear();
-	}*/
+	}
 
 	void DrawImGui(ImGuiApp::HandleUI& _handleUI) override
 	{

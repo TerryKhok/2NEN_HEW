@@ -36,7 +36,6 @@ private:
 	//テクスチャ読み込み関数ポインタ
 	static thread_local HRESULT(* pLoadTexture)(ComPtr<ID3D11ShaderResourceView>& _textureView, const wchar_t* _texPath);
 private:
-	static ComPtr<IWICImagingFactory> m_pWICFactory;
 	static std::unordered_map<std::wstring, ComPtr<ID3D11ShaderResourceView>> m_textureLib;
 	static std::unordered_map<std::wstring, ComPtr<ID3D11ShaderResourceView>> m_nextTextureLib;
 };
