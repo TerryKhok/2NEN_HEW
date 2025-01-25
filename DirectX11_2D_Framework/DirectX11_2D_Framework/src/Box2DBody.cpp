@@ -72,6 +72,8 @@ Box2DBody::Box2DBody(GameObject* _object, SERIALIZE_INPUT& ar)
 	bodyDef.fixedRotation = data.fixRot;
 	bodyDef.isAwake = data.awake;
 
+	pRotUpdate = bodyDef.fixedRotation ? &Box2DBody::FixedRot : &Box2DBody::UpdateRot;
+
 #ifdef BOX2D_UPDATE_MULTITHREAD
 	Box2D::WorldManager::pPauseWorldUpdate();
 #endif
@@ -344,8 +346,7 @@ inline void Box2DBody::Update()
 			auto pos = b2Body_GetPosition(m_bodyId);
 			pos *= DEFAULT_OBJECT_SIZE;
 			m_this->transform.position = Vector3(pos.x, pos.y, 0.5f);
-			auto rot = b2Rot_GetAngle(b2Body_GetRotation(m_bodyId));
-			m_this->transform.angle.z.Set(rot);
+			(this->*pRotUpdate)();
 		};
 
 	//Box2DBodyManager::moveFunctions.emplace(m_this->GetName(), func);
@@ -1089,6 +1090,12 @@ void Box2DBody::DrawImGui(ImGuiApp::HandleUI& _handle)
 #endif
 }
 
+void Box2DBody::UpdateRot()
+{
+	auto rot = b2Rot_GetAngle(b2Body_GetRotation(m_bodyId));
+	m_this->transform.angle.z.Set(rot);
+}
+
 void Box2DBody::SetFilter(const FILTER _filter)
 {
 	if (m_filter == _filter) return;
@@ -1758,6 +1765,8 @@ void Box2DBody::SetFixedRotation(bool _flag)
 #else
 	b2Body_SetFixedRotation(m_bodyId, _flag);
 #endif
+
+	pRotUpdate = _flag ? &Box2DBody::FixedRot : &Box2DBody::UpdateRot;
 }
 
 void Box2DBody::SetAwake(bool _awake)
@@ -2536,7 +2545,7 @@ void Box2DBoxRenderNode::Draw()
 	const auto& transform = m_object->transform;
 	const auto& objectCb = m_object->GetConstantBuffer();
 
-	auto rad = static_cast<float>(transform.angle.z.Get());
+	auto rad = b2Rot_GetAngle(b2Body_GetRotation(m_bodyId));
 	Vector2 offset;
 	offset.x = m_offset.x * cos(rad) - m_offset.y * sin(rad);
 	offset.y = m_offset.x * sin(rad) + m_offset.y * cos(rad);
@@ -2587,7 +2596,7 @@ inline void Box2DCircleRenderNode::Draw()
 	const auto& objectCb = m_object->GetConstantBuffer();
 
 
-	auto rad = static_cast<float>(transform.angle.z.Get());
+	auto rad = b2Rot_GetAngle(b2Body_GetRotation(m_bodyId));
 	Vector2 offset;
 	offset.x = m_offset.x * cos(rad) - m_offset.y * sin(rad);
 	offset.y = m_offset.x * sin(rad) + m_offset.y * cos(rad);
@@ -2637,7 +2646,7 @@ inline void Box2DCapsuleRenderNode::Draw()
 	const auto& transform = m_object->transform;
 	const auto& objectCb = m_object->GetConstantBuffer();
 
-	const float objectRad = static_cast<float>(transform.angle.z.Get());
+	const float objectRad = b2Rot_GetAngle(b2Body_GetRotation(m_bodyId));
 	const float rad = objectRad + m_angle;
 
 	Vector2 offset;
@@ -2776,7 +2785,7 @@ inline void Box2DMeshRenderNode::Draw()
 	const auto& transform = m_object->transform;
 	//const auto& objectCb = m_object->GetConstantBuffer();
 
-	auto rad = static_cast<float>(transform.angle.z.Get());
+	auto rad = b2Rot_GetAngle(b2Body_GetRotation(m_bodyId));
 
 	//ワールド変換行列の作成
 	//ー＞オブジェクトの位置・大きさ・向きを指定
@@ -2874,7 +2883,7 @@ inline void Box2DLineRenderNode::Draw()
 	DirectX11::m_pDeviceContext->IASetVertexBuffers(0, 1, RenderManager::m_lineVertexBuffer.GetAddressOf(), &strides, &offsets);
 	DirectX11::m_pDeviceContext->IASetIndexBuffer(RenderManager::m_lineIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
 
-	const float rad = (float)m_object->transform.angle.z.Get();
+	auto rad = b2Rot_GetAngle(b2Body_GetRotation(m_bodyId));
 	auto& objectPos = m_object->transform.position;
 	Vector2 pos = 
 	{

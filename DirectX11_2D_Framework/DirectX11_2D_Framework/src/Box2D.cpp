@@ -673,6 +673,49 @@ bool Box2D::WorldManager::RayCastShape(Vector2 _start, Vector2 _end, Box2DBody* 
 	return hit;
 }
 
+bool Box2D::WorldManager::RayCastPolygon(Vector2 _start, Vector2 _end, Box2DBody* _body, b2Polygon& _polygon, FILTER _filter)
+{
+	b2QueryFilter filter;
+	filter.categoryBits = _filter;
+	filter.maskBits = Box2DBodyManager::GetMaskFilterBit(_filter);
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pPauseWorldUpdate();
+#endif 
+	b2Vec2 rayStart = { _start.x / DEFAULT_OBJECT_SIZE,_start.y / DEFAULT_OBJECT_SIZE };
+	b2Vec2 rayEnd = { _end.x / DEFAULT_OBJECT_SIZE,_end.y / DEFAULT_OBJECT_SIZE };
+	b2Vec2 translation = b2Sub(rayEnd, rayStart);
+	b2Transform originTransform = b2Body_GetTransform(_body->m_bodyId);
+
+	RayCastContext context = { 0 };
+	// Must initialize fractions for sorting
+	context.fractions[0] = FLT_MAX;
+	context.fractions[1] = FLT_MAX;
+	context.fractions[2] = FLT_MAX;
+
+	b2World_CastPolygon(*currentWorldId, &_polygon, originTransform, translation,
+		filter, RayCastMultipleCallback, &context);
+
+#ifdef BOX2D_UPDATE_MULTITHREAD
+	Box2D::WorldManager::pResumeWorldUpdate();
+#endif
+	bool hit = context.count > 0;
+
+#ifdef DEBUG_TRUE
+	RenderManager::DrawRayNode rayNode;
+	Vector2 dis = _end - _start;
+	rayNode.center = _start + dis / 2;
+	//rayNode.length = Math::PointDistance(_start.x, _start.y, hitPoint.x, hitPoint.y);
+	rayNode.length = sqrt(dis.x * dis.x + dis.y * dis.y);
+	rayNode.radian = Math::PointRadian(_start.x, _start.y, _end.x, _end.y);
+	rayNode.color = hit ? XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) : XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+
+	RenderManager::m_drawRayNode.push_back(rayNode);
+#endif
+
+	return hit;
+}
+
 void Box2D::WorldManager::CreateWorld()
 {
 	//ワールド定義、初期化

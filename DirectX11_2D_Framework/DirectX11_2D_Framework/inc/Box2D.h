@@ -73,6 +73,8 @@ namespace Box2D
 		static bool RayCastShape(Vector2 _start, Vector2 _end, Box2DBody* _body,std::vector<Vector2>& _output);
 		static bool RayCastShape(Vector2 _start, Vector2 _end, Box2DBody* _body, std::vector<Vector2>& _output,FILTER _filter);
 
+		static bool RayCastPolygon(Vector2 _start, Vector2 _end, Box2DBody* _body , b2Polygon& _polygon, FILTER _filter);
+
 	private:
 		//ê∂ê¨ã÷é~
 		WorldManager() = delete;

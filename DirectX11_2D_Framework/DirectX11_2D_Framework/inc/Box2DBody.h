@@ -81,6 +81,10 @@ private:
 	void Serialize(SERIALIZE_OUTPUT& ar) override;
 	//imGui‚Ì•`‰æ
 	void DrawImGui(ImGuiApp::HandleUI& _handle)override;
+
+	void UpdateRot();
+	void FixedRot(){}
+	void(Box2DBody::* pRotUpdate)() = &Box2DBody::UpdateRot;
 public:
 	//bodyId‚ÌŽæ“¾
 	const b2BodyId GetBodyId() { return m_bodyId; }

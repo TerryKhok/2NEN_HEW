@@ -7,8 +7,6 @@ class AntiGravity : public Component
 	SAFE_POINTER(Renderer, rend)
 	SAFE_POINTER(Box2DBody, rb)
 
-	int inCount = 0;
-
 	const XMFLOAT4 enterColor = { 1.0f,1.0f,1.0f,1.0f };
 	const XMFLOAT4 exitColor = { 1.0f,1.0f,1.0f,0.2f };
 
@@ -32,44 +30,54 @@ class AntiGravity : public Component
 			rb->SetType(b2_kinematicBody);
 	}
 
+	static inline std::unordered_map<GameObject*, int> enterLib;
+
 	std::unordered_set<GameObject*> enters;
 
 	void EnterEvent(GameObject* target)
 	{
-		Box2DBody* rb = nullptr;
-		if (target->TryGetComponent<Box2DBody>(&rb))
+		auto iter = enterLib.find(target);
+		if (iter != enterLib.end())
+			iter->second++;
+		else
 		{
-			enters.insert(target);
-			rb->SetGravityScale(rb->GetGravityScale() * -0.5f);
-			rend->SetColor(enterColor);
-			inCount++;
-		}
+			enterLib.emplace(target, 1);
 
-		MovePlayer* player = nullptr;
-		if (target->TryGetComponent<MovePlayer>(&player))
-		{
-			player->inWindow = true;
-			player->PushMode(UNTI_GRAVITY);
+			Box2DBody* rb = nullptr;
+			if (target->TryGetComponent<Box2DBody>(&rb))
+			{
+				rb->SetGravityScale(rb->GetGravityScale() * -0.5f);
+				rb->SetAngle((double)(b2Rot_GetAngle(b2Body_GetRotation(rb->GetBodyId())) + Math::PI));
+			}
+
+			MovePlayer* player = nullptr;
+			if (target->TryGetComponent<MovePlayer>(&player))
+			{
+				player->inFloat = true;
+				player->PushMode(UNTI_GRAVITY);
+			}
 		}
 	}
 
 	void ExitEvent(GameObject* target)
 	{
+		auto iter = enterLib.find(target);
+		if (iter == enterLib.end()) return;
+		iter->second--;
+		if (iter->second > 0)return;
+		enterLib.erase(iter);
+		
 		Box2DBody* rb = nullptr;
 		if (target->TryGetComponent(&rb))
 		{
 			rb->SetGravityScale(rb->GetGravityScale() * -2.0f);
-			inCount--;
-			if (inCount <= 0)
-			{
-				rend->SetColor(exitColor);
-			}
+			rb->SetAngle((double)(b2Rot_GetAngle(b2Body_GetRotation(rb->GetBodyId())) + Math::PI));
 		}
 
 		MovePlayer* player = nullptr;
 		if (target->TryGetComponent<MovePlayer>(&player))
 		{
-			player->inWindow = false;
+			player->inFloat = false;
 			player->PopMode(UNTI_GRAVITY);
 		}
 	}
@@ -102,17 +110,32 @@ class AntiGravity : public Component
 	{
 		if (enters.find(_other) != enters.end()) return;
 
+		enters.insert(_other);
+		rend->SetColor(enterColor);
 		EnterEvent(_other);
 	}
 
 	void OnColliderExit(GameObject* _other) override
 	{
 		auto iter = enters.find(_other);
-		if (iter != enters.end())
-		{
-			enters.erase(iter);
+		if (iter == enters.end()) return;
+		
+		enters.erase(iter);
+		if (enters.empty())
+			rend->SetColor(exitColor);
 
-			ExitEvent(_other);
+		ExitEvent(_other);
+	}
+
+	void Delete() override
+	{
+		for (auto& obj : enters)
+		{
+			auto iter = enterLib.find(obj);
+			if (iter == enterLib.end()) continue;
+			iter->second--;
+			if (iter->second > 0)continue;
+			enterLib.erase(iter);
 		}
 	}
 };
