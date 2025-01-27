@@ -777,26 +777,26 @@
         },
         "polygon": {
             "poly.centroid": {
-                "vec.x": -7.5,
-                "vec.y": -2.500001907348633
+                "vec.x": -7.512520790100098,
+                "vec.y": 3.9651737213134767
             },
             "poly.count": 4,
             "poly.normals": {
                 "value0": {
-                    "vec.x": -0.9999999403953552,
-                    "vec.y": -0.0
+                    "vec.x": 0.0,
+                    "vec.y": -0.9999999403953552
                 },
                 "value1": {
-                    "vec.x": 0.0,
-                    "vec.y": -1.0
-                },
-                "value2": {
-                    "vec.x": 0.9999999403953552,
+                    "vec.x": 1.0,
                     "vec.y": -0.0
                 },
-                "value3": {
+                "value2": {
                     "vec.x": 0.0,
                     "vec.y": 1.0
+                },
+                "value3": {
+                    "vec.x": -0.9999992251396179,
+                    "vec.y": 0.0011904798448085785
                 },
                 "value4": {
                     "vec.x": 0.0,
@@ -818,19 +818,19 @@
             "poly.radius": 0.0,
             "poly.vertices": {
                 "value0": {
-                    "vec.x": -10.0,
-                    "vec.y": 25.0
+                    "vec.x": -10.050000190734864,
+                    "vec.y": -17.0
                 },
                 "value1": {
-                    "vec.x": -10.0,
-                    "vec.y": -30.0
+                    "vec.x": -5.0,
+                    "vec.y": -17.0
                 },
                 "value2": {
                     "vec.x": -5.0,
-                    "vec.y": -30.0
+                    "vec.y": 25.0
                 },
                 "value3": {
-                    "vec.x": -5.0,
+                    "vec.x": -10.0,
                     "vec.y": 25.0
                 },
                 "value4": {
@@ -1019,7 +1019,7 @@
         "comNames": [
             "class Box2DBody"
         ],
-        "m_filter": 16,
+        "m_filter": 32,
         "data": {
             "pos": {
                 "vec.x": 34.650001525878909,
@@ -2101,7 +2101,7 @@
             }
         },
         "confirmed": false,
-        "selfIndex": 0,
+        "selfIndex": 3,
         "restitutionPower": 0.800000011920929
     }
 }
