@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 18,
+    "objectNum": 19,
     "value0": {
         "name": "ooiwa",
         "transform": {
@@ -1618,7 +1618,7 @@
             "class Renderer",
             "class Goal"
         ],
-        "m_filter": 1,
+        "m_filter": 64,
         "data": {
             "pos": {
                 "vec.x": 34.79999923706055,
@@ -1750,8 +1750,8 @@
         "name": "Transparent",
         "transform": {
             "position": {
-                "x": -628.0475463867188,
-                "y": 16.458322525024415,
+                "x": -596.0187377929688,
+                "y": -143.6858673095703,
                 "z": 0.5
             },
             "scale": {
@@ -1799,8 +1799,8 @@
         "m_filter": 64,
         "data": {
             "pos": {
-                "vec.x": -62.80475616455078,
-                "vec.y": 1.6458323001861573
+                "vec.x": -59.60187530517578,
+                "vec.y": -14.368586540222168
             },
             "rot": {
                 "rot.c": 1.0,
@@ -1905,14 +1905,14 @@
             }
         },
         "confirmed": false,
-        "selfIndex": 2
+        "selfIndex": 0
     },
     "value13": {
         "name": "BounceWindow",
         "transform": {
             "position": {
-                "x": -632.5240478515625,
-                "y": -160.95626831054688,
+                "x": 579.9962768554688,
+                "y": 273.7208251953125,
                 "z": 0.5
             },
             "scale": {
@@ -1960,8 +1960,8 @@
         "m_filter": 64,
         "data": {
             "pos": {
-                "vec.x": -63.252403259277347,
-                "vec.y": -16.095626831054689
+                "vec.x": 57.99962615966797,
+                "vec.y": 27.372081756591798
             },
             "rot": {
                 "rot.c": 1.0,
@@ -2066,7 +2066,7 @@
             }
         },
         "confirmed": false,
-        "selfIndex": 0,
+        "selfIndex": 1,
         "restitutionPower": 0.800000011920929
     },
     "value14": {
@@ -2328,8 +2328,8 @@
         "name": "handObject",
         "transform": {
             "position": {
-                "x": -557.526611328125,
-                "y": 175.24639892578126,
+                "x": -550.5942993164063,
+                "y": -184.53475952148438,
                 "z": 0.5
             },
             "scale": {
@@ -2370,5 +2370,166 @@
                 }
             }
         }
+    },
+    "value18": {
+        "name": "FloatWindow_1",
+        "transform": {
+            "position": {
+                "x": 561.7328491210938,
+                "y": -146.68634033203126,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 15.0,
+                "y": 15.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody",
+            "class SubWindow",
+            "class AntiGravity",
+            "class Renderer",
+            "class MoveSubWindow"
+        ],
+        "m_filter": 64,
+        "data": {
+            "pos": {
+                "vec.x": 56.17328643798828,
+                "vec.y": -14.668634414672852
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
+            "type": 1,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 0.0,
+            "autoMass": 1.0,
+            "bullet": true,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": true,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "poly.count": 4,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
+                },
+                "value1": {
+                    "vec.x": 1.0,
+                    "vec.y": 0.0
+                },
+                "value2": {
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
+                },
+                "value3": {
+                    "vec.x": -1.0,
+                    "vec.y": 0.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": -7.5,
+                    "vec.y": -7.5
+                },
+                "value1": {
+                    "vec.x": 7.5,
+                    "vec.y": -7.5
+                },
+                "value2": {
+                    "vec.x": 7.5,
+                    "vec.y": 7.5
+                },
+                "value3": {
+                    "vec.x": -7.5,
+                    "vec.y": 7.5
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            }
+        },
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483658,
+                "data": {
+                    "active": true,
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 0.20000000298023225
+                    },
+                    "path": "asset\\sign\\sign_float.png"
+                }
+            }
+        },
+        "confirmed": false,
+        "selfIndex": 0
     }
 }
