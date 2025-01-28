@@ -50,8 +50,6 @@ class DecorativePlayerMove : public Component
 		state->Start(mode, anim);
 	}
 
-	Sound sound;
-
 	void Start()
 	{
 		render = m_this->GetComponent<Renderer>();
@@ -75,7 +73,7 @@ class DecorativePlayerMove : public Component
 			ChangeState(PLAYER_IDLE);
 			anim->Reverse(reverse);
 		}
-		sound.PlayWaveSound(BGM_Game01, 1.0f);
+		Sound::Get().PlayWaveSound(BGM_Game01, 1.0f);
 	}
 	PLAYER_MODE mode = NORMAL;
 	std::vector<PLAYER_MODE> modeLayer;
@@ -234,7 +232,7 @@ private:
 		if (inAir && isGround)
 		{
 			inAir = false;
-			sound.PlayWaveSound(SFX_Land, 1.0f);
+			Sound::Get().PlayWaveSound(SFX_Land, 1.0f);
 
 			landing = true;
 			state->Land(mode, anim);

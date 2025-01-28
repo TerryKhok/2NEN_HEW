@@ -55,12 +55,18 @@ private:
 
 	bool isPlaying = false;                          // 再生中フラグ
 
-	bool Init();    // XAudio2の初期化
-	void Cleanup(); // リソースの解放
-
-public:
 	Sound();    // コンストラクタ
 	~Sound();   // デストラクタ
+
+	bool Init();    // XAudio2の初期化
+	void Cleanup(); // リソースの解放
+public:
+	//インスタンス取得
+	static Sound& Get()
+	{
+		static Sound sound;
+		return sound;
+	}
 
 	bool LoadWaveFile(const std::wstring& wFilePath, WaveData* outData, IXAudio2SourceVoice* m_pSourceVoice, XAUDIO2_BUFFER& audioBuffer,bool loop);     // WAVファイルを読み込む
 	bool PlayWaveSound(SOUND_LABEL label, float volume);    // 音量を指定して再生

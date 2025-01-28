@@ -206,8 +206,6 @@ class MovePlayer : public Component
 		state->Start(mode, anim);
 	}
 
-	Sound sound;
-
 	void Start()
 	{
 		render = m_this->GetComponent<Renderer>();
@@ -231,7 +229,7 @@ class MovePlayer : public Component
 			ChangeState(PLAYER_IDLE);
 			anim->Reverse(reverse);
 		}
-		sound.PlayWaveSound(BGM_Game01, 1.0f);
+		Sound::Get().PlayWaveSound(BGM_Game01, 1.0f);
 	}
 	PLAYER_MODE mode = NORMAL;
 	std::vector<PLAYER_MODE> modeLayer;
@@ -517,7 +515,7 @@ private:
 		if (jumping)
 		{
 			if (jump_count == 1) {
-				sound.PlayWaveSound(SFX_Jump, 1.0f);
+				Sound::Get().PlayWaveSound(SFX_Jump, 1.0f);
 			}
 			jump_count++;
 			
@@ -539,7 +537,7 @@ private:
 		if (inAir && isGround)
 		{
 			inAir = false;
-			sound.PlayWaveSound(SFX_Land, 1.0f);
+			Sound::Get().PlayWaveSound(SFX_Land, 1.0f);
 
 			if (move_count != 0)
 			{
