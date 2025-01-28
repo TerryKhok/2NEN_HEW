@@ -1,5 +1,7 @@
 #pragma once
 
+#include "SelectTrigger.h"
+
 class MoveRect : public Component
 {
 	SAFE_POINTER(Box2DBody, rb)

@@ -145,6 +145,8 @@ void Renderer::DrawImGui(ImGuiApp::HandleUI& _handle)
 	ImGui::SameLine();
 	ImGui::Text("path  : %s", wstring_to_string(m_node->texPath).c_str());
 	
+	ImGui::DragFloat2("offset##renderer", m_node->m_offset.data());
+
 	ImGui::ColorEdit4("color##render", &m_node->m_color.x);
 	ImVec4 color(m_node->m_color.x, m_node->m_color.y, m_node->m_color.z, m_node->m_color.w);
 	ImGui::Image((ImTextureID)(m_node->m_pTextureView.Get()), ImVec2(50, 50), ImVec2(0, 0), ImVec2(1, 1), color);
@@ -168,16 +170,32 @@ void Renderer::SetColor(XMFLOAT4 _color)
 
 void Renderer::SetUV(int _splitX, int _splitY, int _frameX, int _frameY)
 {
-	m_node->Delete(m_layer);
-	auto node = new UVRenderNode();
-	node->m_object = m_this;
-	node->m_pTextureView = m_node->m_pTextureView;
-	node->m_scaleX = 1.0f / _splitX;
-	node->m_scaleY = 1.0f / _splitY;
-	node->m_frameX = _frameX;
-	node->m_frameY = _frameY;
-	m_node = std::shared_ptr<RenderNode>(node);
-	RenderManager::AddRenderList(m_node, m_layer);
+	if (m_node->IsUVNode())
+	{
+		auto uvNode = dynamic_cast<UVRenderNode*>(m_node.get());
+		uvNode->m_scaleX = 1.0f / _splitX;
+		uvNode->m_scaleY = 1.0f / _splitY;
+		uvNode->m_frameX = _frameX;
+		uvNode->m_frameY = _frameY;
+	}
+	else
+	{
+		m_node->Delete(m_layer);
+		auto node = new UVRenderNode();
+		node->m_object = m_this;
+		node->m_pTextureView = m_node->m_pTextureView;
+		node->m_scaleX = 1.0f / _splitX;
+		node->m_scaleY = 1.0f / _splitY;
+		node->m_frameX = _frameX;
+		node->m_frameY = _frameY;
+		m_node = std::shared_ptr<RenderNode>(node);
+		RenderManager::AddRenderList(m_node, m_layer);
+	}
+}
+
+void Renderer::SetOffset(Vector2 _offset)
+{
+	m_node->m_offset = _offset;
 }
 
 RenderNode::RenderNode()
@@ -203,7 +221,9 @@ void RenderNode::Active(bool _active)
 
 inline void RenderNode::Draw()
 {
+	m_object->transform.position += m_offset;
 	auto& cb = m_object->GetConstantBuffer();
+	m_object->transform.position -= m_offset;
 	cb.color = m_color;
 
 	//テクスチャをピクセルシェーダーに渡す
@@ -319,7 +339,10 @@ inline void RenderNode::DeleteList()
 
 inline void UVRenderNode::Draw()
 {
+	m_object->transform.position += m_offset;
 	auto& cb = m_object->GetConstantBuffer();
+	m_object->transform.position -= m_offset;
+
 	cb.color = m_color;
 
 	//テクスチャをピクセルシェーダーに渡す
@@ -658,8 +681,8 @@ void RenderManager::SetMainCameraMatrix()
 	if (GetWindowRect(Window::GetMainHWnd(), &rect))
 	{
 		CameraManager::cameraPosition = {
-			(static_cast<float>(rect.left + rect.right) / 2 - Window::MONITER_HALF_WIDTH) / renderZoom.x + renderOffset.x,
-			(static_cast<float>(rect.top + rect.bottom) / -2 + Window::MONITER_HALF_HEIGHT) / renderZoom.y + renderOffset.y
+			(static_cast<float>(rect.left + rect.right) / 2 - Window::MONITER_HALF_WIDTH) * PROJECTION_ASPECT_WIDTH / renderZoom.x + renderOffset.x,
+			(static_cast<float>(rect.top + rect.bottom) / -2 + Window::MONITER_HALF_HEIGHT) * PROJECTION_ASPECT_HEIGHT / renderZoom.y + renderOffset.y
 		};
 	}
 
@@ -667,10 +690,9 @@ void RenderManager::SetMainCameraMatrix()
 	{
 		rect.right = max(rect.right, 1);
 		rect.bottom = max(rect.bottom, 1);
-		CameraManager::cameraZoom.x = PROJECTION_WIDTH / static_cast<float>(rect.right) * renderZoom.x;
-		CameraManager::cameraZoom.y = PROJECTION_HEIGHT / static_cast<float>(rect.bottom) * renderZoom.y;
+		CameraManager::cameraZoom.x = PROJECTION_WINDOW_WIDTH / static_cast<float>(rect.right) * renderZoom.x;
+		CameraManager::cameraZoom.y = PROJECTION_WINDOW_HEIGHT / static_cast<float>(rect.bottom) * renderZoom.y;
 	}
 
 	CameraManager::SetCameraMatrix();
 }
-

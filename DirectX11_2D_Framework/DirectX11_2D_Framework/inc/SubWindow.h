@@ -31,8 +31,6 @@ private:
 		int width = static_cast<int>(size.x * DEFAULT_OBJECT_SIZE / PROJECTION_ASPECT_WIDTH);
 		int height = static_cast<int>(size.y * DEFAULT_OBJECT_SIZE / PROJECTION_ASPECT_HEIGHT);
 		Vector2 pos = _object->transform.position;
-		pos.x /= PROJECTION_ASPECT_WIDTH;
-		pos.y /= PROJECTION_ASPECT_HEIGHT;
 		m_hWnd = Window::pWindowSubCreate(_object->GetName(), _object->GetName(), width, height, pos);
 	}
 
@@ -41,8 +39,6 @@ private:
 		int width = static_cast<int>(size.x * DEFAULT_OBJECT_SIZE / PROJECTION_ASPECT_WIDTH);
 		int height = static_cast<int>(size.y * DEFAULT_OBJECT_SIZE / PROJECTION_ASPECT_HEIGHT);
 		Vector2 pos = _object->transform.position;
-		pos.x /= PROJECTION_ASPECT_WIDTH;
-		pos.y /= PROJECTION_ASPECT_HEIGHT;
 		m_hWnd = Window::pWindowSubCreate(_object->GetName(), _windowName, width, height, pos);
 	}
 

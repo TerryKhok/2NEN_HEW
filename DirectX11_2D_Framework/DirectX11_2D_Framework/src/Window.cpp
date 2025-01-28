@@ -627,13 +627,19 @@ const HWND& Window::GetMainHWnd()
 void Window::PauseGame()
 {
 	if (!pauseGame)
-		PostMessage(Window::GetMainHWnd(), WM_PAUSE_GAME, 0, 0);
+	{
+		LOG("pause");
+		PostMessage(mainHwnd, WM_PAUSE_GAME, 0, 0);
+	}
 }
 
 void Window::ResumeGame()
 {
 	if (pauseGame)
-		PostMessage(Window::GetMainHWnd(), WM_RESUME_GAME, 0, 0);
+	{
+		LOG("resume");
+		PostMessage(mainHwnd, WM_RESUME_GAME, 0, 0);
+	}
 }
 
 const bool Window::IsPause()
@@ -893,6 +899,9 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					worldPos.x = worldPos.x * DISPALY_ASPECT_WIDTH / RenderManager::renderZoom.x + RenderManager::renderOffset.x;
 					worldPos.y = worldPos.y * DISPALY_ASPECT_HEIGHT / RenderManager::renderZoom.y + RenderManager::renderOffset.y;				
 
+					worldPos.x *= PROJECTION_ASPECT_WIDTH;
+					worldPos.y *= PROJECTION_ASPECT_HEIGHT;
+
 					bool handleHit = ImGuiApp::UpdateHandleUI(worldPos);
 				
 					bool inGameScreen = abs(mousePos.x) <= PROJECTION_WIDTH / 2 && abs(mousePos.y) <= PROJECTION_HEIGHT / 2;
@@ -1110,7 +1119,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 		if (pauseGame)
 		{
-			PostMessage(Window::GetMainHWnd(), WM_PAUSE_GAME, 0, 0);
+			PostMessage(mainHwnd, WM_PAUSE_GAME, 0, 0);
 		}
 	}
 	break;
@@ -1627,8 +1636,12 @@ void SetWindowPosition(HWND _hWnd, Vector2 pos)
 //	pos -= RenderManager::renderOffset;
 //#endif
 
+	pos.x /= PROJECTION_ASPECT_WIDTH;
+	pos.y /= PROJECTION_ASPECT_HEIGHT;
+
 	int x = static_cast<int>(pos.x) + Window::MONITER_HALF_WIDTH - (rect.right - rect.left) / 2;
 	int y = -static_cast<int>(pos.y) + Window::MONITER_HALF_HEIGHT - (rect.bottom - rect.top) / 2;
+	
 	SetWindowPos(_hWnd, nullptr, x, y, 0, 0, SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE);
 }
 

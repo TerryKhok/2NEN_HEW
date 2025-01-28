@@ -177,8 +177,6 @@ void SceneManager::LoadSceneNotThrow(std::string _sceneName)
         ObjectManager::GenerateList();
         SFTextManager::GenerateList();
 
-        Window::ResumeGame();
-
         //対応したシーンのロード処理
         it->second();
         //シーン切り替え

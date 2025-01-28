@@ -35,12 +35,13 @@ public:
 	void SetColor(XMFLOAT4 _color);
 	//uv座標の変更(ちょっと重い)
 	void SetUV(int _splitX, int _splitY, int _frameX, int _frameY);
+	//offsetの変更
+	void SetOffset(Vector2 _offset);
 private:
 	//対応したノード
 	std::shared_ptr<RenderNode> m_node;
 	//描画する順番
 	LAYER m_layer = LAYER::LAYER_01;
-
 };
 
 
@@ -70,11 +71,14 @@ protected:
 	void SetTexture(const wchar_t* _texpath);
 	//テクスチャーの設定
 	void SetTexture(const std::string& _filePath);
+	//UVのNodeか確かめる
+	virtual bool IsUVNode() const { return false; }
 private:
 	//描画関数ポインター
 	void(RenderNode::* pDrawFunc)(void) = &RenderNode::Draw;
 protected:
 	GameObject* m_object = nullptr;
+	Vector2 m_offset;
 	DirectX::XMFLOAT4 m_color = { 1.0f,1.0f,1.0f,1.0f };
 	//テクスチャパス
 	bool active = false;
@@ -137,6 +141,9 @@ class UVRenderNode : public RenderNode
 private:
 	UVRenderNode() {}
 	UVRenderNode(const wchar_t* _texPath) :RenderNode(_texPath) {}
+
+	//UVのNodeか確かめる
+	bool IsUVNode() const override { return true; }
 private:
 	//描画して次につなぐ
 	inline void Draw();
@@ -150,12 +157,14 @@ private:
 	template <class Archive>
 	void save(Archive& archive) const
 	{
+		//archive(cereal::base_class<RenderNode>(this));
 		archive(CEREAL_NVP(m_scaleX), CEREAL_NVP(m_scaleY), CEREAL_NVP(m_frameX), CEREAL_NVP(m_frameY));
 	}
 
 	template<class Archive>
 	void load(Archive& archive)
 	{
+		//archive(cereal::base_class<RenderNode>(this));
 		archive(CEREAL_NVP(m_scaleX), CEREAL_NVP(m_scaleY), CEREAL_NVP(m_frameX), CEREAL_NVP(m_frameY));
 	}
 
@@ -165,8 +174,6 @@ private:
 // Register the types with Cereal
 CEREAL_REGISTER_TYPE(UVRenderNode)
 CEREAL_REGISTER_POLYMORPHIC_RELATION(RenderNode, UVRenderNode)
-
-
 
 class RenderManager final
 {

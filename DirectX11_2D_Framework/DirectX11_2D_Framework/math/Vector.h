@@ -651,6 +651,13 @@ public:
 		Subtract(_v);
 		return *this;
 	}
+
+	const Vector3& operator-=(const Vector2& _v)
+	{
+		vec.x -= _v.x;
+		vec.y -= _v.y;
+		return *this;
+	}
 	/// <summary>
 	/// œZ‘ã“ü‰‰ZqB
 	/// </summary>

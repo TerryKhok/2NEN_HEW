@@ -149,6 +149,7 @@
     <ClInclude Include="Bounce.h" />
     <ClInclude Include="BreakScaffold.h" />
     <ClInclude Include="CrushRock.h" />
+    <ClInclude Include="DecorativePlayerMove.h" />
     <ClInclude Include="MoveRect.h" />
     <ClInclude Include="Obj.h" />
     <ClInclude Include="ObjMH.h" />
@@ -171,6 +172,7 @@
     <ClInclude Include="Sample_Box2D.h" />
     <ClInclude Include="Sample_SceneLoad.h" />
     <ClInclude Include="SeigoTestScene.h" />
+    <ClInclude Include="SelectTrigger.h" />
     <ClInclude Include="SoundSaino.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>

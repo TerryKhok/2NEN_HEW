@@ -144,6 +144,12 @@
     <ClInclude Include="RunFixedRoute.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="DecorativePlayerMove.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectTrigger.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

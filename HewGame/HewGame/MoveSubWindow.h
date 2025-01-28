@@ -66,10 +66,18 @@ class MoveSubWindowManager : public Component
 		auto& input = Input::Get();
 		if (input.KeyTrigger(VK_E) || input.ButtonTrigger(XINPUT_X))
 		{
+			if (saveBuffer.size() > 1)
+			{
+				saveBuffer.pop_back();
+			}
 			MoveSubWindowMode();
 		}
 		if (input.KeyTrigger(VK_R) || input.ButtonTrigger(XINPUT_B))
 		{
+		/*	if (saveBuffer.size() > 1)
+			{
+				saveBuffer.pop_back();
+			}*/
 			UndoGameSubWindow();
 		}
 	}
@@ -96,6 +104,10 @@ class MoveSubWindowManager : public Component
 		}
 		if (input.KeyTrigger(VK_E) || input.ButtonTrigger(XINPUT_X))
 		{
+			std::stringstream buffer;
+			SceneManager::SaveScene(buffer);
+			saveBuffer.push_back(std::move(buffer));
+
 			PlayGameSubWindow();
 		}
 		if (input.KeyTrigger(VK_F) || input.ButtonTrigger(XINPUT_A))

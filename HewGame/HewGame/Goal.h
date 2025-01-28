@@ -2,7 +2,7 @@
 
 class Goal : public Component
 {
-	std::string sceneName = "goal";
+	std::string sceneName = "GameClearScene";
 	int waitCount = 60;
 	int count = 0;
 	void(Goal::*pEvent)() = &Goal::VoidFunc;

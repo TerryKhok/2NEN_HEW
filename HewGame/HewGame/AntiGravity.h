@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MovePlayer.h"
+#include "DecorativePlayerMove.h"
 
 class AntiGravity : public Component
 {
@@ -30,11 +30,12 @@ class AntiGravity : public Component
 			rb->SetType(b2_kinematicBody);
 	}
 
+protected:
 	static inline std::unordered_map<GameObject*, int> enterLib;
 
 	std::unordered_set<GameObject*> enters;
 
-	void EnterEvent(GameObject* target)
+	virtual void EnterEvent(GameObject* target)
 	{
 		auto iter = enterLib.find(target);
 		if (iter != enterLib.end())
@@ -46,20 +47,20 @@ class AntiGravity : public Component
 			Box2DBody* rb = nullptr;
 			if (target->TryGetComponent<Box2DBody>(&rb))
 			{
-				rb->SetGravityScale(rb->GetGravityScale() * -0.5f);
-				rb->SetAngle((double)(b2Rot_GetAngle(b2Body_GetRotation(rb->GetBodyId())) + Math::PI));
+				rb->SetGravityScale(rb->GetGravityScale() * -1.0f);
+				//rb->SetAngle((double)(b2Rot_GetAngle(b2Body_GetRotation(rb->GetBodyId())) + Math::PI));
 			}
 
 			MovePlayer* player = nullptr;
 			if (target->TryGetComponent<MovePlayer>(&player))
 			{
 				player->inFloat = true;
-				player->PushMode(UNTI_GRAVITY);
+				player->PushMode(ANTI_GRAVITY);
 			}
 		}
 	}
 
-	void ExitEvent(GameObject* target)
+	virtual void ExitEvent(GameObject* target)
 	{
 		auto iter = enterLib.find(target);
 		if (iter == enterLib.end()) return;
@@ -70,23 +71,26 @@ class AntiGravity : public Component
 		Box2DBody* rb = nullptr;
 		if (target->TryGetComponent(&rb))
 		{
-			rb->SetGravityScale(rb->GetGravityScale() * -2.0f);
-			rb->SetAngle((double)(b2Rot_GetAngle(b2Body_GetRotation(rb->GetBodyId())) + Math::PI));
+			float gravity = rb->GetGravityScale();
+			rb->SetGravityScale(gravity * -1.0f);
+			//rb->SetAngle((double)(b2Rot_GetAngle(b2Body_GetRotation(rb->GetBodyId())) + Math::PI));
+			//rb->AddForceImpulse({ 0.0f,rb->GetMass() });
 		}
 
 		MovePlayer* player = nullptr;
 		if (target->TryGetComponent<MovePlayer>(&player))
 		{
 			player->inFloat = false;
-			player->PopMode(UNTI_GRAVITY);
+			player->PopMode(ANTI_GRAVITY);
 		}
 	}
 
+private:
 	int overlapCount = 0;
 	void Update() override
 	{
 		overlapCount++;
-		if (overlapCount > 4)
+		if (overlapCount > 2)
 		{
 			overlapCount = 0;
 			std::unordered_map<GameObject*, b2ShapeId> insideObjects;
@@ -99,6 +103,8 @@ class AntiGravity : public Component
 				{
 					ExitEvent(*iter);
 					iter = enters.erase(iter);
+					if (enters.empty())
+						rend->SetColor(exitColor);
 					continue;
 				}
 				iter++;
@@ -141,3 +147,58 @@ class AntiGravity : public Component
 };
 
 SetReflectionComponent(AntiGravity)
+
+class DecorativeAntiGravity : public AntiGravity
+{
+	void EnterEvent(GameObject* target) override
+	{
+		auto iter = enterLib.find(target);
+		if (iter != enterLib.end())
+			iter->second++;
+		else
+		{
+			enterLib.emplace(target, 1);
+
+			Box2DBody* rb = nullptr;
+			if (target->TryGetComponent<Box2DBody>(&rb))
+			{
+				rb->SetGravityScale(rb->GetGravityScale() * -1.0f);
+				//rb->SetAngle((double)(b2Rot_GetAngle(b2Body_GetRotation(rb->GetBodyId())) + Math::PI));
+			}
+
+			DecorativePlayerMove* player = nullptr;
+			if (target->TryGetComponent<DecorativePlayerMove>(&player))
+			{
+				player->inFloat = true;
+				player->PushMode(ANTI_GRAVITY);
+			}
+		}
+	}
+
+	void ExitEvent(GameObject* target) override
+	{
+		auto iter = enterLib.find(target);
+		if (iter == enterLib.end()) return;
+		iter->second--;
+		if (iter->second > 0)return;
+		enterLib.erase(iter);
+
+		Box2DBody* rb = nullptr;
+		if (target->TryGetComponent(&rb))
+		{
+			float gravity = rb->GetGravityScale();
+			rb->SetGravityScale(gravity * -1.0f);
+			//rb->SetAngle((double)(b2Rot_GetAngle(b2Body_GetRotation(rb->GetBodyId())) + Math::PI));
+			rb->AddForceImpulse({ 0.0f,rb->GetMass() });
+		}
+
+		DecorativePlayerMove* player = nullptr;
+		if (target->TryGetComponent<DecorativePlayerMove>(&player))
+		{
+			player->inFloat = false;
+			player->PopMode(ANTI_GRAVITY);
+		}
+	}
+};
+
+SetReflectionComponent(DecorativeAntiGravity)

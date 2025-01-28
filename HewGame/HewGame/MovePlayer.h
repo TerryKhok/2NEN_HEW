@@ -6,7 +6,7 @@
 enum PLAYER_MODE
 {
 	NORMAL,
-	UNTI_GRAVITY,
+	ANTI_GRAVITY,
 	LOW_GRAVITY,
 	BOUNCE,
 	PERMEATION,
@@ -173,9 +173,9 @@ class MovePlayer : public Component
 		PLAYER_STATE_MAX
 	};
 
-
+	SAFE_POINTER(Renderer, render)
 	SAFE_POINTER(Box2DBody, rb)
-		SAFE_POINTER(Animator, anim)
+	SAFE_POINTER(Animator, anim)
 
 	std::unique_ptr<PlayerState> state;
 
@@ -210,6 +210,9 @@ class MovePlayer : public Component
 
 	void Start()
 	{
+		render = m_this->GetComponent<Renderer>();
+		render->SetOffset({ 0.0f,15.0f * (float)cos(m_this->transform.angle.z.Get()) });
+
 		if (!m_this->TryGetComponent<Box2DBody>(&rb))
 		{
 			rb = m_this->AddComponent<Box2DBody>();
@@ -272,13 +275,11 @@ private:
 	bool jumping = false;
 	int jump_count = 0;
 	int move_count = 0;
-	int movement = 0;
 	bool inAir = false;
 	int airCount = 0;
 	bool landing = false;
 	int landCount = 0;
 	bool reverse = false;
-	bool oldFloat = false;
 
 	void Update()
 	{
@@ -401,7 +402,8 @@ private:
 
 			anim->Reverse(reverse);
 		}
-		oldFloat = inFloat;
+
+		render->SetOffset({ 0.0f,15.0f * (float)cos(angleZ.Get()) });
 
 		if ((input.KeyPress(VK_D) || input.LeftAnalogStick().x > 0.1f))
 		{

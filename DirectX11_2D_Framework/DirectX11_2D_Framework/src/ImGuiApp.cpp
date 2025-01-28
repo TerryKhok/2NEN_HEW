@@ -80,8 +80,8 @@ HRESULT ImGuiApp::Init(HINSTANCE hInstance)
 	RegisterClassEx(&wc);
 
 	Vector2 windowPos[TYPE_MAX];
-	windowPos[OPTIONS] = { Window::MONITER_HALF_WIDTH / -1.35f - 8.0f,0 };
-	windowPos[INSPECTER] = { Window::MONITER_HALF_WIDTH / 1.35f + 8.0f,0 };
+	windowPos[OPTIONS] = { Window::MONITER_HALF_WIDTH * PROJECTION_ASPECT_WIDTH / -1.35f - 8.0f,0 };
+	windowPos[INSPECTER] = { Window::MONITER_HALF_WIDTH * PROJECTION_ASPECT_HEIGHT / 1.35f + 8.0f,0 };
 
 	// Use std::fill to set all elements to the same function
 	std::fill(std::begin(pDrawImGui), std::end(pDrawImGui),[](){});
@@ -426,6 +426,8 @@ void ImGuiApp::DrawOptionGui()
 				Vector2 worldPos = mousePos;
 				worldPos.x = worldPos.x * DISPALY_ASPECT_WIDTH / RenderManager::renderZoom.x + RenderManager::renderOffset.x;
 				worldPos.y = worldPos.y * DISPALY_ASPECT_HEIGHT / RenderManager::renderZoom.y + RenderManager::renderOffset.y;
+				worldPos.x *= PROJECTION_ASPECT_WIDTH;
+				worldPos.y *= PROJECTION_ASPECT_HEIGHT;
 				ImGui::Text("worldMousePos x : %.3f, y : %.3f", worldPos.x, worldPos.y);
 				ImGui::EndTabItem();
 			}
@@ -2768,10 +2770,22 @@ bool ImGuiApp::HandleUI::Update(Vector2 _targetPos)
 			}
 			if (Input::Get().MouseLeftRelease())
 			{
+				//selectedObject->transform.position = beforePos;
+				Box2DBody* rb = nullptr;
+				if (selectedObject->TryGetComponent<Box2DBody>(&rb))
+				{
+					rb->SetAngle(selectedObject->transform.angle.z);
+				}
 				changes.emplace(std::bind([](GameObject* obj, double rad/*, std::function<void()> func*/) {
 					if (obj != nullptr)
 					{
 						obj->transform.angle.z.Set(rad);
+						//selectedObject->transform.position = beforePos;
+						Box2DBody* rb = nullptr;
+						if (selectedObject->TryGetComponent<Box2DBody>(&rb))
+						{
+							rb->SetAngle(selectedObject->transform.angle.z);
+						}
 						//func();
 					}
 					}, selectedObject, beforeRad/*, std::move(SetChangeValue(selectedObject, moveMode))*/));

@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 16,
+    "objectNum": 17,
     "value0": {
         "name": "backGround",
         "transform": {
@@ -30,7 +30,7 @@
         "comNames": [
             "class Renderer"
         ],
-        "m_layer": 0,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -1837,8 +1837,8 @@
         "name": "Player",
         "transform": {
             "position": {
-                "x": -66.66358184814453,
-                "y": 100.61359405517578,
+                "x": -67.1512451171875,
+                "y": 100.61361694335938,
                 "z": 0.5
             },
             "scale": {
@@ -2005,8 +2005,8 @@
         "m_filter": 8,
         "data": {
             "pos": {
-                "vec.x": -6.666358470916748,
-                "vec.y": 10.061359405517579
+                "vec.x": -6.715124130249023,
+                "vec.y": 10.061361312866211
             },
             "rot": {
                 "rot.c": 1.0,
@@ -2177,7 +2177,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 2,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": -12.943499565124512,
                 "vec.y": 29.497726440429689
@@ -2204,7 +2204,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 2,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": -10.0,
                 "vec.y": -10.0
@@ -2231,7 +2231,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 2,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": 10.0,
                 "vec.y": -10.0
@@ -2258,7 +2258,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 2,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": 17.956501007080079,
                 "vec.y": 12.697726249694825
@@ -2731,8 +2731,8 @@
         "name": "Transparent",
         "transform": {
             "position": {
-                "x": -608.0126953125,
-                "y": -3.5765380859375,
+                "x": -618.0126953125,
+                "y": 21.423465728759767,
                 "z": 0.5
             },
             "scale": {
@@ -2892,8 +2892,8 @@
         "name": "handObject",
         "transform": {
             "position": {
-                "x": -536.0247802734375,
-                "y": 158.2740478515625,
+                "x": -506.0248107910156,
+                "y": 218.27407836914063,
                 "z": 0.5
             },
             "scale": {
@@ -3161,7 +3161,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -5.293499946594238,
                 "vec.y": 8.647726058959961
@@ -3188,7 +3188,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -0.793499767780304,
                 "vec.y": -5.302273750305176
@@ -3215,7 +3215,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 0.8565002679824829,
                 "vec.y": -5.302273750305176
@@ -3242,7 +3242,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 5.956500053405762,
                 "vec.y": 8.79772663116455
@@ -3405,8 +3405,8 @@
         "name": "Transparent_1",
         "transform": {
             "position": {
-                "x": -602.526611328125,
-                "y": 210.2463836669922,
+                "x": -572.526611328125,
+                "y": 270.24639892578127,
                 "z": 0.5
             },
             "scale": {
@@ -3561,5 +3561,52 @@
         },
         "confirmed": false,
         "selfIndex": 4
+    },
+    "value16": {
+        "name": "PauseScreen",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 33.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 48.012813568115237,
+                "y": 36.030517578125,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer"
+        ],
+        "m_layer": 3,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483660,
+                "data": {
+                    "active": true,
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\pauseScreen.png"
+                }
+            }
+        }
     }
 }
