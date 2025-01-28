@@ -148,6 +148,7 @@
     <ClInclude Include="BigRock.h" />
     <ClInclude Include="Bounce.h" />
     <ClInclude Include="BreakScaffold.h" />
+    <ClInclude Include="BreakWall.h" />
     <ClInclude Include="CrushRock.h" />
     <ClInclude Include="DecorativePlayerMove.h" />
     <ClInclude Include="MoveRect.h" />

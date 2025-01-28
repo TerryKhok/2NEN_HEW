@@ -23,11 +23,12 @@ class Goal : public Component
 		(this->*pEvent)();
 	}
 
-	void OnColliderEnter(GameObject* _ohter) override
+	void OnColliderEnter(GameObject* _other) override
 	{
-		if (_ohter->ExistComponent<MovePlayer>())
+		MovePlayer* player = nullptr;
+		if (_other->TryGetComponent<MovePlayer>(&player))
 		{
-			LOG("touch goal!!");
+			player->GameClear();
 			pEvent = &Goal::EventFunc;
 		}
 	}

@@ -150,6 +150,9 @@
     <ClInclude Include="SelectTrigger.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="BreakWall.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

@@ -265,6 +265,13 @@ public:
 			state->ModeChange(mode, anim);
 	}
 
+	//goalヘッダーから呼び出してる
+	void GameClear()
+	{
+		LOG("GameClear");
+		ChangeState(PLAYER_GOAL);
+		m_this->RemoveComponent<MovePlayer>();
+	}
 
 	void GameOver()
 	{
