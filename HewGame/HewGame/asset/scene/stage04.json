@@ -5,8 +5,8 @@
         "name": "handObject",
         "transform": {
             "position": {
-                "x": -540.9304809570313,
-                "y": 157.44383239746095,
+                "x": -565.9304809570313,
+                "y": 137.44383239746095,
                 "z": 0.5
             },
             "scale": {
@@ -801,8 +801,8 @@
         "name": "BounceWindow",
         "transform": {
             "position": {
-                "x": -590.9304809570313,
-                "y": 207.44383239746095,
+                "x": -615.9304809570313,
+                "y": 187.44383239746095,
                 "z": 0.5
             },
             "scale": {
@@ -3292,8 +3292,8 @@
         "active": true,
         "comNames": [
             "class Box2DBody",
-            "class BreakWall",
-            "class TileMap"
+            "class TileMap",
+            "class BreakWall"
         ],
         "m_filter": 1,
         "data": {
@@ -3403,7 +3403,6 @@
                 }
             }
         },
-        "targetFilter": 128,
         "m_renderNode": {
             "polymorphic_id": 2,
             "ptr_wrapper": {
@@ -3480,6 +3479,7 @@
                 }
             }
         },
-        "m_layer": 0
+        "m_layer": 0,
+        "targetFilter": 128
     }
 }

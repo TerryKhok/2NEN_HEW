@@ -171,9 +171,6 @@
     <ClInclude Include="Sample_SceneLoad.h" />
     <ClInclude Include="SeigoTestScene.h" />
     <ClInclude Include="SelectTrigger.h" />
-    <ClInclude Include="SoundSaino.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="AntiGravity.h" />
     <ClInclude Include="Thon.h" />
@@ -191,9 +188,6 @@
     <ClCompile Include="MoveSubWIndow.cpp" />
     <ClCompile Include="Permeation.cpp" />
     <ClCompile Include="Rock.cpp" />
-    <ClCompile Include="SoundSaino.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>

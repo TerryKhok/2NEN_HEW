@@ -117,9 +117,6 @@
     <ClInclude Include="BigRock.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="SoundSaino.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="MoveRect.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -175,9 +172,6 @@
     </ClCompile>
     <ClCompile Include="MoveSubWIndow.cpp">
       <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="SoundSaino.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

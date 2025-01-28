@@ -3343,7 +3343,7 @@
             "mass": 19.63495445251465,
             "autoMass": 1.0,
             "bullet": false,
-            "fixRot": false,
+            "fixRot": true,
             "awake": true
         },
         "types": [
