@@ -7,9 +7,9 @@ private:
 	float cnt     = 0.0f; // 経過時間
 	float trigger = 3.0f; // 起動時間
 
-	float speed = 3.0f;    // 移動スピード
-	float mvCnt = 0.0f;    // 移動時間
-	float turnDis = 50.0f; // 移動距離
+	float speed = 3.0f;              // 移動スピード
+	float turnDis = 200.0f;           // 移動距離
+	float mvCnt = turnDis / 2.0f;    // 移動時間
 	 
 	bool rbType  = false; // リジットボディのタイプ
 	bool touchFg = false; // 接触フラグ
