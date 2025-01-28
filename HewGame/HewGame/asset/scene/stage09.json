@@ -274,7 +274,7 @@
                 "data": {
                     "m_scaleX": 0.125,
                     "m_scaleY": 0.3333333432674408,
-                    "m_frameX": 7,
+                    "m_frameX": 0,
                     "m_frameY": 0
                 }
             }
@@ -1592,6 +1592,272 @@
                                 "x": -10.0,
                                 "y": -10.0
                             }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -90.0,
+                                "y": 70.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": -90.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": -80.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": -70.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": -60.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": -50.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": -40.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": -30.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": -20.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": -10.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": 0.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": 10.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": 20.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": 30.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": 30.0,
+                                "y": 70.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": 40.0,
+                                "y": 70.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": 50.0,
+                                "y": 70.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": 60.0,
+                                "y": 70.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": 60.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": 70.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": 80.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": 90.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": 50.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": 40.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -80.0,
+                                "y": 70.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -70.0,
+                                "y": 70.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -60.0,
+                                "y": 70.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -50.0,
+                                "y": 70.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -40.0,
+                                "y": 70.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -30.0,
+                                "y": 70.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -20.0,
+                                "y": 70.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -10.0,
+                                "y": 70.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": 0.0,
+                                "y": 70.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": 10.0,
+                                "y": 70.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": 20.0,
+                                "y": 70.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": 70.0,
+                                "y": 70.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": 80.0,
+                                "y": 70.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": 90.0,
+                                "y": 70.0
+                            }
                         }
                     ],
                     "textureList": [
@@ -1609,7 +1875,7 @@
                         },
                         {
                             "pathStr": "asset\\tile\\2\\tile map 2_5.png",
-                            "count": 55
+                            "count": 76
                         },
                         {
                             "pathStr": "asset\\tile\\2\\tile map 2_13.png",
@@ -1625,7 +1891,7 @@
                         },
                         {
                             "pathStr": "asset\\tile\\2\\tile map 2_2.png",
-                            "count": 5
+                            "count": 33
                         },
                         {
                             "pathStr": "asset\\tile\\2\\tile map 2_4.png",
@@ -1822,8 +2088,7 @@
         },
         "active": true,
         "comNames": [
-            "class Box2DBody",
-            "class Renderer"
+            "class Box2DBody"
         ],
         "m_filter": 512,
         "data": {
@@ -1930,23 +2195,6 @@
                 "value7": {
                     "vec.x": 0.0,
                     "vec.y": 0.0
-                }
-            }
-        },
-        "m_layer": 1,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483653,
-                "data": {
-                    "active": true,
-                    "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
-                        "f.z": 1.0,
-                        "f.w": 1.0
-                    },
-                    "path": "null"
                 }
             }
         }
@@ -2372,7 +2620,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483654,
+                "id": 2147483653,
                 "data": {
                     "active": true,
                     "m_color": {
@@ -2444,7 +2692,7 @@
                 }
             }
         },
-        "active": false,
+        "active": true,
         "comNames": [
             "class Renderer"
         ],
@@ -2452,9 +2700,9 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483655,
+                "id": 2147483654,
                 "data": {
-                    "active": false,
+                    "active": true,
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
@@ -2491,7 +2739,7 @@
                 }
             }
         },
-        "active": false,
+        "active": true,
         "comNames": [
             "class Renderer"
         ],
@@ -2499,9 +2747,9 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483656,
+                "id": 2147483655,
                 "data": {
-                    "active": false,
+                    "active": true,
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
@@ -2538,7 +2786,7 @@
                 }
             }
         },
-        "active": true,
+        "active": false,
         "comNames": [
             "class Renderer"
         ],
@@ -2546,9 +2794,9 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483657,
+                "id": 2147483656,
                 "data": {
-                    "active": true,
+                    "active": false,
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
@@ -2597,7 +2845,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483658,
+                "id": 2147483657,
                 "data": {
                     "active": true,
                     "m_color": {
@@ -2866,7 +3114,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483659,
+                "id": 2147483658,
                 "data": {
                     "active": true,
                     "m_color": {
@@ -2919,7 +3167,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483660,
+                "id": 2147483659,
                 "data": {
                     "active": true,
                     "m_color": {
@@ -3116,17 +3364,17 @@
         },
         "searchAngle": 45.0,
         "searchDis": 20.0,
-        "searchRenge": 300.0,
-        "speed": 10.0,
+        "searchRenge": 100.0,
+        "speed": 1.0,
         "m_layer": 1,
         "m_node": {
             "polymorphic_id": 1,
             "ptr_wrapper": {
-                "id": 2147483661,
+                "id": 2147483660,
                 "data": {
                     "m_scaleX": 0.125,
                     "m_scaleY": 0.5,
-                    "m_frameX": 4,
+                    "m_frameX": 0,
                     "m_frameY": 0
                 }
             }
