@@ -7,12 +7,13 @@ private:
 	float cnt     = 0.0f; // 経過時間
 	float trigger = 3.0f; // 起動時間
 
-	float speed = 3.0f; // 移動スピード
-	float mvCnt = 0.0f; // 移動時間
-
-	int   change  = 0; // リジットボディのタイプ
-
-	bool touchFg = false;
+	float speed = 3.0f;    // 移動スピード
+	float mvCnt = 0.0f;    // 移動時間
+	float turnDis = 50.0f; // 移動距離
+	 
+	bool rbType  = false; // リジットボディのタイプ
+	bool touchFg = false; // 接触フラグ
+	bool turnFg  = false;
 
 public:
 	void Start()
@@ -29,11 +30,11 @@ public:
 		}
 		else if (cnt >= trigger)
 		{
-			switch (change)
+			switch (rbType)
 			{
-			case 0:
+			case false:
 				rb->SetType(b2_dynamicBody);
-				change = 1;
+				rbType = true;
 				break;
 			}
 		}
@@ -41,7 +42,33 @@ public:
 		switch (touchFg)
 		{
 		case true:
-			rb->SetVelocityX(speed);
+			switch (turnFg)
+			{
+			case false:
+				mvCnt++;
+				rb->SetVelocityX(speed);
+				break;
+
+			case true:
+				mvCnt++;
+				rb->SetVelocityX(speed * -1.0f);
+				break;
+			}
+			
+			if (mvCnt == turnDis)
+			{
+				mvCnt = 0;
+				switch (turnFg)
+				{
+				case false:
+					turnFg = true;
+					break;
+
+				case true:
+					turnFg = false;
+					break;
+				}
+			}
 
 			break;
 		}
@@ -59,7 +86,9 @@ public:
 		ImGui::InputFloat("cnt##uiObj",     &cnt);
 		ImGui::InputFloat("trigger##uiObj", &trigger);
 		ImGui::InputFloat("speed##uiObj",   &speed);
-		ImGui::InputFloat("mvCnt##uiObj", &mvCnt);
+		ImGui::InputFloat("mvCnt##uiObj",   &mvCnt);
+		ImGui::InputFloat("turnDis##uiObj", &turnDis);
+
 	}
 };
 
