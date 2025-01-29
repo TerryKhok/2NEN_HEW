@@ -239,8 +239,9 @@ void Permeation::ClipObject()
 		}
 
 		std::vector<Vector2> vertices;
-
 		Box2DBody* box2d = object->GetComponent<Box2DBody>();
+		if (box2d == nullptr) continue;
+
 		auto& shapeList = box2d->GetShapeId();
 		for (auto& shape : shapeList)
 		{

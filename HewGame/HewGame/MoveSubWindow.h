@@ -156,6 +156,7 @@ class MoveSubWindowManager : public Component
 	}
 
 public:
+	static std::vector<std::stringstream> saveBuffer;
 	int selectIndex = 0;
 	std::vector<MoveSubWindow*> moveWindows;
 

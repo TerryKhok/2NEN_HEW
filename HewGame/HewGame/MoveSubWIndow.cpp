@@ -1,7 +1,7 @@
 #include "MoveSubWindow.h"
 #include "Permeation.h"
 
-std::vector<std::stringstream> saveBuffer;
+std::vector<std::stringstream> MoveSubWindowManager::saveBuffer;
 
 void MoveSubWindow::Proceed()
 {

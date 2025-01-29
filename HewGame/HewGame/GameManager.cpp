@@ -1,5 +1,7 @@
 #include "GameManager.h"
 #include "Trigger.h"
+#include "MoveSubWindow.h"
+#include "FixedSubWindowWorldPos.h"
 
 namespace GameManager
 {
@@ -7,6 +9,8 @@ namespace GameManager
 
 	void ChangeStage()
 	{
+		MoveSubWindowManager::saveBuffer.clear();
+
 		std::string sceneName = stageName;
 		if (currentStage < 10)
 		{
@@ -21,6 +25,8 @@ namespace GameManager
 
 	void ChangeNextStage()
 	{
+		MoveSubWindowManager::saveBuffer.clear();
+
 		std::string sceneName = GameManager::stageName;
 
 		if (currentStage < 12)
@@ -146,6 +152,25 @@ namespace GameManager
 	REGISTER_FUNCTION(ChangeStage11)
 	REGISTER_FUNCTION(ChangeStage12)
 
+	void SetFixedSubWindow(GameObject* obj)
+	{
+		if (obj == nullptr) return;
+
+		bool active = obj->IsActive();
+		if (!active)
+		{
+			obj->AddComponent<SubWindow>();
+			obj->AddComponent<FixedSubWindowWorldPos>();
+		}
+		else
+		{
+			obj->RemoveComponent<SubWindow>();
+			obj->RemoveComponent<FixedSubWindowWorldPos>();
+		}
+
+		obj->SetActive(!active);
+	}
+
 	static void MoveCameraLeft()
 	{
 		auto ui = ObjectManager::Find("LeftStage");
@@ -153,23 +178,12 @@ namespace GameManager
 		{
 			auto rotation = ui->AddComponent<RotationObject>();
 		}
+		SetFixedSubWindow(ObjectManager::Find("RightStage"));
+		SetFixedSubWindow(ObjectManager::Find("BottomStage"));
 		for (int i = 1; i <= 4; i++)
 		{
 			std::string name = "stage" + std::to_string(i);
-			auto stage = ObjectManager::Find(name);
-			if (stage != nullptr)
-			{
-				bool active = stage->IsActive();
-				if (!active)
-				{
-					SubWindow* subWindow = nullptr;
-					if (stage->TryGetComponent<SubWindow>(&subWindow))
-					{
-						SetWindowPosition(subWindow->GeWndHandle(), stage->transform.position);
-					}
-				}
-				stage->SetActive(!active);
-			}
+			SetFixedSubWindow(ObjectManager::Find(name));
 		}
 
 		auto chaseCamera = ObjectManager::Find("chaseCameraLeft");
@@ -188,23 +202,12 @@ namespace GameManager
 		{
 			auto rotation = ui->AddComponent<RotationObject>();
 		}
+		SetFixedSubWindow(ObjectManager::Find("LeftStage"));
+		SetFixedSubWindow(ObjectManager::Find("BottomStage"));
 		for (int i = 5; i <= 8; i++)
 		{
 			std::string name = "stage" + std::to_string(i);
-			auto stage = ObjectManager::Find(name);
-			if (stage != nullptr)
-			{
-				bool active = stage->IsActive();
-				if (!active)
-				{
-					SubWindow* subWindow = nullptr;
-					if (stage->TryGetComponent<SubWindow>(&subWindow))
-					{
-						SetWindowPosition(subWindow->GeWndHandle(), stage->transform.position);
-					}
-				}
-				stage->SetActive(!active);
-			}
+			SetFixedSubWindow(ObjectManager::Find(name));
 		}
 
 		auto chaseCamera = ObjectManager::Find("chaseCameraRight");
@@ -223,23 +226,12 @@ namespace GameManager
 		{
 			auto rotation = ui->AddComponent<RotationObject>();
 		}
+		SetFixedSubWindow(ObjectManager::Find("LeftStage"));
+		SetFixedSubWindow(ObjectManager::Find("RightStage"));
 		for (int i = 9; i <= 12; i++)
 		{
 			std::string name = "stage" + std::to_string(i);
-			auto stage = ObjectManager::Find(name);
-			if (stage != nullptr)
-			{
-				bool active = stage->IsActive();
-				if (!active)
-				{
-					SubWindow* subWindow = nullptr;
-					if (stage->TryGetComponent<SubWindow>(&subWindow))
-					{
-						SetWindowPosition(subWindow->GeWndHandle(), stage->transform.position);
-					}
-				}
-				stage->SetActive(!active);
-			}
+			SetFixedSubWindow(ObjectManager::Find(name));
 		}
 
 		auto chaseCamera = ObjectManager::Find("chaseCameraBottom");

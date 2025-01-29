@@ -6494,9 +6494,7 @@
         "active": false,
         "comNames": [
             "class Renderer",
-            "class SelectTrigger",
-            "class FixedSubWindowWorldPos",
-            "class SubWindow"
+            "class SelectTrigger"
         ],
         "m_layer": 1,
         "m_node": {
@@ -6562,9 +6560,7 @@
         "active": false,
         "comNames": [
             "class Renderer",
-            "class SelectTrigger",
-            "class FixedSubWindowWorldPos",
-            "class SubWindow"
+            "class SelectTrigger"
         ],
         "m_layer": 1,
         "m_node": {
@@ -6630,9 +6626,7 @@
         "active": false,
         "comNames": [
             "class Renderer",
-            "class SelectTrigger",
-            "class FixedSubWindowWorldPos",
-            "class SubWindow"
+            "class SelectTrigger"
         ],
         "m_layer": 1,
         "m_node": {
@@ -6698,9 +6692,7 @@
         "active": false,
         "comNames": [
             "class Renderer",
-            "class SelectTrigger",
-            "class FixedSubWindowWorldPos",
-            "class SubWindow"
+            "class SelectTrigger"
         ],
         "m_layer": 1,
         "m_node": {
@@ -6766,9 +6758,7 @@
         "active": false,
         "comNames": [
             "class Renderer",
-            "class SelectTrigger",
-            "class FixedSubWindowWorldPos",
-            "class SubWindow"
+            "class SelectTrigger"
         ],
         "m_layer": 1,
         "m_node": {
@@ -6834,9 +6824,7 @@
         "active": false,
         "comNames": [
             "class Renderer",
-            "class SelectTrigger",
-            "class FixedSubWindowWorldPos",
-            "class SubWindow"
+            "class SelectTrigger"
         ],
         "m_layer": 1,
         "m_node": {
@@ -6902,9 +6890,7 @@
         "active": false,
         "comNames": [
             "class Renderer",
-            "class SelectTrigger",
-            "class FixedSubWindowWorldPos",
-            "class SubWindow"
+            "class SelectTrigger"
         ],
         "m_layer": 1,
         "m_node": {
@@ -6946,8 +6932,8 @@
         "name": "stage8",
         "transform": {
             "position": {
-                "x": 1010.823974609375,
-                "y": -192.56777954101563,
+                "x": 1050.4930419921876,
+                "y": -118.1883773803711,
                 "z": 0.0
             },
             "scale": {
@@ -6970,9 +6956,7 @@
         "active": false,
         "comNames": [
             "class Renderer",
-            "class SelectTrigger",
-            "class FixedSubWindowWorldPos",
-            "class SubWindow"
+            "class SelectTrigger"
         ],
         "m_layer": 1,
         "m_node": {
@@ -7038,9 +7022,7 @@
         "active": false,
         "comNames": [
             "class Renderer",
-            "class SelectTrigger",
-            "class FixedSubWindowWorldPos",
-            "class SubWindow"
+            "class SelectTrigger"
         ],
         "m_layer": 1,
         "m_node": {
@@ -7106,9 +7088,7 @@
         "active": false,
         "comNames": [
             "class Renderer",
-            "class SelectTrigger",
-            "class FixedSubWindowWorldPos",
-            "class SubWindow"
+            "class SelectTrigger"
         ],
         "m_layer": 1,
         "m_node": {
@@ -7174,9 +7154,7 @@
         "active": false,
         "comNames": [
             "class Renderer",
-            "class SelectTrigger",
-            "class FixedSubWindowWorldPos",
-            "class SubWindow"
+            "class SelectTrigger"
         ],
         "m_layer": 1,
         "m_node": {
@@ -7242,9 +7220,7 @@
         "active": false,
         "comNames": [
             "class Renderer",
-            "class SelectTrigger",
-            "class FixedSubWindowWorldPos",
-            "class SubWindow"
+            "class SelectTrigger"
         ],
         "m_layer": 1,
         "m_node": {
