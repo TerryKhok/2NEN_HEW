@@ -206,6 +206,35 @@ class MovePlayer : public Component
 		state->Start(mode, anim);
 	}
 
+	void PlayWalkSFX() {
+		walk_count++;
+		if (walk_count == 1 && isGround) {
+			std::random_device rnd;     // 非決定的な乱数生成器を生成
+			std::mt19937 mt(rnd());     //  メルセンヌ・ツイスタの32ビット版、引数は初期シード値
+			std::uniform_int_distribution<> rand4(1, 4);        // [1, 4] 範囲の一様乱数
+			int RNG = rand4(mt);
+
+			std::cerr << RNG << isGround << std::endl;
+			switch (RNG) {
+			case 1:
+				Sound::Get().PlayWaveSound(SFX_Walk01, 1.0f);
+				break;
+			case 2:
+				Sound::Get().PlayWaveSound(SFX_Walk02, 1.0f);
+				break;
+			case 3:
+				Sound::Get().PlayWaveSound(SFX_Walk03, 1.0f);
+				break;
+			case 4:
+				Sound::Get().PlayWaveSound(SFX_Walk04, 1.0f);
+				break;
+			}
+		}
+		if (walk_count == walk_speed) {
+			walk_count = 0;
+		}
+	}
+
 	void Start()
 	{
 		render = m_this->GetComponent<Renderer>();
@@ -229,7 +258,7 @@ class MovePlayer : public Component
 			ChangeState(PLAYER_IDLE);
 			anim->Reverse(reverse);
 		}
-		Sound::Get().PlayWaveSound(BGM_Game01, 1.0f);
+		Sound::Get().PlayWaveSound(BGM_Game02, 0.4f);
 	}
 	PLAYER_MODE mode = NORMAL;
 	std::vector<PLAYER_MODE> modeLayer;
@@ -279,7 +308,9 @@ private:
 	bool isGround = false;
 	bool jumping = false;
 	int jump_count = 0;
-	int move_count = 0;
+	int move_count = 0; 
+	int walk_count = 0;
+	int walk_speed = 30;
 	bool inAir = false;
 	int airCount = 0;
 	bool landing = false;
@@ -428,11 +459,15 @@ private:
 				rb->SetVelocityX((float)move_count);
 			else
 				rb->SetVelocityX(0.0f);
+
+			PlayWalkSFX();
 		}
 		else if (move_count > 0)
 		{
-			if (input.KeyRelease(VK_D))
+			if (input.KeyRelease(VK_D)) {
 				move_count = 0;
+				walk_count = 0;
+			}
 			else
 				move_count--;
 			if (move_count == 0 && !jumping && !inAir)
@@ -469,11 +504,15 @@ private:
 				rb->SetVelocityX((float)move_count);
 			else
 				rb->SetVelocityX(0.0f);
+
+			PlayWalkSFX();
 		}
 		else if (move_count < 0)
 		{
-			if (input.KeyRelease(VK_A))
+			if (input.KeyRelease(VK_A)) {
 				move_count = 0;
+				walk_count = 0;
+			}
 			else
 				move_count++;
 			if (move_count == 0 && !jumping && !inAir)
