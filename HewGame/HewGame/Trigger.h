@@ -139,25 +139,32 @@ class TitleTrigger : public Component
 
 SetReflectionComponent(TitleTrigger)
 
-//class ClearTrigger : public Component
-//{
-//	void Update() override
-//	{
-//		if (!loading)
-//		{
-//			count++;
-//			if (count > 20)
-//			{
-//				loading = true;
-//				SceneManager::LoadingScene("SelectScene");
-//			}
-//		}
-//	}
-//
-//	int count = 0;
-//	bool loading = false;
-//};
-//
-//SetReflectionComponent(ClearTrigger)
+
+class MoveVerticalPoint : public Component
+{
+	void Start() override
+	{
+		startPos = m_this->transform.position;
+	}
+
+	void Update() override
+	{
+		float t = time / moveTime;
+		Vector2 targetPos;
+		targetPos.Lerp(t, startPos, endPos);
+		m_this->transform.position = targetPos;
+		time += (1.0f / UPDATE_FPS);
+		if (time >= moveTime)
+		{
+			m_this->RemoveComponent<MoveVerticalPoint>();
+		}
+	}
+
+	Vector2 startPos;
+	float time = 0.0f;
+public:
+	Vector2 endPos;
+	float moveTime = 1.25f;
+};
 
 

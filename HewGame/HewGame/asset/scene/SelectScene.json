@@ -5502,7 +5502,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": -12.112035751342774,
                 "vec.y": -32.920745849609378
@@ -5529,7 +5529,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": -12.904833793640137,
                 "vec.y": -27.76556396484375
@@ -5556,7 +5556,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": -22.558935165405275,
                 "vec.y": -27.345821380615236
@@ -5583,7 +5583,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": -22.558935165405275,
                 "vec.y": -16.852235794067384
@@ -5610,7 +5610,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": -27.176111221313478,
                 "vec.y": -17.2719783782959
@@ -5637,7 +5637,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": -28.435352325439454,
                 "vec.y": 2.036219835281372
@@ -5664,7 +5664,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": -32.755699157714847,
                 "vec.y": 2.4684112071990969
@@ -5691,7 +5691,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": -32.755699157714847,
                 "vec.y": 26.903778076171876
@@ -5718,7 +5718,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": -2.4221434593200685,
                 "vec.y": 26.48247718811035
@@ -5745,7 +5745,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": -2.4221434593200685,
                 "vec.y": 31.116771697998048
@@ -5772,7 +5772,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": 21.170629501342775,
                 "vec.y": 31.116771697998048
@@ -5799,7 +5799,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": 21.170629501342775,
                 "vec.y": 26.48247718811035
@@ -5826,7 +5826,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": 26.226221084594728,
                 "vec.y": 26.48247718811035
@@ -5853,7 +5853,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": 26.226221084594728,
                 "vec.y": 21.42688751220703
@@ -5880,7 +5880,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": 31.281810760498048,
                 "vec.y": 21.005586624145509
@@ -5907,7 +5907,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": 31.281810760498048,
                 "vec.y": 16.371294021606447
@@ -5934,7 +5934,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": 36.33740997314453,
                 "vec.y": 15.949995040893555
@@ -5961,7 +5961,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": 36.758705139160159,
                 "vec.y": 11.315699577331543
@@ -5988,7 +5988,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": 40.971702575683597,
                 "vec.y": 11.315699577331543
@@ -6015,7 +6015,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": 41.39299774169922,
                 "vec.y": -6.800177097320557
@@ -6042,7 +6042,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": 36.758705139160159,
                 "vec.y": -7.642775058746338
@@ -6069,7 +6069,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": 36.33740997314453,
                 "vec.y": -17.33266258239746
@@ -6096,7 +6096,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": 32.124412536621097,
                 "vec.y": -17.753963470458986
@@ -6123,7 +6123,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": 31.703113555908204,
                 "vec.y": -22.388256072998048
@@ -6150,7 +6150,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": 26.226221084594728,
                 "vec.y": -22.809555053710939
@@ -6177,7 +6177,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": 26.226221084594728,
                 "vec.y": -27.443851470947267
@@ -6204,7 +6204,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": 16.536327362060548,
                 "vec.y": -27.865148544311525
@@ -6231,7 +6231,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": 16.115039825439454,
                 "vec.y": -32.49944305419922
@@ -6416,16 +6416,16 @@
         }
     },
     "value7": {
-        "name": "selectStageText",
+        "name": "BottomStage",
         "transform": {
             "position": {
-                "x": 5.444126129150391,
-                "y": 227.21487426757813,
+                "x": 0.0,
+                "y": -250.0,
                 "z": 0.0
             },
             "scale": {
-                "x": 55.2653694152832,
-                "y": 10.468023300170899,
+                "x": 15.69855785369873,
+                "y": 15.408622741699219,
                 "z": 1.0
             },
             "angle": {
@@ -6436,13 +6436,16 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.0
+                    "radians": 7.853979605489201
                 }
             }
         },
         "active": true,
         "comNames": [
-            "class Renderer"
+            "class Renderer",
+            "class SelectTrigger",
+            "class FixedSubWindowWorldPos",
+            "class SubWindow"
         ],
         "m_layer": 1,
         "m_node": {
@@ -6456,14 +6459,28 @@
                         "y": 0.0
                     },
                     "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
+                        "f.x": 0.0,
+                        "f.y": 0.529411792755127,
                         "f.z": 1.0,
-                        "f.w": 1.0
+                        "f.w": 0.5882353186607361
                     },
-                    "path": "asset\\pic\\SelectStageText.png"
+                    "path": "asset\\pic\\arrow_left.png"
                 }
             }
+        },
+        "targetName": "FloatWindow",
+        "funcName": "MoveCameraBottom",
+        "beforeColor": {
+            "f.x": 0.0,
+            "f.y": 0.529411792755127,
+            "f.z": 1.0,
+            "f.w": 0.5882353186607361
+        },
+        "selectColor": {
+            "f.x": 0.0,
+            "f.y": 0.13725490868091584,
+            "f.z": 0.6666666865348816,
+            "f.w": 1.0
         }
     },
     "value8": {
@@ -10083,7 +10100,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -46.22307586669922,
                 "vec.y": -21.583690643310548
@@ -10110,7 +10127,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -51.96259689331055,
                 "vec.y": -22.132219314575197
@@ -10137,7 +10154,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -51.96259689331055,
                 "vec.y": -8.179298400878907
@@ -10164,7 +10181,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -47.151248931884769,
                 "vec.y": -7.698163032531738
@@ -10191,7 +10208,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -46.67011260986328,
                 "vec.y": 6.735892295837402
@@ -10218,7 +10235,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -41.858760833740237,
                 "vec.y": 7.2170281410217289
@@ -10245,7 +10262,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -41.37762451171875,
                 "vec.y": 16.358596801757814
@@ -10272,7 +10289,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -37.04740905761719,
                 "vec.y": 16.358596801757814
@@ -10299,7 +10316,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -36.56627655029297,
                 "vec.y": 26.46243667602539
@@ -10326,7 +10343,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -27.424707412719728,
                 "vec.y": 26.94356918334961
@@ -10353,7 +10370,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -27.424707412719728,
                 "vec.y": 32.23605728149414
@@ -10380,7 +10397,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -21.65108299255371,
                 "vec.y": 31.75492286682129
@@ -10407,7 +10424,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -21.65108299255371,
                 "vec.y": 51.96259689331055
@@ -10434,7 +10451,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -17.320865631103517,
                 "vec.y": 52.4437370300293
@@ -10461,7 +10478,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -16.912822723388673,
                 "vec.y": 57.16667556762695
@@ -10488,7 +10505,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 11.959662437438965,
                 "vec.y": 56.621910095214847
@@ -10515,7 +10532,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 11.959662437438965,
                 "vec.y": 47.36092758178711
@@ -10542,7 +10559,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 16.862537384033204,
                 "vec.y": 47.36092758178711
@@ -10569,7 +10586,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 17.407302856445314,
                 "vec.y": 41.913291931152347
@@ -10596,7 +10613,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 22.310176849365236,
                 "vec.y": 41.913291931152347
@@ -10623,7 +10640,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 22.310176849365236,
                 "vec.y": 37.555179595947269
@@ -10650,7 +10667,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 27.21305274963379,
                 "vec.y": 37.555179595947269
@@ -10677,7 +10694,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 26.668289184570314,
                 "vec.y": 32.652305603027347
@@ -10704,7 +10721,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 41.92167663574219,
                 "vec.y": 32.10753631591797
@@ -10731,7 +10748,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 41.92167663574219,
                 "vec.y": 27.204662322998048
@@ -10758,7 +10775,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 47.36931610107422,
                 "vec.y": 27.204662322998048
@@ -10785,7 +10802,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 47.36931610107422,
                 "vec.y": 21.75702476501465
@@ -10812,7 +10829,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 52.272193908691409,
                 "vec.y": 22.301788330078126
@@ -10839,7 +10856,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 51.7274284362793,
                 "vec.y": -11.4735746383667
@@ -10866,7 +10883,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 46.455039978027347,
                 "vec.y": -12.051084518432618
@@ -10893,7 +10910,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 46.98462677001953,
                 "vec.y": -21.054101943969728
@@ -10920,7 +10937,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 42.21833038330078,
                 "vec.y": -21.583690643310548
@@ -10947,7 +10964,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 41.68873977661133,
                 "vec.y": -32.17547607421875
@@ -10974,7 +10991,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -36.16088104248047,
                 "vec.y": -31.645889282226564
@@ -11001,7 +11018,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -36.690467834472659,
                 "vec.y": -26.87958335876465
@@ -11028,7 +11045,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 1,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -46.22307586669922,
                 "vec.y": -26.87958335876465
@@ -11050,16 +11067,16 @@
         }
     },
     "value39": {
-        "name": "BottomStage",
+        "name": "selectStageText",
         "transform": {
             "position": {
-                "x": 0.0,
-                "y": -400.0,
+                "x": 5.444126129150391,
+                "y": 227.21487426757813,
                 "z": 0.0
             },
             "scale": {
-                "x": 15.69855785369873,
-                "y": 15.408622741699219,
+                "x": 55.2653694152832,
+                "y": 10.468023300170899,
                 "z": 1.0
             },
             "angle": {
@@ -11070,16 +11087,13 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 7.853979605489201
+                    "radians": 0.0
                 }
             }
         },
         "active": true,
         "comNames": [
-            "class Renderer",
-            "class SelectTrigger",
-            "class FixedSubWindowWorldPos",
-            "class SubWindow"
+            "class Renderer"
         ],
         "m_layer": 1,
         "m_node": {
@@ -11093,28 +11107,14 @@
                         "y": 0.0
                     },
                     "m_color": {
-                        "f.x": 0.0,
-                        "f.y": 0.529411792755127,
+                        "f.x": 1.0,
+                        "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 0.5882353186607361
+                        "f.w": 1.0
                     },
-                    "path": "asset\\pic\\arrow_left.png"
+                    "path": "asset\\pic\\SelectStageText.png"
                 }
             }
-        },
-        "targetName": "FloatWindow",
-        "funcName": "MoveCameraBottom",
-        "beforeColor": {
-            "f.x": 0.0,
-            "f.y": 0.529411792755127,
-            "f.z": 1.0,
-            "f.w": 0.5882353186607361
-        },
-        "selectColor": {
-            "f.x": 0.0,
-            "f.y": 0.13725490868091584,
-            "f.z": 0.6666666865348816,
-            "f.w": 1.0
         }
     },
     "value40": {

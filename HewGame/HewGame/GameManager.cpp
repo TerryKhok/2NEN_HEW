@@ -225,6 +225,10 @@ namespace GameManager
 		if (ui != nullptr)
 		{
 			auto rotation = ui->AddComponent<RotationObject>();
+			auto moveVer = ui->AddComponent<MoveVerticalPoint>();
+			moveVer->endPos = ui->transform.position;
+			moveVer->endPos.x += (float)cos(ui->transform.angle.z.Get()) * 200.0f;
+			moveVer->endPos.y -= (float)sin(ui->transform.angle.z.Get()) * 200.0f;
 		}
 		SetFixedSubWindow(ObjectManager::Find("LeftStage"));
 		SetFixedSubWindow(ObjectManager::Find("RightStage"));
