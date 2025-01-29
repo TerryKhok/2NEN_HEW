@@ -119,7 +119,7 @@ private:
 	void load(Archive& archive)
 	{
 		std::string path;
-		archive(CEREAL_NVP(active) , CEREAL_NVP(m_offset),  CEREAL_NVP(m_color), CEREAL_NVP(path));
+		archive(CEREAL_NVP(active), CEREAL_NVP(m_offset),  CEREAL_NVP(m_color), CEREAL_NVP(path));
 		Active(active);
 		if (path != "null")
 		{

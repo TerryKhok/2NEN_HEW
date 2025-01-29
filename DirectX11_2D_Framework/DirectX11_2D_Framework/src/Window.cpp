@@ -419,7 +419,7 @@ LRESULT Window::WindowUpdate(/*, void(*p_drawFunc)(void), int fps*/)
 
 			Input::Get().Update();
 
-			TRY_CATCH_LOG(SceneManager::m_currentScene->Update());
+			//TRY_CATCH_LOG(SceneManager::m_currentScene->Update());
 
 			TRY_CATCH_LOG(ObjectManager::UpdateObjectComponent());
 
@@ -514,10 +514,12 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 			if (updateLag >= updateFrameCount)
 			{
 				updateLag -= updateFrameCount;
+				//Animator用のカウント更新
+				AnimatorManager::deltaCount = updateFrameCount;
 
 				Input::Get().Update();
 
-				TRY_CATCH_LOG(SceneManager::m_currentScene->Update());
+				//TRY_CATCH_LOG(SceneManager::m_currentScene->Update());
 
 				TRY_CATCH_LOG(ObjectManager::UpdateObjectComponent());
 
@@ -536,6 +538,7 @@ LRESULT Window::WindowUpdate(std::future<void>& sceneFuture,bool& loading)
 
 				ImGuiApp::Draw();
 #endif
+
 				DirectX11::D3D_FinishRender();
 
 #ifdef DEBUG_TRUE

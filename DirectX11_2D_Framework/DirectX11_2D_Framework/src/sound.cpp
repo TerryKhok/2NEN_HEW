@@ -216,8 +216,6 @@ bool Sound::LoadWaveFile(const std::wstring& wFilePath, WaveData* outData, IXAud
 }
 
 
-
-
 bool Sound::PlayWaveSound(SOUND_LABEL label, float volume)
 {
 	IXAudio2SourceVoice*& pSV = m_pSourceVoice[(int)label];

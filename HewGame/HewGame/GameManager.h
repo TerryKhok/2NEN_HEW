@@ -1,19 +1,28 @@
 #pragma once
 
-class GameManager final
-{
-	static constexpr int stageNum = 12;
-	static constexpr const char* stageName = "stage";
+#ifndef A_GAMEMANAGER
+#define A_GAMEMANAGER
 
+namespace GameManager
+{
 	enum SYSTEM_STATE
 	{
 		TITLE,
 		IN_GAME,
 		PAUSE_GAME,
 	};
-	
-	GameManager() = default;
 
-private:
-	int currentStage = 0;
-}
+	static constexpr int stageNum = 12;
+	static constexpr const char* stageName = "stage";
+
+	static void Init();
+
+	static void ChangeStage();
+
+	extern int currentStage;
+
+	static void ChangeNextStage();
+};
+
+
+#endif

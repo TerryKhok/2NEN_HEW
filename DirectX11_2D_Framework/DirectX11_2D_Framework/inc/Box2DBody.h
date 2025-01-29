@@ -362,11 +362,19 @@ private:
 #endif
 	//指定したLayerのMaskBit取得
 	static unsigned int GetMaskFilterBit(FILTER _filter);
+	//スレッドの現在のリストを次のリストに変更
+	static void ChangeNextBodyNameList();
+	//次のノードリストに繋ぐ
+	static void LinkNextBodyNameList();
 private:
 	//layerのフィルターのビットを格納
 	static std::unordered_map<FILTER, unsigned int> m_layerFilterBit;
+	//現在のスレッドのBodyIdに対応したオブジェクトの名前を格納
+	static thread_local std::unordered_map<int32_t, const std::string&>* m_currentBodyObjectName;
 	//bodyIdに対応したオブジェクトの名前を格納
 	static std::unordered_map<int32_t, const std::string&> m_bodyObjectName;
+	//次のスレッドのBodyIdに対応したオブジェクトの名前を格納
+	static std::unordered_map<int32_t, const std::string&> m_nextBodyObjectName;
 
 #ifdef DEBUG_TRUE
 	// More segments = smoother circle

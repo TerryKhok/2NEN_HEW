@@ -436,12 +436,12 @@ HRESULT RenderManager::Init()
 	GenerateList();
 
 	//リストの初期化
-	for (auto& node : m_nextRendererList)
+	/*for (auto& node : m_nextRendererList)
 	{
 		RenderNode* renderNode = new RenderNode();
 		node.first = std::shared_ptr<RenderNode>(renderNode);
 		node.second = node.first;
-	}
+	}*/
 
 #ifdef DEBUG_TRUE
 	Vertex lineVertexList[] =
@@ -655,6 +655,14 @@ void RenderManager::AddRenderList(std::shared_ptr<RenderNode> _node, LAYER _laye
 
 void RenderManager::ChangeNextRenderList()
 {
+	//リストの初期化
+	for (auto& node : m_nextRendererList)
+	{
+		RenderNode* renderNode = new RenderNode();
+		node.first = std::shared_ptr<RenderNode>(renderNode);
+		node.second = node.first;
+	}
+
 	currentList = m_nextRendererList;
 }
 
@@ -664,14 +672,6 @@ void RenderManager::LinkNextRenderList()
 	for (int i = 0; i < LAYER_MAX; i++)
 	{
 		m_rendererList[i] = std::move(m_nextRendererList[i]);
-	}
-
-	//リストの初期化
-	for (auto& node : m_nextRendererList)
-	{
-		RenderNode* renderNode = new RenderNode();
-		node.first = std::shared_ptr<RenderNode>(renderNode);
-		node.second = node.first;
 	}
 }
 

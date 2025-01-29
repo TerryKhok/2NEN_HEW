@@ -135,7 +135,7 @@ public:
 		std::string sceneName = typeid(T).name();
 
 		//非同期にシーンをロードしている場合
-		if (async)
+		if (loading)
 		{
 			LOG("no loading %s,other scene loading now", sceneName.substr(6).c_str());
 		}
@@ -143,6 +143,8 @@ public:
 		//シーンが登録済みかどうか
 		auto it = m_sceneList.find(sceneName);
 		if (it != m_sceneList.end()) {
+
+			currentSceneName = sceneName;
 
 #ifdef BOX2D_UPDATE_MULTITHREAD
 			Box2D::WorldManager::DisableWorldUpdate();
@@ -164,7 +166,7 @@ public:
 			//シーン切り替え
 			NextScene();
 			//シーン初期化
-			TRY_CATCH_LOG(m_currentScene->Init());
+			//TRY_CATCH_LOG(m_currentScene->Init());
 
 			TextureAssets::LinkNextTextureLib();
 
@@ -190,15 +192,19 @@ public:
 	static void LoadingScene()
 	{
 		//ロード中
-		if (async) return;
+		//if (async) return;
 
 		std::string sceneName = typeid(T).name();
+
+		//既に読み込み済み
+		if (loadingSceneName == sceneName || loading) return;
 
 		//シーンが登録されているか
 		auto it = m_sceneList.find(sceneName);
 		if (it != m_sceneList.end()) {
-			async = true;
 			loading = true;
+
+			loadingSceneName = sceneName;
 
 			// Start scene loading asynchronously
 			LOG("Starting scene loading...%s", sceneName.c_str());
@@ -213,6 +219,7 @@ public:
 					RenderManager::ChangeNextRenderList();
 					ObjectManager::ChangeNextObjectList();
 					SFTextManager::ChangeNextTextList();
+					Box2DBodyManager::ChangeNextBodyNameList();
 					//生成するウィンドウを表示しない
 					Window::WindowSubLoadingBegin();
 					//シーンのロード処理
@@ -265,10 +272,10 @@ public:
 
 				//デストラクタ登録
 				std::unique_ptr<Scene, void(*)(Scene*)> scene(new T, [](Scene* p) {delete p; });
-				m_nextScene = std::move(scene);
+				//m_nextScene = std::move(scene);
 #ifdef DEBUG_TRUE
 				try{
-					m_nextScene->Load();
+					scene->Load();
 					ObjectManager::ProceedObjectComponent();
 				}
 				//例外キャッチ(nullptr参照とか)
@@ -277,7 +284,7 @@ public:
 				}
 #else
 				try{
-					m_nextScene->Load();
+					scene->Load();
 					ObjectManager::ProceedObjectComponent();
 				}
 				catch(...){}
@@ -317,12 +324,14 @@ private:
 #endif
 
 	//今のシーン
-	static std::unique_ptr<Scene, void(*)(Scene*)> m_currentScene;
+	//static std::unique_ptr<Scene, void(*)(Scene*)> m_currentScene;
 	//次のシーン
-	static std::unique_ptr<Scene, void(*)(Scene*)> m_nextScene;
+	//static std::unique_ptr<Scene, void(*)(Scene*)> m_nextScene;
 	//非同期用変数
-	static bool async;
+	//static bool async;
 	static bool loading;
+	static std::string currentSceneName;
+	static std::string loadingSceneName;
 };
 
 

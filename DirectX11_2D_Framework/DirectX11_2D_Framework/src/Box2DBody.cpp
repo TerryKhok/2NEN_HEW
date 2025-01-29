@@ -1,8 +1,12 @@
 
 std::unordered_map<FILTER, unsigned int> Box2DBodyManager::m_layerFilterBit;
 
+//現在のスレッドのBodyIdに対応したオブジェクトの名前を格納
+thread_local std::unordered_map<int32_t, const std::string&>* Box2DBodyManager::m_currentBodyObjectName = &m_bodyObjectName;
 //shapeIdに対応したオブジェクトの名前を格納
 std::unordered_map<int32_t, const std::string&> Box2DBodyManager::m_bodyObjectName;
+//次のスレッドのBodyIdに対応したオブジェクトの名前を格納
+std::unordered_map<int32_t, const std::string&> Box2DBodyManager::m_nextBodyObjectName;
 
 #ifdef DEBUG_TRUE
 const int Box2DBodyManager::numSegments = 36;
@@ -32,7 +36,7 @@ Box2DBody::Box2DBody(GameObject* _object)
 	Box2D::WorldManager::pResumeWorldUpdate();
 #endif
 
-	Box2DBodyManager::m_bodyObjectName.emplace(m_bodyId.index1, _object->GetName());
+	Box2DBodyManager::m_currentBodyObjectName->emplace(m_bodyId.index1, _object->GetName());
 }
 
 Box2DBody::Box2DBody(GameObject* _object, b2BodyDef* _bodyDef)
@@ -49,7 +53,7 @@ Box2DBody::Box2DBody(GameObject* _object, b2BodyDef* _bodyDef)
 	Box2D::WorldManager::pResumeWorldUpdate();
 #endif
 
-	Box2DBodyManager::m_bodyObjectName.emplace(m_bodyId.index1, _object->GetName());
+	Box2DBodyManager::m_currentBodyObjectName->emplace(m_bodyId.index1, _object->GetName());
 }
 
 Box2DBody::Box2DBody(GameObject* _object, SERIALIZE_INPUT& ar)
@@ -83,7 +87,7 @@ Box2DBody::Box2DBody(GameObject* _object, SERIALIZE_INPUT& ar)
 	Box2D::WorldManager::pResumeWorldUpdate();
 #endif
 
-	Box2DBodyManager::m_bodyObjectName.emplace(m_bodyId.index1, _object->GetName());
+	Box2DBodyManager::m_currentBodyObjectName->emplace(m_bodyId.index1, _object->GetName());
 
 	std::unordered_map<int32_t, std::pair<std::vector<b2Vec2>,std::vector<ShapeSaveData>>> chainVertex;
 	for (auto& type : types)
@@ -361,7 +365,7 @@ void Box2DBody::Delete()
 	{
 		node->Delete(LAYER_BOX2D_DEBUG);
 	}
-	auto& list = Box2DBodyManager::m_bodyObjectName;
+	auto& list = *Box2DBodyManager::m_currentBodyObjectName;
 	auto it = list.find(m_bodyId.index1);
 	if (it != list.end()) {
 		list.erase(it);
@@ -379,7 +383,7 @@ void Box2DBody::Delete()
 #else
 void Box2DBody::Delete()
 {
-	auto& list = Box2DBodyManager::m_bodyObjectName;
+	auto& list = *Box2DBodyManager::m_currentBodyObjectName;
 	auto it = list.find(m_bodyId.index1);
 	if (it != list.end()) {
 		list.erase(it);
@@ -1841,8 +1845,8 @@ void Box2DBody::GetOverlapObject(std::vector<GameObject*>& _objects, FILTER _fil
 		auto bodyId = b2Shape_GetBody(id);
 		//if (bodyId.index1 == m_bodyId.index1) continue;
 
-		auto iter = Box2DBodyManager::m_bodyObjectName.find(bodyId.index1);
-		if (iter != Box2DBodyManager::m_bodyObjectName.end())
+		auto iter = Box2DBodyManager::m_currentBodyObjectName->find(bodyId.index1);
+		if (iter != Box2DBodyManager::m_currentBodyObjectName->end())
 		{
 			auto object = ObjectManager::Find(iter->second);
 			if (object != nullptr)
@@ -1908,8 +1912,8 @@ void Box2DBody::GetOverlapObject(std::unordered_map<GameObject*, b2ShapeId>& _ob
 		auto bodyId = b2Shape_GetBody(id);
 		//if (bodyId.index1 == m_bodyId.index1) continue;
 
-		auto iter = Box2DBodyManager::m_bodyObjectName.find(bodyId.index1);
-		if (iter != Box2DBodyManager::m_bodyObjectName.end())
+		auto iter = Box2DBodyManager::m_currentBodyObjectName->find(bodyId.index1);
+		if (iter != Box2DBodyManager::m_currentBodyObjectName->end())
 		{
 			auto object = ObjectManager::Find(iter->second);
 			if (object != nullptr)
@@ -2487,6 +2491,17 @@ unsigned int Box2DBodyManager::GetMaskFilterBit(FILTER _filter)
 
 	m_layerFilterBit.insert(std::make_pair(_filter, ALL_BITS));
 	return m_layerFilterBit.find(_filter)->second;
+}
+
+void Box2DBodyManager::ChangeNextBodyNameList()
+{
+	m_nextBodyObjectName = std::unordered_map<int32_t, const std::string&>();
+	m_currentBodyObjectName = &m_nextBodyObjectName;
+}
+
+void Box2DBodyManager::LinkNextBodyNameList()
+{
+	m_bodyObjectName = std::move(m_nextBodyObjectName);
 }
 
 

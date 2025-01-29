@@ -149,8 +149,10 @@
     <ClInclude Include="Bounce.h" />
     <ClInclude Include="BreakScaffold.h" />
     <ClInclude Include="BreakWall.h" />
+    <ClInclude Include="ChaseCamera.h" />
     <ClInclude Include="CrushRock.h" />
     <ClInclude Include="DecorativePlayerMove.h" />
+    <ClInclude Include="FixedSubWindowWorldPos.h" />
     <ClInclude Include="FlickeringRenderColor.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="MoveRect.h" />
@@ -173,7 +175,7 @@
     <ClInclude Include="Sample_Box2D.h" />
     <ClInclude Include="Sample_SceneLoad.h" />
     <ClInclude Include="SeigoTestScene.h" />
-    <ClInclude Include="SelectTrigger.h" />
+    <ClInclude Include="Trigger.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="AntiGravity.h" />
     <ClInclude Include="Thon.h" />

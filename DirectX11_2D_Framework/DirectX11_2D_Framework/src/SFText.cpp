@@ -142,8 +142,8 @@ void SFTextManager::Init()
 	textNodeList.first.reset(new SFTextNode(nullptr));
 	textNodeList.second = textNodeList.first;
 
-	nextTextNodeList.first.reset(new SFTextNode(nullptr));
-	nextTextNodeList.second = nextTextNodeList.first;
+	/*nextTextNodeList.first.reset(new SFTextNode(nullptr));
+	nextTextNodeList.second = nextTextNodeList.first;*/
 }
 
 void SFTextManager::Draw()
@@ -237,14 +237,14 @@ void SFTextManager::GenerateList()
 
 void SFTextManager::ChangeNextTextList()
 {
+	nextTextNodeList.first.reset(new SFTextNode(nullptr));
+	nextTextNodeList.second = nextTextNodeList.first;
 	currentList = &nextTextNodeList;
 }
 
 void SFTextManager::LinkNextTextList()
 {
 	textNodeList = std::move(nextTextNodeList);
-	nextTextNodeList.first.reset(new SFTextNode(nullptr));
-	nextTextNodeList.second = nextTextNodeList.first;
 }
 
 #endif

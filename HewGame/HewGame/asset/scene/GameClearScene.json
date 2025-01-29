@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 22,
+    "objectNum": 23,
     "value0": {
         "name": "background",
         "transform": {
@@ -95,8 +95,8 @@
                             "y": 0.0
                         },
                         "m_color": {
-                            "f.x": 1.0,
-                            "f.y": 1.0,
+                            "f.x": 0.8399999141693115,
+                            "f.y": 0.9529411792755127,
                             "f.z": 1.0,
                             "f.w": 1.0
                         },
@@ -1733,8 +1733,8 @@
         "name": "Player",
         "transform": {
             "position": {
-                "x": -26.5947322845459,
-                "y": 451.7049560546875,
+                "x": -33.581058502197269,
+                "y": 457.44757080078127,
                 "z": 0.5
             },
             "scale": {
@@ -1915,8 +1915,8 @@
         "m_filter": 8,
         "data": {
             "pos": {
-                "vec.x": -2.659473180770874,
-                "vec.y": 45.170494079589847
+                "vec.x": -3.3581058979034426,
+                "vec.y": 45.74475860595703
             },
             "rot": {
                 "rot.c": 1.0,
@@ -1924,8 +1924,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
+                "vec.x": -0.00007737349369563162,
+                "vec.y": -0.00009021671576192603
             },
             "angleVec": 0.0,
             "gravity": 10.0,
@@ -1957,16 +1957,16 @@
         }
     },
     "value3": {
-        "name": "FloatWindow",
+        "name": "arrow",
         "transform": {
             "position": {
-                "x": -36.0,
-                "y": 25.5,
-                "z": 0.5
+                "x": -24.0,
+                "y": -105.0,
+                "z": 0.0
             },
             "scale": {
-                "x": 15.0,
-                "y": 15.0,
+                "x": 7.121319770812988,
+                "y": 6.272791862487793,
                 "z": 1.0
             },
             "angle": {
@@ -1977,126 +1977,14 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.0
+                    "radians": -1.5707963705062867
                 }
             }
         },
         "active": true,
         "comNames": [
-            "class Box2DBody",
-            "class SubWindow",
-            "class MoveRect",
-            "class Renderer",
-            "class DecorativeAntiGravity"
+            "class Renderer"
         ],
-        "m_filter": 64,
-        "data": {
-            "pos": {
-                "vec.x": -3.5999999046325685,
-                "vec.y": 2.549999952316284
-            },
-            "rot": {
-                "rot.c": 1.0,
-                "rot.s": 0.0
-            },
-            "type": 1,
-            "lineVec": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
-            },
-            "angleVec": 0.0,
-            "gravity": 1.0,
-            "mass": 0.0,
-            "autoMass": 1.0,
-            "bullet": true,
-            "fixRot": false,
-            "awake": false
-        },
-        "types": [
-            3
-        ],
-        "shapeData": {
-            "sensor": true,
-            "friction": 0.6000000238418579,
-            "density": 1.0,
-            "restitution": 0.0
-        },
-        "polygon": {
-            "poly.centroid": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
-            },
-            "poly.count": 4,
-            "poly.normals": {
-                "value0": {
-                    "vec.x": 0.0,
-                    "vec.y": -1.0
-                },
-                "value1": {
-                    "vec.x": 1.0,
-                    "vec.y": 0.0
-                },
-                "value2": {
-                    "vec.x": 0.0,
-                    "vec.y": 1.0
-                },
-                "value3": {
-                    "vec.x": -1.0,
-                    "vec.y": 0.0
-                },
-                "value4": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value5": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value6": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value7": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                }
-            },
-            "poly.radius": 0.0,
-            "poly.vertices": {
-                "value0": {
-                    "vec.x": -7.5,
-                    "vec.y": -7.5
-                },
-                "value1": {
-                    "vec.x": 7.5,
-                    "vec.y": -7.5
-                },
-                "value2": {
-                    "vec.x": 7.5,
-                    "vec.y": 7.5
-                },
-                "value3": {
-                    "vec.x": -7.5,
-                    "vec.y": 7.5
-                },
-                "value4": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value5": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value6": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value7": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                }
-            }
-        },
         "m_layer": 1,
         "m_node": {
             "polymorphic_id": 1073741824,
@@ -2112,9 +2000,9 @@
                         "f.x": 1.0,
                         "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 0.20000000298023225
+                        "f.w": 0.3176470696926117
                     },
-                    "path": "asset\\sign\\sign_float.png"
+                    "path": "asset\\pic\\arrow_blue_right.png"
                 }
             }
         }
@@ -2169,7 +2057,7 @@
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false
+            "awake": true
         },
         "types": [
             4,
@@ -2962,7 +2850,7 @@
         "name": "rock",
         "transform": {
             "position": {
-                "x": -281.3348083496094,
+                "x": -297.288330078125,
                 "y": -200.69979858398438,
                 "z": 0.5
             },
@@ -2979,7 +2867,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 1.0712224245071412
+                    "radians": 0.05826932564377785
                 }
             }
         },
@@ -3012,25 +2900,25 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": -28.133480072021486,
+                "vec.x": -29.72883415222168,
                 "vec.y": -20.06998062133789
             },
             "rot": {
-                "rot.c": 0.4790530800819397,
-                "rot.s": 0.8777859807014465
+                "rot.c": 0.9983028173446655,
+                "rot.s": 0.058237552642822269
             },
             "type": 2,
             "lineVec": {
-                "vec.x": 0.0,
+                "vec.x": 0.057365771383047107,
                 "vec.y": 0.0
             },
-            "angleVec": 0.0,
+            "angleVec": -0.045943792909383777,
             "gravity": 10.0,
             "mass": 4.908738613128662,
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false
+            "awake": true
         },
         "types": [
             0
@@ -3053,8 +2941,8 @@
         "name": "rock_1",
         "transform": {
             "position": {
-                "x": -227.5538787841797,
-                "y": -222.44454956054688,
+                "x": -209.8594970703125,
+                "y": -217.79412841796876,
                 "z": 0.5
             },
             "scale": {
@@ -3070,7 +2958,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.27600520849227908
+                    "radians": -0.49940407276153567
                 }
             }
         },
@@ -3103,25 +2991,25 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": -22.755388259887697,
-                "vec.y": -22.244455337524415
+                "vec.x": -20.985950469970704,
+                "vec.y": -21.7794132232666
             },
             "rot": {
-                "rot.c": 0.9621520638465881,
-                "rot.s": 0.27251312136650088
+                "rot.c": 0.8778672814369202,
+                "rot.s": -0.47890394926071169
             },
             "type": 2,
             "lineVec": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
+                "vec.x": 0.0000388616208510939,
+                "vec.y": -0.00007607909356011078
             },
-            "angleVec": 0.0,
+            "angleVec": -0.000013928358384873718,
             "gravity": 10.0,
             "mass": 56.086971282958987,
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false
+            "awake": true
         },
         "types": [
             3
@@ -3213,8 +3101,8 @@
         "name": "rock_2",
         "transform": {
             "position": {
-                "x": 332.6687316894531,
-                "y": 49.230812072753909,
+                "x": 70.62654113769531,
+                "y": -296.5678405761719,
                 "z": 0.5
             },
             "scale": {
@@ -3230,7 +3118,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": -0.00009317441435996443
+                    "radians": -0.8852407932281494
                 }
             }
         },
@@ -3263,25 +3151,25 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": 33.26687240600586,
-                "vec.y": 4.923081398010254
+                "vec.x": 7.062654495239258,
+                "vec.y": -29.656784057617189
             },
             "rot": {
-                "rot.c": 1.0,
-                "rot.s": -0.00009317653893958777
+                "rot.c": 0.6331033706665039,
+                "rot.s": -0.7740672826766968
             },
             "type": 2,
             "lineVec": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
+                "vec.x": -0.000042263607610948387,
+                "vec.y": 9.36849801291828e-7
             },
-            "angleVec": 0.0,
+            "angleVec": 0.00002115226016030647,
             "gravity": 10.0,
             "mass": 12.566370964050293,
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false
+            "awake": true
         },
         "types": [
             0
@@ -3304,8 +3192,8 @@
         "name": "crystal",
         "transform": {
             "position": {
-                "x": 374.0807800292969,
-                "y": 48.94910430908203,
+                "x": 302.36737060546877,
+                "y": -43.883705139160159,
                 "z": 0.5
             },
             "scale": {
@@ -3321,7 +3209,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.12417742609977722
+                    "radians": -0.5530087351799011
                 }
             }
         },
@@ -3343,8 +3231,8 @@
                         "y": 0.0
                     },
                     "m_color": {
-                        "f.x": 0.053333938121795657,
-                        "f.y": 0.8886276483535767,
+                        "f.x": 0.8399999141693115,
+                        "f.y": 0.981176495552063,
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
@@ -3355,25 +3243,25 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": 37.408077239990237,
-                "vec.y": 4.8949103355407719
+                "vec.x": 30.236738204956056,
+                "vec.y": -4.388370513916016
             },
             "rot": {
-                "rot.c": 0.9922997355461121,
-                "rot.s": 0.12386017292737961
+                "rot.c": 0.8509476780891419,
+                "rot.s": -0.5252505540847778
             },
             "type": 2,
             "lineVec": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
+                "vec.x": -0.000006975611086090794,
+                "vec.y": 0.000020411818695720286
             },
-            "angleVec": 0.0,
+            "angleVec": 2.198030415456742e-7,
             "gravity": 10.0,
             "mass": 10.018392562866211,
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false
+            "awake": true
         },
         "types": [
             3
@@ -3480,8 +3368,8 @@
         "name": "crystal_1",
         "transform": {
             "position": {
-                "x": -399.80712890625,
-                "y": -152.59756469726563,
+                "x": -400.453857421875,
+                "y": -152.57086181640626,
                 "z": 0.5
             },
             "scale": {
@@ -3497,7 +3385,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.08234258741140366
+                    "radians": 0.0823410302400589
                 }
             }
         },
@@ -3519,8 +3407,8 @@
                         "y": 0.0
                     },
                     "m_color": {
-                        "f.x": 0.053333938121795657,
-                        "f.y": 0.721568763256073,
+                        "f.x": 0.8399999141693115,
+                        "f.y": 0.9529411792755127,
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
@@ -3531,25 +3419,25 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": -39.980712890625,
-                "vec.y": -15.259757041931153
+                "vec.x": -40.045387268066409,
+                "vec.y": -15.257086753845215
             },
             "rot": {
-                "rot.c": 0.9966116547584534,
-                "rot.s": 0.08225106447935105
+                "rot.c": 0.9966117739677429,
+                "rot.s": 0.08224951475858689
             },
             "type": 2,
             "lineVec": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
+                "vec.x": 0.0000028986751203774476,
+                "vec.y": -0.00001158540544565767
             },
-            "angleVec": 0.0,
+            "angleVec": -0.0000012305558811931406,
             "gravity": 10.0,
             "mass": 10.018392562866211,
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false
+            "awake": true
         },
         "types": [
             3
@@ -3695,9 +3583,9 @@
                         "y": 0.0
                     },
                     "m_color": {
-                        "f.x": 0.053333938121795657,
+                        "f.x": 0.8399999141693115,
                         "f.y": 1.0,
-                        "f.z": 0.6937255859375,
+                        "f.z": 0.948235273361206,
                         "f.w": 1.0
                     },
                     "path": "asset\\pic\\Suisyou 2.png"
@@ -3871,8 +3759,8 @@
                         "y": 0.0
                     },
                     "m_color": {
-                        "f.x": 0.053333938121795657,
-                        "f.y": 0.8050981760025024,
+                        "f.x": 0.8399999141693115,
+                        "f.y": 0.9670588374137878,
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
@@ -4008,8 +3896,8 @@
         "name": "crystal_4",
         "transform": {
             "position": {
-                "x": -126.62847900390625,
-                "y": -250.72354125976563,
+                "x": -129.695556640625,
+                "y": -237.17970275878907,
                 "z": 0.5
             },
             "scale": {
@@ -4025,7 +3913,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.10280638188123703
+                    "radians": 0.07030778867192567
                 }
             }
         },
@@ -4047,8 +3935,8 @@
                         "y": 0.0
                     },
                     "m_color": {
-                        "f.x": 0.053333938121795657,
-                        "f.y": 0.5266672372817993,
+                        "f.x": 0.8399999141693115,
+                        "f.y": 0.9200000166893005,
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
@@ -4059,25 +3947,25 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": -12.662847518920899,
-                "vec.y": -25.07235336303711
+                "vec.x": -12.969555854797364,
+                "vec.y": -23.71796989440918
             },
             "rot": {
-                "rot.c": 0.994719922542572,
-                "rot.s": 0.10262701660394669
+                "rot.c": 0.9974581003189087,
+                "rot.s": 0.07125668227672577
             },
             "type": 2,
             "lineVec": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
+                "vec.x": 0.00001300838812312577,
+                "vec.y": -0.000030687067919643599
             },
-            "angleVec": 0.0,
+            "angleVec": -0.000012340881767158863,
             "gravity": 10.0,
             "mass": 10.018392562866211,
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false
+            "awake": true
         },
         "types": [
             3
@@ -4223,9 +4111,9 @@
                         "y": 0.0
                     },
                     "m_color": {
-                        "f.x": 0.053333938121795657,
+                        "f.x": 0.8399999141693115,
                         "f.y": 1.0,
-                        "f.z": 0.9164705872535706,
+                        "f.z": 0.9858823418617249,
                         "f.w": 1.0
                     },
                     "path": "asset\\pic\\Suisyou 2.png"
@@ -4360,8 +4248,8 @@
         "name": "crystal_6",
         "transform": {
             "position": {
-                "x": 101.88156127929688,
-                "y": -297.54302978515627,
+                "x": 102.046875,
+                "y": -297.5982666015625,
                 "z": 0.5
             },
             "scale": {
@@ -4377,7 +4265,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.1018567904829979
+                    "radians": 0.10105270892381668
                 }
             }
         },
@@ -4399,8 +4287,8 @@
                         "y": 0.0
                     },
                     "m_color": {
-                        "f.x": 0.053333938121795657,
-                        "f.y": 0.5823532342910767,
+                        "f.x": 0.8399999141693115,
+                        "f.y": 0.929411768913269,
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
@@ -4411,25 +4299,25 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": 10.188156127929688,
-                "vec.y": -29.754302978515626
+                "vec.x": 10.204687118530274,
+                "vec.y": -29.75982666015625
             },
             "rot": {
-                "rot.c": 0.9948168992996216,
-                "rot.s": 0.1016823872923851
+                "rot.c": 0.9948983788490295,
+                "rot.s": 0.10088244080543518
             },
             "type": 2,
             "lineVec": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
+                "vec.x": -0.000031009727536002177,
+                "vec.y": 0.000023264419724000619
             },
-            "angleVec": 0.0,
+            "angleVec": 0.000011496462320792489,
             "gravity": 10.0,
             "mass": 10.018392562866211,
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": false
+            "awake": true
         },
         "types": [
             3
@@ -4584,16 +4472,16 @@
         }
     },
     "value16": {
-        "name": "playAgainText",
+        "name": "arrow_1",
         "transform": {
             "position": {
-                "x": -291.0802001953125,
-                "y": 85.4051284790039,
+                "x": 126.0,
+                "y": -6.0,
                 "z": 0.0
             },
             "scale": {
-                "x": 22.54953384399414,
-                "y": 5.059503078460693,
+                "x": 7.121319770812988,
+                "y": 6.272791862487793,
                 "z": 1.0
             },
             "angle": {
@@ -4610,8 +4498,7 @@
         },
         "active": true,
         "comNames": [
-            "class Renderer",
-            "class SelectTrigger"
+            "class Renderer"
         ],
         "m_layer": 1,
         "m_node": {
@@ -4628,231 +4515,19 @@
                         "f.x": 1.0,
                         "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 1.0
+                        "f.w": 0.3176470696926117
                     },
-                    "path": "asset\\pic\\playAgainText.png"
+                    "path": "asset\\pic\\arrow_blue_right.png"
                 }
             }
-        },
-        "targetName": "FloatWindow",
-        "funcName": ""
+        }
     },
     "value17": {
-        "name": "nextStageText",
-        "transform": {
-            "position": {
-                "x": 267.5850524902344,
-                "y": 100.40514373779297,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 27.91025733947754,
-                "y": 7.12131929397583,
-                "z": 1.0
-            },
-            "angle": {
-                "x": {
-                    "radians": 0.0
-                },
-                "y": {
-                    "radians": 0.0
-                },
-                "z": {
-                    "radians": 0.0
-                }
-            }
-        },
-        "active": true,
-        "comNames": [
-            "class Renderer",
-            "class SelectTrigger"
-        ],
-        "m_layer": 1,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483665,
-                "data": {
-                    "active": true,
-                    "m_offset": {
-                        "x": 0.0,
-                        "y": 0.0
-                    },
-                    "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
-                        "f.z": 1.0,
-                        "f.w": 1.0
-                    },
-                    "path": "asset\\pic\\nextStageText.png"
-                }
-            }
-        },
-        "targetName": "FloatWindow",
-        "funcName": ""
-    },
-    "value18": {
-        "name": "returnTitleText",
-        "transform": {
-            "position": {
-                "x": -5.915851593017578,
-                "y": -191.20932006835938,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 27.91025733947754,
-                "y": 7.12131929397583,
-                "z": 1.0
-            },
-            "angle": {
-                "x": {
-                    "radians": 0.0
-                },
-                "y": {
-                    "radians": 0.0
-                },
-                "z": {
-                    "radians": 0.0
-                }
-            }
-        },
-        "active": true,
-        "comNames": [
-            "class Renderer",
-            "class SelectTrigger"
-        ],
-        "m_layer": 1,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483666,
-                "data": {
-                    "active": true,
-                    "m_offset": {
-                        "x": 0.0,
-                        "y": 0.0
-                    },
-                    "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
-                        "f.z": 1.0,
-                        "f.w": 1.0
-                    },
-                    "path": "asset\\pic\\returnTitleText.png"
-                }
-            }
-        },
-        "targetName": "FloatWindow",
-        "funcName": ""
-    },
-    "value19": {
-        "name": "arrow",
-        "transform": {
-            "position": {
-                "x": -39.0,
-                "y": -96.0,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 7.121319770812988,
-                "y": 6.272791862487793,
-                "z": 1.0
-            },
-            "angle": {
-                "x": {
-                    "radians": 0.0
-                },
-                "y": {
-                    "radians": 0.0
-                },
-                "z": {
-                    "radians": -1.5707963705062867
-                }
-            }
-        },
-        "active": true,
-        "comNames": [
-            "class Renderer"
-        ],
-        "m_layer": 1,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483667,
-                "data": {
-                    "active": true,
-                    "m_offset": {
-                        "x": 0.0,
-                        "y": 0.0
-                    },
-                    "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
-                        "f.z": 1.0,
-                        "f.w": 0.3176470696926117
-                    },
-                    "path": "asset\\pic\\arrow_blue_right.png"
-                }
-            }
-        }
-    },
-    "value20": {
-        "name": "arrow_1",
-        "transform": {
-            "position": {
-                "x": 99.0,
-                "y": 30.0,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 7.121319770812988,
-                "y": 6.272791862487793,
-                "z": 1.0
-            },
-            "angle": {
-                "x": {
-                    "radians": 0.0
-                },
-                "y": {
-                    "radians": 0.0
-                },
-                "z": {
-                    "radians": 0.0
-                }
-            }
-        },
-        "active": true,
-        "comNames": [
-            "class Renderer"
-        ],
-        "m_layer": 1,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483668,
-                "data": {
-                    "active": true,
-                    "m_offset": {
-                        "x": 0.0,
-                        "y": 0.0
-                    },
-                    "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
-                        "f.z": 1.0,
-                        "f.w": 0.3176470696926117
-                    },
-                    "path": "asset\\pic\\arrow_blue_right.png"
-                }
-            }
-        }
-    },
-    "value21": {
         "name": "arrow_2",
         "transform": {
             "position": {
-                "x": -168.0,
-                "y": 27.0,
+                "x": -177.0,
+                "y": -9.0,
                 "z": 0.0
             },
             "scale": {
@@ -4880,7 +4555,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483669,
+                "id": 2147483665,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -4894,6 +4569,421 @@
                         "f.w": 0.3176470696926117
                     },
                     "path": "asset\\pic\\arrow_blue_right.png"
+                }
+            }
+        }
+    },
+    "value18": {
+        "name": "FloatWindow",
+        "transform": {
+            "position": {
+                "x": -36.0,
+                "y": 25.5,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 15.0,
+                "y": 15.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody",
+            "class SubWindow",
+            "class MoveRect",
+            "class Renderer",
+            "class DecorativeAntiGravity"
+        ],
+        "m_filter": 64,
+        "data": {
+            "pos": {
+                "vec.x": -3.5999999046325685,
+                "vec.y": 2.549999952316284
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
+            "type": 1,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 0.0,
+            "autoMass": 1.0,
+            "bullet": true,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": true,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "poly.count": 4,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
+                },
+                "value1": {
+                    "vec.x": 1.0,
+                    "vec.y": 0.0
+                },
+                "value2": {
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
+                },
+                "value3": {
+                    "vec.x": -1.0,
+                    "vec.y": 0.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": -7.5,
+                    "vec.y": -7.5
+                },
+                "value1": {
+                    "vec.x": 7.5,
+                    "vec.y": -7.5
+                },
+                "value2": {
+                    "vec.x": 7.5,
+                    "vec.y": 7.5
+                },
+                "value3": {
+                    "vec.x": -7.5,
+                    "vec.y": 7.5
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            }
+        },
+        "m_layer": 2,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483666,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 0.20000000298023225
+                    },
+                    "path": "asset\\sign\\sign_float.png"
+                }
+            }
+        }
+    },
+    "value19": {
+        "name": "NextStage",
+        "transform": {
+            "position": {
+                "x": 267.5850524902344,
+                "y": 100.40514373779297,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 27.91025733947754,
+                "y": 7.12131929397583,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class SelectTrigger",
+            "class SubWindow"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483667,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\nextStageText.png"
+                }
+            }
+        },
+        "targetName": "FloatWindow",
+        "funcName": "ChangeNextStage",
+        "beforeColor": {
+            "f.x": 1.0,
+            "f.y": 1.0,
+            "f.z": 1.0,
+            "f.w": 1.0
+        },
+        "selectColor": {
+            "f.x": 0.5882353782653809,
+            "f.y": 0.0,
+            "f.z": 1.0,
+            "f.w": 1.0
+        }
+    },
+    "value20": {
+        "name": "ReturnTitle",
+        "transform": {
+            "position": {
+                "x": -5.915851593017578,
+                "y": -191.20932006835938,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 27.91025733947754,
+                "y": 7.12131929397583,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class SelectTrigger",
+            "class SubWindow"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483668,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\returnTitleText.png"
+                }
+            }
+        },
+        "targetName": "FloatWindow",
+        "funcName": "ChangeTitleScene",
+        "beforeColor": {
+            "f.x": 1.0,
+            "f.y": 1.0,
+            "f.z": 1.0,
+            "f.w": 1.0
+        },
+        "selectColor": {
+            "f.x": 0.0,
+            "f.y": 0.23529410362243653,
+            "f.z": 1.0,
+            "f.w": 1.0
+        }
+    },
+    "value21": {
+        "name": "SelectStage",
+        "transform": {
+            "position": {
+                "x": -276.0802001953125,
+                "y": 76.4051284790039,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 29.76203727722168,
+                "y": 6.756558418273926,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class SelectTrigger",
+            "class SubWindow"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483669,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\SelectStageText.png"
+                }
+            }
+        },
+        "targetName": "FloatWindow",
+        "funcName": "ChangeSelectScene",
+        "beforeColor": {
+            "f.x": 1.0,
+            "f.y": 1.0,
+            "f.z": 1.0,
+            "f.w": 1.0
+        },
+        "selectColor": {
+            "f.x": 0.0,
+            "f.y": 1.0,
+            "f.z": 0.058823585510253909,
+            "f.w": 1.0
+        }
+    },
+    "value22": {
+        "name": "rollArrow",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 14.333806991577149,
+                "y": 14.758070945739746,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": false,
+        "comNames": [
+            "class Renderer"
+        ],
+        "m_layer": 3,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483670,
+                "data": {
+                    "active": false,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\rollArrow.png"
                 }
             }
         }

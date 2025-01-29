@@ -4,6 +4,8 @@ class uiObj :public Component
 {
 private:
 	SAFE_POINTER(Box2DBody, rb);
+	//アニメーション用
+	SAFE_POINTER(Animator, ani);
 	float cnt     = 0.0f; // 経過時間
 	float trigger = 3.0f; // 起動時間
 
@@ -19,6 +21,7 @@ public:
 	void Start()
 	{
 		rb = m_this->GetComponent<Box2DBody>();
+		ani = m_this->GetComponent<Animator>();
 		rb->SetType(b2_staticBody);
 	}
 
@@ -47,11 +50,17 @@ public:
 			case false:
 				mvCnt++;
 				rb->SetVelocityX(speed);
+
+				//アニメーションを反転させる
+				ani->Reverse(true);
 				break;
 
 			case true:
 				mvCnt++;
 				rb->SetVelocityX(speed * -1.0f);
+
+				//アニメーションの反転を戻す
+				ani->Reverse(false);
 				break;
 			}
 			
@@ -88,8 +97,9 @@ public:
 		ImGui::InputFloat("speed##uiObj",   &speed);
 		ImGui::InputFloat("mvCnt##uiObj",   &mvCnt);
 		ImGui::InputFloat("turnDis##uiObj", &turnDis);
-
 	}
+
+	SERIALIZE_COMPONENT_VALUE(trigger, speed, turnDis, mvCnt)
 };
 
 SetReflectionComponent(uiObj);

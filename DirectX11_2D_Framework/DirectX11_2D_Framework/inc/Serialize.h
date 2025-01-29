@@ -74,7 +74,7 @@ void serialize(Archive& ar) {                               \
 // Recursive macro to process each argument
 #define SERIALIZE_OPTIONAL_1(arg1) OPTIONAL_WRAP(arg1)
 #define SERIALIZE_OPTIONAL_2(arg1, arg2) OPTIONAL_WRAP(arg1);SERIALIZE_OPTIONAL_1(arg2)
-#define SERIALIZE_OPTIONAL_3(arg1, arg2, arg3) OPTIONAL_WRAP(arg1),;SERIALIZE_OPTIONAL_2(arg2, arg3)
+#define SERIALIZE_OPTIONAL_3(arg1, arg2, arg3) OPTIONAL_WRAP(arg1);SERIALIZE_OPTIONAL_2(arg2, arg3)
 #define SERIALIZE_OPTIONAL_4(arg1, arg2, arg3, arg4) OPTIONAL_WRAP(arg1); SERIALIZE_OPTIONAL_3(arg2, arg3, arg4)
 #define SERIALIZE_OPTIONAL_5(arg1, arg2, arg3, arg4, arg5) OPTIONAL_WRAP(arg1); SERIALIZE_OPTIONAL_4(arg2, arg3, arg4, arg5)
 #define SERIALIZE_OPTIONAL_6(arg1, arg2, arg3, arg4, arg5, arg6) OPTIONAL_WRAP(arg1); SERIALIZE_OPTIONAL_5(arg2, arg3, arg4, arg5, arg6)

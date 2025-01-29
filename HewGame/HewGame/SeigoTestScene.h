@@ -10,6 +10,8 @@
 #include "MoveRect.h"
 #include "BreakWall.h"
 #include "FlickeringRenderColor.h"
+#include "ChaseCamera.h"
+#include "FixedSubWindowWorldPos.h"
 
 class SeigoTestScene :public Scene
 {

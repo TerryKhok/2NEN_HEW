@@ -60,25 +60,7 @@ private:
 	int count = 0;
 	Vector2 shootVec;
 
-	void Serialize(cereal::JSONOutputArchive& ar) override {
-		if constexpr (2 <= 7) {
-			::cereal::make_optional_nvp(ar, "rockPath", rockPath); 
-			::cereal::make_optional_nvp(ar, "createCount", createCount);
-			::cereal::make_optional_nvp(ar, "shootVec", shootVec);
-		}
-		else {
-			ar(rockPath, createCount, shootVec);
-		}
-	} void Deserialize(cereal::JSONInputArchive& ar) override {
-		if constexpr (2 <= 7) {
-			::cereal::make_optional_nvp(ar, "rockPath", rockPath); 
-			::cereal::make_optional_nvp(ar, "createCount", createCount);
-			::cereal::make_optional_nvp(ar, "shootVec", shootVec);
-		}
-		else {
-			ar(rockPath, createCount, shootVec);
-		}
-	}
+	SERIALIZE_COMPONENT_VALUE(rockPath, createCount, shootVec)
 };
 
 SetReflectionComponent(RockGenerator)

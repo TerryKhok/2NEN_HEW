@@ -104,6 +104,11 @@ private:
 public:
 	//アクティブを変更する(※処理が多いため頻繁に使用しない)
 	void SetActive(bool _active);
+	//アクティブ状態取得
+	bool IsActive() const
+	{
+		return active;
+	}
 	//名前の変更
 	void SetName(const std::string _name);
 	//名前の取得

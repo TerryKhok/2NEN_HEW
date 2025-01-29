@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SelectTrigger.h"
+#include "Trigger.h"
 
 class MoveRect : public Component
 {
@@ -30,29 +30,31 @@ class MoveRect : public Component
 			Window::MONITER_HALF_HEIGHT * PROJECTION_ASPECT_HEIGHT
 		};
 
+		auto& offset = RenderManager::renderOffset;
+
 		bool move = false;
-		if (input.KeyPress(VK_W) && pos.y < moveArea.y)
+		if (input.KeyPress(VK_W) && pos.y < moveArea.y + offset.y)
 		{
 			move = true;
 			pos.y += moveSpeed;
 			rb->SetPosition(pos);
 			SetWindowPosition(subWindow->GeWndHandle(), pos);
 		}
-		if (input.KeyPress(VK_A) && pos.x > -moveArea.x)
+		if (input.KeyPress(VK_A) && pos.x > -moveArea.x + offset.x)
 		{
 			move = true;
 			pos.x -= moveSpeed;
 			rb->SetPosition(pos);
 			SetWindowPosition(subWindow->GeWndHandle(), pos);
 		}
-		if (input.KeyPress(VK_S) && pos.y > -moveArea.y)
+		if (input.KeyPress(VK_S) && pos.y > -moveArea.y + offset.y)
 		{
 			move = true;
 			pos.y -= moveSpeed;
 			rb->SetPosition(pos);
 			SetWindowPosition(subWindow->GeWndHandle(), pos);
 		}
-		if (input.KeyPress(VK_D) && pos.x < moveArea.x)
+		if (input.KeyPress(VK_D) && pos.x < moveArea.x + offset.x)
 		{
 			move = true;
 			pos.x += moveSpeed;
@@ -63,28 +65,28 @@ class MoveRect : public Component
 		if (input.IsConnectController())
 		{
 			Vector2 vec = input.LeftAnalogStick();
-			if (vec.y > 0.1f && pos.y < moveArea.y)
+			if (vec.y > 0.1f && pos.y < moveArea.y + offset.y)
 			{
 				move = true;
 				pos.y += moveSpeed * vec.y;
 				rb->SetPosition(pos);
 				SetWindowPosition(subWindow->GeWndHandle(), pos);
 			}
-			if (vec.x < -0.1f && pos.x > -moveArea.x)
+			if (vec.x < -0.1f && pos.x > -moveArea.x + offset.x)
 			{
 				move = true;
 				pos.x += moveSpeed * vec.x;
 				rb->SetPosition(pos);
 				SetWindowPosition(subWindow->GeWndHandle(), pos);
 			}
-			if (vec.y < -0.1f && pos.y > -moveArea.y)
+			if (vec.y < -0.1f && pos.y > -moveArea.y + offset.y)
 			{
 				move = true;
 				pos.y += moveSpeed * vec.y;
 				rb->SetPosition(pos);
 				SetWindowPosition(subWindow->GeWndHandle(), pos);
 			}
-			if (vec.x > 0.1f && pos.x < moveArea.x)
+			if (vec.x > 0.1f && pos.x < moveArea.x + offset.x)
 			{
 				move = true;
 				pos.x += moveSpeed * vec.x;

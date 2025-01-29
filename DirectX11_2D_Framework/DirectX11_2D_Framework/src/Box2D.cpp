@@ -1011,13 +1011,16 @@ void Box2D::WorldManager::ExecuteBodyEvent()
 		if (iter != Box2DBodyManager::m_bodyObjectName.end())
 		{
 			GameObject* sensorObject = ObjectManager::Find(iter->second);
-			auto it = Box2DBodyManager::m_bodyObjectName.find(b2Shape_GetBody(event.visitorShapeId).index1);
-			if (it != Box2DBodyManager::m_bodyObjectName.end())
+			if (sensorObject != nullptr)
 			{
-				GameObject* visitorObject = ObjectManager::Find(it->second);
-				for (auto& component : sensorObject->m_componentList.first)
+				auto it = Box2DBodyManager::m_bodyObjectName.find(b2Shape_GetBody(event.visitorShapeId).index1);
+				if (it != Box2DBodyManager::m_bodyObjectName.end())
 				{
-					TRY_CATCH_LOG(component->OnColliderExit(visitorObject));
+					GameObject* visitorObject = ObjectManager::Find(it->second);
+					for (auto& component : sensorObject->m_componentList.first)
+					{
+						TRY_CATCH_LOG(component->OnColliderExit(visitorObject));
+					}
 				}
 			}
 		}

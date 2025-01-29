@@ -126,7 +126,7 @@
     <ClInclude Include="DecorativePlayerMove.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="SelectTrigger.h">
+    <ClInclude Include="Trigger.h">
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="BreakWall.h">
@@ -146,6 +146,12 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="ChaseCamera.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="FixedSubWindowWorldPos.h">
+      <Filter>Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

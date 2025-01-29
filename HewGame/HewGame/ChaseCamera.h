@@ -1,49 +1,7 @@
 #pragma once
 
-class RunFixedRoute : public Component
+class ChaseCamera : public Component
 {
-	SAFE_POINTER(Box2DBody, rb)
-
-	void Start() override
-	{
-		if(m_this->TryGetComponent<Box2DBody>(&rb))
-		{
-			switch (rb->GetType())
-			{
-			case b2_staticBody:
-				pRunFunc = &RunFixedRoute::RunWithStaticBody;
-				break;
-			case b2_dynamicBody:
-				pRunFunc = &RunFixedRoute::RunWithDynamicBody;
-				break;
-			case b2_kinematicBody:
-				pRunFunc = &RunFixedRoute::RunWithKinematicBody;
-				break;
-			}
-		}
-	}
-
-	void Run(Vector2 _targetPos)
-	{
-		m_this->transform.position = _targetPos;
-	}
-	void RunWithStaticBody(Vector2 _targetPos)
-	{
-		rb->SetPosition(_targetPos);
-	}
-	void RunWithDynamicBody(Vector2 _targetPos)
-	{
-		Vector2 vec = _targetPos - m_this->transform.position;
-		rb->AddForce({ vec.x ,vec.y });
-	}
-	void RunWithKinematicBody(Vector2 _targetPos)
-	{
-		Vector2 vec = _targetPos - m_this->transform.position;
-		rb->SetVelocity({ vec.x ,vec.y });
-	}
-
-	void(RunFixedRoute::* pRunFunc)(Vector2) = &RunFixedRoute::Run;
-
 	void Update() override
 	{
 		int pointNum = (int)routePoints.size();
@@ -55,12 +13,13 @@ class RunFixedRoute : public Component
 		Vector2 targetPos;
 		targetPos.Lerp(t, routePoints[currentIndex], routePoints[nextIndex]);
 
-		(this->*pRunFunc)(targetPos);
+		RenderManager::renderOffset = targetPos;
 
 		time += 1.0f / UPDATE_FPS;
 
 		if (time >= goalTime)
 		{
+			m_this->SetActive(false);
 			time = 0.0f;
 			currentIndex = nextIndex;
 		}
@@ -97,22 +56,22 @@ private:
 #ifdef DEBUG_TRUE
 	void DrawImGui(ImGuiApp::HandleUI& _handle) override
 	{
-		if (ImGui::InputFloat("AroundTime##FixedRouteTime",&aroundTime))
+		if (ImGui::InputFloat("AroundTime##ChaseCameraTime", &aroundTime))
 		{
 			CalculationPointTime();
 		}
-		ImGui::Checkbox("Reverse##FixedRouteTime", &reverse);
+		ImGui::Checkbox("Reverse##ChaseCameraTime", &reverse);
 
 
-		bool edit = _handle.DrawLockButton("FixedRoutePoint");
-		/*if (ImGui::Checkbox("EditLock##fixedRoutePoint", &edit))
+		bool edit = _handle.DrawLockButton("ChaseCameraPoint");
+		/*if (ImGui::Checkbox("EditLock##ChaseCameraPoint", &edit))
 		{
-			_handle.LockHandle(edit, "FixedRoutePoint");
+			_handle.LockHandle(edit, "ChaseCameraPoint");
 		}*/
 
 		if (edit)
 		{
-			if(ImGui::Button("AddPoint##RunFixedRoute"))
+			if (ImGui::Button("AddPoint##RunChaseCamera"))
 			{
 				routePoints.emplace_back(0.0f, 0.0f);
 				pointTimes.push_back(2.5f);
@@ -130,7 +89,7 @@ private:
 					ImGui::PushID(i);
 					if (routePoints.size() > 2)
 					{
-						if (ImGui::Button("erase##fixedRoutePoint"))
+						if (ImGui::Button("erase##ChaseCameraPoint"))
 						{
 							iter = routePoints.erase(iter);
 							if (i >= currentIndex)
@@ -143,7 +102,7 @@ private:
 						}
 						ImGui::SameLine();
 					}
-					
+
 					ImGui::InputFloat2("point", iter->data(), "%.1f");
 					ImGui::PopID();
 
@@ -221,7 +180,7 @@ private:
 		}
 	}
 #endif
-	
+
 private:
 	std::vector<Vector2> routePoints = { {-100.0f,0.0f},{100.0f,0.0f} };
 	std::vector<float> pointTimes = { 2.5f,2.5f };
@@ -233,12 +192,15 @@ private:
 	void Serialize(SERIALIZE_OUTPUT& ar) override {
 		ar(CEREAL_NVP(routePoints), CEREAL_NVP(pointTimes), CEREAL_NVP(currentIndex),
 			CEREAL_NVP(aroundTime), CEREAL_NVP(time), CEREAL_NVP(reverse));
-	} 
-	
+	}
+
 	void Deserialize(SERIALIZE_INPUT& ar) override {
 		ar(CEREAL_NVP(routePoints), CEREAL_NVP(pointTimes), CEREAL_NVP(currentIndex),
 			CEREAL_NVP(aroundTime), CEREAL_NVP(time), CEREAL_NVP(reverse));
 	}
 };
 
-SetReflectionComponent(RunFixedRoute)
+
+SetReflectionComponent(ChaseCamera)
+
+

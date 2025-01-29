@@ -11,10 +11,15 @@ class Goal : public Component
 
 	void EventFunc()
 	{
+		if (count == 0)
+		{
+			SceneManager::LoadingScene(sceneName);
+		}
+
 		count++;
 		if (count > waitCount)
 		{
-			SceneManager::LoadScene(sceneName);
+			SceneManager::ChangeScene();
 		}
 	}
 

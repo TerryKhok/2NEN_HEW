@@ -878,9 +878,9 @@ void ImGuiApp::DrawOptionGui()
 							ImGui::PopID();
 						}
 
-						std::string currentSceneName = SceneManager::m_currentScene->getType();
+						//std::string currentSceneName = SceneManager::m_currentScene->getType();
 						ImGui::SameLine();
-						bool current = currentSceneName == scene.name;
+						bool current = SceneManager::currentSceneName == scene.name;
 						if (ImGui::Selectable(scene.name.c_str(), &current))
 						{
 							if(!dont_ask_me_next_time){
@@ -903,7 +903,7 @@ void ImGuiApp::DrawOptionGui()
 						// Source: Dragging starts here
 						if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
 							ImGui::SetDragDropPayload("DND_SCENE_ITEM", &i, sizeof(int)); // Pass the index
-							ImGui::Text("%s", currentSceneName.c_str());
+							ImGui::Text("%s", SceneManager::currentSceneName.c_str());
 							ImGui::EndDragDropSource();
 						}
 					}

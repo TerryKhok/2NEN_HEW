@@ -25,6 +25,8 @@ void MainInit()
 	Box2DBodyManager::OnlyCollisionFilter(F_PERWINDOW, F_ONLYOBSTACLE);
 	Box2DBodyManager::OnlyCollisionFilter(F_ONLYOBSTACLE, F_OBSTACLE);
 	Box2DBodyManager::EnableCollisionFilter(F_ONLYOBSTACLE, F_PERWINDOW);
+
+	Sound::Get().PlayWaveSound(BGM_Game01, 1.0f);
 }
 //============================================================
 
