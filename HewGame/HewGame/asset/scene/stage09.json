@@ -3364,8 +3364,8 @@
         },
         "searchAngle": 45.0,
         "searchDis": 20.0,
-        "searchRenge": 100.0,
-        "speed": 1.0,
+        "searchRenge": 300.0,
+        "speed": 5.0,
         "m_layer": 1,
         "m_node": {
             "polymorphic_id": 1,
