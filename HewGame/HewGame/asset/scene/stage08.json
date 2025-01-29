@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 20,
+    "objectNum": 22,
     "value0": {
         "name": "Goal",
         "transform": {
@@ -839,8 +839,8 @@
         "name": "StaticBox_Ground3",
         "transform": {
             "position": {
-                "x": -75.03691864013672,
-                "y": 24.676822662353517,
+                "x": -125.0,
+                "y": 25.0,
                 "z": 0.5
             },
             "scale": {
@@ -867,8 +867,8 @@
         "m_filter": 32,
         "data": {
             "pos": {
-                "vec.x": -7.503691673278809,
-                "vec.y": 2.467682361602783
+                "vec.x": -12.5,
+                "vec.y": 2.5
             },
             "rot": {
                 "rot.c": 1.0,
@@ -1115,8 +1115,8 @@
         "name": "StaticBox_Roof3",
         "transform": {
             "position": {
-                "x": 174.70098876953126,
-                "y": 301.376220703125,
+                "x": 25.0,
+                "y": 300.0,
                 "z": 0.5
             },
             "scale": {
@@ -1143,8 +1143,8 @@
         "m_filter": 128,
         "data": {
             "pos": {
-                "vec.x": 17.4700984954834,
-                "vec.y": 30.137622833251954
+                "vec.x": 2.5,
+                "vec.y": 30.0
             },
             "rot": {
                 "rot.c": 1.0,
@@ -1391,8 +1391,8 @@
         "name": "StaticBox_Roof2",
         "transform": {
             "position": {
-                "x": 175.30133056640626,
-                "y": 277.11309814453127,
+                "x": 25.0,
+                "y": 275.0,
                 "z": 0.5
             },
             "scale": {
@@ -1419,8 +1419,8 @@
         "m_filter": 32,
         "data": {
             "pos": {
-                "vec.x": 17.530132293701173,
-                "vec.y": 27.7113094329834
+                "vec.x": 2.5,
+                "vec.y": 27.5
             },
             "rot": {
                 "rot.c": 1.0,
@@ -1529,8 +1529,8 @@
         "name": "LowGravity",
         "transform": {
             "position": {
-                "x": 602.0763549804688,
-                "y": 277.96417236328127,
+                "x": 567.0763549804688,
+                "y": 242.96417236328126,
                 "z": 0.5
             },
             "scale": {
@@ -2829,28 +2829,14 @@
                             }
                         },
                         {
-                            "texIndex": 1,
-                            "pos": {
-                                "x": -20.0,
-                                "y": 10.0
-                            }
-                        },
-                        {
                             "texIndex": 0,
                             "pos": {
-                                "x": -10.0,
+                                "x": -20.0,
                                 "y": 10.0
                             }
                         },
                         {
                             "texIndex": 6,
-                            "pos": {
-                                "x": -10.0,
-                                "y": 0.0
-                            }
-                        },
-                        {
-                            "texIndex": 7,
                             "pos": {
                                 "x": -20.0,
                                 "y": 0.0
@@ -2885,16 +2871,9 @@
                             }
                         },
                         {
-                            "texIndex": 7,
+                            "texIndex": 8,
                             "pos": {
                                 "x": 10.0,
-                                "y": 50.0
-                            }
-                        },
-                        {
-                            "texIndex": 6,
-                            "pos": {
-                                "x": 60.0,
                                 "y": 50.0
                             }
                         },
@@ -2906,7 +2885,7 @@
                             }
                         },
                         {
-                            "texIndex": 8,
+                            "texIndex": 6,
                             "pos": {
                                 "x": 30.0,
                                 "y": 50.0
@@ -2915,35 +2894,7 @@
                         {
                             "texIndex": 8,
                             "pos": {
-                                "x": 40.0,
-                                "y": 50.0
-                            }
-                        },
-                        {
-                            "texIndex": 8,
-                            "pos": {
-                                "x": 50.0,
-                                "y": 50.0
-                            }
-                        },
-                        {
-                            "texIndex": 8,
-                            "pos": {
                                 "x": 0.0,
-                                "y": 60.0
-                            }
-                        },
-                        {
-                            "texIndex": 8,
-                            "pos": {
-                                "x": 70.0,
-                                "y": 60.0
-                            }
-                        },
-                        {
-                            "texIndex": 6,
-                            "pos": {
-                                "x": 80.0,
                                 "y": 60.0
                             }
                         },
@@ -3048,13 +2999,6 @@
                         {
                             "texIndex": 10,
                             "pos": {
-                                "x": 60.0,
-                                "y": 60.0
-                            }
-                        },
-                        {
-                            "texIndex": 10,
-                            "pos": {
                                 "x": 80.0,
                                 "y": 70.0
                             }
@@ -3116,14 +3060,14 @@
                             }
                         },
                         {
-                            "texIndex": 3,
+                            "texIndex": 8,
                             "pos": {
                                 "x": 40.0,
                                 "y": 60.0
                             }
                         },
                         {
-                            "texIndex": 3,
+                            "texIndex": 10,
                             "pos": {
                                 "x": 30.0,
                                 "y": 60.0
@@ -3137,7 +3081,7 @@
                             }
                         },
                         {
-                            "texIndex": 3,
+                            "texIndex": 6,
                             "pos": {
                                 "x": 50.0,
                                 "y": 60.0
@@ -3170,16 +3114,100 @@
                                 "x": 80.0,
                                 "y": 0.0
                             }
+                        },
+                        {
+                            "texIndex": 6,
+                            "pos": {
+                                "x": 40.0,
+                                "y": 0.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": 40.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 1,
+                            "pos": {
+                                "x": 30.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": 30.0,
+                                "y": 0.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": -30.0,
+                                "y": 0.0
+                            }
+                        },
+                        {
+                            "texIndex": 1,
+                            "pos": {
+                                "x": -30.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": -40.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 8,
+                            "pos": {
+                                "x": -30.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -20.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": -20.0,
+                                "y": 50.0
+                            }
+                        },
+                        {
+                            "texIndex": 8,
+                            "pos": {
+                                "x": -10.0,
+                                "y": 50.0
+                            }
+                        },
+                        {
+                            "texIndex": 8,
+                            "pos": {
+                                "x": 0.0,
+                                "y": 50.0
+                            }
                         }
                     ],
                     "textureList": [
                         {
                             "pathStr": "asset\\tile\\2\\tile map 2_9.png",
-                            "count": 2
+                            "count": 3
                         },
                         {
                             "pathStr": "asset\\tile\\2\\tile map 2_7.png",
-                            "count": 3
+                            "count": 5
                         },
                         {
                             "pathStr": "asset\\tile\\2\\tile map 2_8.png",
@@ -3199,19 +3227,19 @@
                         },
                         {
                             "pathStr": "asset\\tile\\2\\tile map 2_3.png",
-                            "count": 3
-                        },
-                        {
-                            "pathStr": "asset\\tile\\2\\tile map 2_1.png",
                             "count": 4
                         },
                         {
+                            "pathStr": "asset\\tile\\2\\tile map 2_1.png",
+                            "count": 8
+                        },
+                        {
                             "pathStr": "asset\\tile\\2\\tile map 2_2.png",
-                            "count": 20
+                            "count": 23
                         },
                         {
                             "pathStr": "asset\\tile\\2\\tile map 2_10.png",
-                            "count": 2
+                            "count": 3
                         },
                         {
                             "pathStr": "asset\\tile\\2\\tile map 2_11.png",
@@ -3231,13 +3259,13 @@
         "name": "routeEnemy",
         "transform": {
             "position": {
-                "x": 100.75949096679688,
-                "y": 34.0019416809082,
+                "x": -100.82556915283203,
+                "y": 101.97686767578125,
                 "z": 0.5
             },
             "scale": {
-                "x": 21.122041702270509,
-                "y": 15.606598854064942,
+                "x": 14.115433692932129,
+                "y": 9.666902542114258,
                 "z": 1.0
             },
             "angle": {
@@ -3262,8 +3290,8 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": 10.075948715209961,
-                "vec.y": 3.4001941680908205
+                "vec.x": -10.08255672454834,
+                "vec.y": 10.197687149047852
             },
             "rot": {
                 "rot.c": 1.0,
@@ -3271,8 +3299,8 @@
             },
             "type": 1,
             "lineVec": {
-                "vec.x": 2.6139602661132814,
-                "vec.y": -12.784828186035157
+                "vec.x": -12.574447631835938,
+                "vec.y": 0.02313232421875
             },
             "angleVec": 0.0,
             "gravity": 1.0,
@@ -3369,31 +3397,31 @@
         },
         "routePoints": [
             {
-                "x": 150.0,
-                "y": -243.0
+                "x": -207.0,
+                "y": 102.0
             },
             {
-                "x": 96.0,
-                "y": 63.0
+                "x": -42.0,
+                "y": 102.0
             },
             {
-                "x": -237.0,
-                "y": 66.0
+                "x": -42.0,
+                "y": -48.0
             },
             {
-                "x": -243.0,
-                "y": -237.0
+                "x": -207.0,
+                "y": -48.0
             }
         ],
         "pointTimes": [
-            2.319131851196289,
-            2.485459327697754,
-            2.2618956565856935,
-            2.9335126876831056
+            1.3095238208770753,
+            1.1904761791229249,
+            1.3095238208770753,
+            1.1904761791229249
         ],
         "currentIndex": 1,
-        "aroundTime": 10.0,
-        "time": 0.33333340287208559,
+        "aroundTime": 5.0,
+        "time": 0.583333432674408,
         "reverse": true,
         "m_layer": 1,
         "m_node": {
@@ -3402,20 +3430,343 @@
                 "id": 2147483660,
                 "data": {
                     "m_scaleX": 0.125,
-                    "m_scaleY": 0.5,
+                    "m_scaleY": 0.1666666716337204,
                     "m_frameX": 0,
                     "m_frameY": 0
                 }
             }
         },
-        "clipSize": 2,
-        "name": "batWalk",
-        "path": "asset\\animationClip\\enemy_bat_fly.amcp",
-        "loop": true,
+        "clipSize": 1,
         "name": "lizardWalk",
         "path": "asset\\animationClip\\enemy_lizard_walk.amcp",
         "loop": true,
-        "currentClipName": "batWalk",
+        "currentClipName": "lizardWalk",
+        "pause": false
+    },
+    "value20": {
+        "name": "StaticBox_Ground3_1",
+        "transform": {
+            "position": {
+                "x": 175.0,
+                "y": 25.0,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 10.0,
+                "y": 10.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody"
+        ],
+        "m_filter": 32,
+        "data": {
+            "pos": {
+                "vec.x": 17.5,
+                "vec.y": 2.5
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
+            "type": 0,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 0.0,
+            "autoMass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "poly.count": 4,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
+                },
+                "value1": {
+                    "vec.x": 1.0,
+                    "vec.y": 0.0
+                },
+                "value2": {
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
+                },
+                "value3": {
+                    "vec.x": -1.0,
+                    "vec.y": 0.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": -5.0,
+                    "vec.y": -5.0
+                },
+                "value1": {
+                    "vec.x": 5.0,
+                    "vec.y": -5.0
+                },
+                "value2": {
+                    "vec.x": 5.0,
+                    "vec.y": 5.0
+                },
+                "value3": {
+                    "vec.x": -5.0,
+                    "vec.y": 5.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            }
+        }
+    },
+    "value21": {
+        "name": "routeEnemy_1",
+        "transform": {
+            "position": {
+                "x": 175.92913818359376,
+                "y": 101.90127563476563,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 14.115433692932129,
+                "y": 9.666902542114258,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody",
+            "class RunFixedRoute",
+            "class Renderer",
+            "class Animator"
+        ],
+        "m_filter": 1,
+        "data": {
+            "pos": {
+                "vec.x": 17.592914581298829,
+                "vec.y": 10.1901273727417
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
+            "type": 1,
+            "lineVec": {
+                "vec.x": -20.495849609375,
+                "vec.y": 0.098724365234375
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 0.0,
+            "autoMass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": true
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "poly.count": 4,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
+                },
+                "value1": {
+                    "vec.x": 1.0,
+                    "vec.y": 0.0
+                },
+                "value2": {
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
+                },
+                "value3": {
+                    "vec.x": -1.0,
+                    "vec.y": 0.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": -2.5,
+                    "vec.y": -2.5
+                },
+                "value1": {
+                    "vec.x": 2.5,
+                    "vec.y": -2.5
+                },
+                "value2": {
+                    "vec.x": 2.5,
+                    "vec.y": 2.5
+                },
+                "value3": {
+                    "vec.x": -2.5,
+                    "vec.y": 2.5
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            }
+        },
+        "routePoints": [
+            {
+                "x": 96.0,
+                "y": 102.0
+            },
+            {
+                "x": 255.0,
+                "y": 102.0
+            },
+            {
+                "x": 255.0,
+                "y": -48.0
+            },
+            {
+                "x": 96.0,
+                "y": -48.0
+            }
+        ],
+        "pointTimes": [
+            0.7718446254730225,
+            0.7281553149223328,
+            0.7718446254730225,
+            0.7281553149223328
+        ],
+        "currentIndex": 1,
+        "aroundTime": 3.0,
+        "time": 0.5000001788139343,
+        "reverse": true,
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1,
+            "ptr_wrapper": {
+                "id": 2147483661,
+                "data": {
+                    "m_scaleX": 0.125,
+                    "m_scaleY": 0.1666666716337204,
+                    "m_frameX": 0,
+                    "m_frameY": 0
+                }
+            }
+        },
+        "clipSize": 1,
+        "name": "lizardWalk",
+        "path": "asset\\animationClip\\enemy_lizard_walk.amcp",
+        "loop": true,
+        "currentClipName": "lizardWalk",
         "pause": false
     }
 }

@@ -281,7 +281,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 4,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -48.45429611206055,
                 "vec.y": -27.346050262451173
@@ -308,7 +308,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 4,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -48.57529830932617,
                 "vec.y": 27.490489959716798
@@ -335,7 +335,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 4,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 48.48699188232422,
                 "vec.y": 27.41583251953125
@@ -362,7 +362,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 4,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 48.567909240722659,
                 "vec.y": -27.504886627197267
