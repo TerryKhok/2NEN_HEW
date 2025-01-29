@@ -1030,7 +1030,7 @@
         ],
         "sceneName": "GameClearScene",
         "waitCount": 60,
-        "m_filter": 16,
+        "m_filter": 64,
         "data": {
             "pos": {
                 "vec.x": 37.5,
@@ -1057,7 +1057,7 @@
             3
         ],
         "shapeData": {
-            "sensor": false,
+            "sensor": true,
             "friction": 0.6000000238418579,
             "density": 1.0,
             "restitution": 0.0
@@ -1161,11 +1161,11 @@
         }
     },
     "value10": {
-        "name": "Transparent_1_1",
+        "name": "BounceWindow_1",
         "transform": {
             "position": {
-                "x": -589.7680053710938,
-                "y": -240.91683959960938,
+                "x": -607.0283203125,
+                "y": -246.13604736328126,
                 "z": 0.5
             },
             "scale": {
@@ -1189,9 +1189,9 @@
         "comNames": [
             "class Renderer",
             "class Box2DBody",
-            "class Permeation",
             "class SubWindow",
-            "class MoveSubWindow"
+            "class MoveSubWindow",
+            "class Bounce"
         ],
         "m_layer": 1,
         "m_node": {
@@ -1210,15 +1210,15 @@
                         "f.z": 1.0,
                         "f.w": 0.20000000298023225
                     },
-                    "path": "asset\\sign\\sign_transparent.png"
+                    "path": "asset\\sign\\sign_bounce.png"
                 }
             }
         },
         "m_filter": 64,
         "data": {
             "pos": {
-                "vec.x": -58.97679901123047,
-                "vec.y": -24.091684341430665
+                "vec.x": -60.70283126831055,
+                "vec.y": -24.613605499267579
             },
             "rot": {
                 "rot.c": 1.0,
@@ -1230,7 +1230,7 @@
                 "vec.y": 0.0
             },
             "angleVec": 0.0,
-            "gravity": 0.0,
+            "gravity": 1.0,
             "mass": 0.0,
             "autoMass": 1.0,
             "bullet": true,
@@ -1323,14 +1323,15 @@
             }
         },
         "confirmed": false,
-        "selfIndex": 1
+        "selfIndex": 1,
+        "restitutionPower": 1.100000023841858
     },
     "value11": {
-        "name": "Transparent_1_1_1",
+        "name": "lowgravity_1",
         "transform": {
             "position": {
-                "x": 560.101318359375,
-                "y": 247.44464111328126,
+                "x": 569.081298828125,
+                "y": 208.72488403320313,
                 "z": 0.5
             },
             "scale": {
@@ -1352,38 +1353,17 @@
         },
         "active": true,
         "comNames": [
-            "class Renderer",
             "class Box2DBody",
-            "class Permeation",
             "class SubWindow",
+            "class Renderer",
+            "class LowGravity",
             "class MoveSubWindow"
         ],
-        "m_layer": 1,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483658,
-                "data": {
-                    "active": true,
-                    "m_offset": {
-                        "x": 0.0,
-                        "y": 0.0
-                    },
-                    "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
-                        "f.z": 1.0,
-                        "f.w": 0.20000000298023225
-                    },
-                    "path": "asset\\sign\\sign_transparent.png"
-                }
-            }
-        },
         "m_filter": 64,
         "data": {
             "pos": {
-                "vec.x": 56.0101318359375,
-                "vec.y": 24.744464874267579
+                "vec.x": 56.90813064575195,
+                "vec.y": 20.872488021850587
             },
             "rot": {
                 "rot.c": 1.0,
@@ -1395,7 +1375,7 @@
                 "vec.y": 0.0
             },
             "angleVec": 0.0,
-            "gravity": 0.0,
+            "gravity": 1.0,
             "mass": 0.0,
             "autoMass": 1.0,
             "bullet": true,
@@ -1484,6 +1464,27 @@
                 "value7": {
                     "vec.x": 0.0,
                     "vec.y": 0.0
+                }
+            }
+        },
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483658,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 0.20000000298023225
+                    },
+                    "path": "asset\\sign\\sign_lowgravity.png"
                 }
             }
         },
@@ -3473,9 +3474,9 @@
                             "y": 0.0
                         },
                         "m_color": {
-                            "f.x": 0.5206170678138733,
-                            "f.y": 0.6670823097229004,
-                            "f.z": 0.7696078419685364,
+                            "f.x": 1.0,
+                            "f.y": 1.0,
+                            "f.z": 1.0,
                             "f.w": 1.0
                         },
                         "path": "null"
