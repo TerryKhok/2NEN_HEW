@@ -75,6 +75,7 @@
 #include <filesystem>
 #include <exception>
 #include <limits>
+#include <random>
 
 
 #define _CRTDBG_MAP_ALLOC

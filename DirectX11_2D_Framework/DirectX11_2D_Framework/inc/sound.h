@@ -21,6 +21,16 @@ typedef enum
 	SFX_Jump,
 	SFX_Land,
 	SFX_Walk01,
+	SFX_Walk02,
+	SFX_Walk03,
+	SFX_Walk04,
+	SFX_Cancel,
+	SFX_Clear,
+	SFX_Confirm,
+	SFX_Death,
+	SFX_Hit,
+	SFX_Open,
+	SFX_Select,
 
 	SOUND_LABEL_MAX,
 } SOUND_LABEL;
@@ -43,7 +53,18 @@ private:
 		{L"../../HewGame/HewGame/asset/sound/se/SFX_Jump.wav",false},
 		{L"../../HewGame/HewGame/asset/sound/se/SFX_Land.wav",false},
 		{L"../../HewGame/HewGame/asset/sound/se/SFX_Walk01.wav",false},
+		{L"../../HewGame/HewGame/asset/sound/se/SFX_Walk02.wav",false},
+		{L"../../HewGame/HewGame/asset/sound/se/SFX_Walk03.wav",false},
+		{L"../../HewGame/HewGame/asset/sound/se/SFX_Walk04.wav",false},
+		{L"../../HewGame/HewGame/asset/sound/se/SFX_Cancel.wav",false},
+		{L"../../HewGame/HewGame/asset/sound/se/SFX_Clear.wav",false},
+		{L"../../HewGame/HewGame/asset/sound/se/SFX_Confirm.wav",false},
+		{L"../../HewGame/HewGame/asset/sound/se/SFX_Death.wav",false},
+		{L"../../HewGame/HewGame/asset/sound/se/SFX_Hit.wav",false},
+		{L"../../HewGame/HewGame/asset/sound/se/SFX_Open.wav",false},
+		{L"../../HewGame/HewGame/asset/sound/se/SFX_Select.wav",false},
 	};
+
 	IXAudio2* pXAudio2 = NULL;
 	IXAudio2MasteringVoice* pMasteringVoice = NULL;
 	WaveData waveData[SOUND_LABEL_MAX];
