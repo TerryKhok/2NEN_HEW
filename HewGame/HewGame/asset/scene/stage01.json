@@ -67,7 +67,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 4,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": -32.0
@@ -94,7 +94,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 4,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": 32.0
@@ -121,7 +121,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 4,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": 32.0
@@ -148,7 +148,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 4,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": -32.0
@@ -2109,14 +2109,14 @@
                             "texIndex": 10,
                             "pos": {
                                 "x": 40.0,
-                                "y": -20.0
+                                "y": -10.0
                             }
                         },
                         {
                             "texIndex": 10,
                             "pos": {
                                 "x": 50.0,
-                                "y": -20.0
+                                "y": -10.0
                             }
                         }
                     ],
@@ -2593,8 +2593,8 @@
         "name": "platform_main_1_1",
         "transform": {
             "position": {
-                "x": 223.0,
-                "y": -100.0,
+                "x": 225.0,
+                "y": -49.0,
                 "z": 0.5
             },
             "scale": {
@@ -2621,8 +2621,8 @@
         "m_filter": 32,
         "data": {
             "pos": {
-                "vec.x": 22.299999237060548,
-                "vec.y": -10.0
+                "vec.x": 22.5,
+                "vec.y": -4.900000095367432
             },
             "rot": {
                 "rot.c": 1.0,
