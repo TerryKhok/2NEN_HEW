@@ -144,6 +144,7 @@ void MoveSubWindow::Confirmed()
 	{
 		permeation->ClipObject();
 	}
+	Sound::Get().PlayWaveSound(SFX_Confirm, 0.3f);
 }
 
 void MoveSubWindowManager::MoveSubWindowMode()
@@ -167,12 +168,14 @@ void MoveSubWindowManager::MoveSubWindowMode()
 	}
 
 	Window::PauseGame();
+	Sound::Get().PlayWaveSound(SFX_Exit, .3f);
 }
 
 void MoveSubWindowManager::UndoGameSubWindow()
 {
 	if (!saveBuffer.empty())
 	{
+		Sound::Get().PlayWaveSound(SFX_Cancel, 0.3f);
 		std::stringstream buffer = std::move(saveBuffer.back());
 		saveBuffer.pop_back();
 		SceneManager::LoadScene(buffer);
@@ -204,6 +207,7 @@ void MoveSubWindowManager::PlayGameSubWindow()
 	{
 		moveObject->SetActive(true);
 	}
+	Sound::Get().PlayWaveSound(SFX_Open, 0.2f);
 	Window::ResumeGame();
 }
 

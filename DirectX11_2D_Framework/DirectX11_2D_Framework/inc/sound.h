@@ -31,6 +31,7 @@ typedef enum
 	SFX_Hit,
 	SFX_Open,
 	SFX_Select,
+	SFX_Exit,
 
 	SOUND_LABEL_MAX,
 } SOUND_LABEL;
@@ -63,6 +64,7 @@ private:
 		{L"../../HewGame/HewGame/asset/sound/se/SFX_Hit.wav",false},
 		{L"../../HewGame/HewGame/asset/sound/se/SFX_Open.wav",false},
 		{L"../../HewGame/HewGame/asset/sound/se/SFX_Select.wav",false},
+		{L"../../HewGame/HewGame/asset/sound/se/SFX_Exit.wav",false},
 	};
 
 	IXAudio2* pXAudio2 = NULL;

@@ -101,6 +101,7 @@ class MoveSubWindowManager : public Component
 				auto& index = selectIndex;
 				index = (index + size - 1) % size;
 			}
+			Sound::Get().PlayWaveSound(SFX_Select, 0.3f);
 		}
 		if (input.KeyTrigger(VK_E) || input.ButtonTrigger(XINPUT_X))
 		{
