@@ -9,7 +9,7 @@ SetReflectionComponent(BreakScaffold)
 SetReflectionComponent(Fog)
 SetReflectionComponent(Rock)
 SetReflectionComponent(Thon)
-SetReflectionScene(YkTestScene)
+//SetReflectionScene(YkTestScene)
 
 //シーンの登録、レイヤーの設定
 //============================================================

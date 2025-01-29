@@ -15,7 +15,7 @@ private:
 	FunctionRegistry(const FunctionRegistry&) = delete;
 	FunctionRegistry& operator=(const FunctionRegistry&) = delete;
 public:
-	static FunctionRegistry& getInstance() {
+	static FunctionRegistry& Get() {
 		static FunctionRegistry instance;
 		return instance;
 	}
@@ -45,6 +45,9 @@ public:
 		}
 		it->second;
 	}
+
+	//登録された関数を選ぶアイコンを表示する
+	static void DrawPickFunction(const char* _label, std::string& _funcName);
 };
 
 class Button : public Component
@@ -100,7 +103,7 @@ private:
     namespace {                                                           \
         struct AutoRegister_##func {                                      \
             AutoRegister_##func() {                                       \
-                FunctionRegistry::getInstance().registerFunction(#func, func); \
+                FunctionRegistry::Get().registerFunction(#func, func); \
             }                                                             \
         } autoRegister_##func;                                            \
     }

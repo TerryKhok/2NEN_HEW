@@ -112,14 +112,14 @@ private:
 	void save(Archive& archive) const 
 	{
 		std::string path = wstring_to_string(texPath);
-		archive(CEREAL_NVP(active), CEREAL_NVP(m_color), CEREAL_NVP(path));
+		archive(CEREAL_NVP(active), CEREAL_NVP(m_offset), CEREAL_NVP(m_color), CEREAL_NVP(path));
 	}
 
 	template<class Archive>
 	void load(Archive& archive)
 	{
 		std::string path;
-		archive(CEREAL_NVP(active), CEREAL_NVP(m_color), CEREAL_NVP(path));
+		archive(CEREAL_NVP(active) , CEREAL_NVP(m_offset),  CEREAL_NVP(m_color), CEREAL_NVP(path));
 		Active(active);
 		if (path != "null")
 		{
@@ -157,14 +157,14 @@ private:
 	template <class Archive>
 	void save(Archive& archive) const
 	{
-		//archive(cereal::base_class<RenderNode>(this));
+		archive(cereal::base_class<RenderNode>(this));
 		archive(CEREAL_NVP(m_scaleX), CEREAL_NVP(m_scaleY), CEREAL_NVP(m_frameX), CEREAL_NVP(m_frameY));
 	}
 
 	template<class Archive>
 	void load(Archive& archive)
 	{
-		//archive(cereal::base_class<RenderNode>(this));
+		archive(cereal::base_class<RenderNode>(this));
 		archive(CEREAL_NVP(m_scaleX), CEREAL_NVP(m_scaleY), CEREAL_NVP(m_frameX), CEREAL_NVP(m_frameY));
 	}
 

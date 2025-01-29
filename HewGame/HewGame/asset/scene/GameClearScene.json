@@ -37,6 +37,10 @@
                 "id": 2147483649,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
@@ -75,7 +79,8 @@
         },
         "active": true,
         "comNames": [
-            "class TileMap"
+            "class TileMap",
+            "class FlickeringTileMapColor"
         ],
         "m_renderNode": {
             "polymorphic_id": 2147483649,
@@ -85,6 +90,10 @@
                 "data": {
                     "value0": {
                         "active": true,
+                        "m_offset": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
                         "m_color": {
                             "f.x": 1.0,
                             "f.y": 1.0,
@@ -1703,14 +1712,29 @@
                 }
             }
         },
-        "m_layer": 0
+        "m_layer": 0,
+        "colors": [
+            {
+                "f.x": 1.0,
+                "f.y": 1.0,
+                "f.z": 1.0,
+                "f.w": 1.0
+            },
+            {
+                "f.x": 0.0,
+                "f.y": 0.7058823108673096,
+                "f.z": 1.0,
+                "f.w": 1.0
+            }
+        ],
+        "flickeringTime": 2.5
     },
     "value2": {
         "name": "Player",
         "transform": {
             "position": {
-                "x": -26.642452239990236,
-                "y": 452.34503173828127,
+                "x": -26.5947322845459,
+                "y": 451.7049560546875,
                 "z": 0.5
             },
             "scale": {
@@ -1744,6 +1768,20 @@
             "ptr_wrapper": {
                 "id": 2147483651,
                 "data": {
+                    "value0": {
+                        "active": true,
+                        "m_offset": {
+                            "x": 0.0,
+                            "y": 15.0
+                        },
+                        "m_color": {
+                            "f.x": 1.0,
+                            "f.y": 1.0,
+                            "f.z": 1.0,
+                            "f.w": 1.0
+                        },
+                        "path": "asset\\spritesheet\\player_normal_standby.png"
+                    },
                     "m_scaleX": 0.125,
                     "m_scaleY": 0.3333333432674408,
                     "m_frameX": 0,
@@ -1877,8 +1915,8 @@
         "m_filter": 8,
         "data": {
             "pos": {
-                "vec.x": -2.664245128631592,
-                "vec.y": 45.23450469970703
+                "vec.x": -2.659473180770874,
+                "vec.y": 45.170494079589847
             },
             "rot": {
                 "rot.c": 1.0,
@@ -1922,8 +1960,8 @@
         "name": "FloatWindow",
         "transform": {
             "position": {
-                "x": -36.957061767578128,
-                "y": 28.005584716796876,
+                "x": -36.0,
+                "y": 25.5,
                 "z": 0.5
             },
             "scale": {
@@ -1954,8 +1992,8 @@
         "m_filter": 64,
         "data": {
             "pos": {
-                "vec.x": -3.6957061290740969,
-                "vec.y": 2.800558567047119
+                "vec.x": -3.5999999046325685,
+                "vec.y": 2.549999952316284
             },
             "rot": {
                 "rot.c": 1.0,
@@ -2066,6 +2104,10 @@
                 "id": 2147483652,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
@@ -2127,7 +2169,7 @@
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": true
+            "awake": false
         },
         "types": [
             4,
@@ -2920,9 +2962,9 @@
         "name": "rock",
         "transform": {
             "position": {
-                "x": -339.80755615234377,
-                "y": -159.48410034179688,
-                "z": 0.0
+                "x": -281.3348083496094,
+                "y": -200.69979858398438,
+                "z": 0.5
             },
             "scale": {
                 "x": 3.279984951019287,
@@ -2937,7 +2979,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.0
+                    "radians": 1.0712224245071412
                 }
             }
         },
@@ -2953,6 +2995,10 @@
                 "id": 2147483653,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
@@ -2966,12 +3012,12 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": -33.98075485229492,
-                "vec.y": -15.948410034179688
+                "vec.x": -28.133480072021486,
+                "vec.y": -20.06998062133789
             },
             "rot": {
-                "rot.c": 1.0,
-                "rot.s": 0.0
+                "rot.c": 0.4790530800819397,
+                "rot.s": 0.8777859807014465
             },
             "type": 2,
             "lineVec": {
@@ -2984,7 +3030,7 @@
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": true
+            "awake": false
         },
         "types": [
             0
@@ -3007,9 +3053,9 @@
         "name": "rock_1",
         "transform": {
             "position": {
-                "x": -214.36996459960938,
-                "y": -213.38174438476563,
-                "z": 0.0
+                "x": -227.5538787841797,
+                "y": -222.44454956054688,
+                "z": 0.5
             },
             "scale": {
                 "x": 11.34712028503418,
@@ -3024,7 +3070,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.0
+                    "radians": 0.27600520849227908
                 }
             }
         },
@@ -3040,6 +3086,10 @@
                 "id": 2147483654,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
@@ -3053,12 +3103,12 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": -21.436996459960939,
-                "vec.y": -21.33817481994629
+                "vec.x": -22.755388259887697,
+                "vec.y": -22.244455337524415
             },
             "rot": {
-                "rot.c": 1.0,
-                "rot.s": 0.0
+                "rot.c": 0.9621520638465881,
+                "rot.s": 0.27251312136650088
             },
             "type": 2,
             "lineVec": {
@@ -3071,7 +3121,7 @@
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": true
+            "awake": false
         },
         "types": [
             3
@@ -3164,8 +3214,8 @@
         "transform": {
             "position": {
                 "x": 332.6687316894531,
-                "y": 54.46215057373047,
-                "z": 0.0
+                "y": 49.230812072753909,
+                "z": 0.5
             },
             "scale": {
                 "x": 4.983160972595215,
@@ -3180,7 +3230,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.0
+                    "radians": -0.00009317441435996443
                 }
             }
         },
@@ -3196,6 +3246,10 @@
                 "id": 2147483655,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
@@ -3210,11 +3264,11 @@
         "data": {
             "pos": {
                 "vec.x": 33.26687240600586,
-                "vec.y": 5.4462151527404789
+                "vec.y": 4.923081398010254
             },
             "rot": {
                 "rot.c": 1.0,
-                "rot.s": 0.0
+                "rot.s": -0.00009317653893958777
             },
             "type": 2,
             "lineVec": {
@@ -3227,7 +3281,7 @@
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": true
+            "awake": false
         },
         "types": [
             0
@@ -3250,9 +3304,9 @@
         "name": "crystal",
         "transform": {
             "position": {
-                "x": 372.8270263671875,
-                "y": 53.433311462402347,
-                "z": 0.0
+                "x": 374.0807800292969,
+                "y": 48.94910430908203,
+                "z": 0.5
             },
             "scale": {
                 "x": 7.09345006942749,
@@ -3267,14 +3321,15 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.1745329201221466
+                    "radians": 0.12417742609977722
                 }
             }
         },
         "active": true,
         "comNames": [
             "class Renderer",
-            "class Box2DBody"
+            "class Box2DBody",
+            "class FlickeringRenderColor"
         ],
         "m_layer": 1,
         "m_node": {
@@ -3283,9 +3338,13 @@
                 "id": 2147483656,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
+                        "f.x": 0.053333938121795657,
+                        "f.y": 0.8886276483535767,
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
@@ -3296,12 +3355,12 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": 37.2827033996582,
-                "vec.y": 5.343331336975098
+                "vec.x": 37.408077239990237,
+                "vec.y": 4.8949103355407719
             },
             "rot": {
-                "rot.c": 0.9845255017280579,
-                "rot.s": 0.17524172365665437
+                "rot.c": 0.9922997355461121,
+                "rot.s": 0.12386017292737961
             },
             "type": 2,
             "lineVec": {
@@ -3314,7 +3373,7 @@
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": true
+            "awake": false
         },
         "types": [
             3
@@ -3400,15 +3459,30 @@
                     "vec.y": 0.0
                 }
             }
-        }
+        },
+        "colors": [
+            {
+                "f.x": 1.0,
+                "f.y": 1.0,
+                "f.z": 1.0,
+                "f.w": 1.0
+            },
+            {
+                "f.x": 0.0,
+                "f.y": 0.8823530673980713,
+                "f.z": 1.0,
+                "f.w": 1.0
+            }
+        ],
+        "flickeringTime": 2.5
     },
     "value9": {
         "name": "crystal_1",
         "transform": {
             "position": {
-                "x": -401.61322021484377,
-                "y": -150.3667449951172,
-                "z": 0.0
+                "x": -399.80712890625,
+                "y": -152.59756469726563,
+                "z": 0.5
             },
             "scale": {
                 "x": 7.09345006942749,
@@ -3423,14 +3497,15 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.1745329201221466
+                    "radians": 0.08234258741140366
                 }
             }
         },
         "active": true,
         "comNames": [
             "class Renderer",
-            "class Box2DBody"
+            "class Box2DBody",
+            "class FlickeringRenderColor"
         ],
         "m_layer": 1,
         "m_node": {
@@ -3439,9 +3514,13 @@
                 "id": 2147483657,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
+                        "f.x": 0.053333938121795657,
+                        "f.y": 0.721568763256073,
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
@@ -3452,12 +3531,12 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": -40.16132354736328,
-                "vec.y": -15.036674499511719
+                "vec.x": -39.980712890625,
+                "vec.y": -15.259757041931153
             },
             "rot": {
-                "rot.c": 0.9845255017280579,
-                "rot.s": 0.17524172365665437
+                "rot.c": 0.9966116547584534,
+                "rot.s": 0.08225106447935105
             },
             "type": 2,
             "lineVec": {
@@ -3470,7 +3549,7 @@
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": true
+            "awake": false
         },
         "types": [
             3
@@ -3556,7 +3635,22 @@
                     "vec.y": 0.0
                 }
             }
-        }
+        },
+        "colors": [
+            {
+                "f.x": 1.0,
+                "f.y": 1.0,
+                "f.z": 1.0,
+                "f.w": 1.0
+            },
+            {
+                "f.x": 0.0,
+                "f.y": 0.7058823108673096,
+                "f.z": 1.0,
+                "f.w": 1.0
+            }
+        ],
+        "flickeringTime": 2.5
     },
     "value10": {
         "name": "crystal_2",
@@ -3564,7 +3658,7 @@
             "position": {
                 "x": 200.46646118164063,
                 "y": 396.843017578125,
-                "z": 0.0
+                "z": 0.5
             },
             "scale": {
                 "x": 7.09345006942749,
@@ -3579,14 +3673,15 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.6716639688238502
+                    "radians": 0.6718421578407288
                 }
             }
         },
         "active": true,
         "comNames": [
             "class Renderer",
-            "class Box2DBody"
+            "class Box2DBody",
+            "class FlickeringRenderColor"
         ],
         "m_layer": 1,
         "m_node": {
@@ -3595,10 +3690,14 @@
                 "id": 2147483658,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
-                        "f.x": 1.0,
+                        "f.x": 0.053333938121795657,
                         "f.y": 1.0,
-                        "f.z": 1.0,
+                        "f.z": 0.6937255859375,
                         "f.w": 1.0
                     },
                     "path": "asset\\pic\\Suisyou 2.png"
@@ -3712,7 +3811,22 @@
                     "vec.y": 0.0
                 }
             }
-        }
+        },
+        "colors": [
+            {
+                "f.x": 1.0,
+                "f.y": 1.0,
+                "f.z": 1.0,
+                "f.w": 1.0
+            },
+            {
+                "f.x": 0.0,
+                "f.y": 1.0,
+                "f.z": 0.6764705181121826,
+                "f.w": 1.0
+            }
+        ],
+        "flickeringTime": 2.5
     },
     "value11": {
         "name": "crystal_3",
@@ -3720,7 +3834,7 @@
             "position": {
                 "x": -347.61322021484377,
                 "y": 293.63323974609377,
-                "z": 0.0
+                "z": 0.5
             },
             "scale": {
                 "x": 7.09345006942749,
@@ -3735,14 +3849,15 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": -2.296309731900692
+                    "radians": -2.296393871307373
                 }
             }
         },
         "active": true,
         "comNames": [
             "class Renderer",
-            "class Box2DBody"
+            "class Box2DBody",
+            "class FlickeringRenderColor"
         ],
         "m_layer": 1,
         "m_node": {
@@ -3751,9 +3866,13 @@
                 "id": 2147483659,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
+                        "f.x": 0.053333938121795657,
+                        "f.y": 0.8050981760025024,
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
@@ -3868,15 +3987,30 @@
                     "vec.y": 0.0
                 }
             }
-        }
+        },
+        "colors": [
+            {
+                "f.x": 1.0,
+                "f.y": 1.0,
+                "f.z": 1.0,
+                "f.w": 1.0
+            },
+            {
+                "f.x": 0.0,
+                "f.y": 0.7941176891326904,
+                "f.z": 1.0,
+                "f.w": 1.0
+            }
+        ],
+        "flickeringTime": 2.5
     },
     "value12": {
         "name": "crystal_4",
         "transform": {
             "position": {
-                "x": -128.08169555664063,
-                "y": -246.9072723388672,
-                "z": 0.0
+                "x": -126.62847900390625,
+                "y": -250.72354125976563,
+                "z": 0.5
             },
             "scale": {
                 "x": 7.09345006942749,
@@ -3891,14 +4025,15 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.1745329201221466
+                    "radians": 0.10280638188123703
                 }
             }
         },
         "active": true,
         "comNames": [
             "class Renderer",
-            "class Box2DBody"
+            "class Box2DBody",
+            "class FlickeringRenderColor"
         ],
         "m_layer": 1,
         "m_node": {
@@ -3907,9 +4042,13 @@
                 "id": 2147483660,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
+                        "f.x": 0.053333938121795657,
+                        "f.y": 0.5266672372817993,
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
@@ -3920,12 +4059,12 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": -12.8081693649292,
-                "vec.y": -24.69072723388672
+                "vec.x": -12.662847518920899,
+                "vec.y": -25.07235336303711
             },
             "rot": {
-                "rot.c": 0.9845255017280579,
-                "rot.s": 0.17524172365665437
+                "rot.c": 0.994719922542572,
+                "rot.s": 0.10262701660394669
             },
             "type": 2,
             "lineVec": {
@@ -3938,7 +4077,7 @@
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": true
+            "awake": false
         },
         "types": [
             3
@@ -4024,7 +4163,22 @@
                     "vec.y": 0.0
                 }
             }
-        }
+        },
+        "colors": [
+            {
+                "f.x": 1.0,
+                "f.y": 1.0,
+                "f.z": 1.0,
+                "f.w": 1.0
+            },
+            {
+                "f.x": 0.0,
+                "f.y": 0.5000002384185791,
+                "f.z": 1.0,
+                "f.w": 1.0
+            }
+        ],
+        "flickeringTime": 2.5
     },
     "value13": {
         "name": "crystal_5",
@@ -4032,7 +4186,7 @@
             "position": {
                 "x": -247.96237182617188,
                 "y": 425.314697265625,
-                "z": 0.0
+                "z": 0.5
             },
             "scale": {
                 "x": 7.09345006942749,
@@ -4047,14 +4201,15 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": -0.6636393200606108
+                    "radians": -0.6638336181640625
                 }
             }
         },
         "active": true,
         "comNames": [
             "class Renderer",
-            "class Box2DBody"
+            "class Box2DBody",
+            "class FlickeringRenderColor"
         ],
         "m_layer": 1,
         "m_node": {
@@ -4063,10 +4218,14 @@
                 "id": 2147483661,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
-                        "f.x": 1.0,
+                        "f.x": 0.053333938121795657,
                         "f.y": 1.0,
-                        "f.z": 1.0,
+                        "f.z": 0.9164705872535706,
                         "f.w": 1.0
                     },
                     "path": "asset\\pic\\Suisyou 2.png"
@@ -4180,15 +4339,30 @@
                     "vec.y": 0.0
                 }
             }
-        }
+        },
+        "colors": [
+            {
+                "f.x": 1.0,
+                "f.y": 1.0,
+                "f.z": 1.0,
+                "f.w": 1.0
+            },
+            {
+                "f.x": 0.0,
+                "f.y": 1.0,
+                "f.z": 0.9117646217346191,
+                "f.w": 1.0
+            }
+        ],
+        "flickeringTime": 2.5
     },
     "value14": {
         "name": "crystal_6",
         "transform": {
             "position": {
-                "x": 100.39755249023438,
-                "y": -298.39556884765627,
-                "z": 0.0
+                "x": 101.88156127929688,
+                "y": -297.54302978515627,
+                "z": 0.5
             },
             "scale": {
                 "x": 7.09345006942749,
@@ -4203,14 +4377,15 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.1745329201221466
+                    "radians": 0.1018567904829979
                 }
             }
         },
         "active": true,
         "comNames": [
             "class Renderer",
-            "class Box2DBody"
+            "class Box2DBody",
+            "class FlickeringRenderColor"
         ],
         "m_layer": 1,
         "m_node": {
@@ -4219,9 +4394,13 @@
                 "id": 2147483662,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
+                        "f.x": 0.053333938121795657,
+                        "f.y": 0.5823532342910767,
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
@@ -4232,12 +4411,12 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": 10.039754867553711,
-                "vec.y": -29.839557647705079
+                "vec.x": 10.188156127929688,
+                "vec.y": -29.754302978515626
             },
             "rot": {
-                "rot.c": 0.9845255017280579,
-                "rot.s": 0.17524172365665437
+                "rot.c": 0.9948168992996216,
+                "rot.s": 0.1016823872923851
             },
             "type": 2,
             "lineVec": {
@@ -4250,7 +4429,7 @@
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": true
+            "awake": false
         },
         "types": [
             3
@@ -4336,7 +4515,22 @@
                     "vec.y": 0.0
                 }
             }
-        }
+        },
+        "colors": [
+            {
+                "f.x": 1.0,
+                "f.y": 1.0,
+                "f.z": 1.0,
+                "f.w": 1.0
+            },
+            {
+                "f.x": 0.0,
+                "f.y": 0.5588235855102539,
+                "f.z": 1.0,
+                "f.w": 1.0
+            }
+        ],
+        "flickeringTime": 2.5
     },
     "value15": {
         "name": "gameclearText",
@@ -4374,6 +4568,10 @@
                 "id": 2147483663,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
@@ -4422,6 +4620,10 @@
                 "id": 2147483664,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
@@ -4432,7 +4634,8 @@
                 }
             }
         },
-        "targetName": "FloatWindow"
+        "targetName": "FloatWindow",
+        "funcName": ""
     },
     "value17": {
         "name": "nextStageText",
@@ -4471,6 +4674,10 @@
                 "id": 2147483665,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
@@ -4481,7 +4688,8 @@
                 }
             }
         },
-        "targetName": "FloatWindow"
+        "targetName": "FloatWindow",
+        "funcName": ""
     },
     "value18": {
         "name": "returnTitleText",
@@ -4520,6 +4728,10 @@
                 "id": 2147483666,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
@@ -4530,7 +4742,8 @@
                 }
             }
         },
-        "targetName": "FloatWindow"
+        "targetName": "FloatWindow",
+        "funcName": ""
     },
     "value19": {
         "name": "arrow",
@@ -4568,6 +4781,10 @@
                 "id": 2147483667,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
@@ -4615,6 +4832,10 @@
                 "id": 2147483668,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
@@ -4662,6 +4883,10 @@
                 "id": 2147483669,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,

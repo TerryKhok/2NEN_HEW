@@ -8,7 +8,6 @@ class SelectTrigger : public Component
 	void Start() override
 	{
 		render = m_this->GetComponent<Renderer>();
-		
 	}
 
 	void Update() override
@@ -48,11 +47,16 @@ class SelectTrigger : public Component
 		{
 			targetName = str;
 		}
+		FunctionRegistry::DrawPickFunction("Event##SelectTrigger", funcName);
 	}
 public:
 	void EnterEvent()
 	{
 		render->SetColor({ 0.8f,0.0f,0.8f,1.0f });
+		if (Input::Get().KeyTrigger(VK_F))
+		{
+			FunctionRegistry::Get().callFunction(funcName);
+		}
 	}
 
 	void ExitEvent()
@@ -61,8 +65,9 @@ public:
 	}
 private:
 	std::string targetName = "null";
+	std::string funcName;
 
-	SERIALIZE_COMPONENT_VALUE(targetName)
+	SERIALIZE_COMPONENT_VALUE(targetName, funcName)
 };
 
 SetReflectionComponent(SelectTrigger)

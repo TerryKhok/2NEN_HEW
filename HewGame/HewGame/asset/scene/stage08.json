@@ -39,6 +39,10 @@
                 "id": 2147483649,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
@@ -226,7 +230,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": -36.0
@@ -253,7 +257,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": 36.0
@@ -280,7 +284,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": 36.0
@@ -307,7 +311,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": -36.0
@@ -334,6 +338,10 @@
                 "id": 2147483650,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
@@ -384,6 +392,20 @@
             "ptr_wrapper": {
                 "id": 2147483651,
                 "data": {
+                    "value0": {
+                        "active": true,
+                        "m_offset": {
+                            "x": 0.0,
+                            "y": 15.0
+                        },
+                        "m_color": {
+                            "f.x": 1.0,
+                            "f.y": 1.0,
+                            "f.z": 1.0,
+                            "f.w": 1.0
+                        },
+                        "path": "asset\\spritesheet\\player_normal_standby.png"
+                    },
                     "m_scaleX": 0.125,
                     "m_scaleY": 0.3333333432674408,
                     "m_frameX": 0,
@@ -1565,6 +1587,10 @@
                 "id": 2147483652,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
@@ -1726,6 +1752,10 @@
                 "id": 2147483653,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
@@ -1995,6 +2025,10 @@
                 "id": 2147483654,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
@@ -2156,6 +2190,10 @@
                 "id": 2147483655,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
@@ -2236,6 +2274,10 @@
                 "id": 2147483656,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
@@ -2283,6 +2325,10 @@
                 "id": 2147483657,
                 "data": {
                     "active": false,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
@@ -2330,6 +2376,10 @@
                 "id": 2147483658,
                 "data": {
                     "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
                     "m_color": {
                         "f.x": 1.0,
                         "f.y": 1.0,
@@ -2378,6 +2428,10 @@
                 "data": {
                     "value0": {
                         "active": true,
+                        "m_offset": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
                         "m_color": {
                             "f.x": 1.0,
                             "f.y": 1.0,
@@ -3429,6 +3483,20 @@
             "ptr_wrapper": {
                 "id": 2147483660,
                 "data": {
+                    "value0": {
+                        "active": true,
+                        "m_offset": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "m_color": {
+                            "f.x": 1.0,
+                            "f.y": 1.0,
+                            "f.z": 1.0,
+                            "f.w": 1.0
+                        },
+                        "path": "asset\\spritesheet\\enemy_lizard_walk.png"
+                    },
                     "m_scaleX": 0.125,
                     "m_scaleY": 0.1666666716337204,
                     "m_frameX": 0,
@@ -3755,6 +3823,20 @@
             "ptr_wrapper": {
                 "id": 2147483661,
                 "data": {
+                    "value0": {
+                        "active": true,
+                        "m_offset": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "m_color": {
+                            "f.x": 1.0,
+                            "f.y": 1.0,
+                            "f.z": 1.0,
+                            "f.w": 1.0
+                        },
+                        "path": "asset\\spritesheet\\enemy_lizard_walk.png"
+                    },
                     "m_scaleX": 0.125,
                     "m_scaleY": 0.1666666716337204,
                     "m_frameX": 0,

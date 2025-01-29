@@ -39,22 +39,28 @@ void MoveSubWindow::PauseUpdate()
 		auto& input = Input::Get();
 		auto& pos = m_this->transform.position;
 
-		if (input.KeyPress(VK_W) && pos.y < Window::MONITER_HALF_HEIGHT)
+		static Vector2 moveArea =
+		{
+			Window::MONITER_HALF_WIDTH * PROJECTION_ASPECT_WIDTH,
+			Window::MONITER_HALF_HEIGHT * PROJECTION_ASPECT_HEIGHT
+		};
+
+		if (input.KeyPress(VK_W) && pos.y < moveArea.y)
 		{
 			pos.y += moveSpeed;
 			SetWindowPosition(subWindow->GeWndHandle(), pos);
 		}
-		if (input.KeyPress(VK_A) && pos.x > -Window::MONITER_HALF_WIDTH)
+		if (input.KeyPress(VK_A) && pos.x > -moveArea.x)
 		{
 			pos.x -= moveSpeed;
 			SetWindowPosition(subWindow->GeWndHandle(), pos);
 		}
-		if (input.KeyPress(VK_S) && pos.y > -Window::MONITER_HALF_HEIGHT)
+		if (input.KeyPress(VK_S) && pos.y > -moveArea.y)
 		{
 			pos.y -= moveSpeed;
 			SetWindowPosition(subWindow->GeWndHandle(), pos);
 		}
-		if (input.KeyPress(VK_D) && pos.x < Window::MONITER_HALF_WIDTH)
+		if (input.KeyPress(VK_D) && pos.x < moveArea.x)
 		{
 			pos.x += moveSpeed;
 			SetWindowPosition(subWindow->GeWndHandle(), pos);
@@ -63,22 +69,22 @@ void MoveSubWindow::PauseUpdate()
 		if (input.IsConnectController())
 		{
 			Vector2 vec = input.LeftAnalogStick();
-			if (vec.y > 0.1f && pos.y < Window::MONITER_HALF_HEIGHT)
+			if (vec.y > 0.1f && pos.y < moveArea.y)
 			{
 				pos.y += moveSpeed * vec.y;
 				SetWindowPosition(subWindow->GeWndHandle(), pos);
 			}
-			if (vec.x < -0.1f && pos.x > -Window::MONITER_HALF_WIDTH)
+			if (vec.x < -0.1f && pos.x > -moveArea.x)
 			{
 				pos.x += moveSpeed * vec.x;
 				SetWindowPosition(subWindow->GeWndHandle(), pos);
 			}
-			if (vec.y < -0.1f && pos.y > -Window::MONITER_HALF_HEIGHT)
+			if (vec.y < -0.1f && pos.y > -moveArea.y)
 			{
 				pos.y += moveSpeed * vec.y;
 				SetWindowPosition(subWindow->GeWndHandle(), pos);
 			}
-			if (vec.x > 0.1f && pos.x < Window::MONITER_HALF_WIDTH)
+			if (vec.x > 0.1f && pos.x < moveArea.x)
 			{
 				pos.x += moveSpeed * vec.x;
 				SetWindowPosition(subWindow->GeWndHandle(), pos);

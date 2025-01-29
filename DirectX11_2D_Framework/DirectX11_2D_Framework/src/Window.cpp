@@ -1620,9 +1620,9 @@ Vector2 GetWindowPosition(HWND _hWnd)
 	pos.x *= PROJECTION_ASPECT_WIDTH;
 	pos.y *= PROJECTION_ASPECT_HEIGHT;
 
-//#ifdef CAMERA_ON_WINDOW
-//	pos += RenderManager::renderOffset;
-//#endif
+#ifdef CAMERA_ON_WINDOW
+	pos += RenderManager::renderOffset;
+#endif
 
 	return pos;
 }
@@ -1632,9 +1632,9 @@ void SetWindowPosition(HWND _hWnd, Vector2 pos)
 	RECT rect;
 	GetWindowRect(_hWnd, &rect);
 
-//#ifdef CAMERA_ON_WINDOW
-//	pos -= RenderManager::renderOffset;
-//#endif
+#ifdef CAMERA_ON_WINDOW
+	pos -= RenderManager::renderOffset;
+#endif
 
 	pos.x /= PROJECTION_ASPECT_WIDTH;
 	pos.y /= PROJECTION_ASPECT_HEIGHT;
