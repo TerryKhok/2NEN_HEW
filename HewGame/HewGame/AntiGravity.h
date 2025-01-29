@@ -8,7 +8,7 @@ class AntiGravity : public Component
 	SAFE_POINTER(Box2DBody, rb)
 
 	const XMFLOAT4 enterColor = { 1.0f,1.0f,1.0f,1.0f };
-	const XMFLOAT4 exitColor = { 1.0f,1.0f,1.0f,0.2f };
+	const XMFLOAT4 exitColor = { 1.0f,1.0f,1.0f,0.6f };
 
 	void Start() override
 	{

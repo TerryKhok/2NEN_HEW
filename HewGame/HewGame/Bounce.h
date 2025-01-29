@@ -8,7 +8,7 @@ class Bounce : public Component
 	int inCount = 0;
 
 	const XMFLOAT4 enterColor = { 1.0f,1.0f,1.0f,1.0f };
-	const XMFLOAT4 exitColor = { 1.0f,1.0f,1.0f,0.2f };
+	const XMFLOAT4 exitColor = { 1.0f,1.0f,1.0f,0.6f };
 	float restitutionPower = 0.8f;
 
 	void Start() override
