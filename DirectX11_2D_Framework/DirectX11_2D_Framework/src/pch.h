@@ -114,6 +114,7 @@
 #include "../../DirectX11_2D_Framework/inc/Button.h"
 #include "../../DirectX11_2D_Framework/inc/Assembly.h"
 #include "../../DirectX11_2D_Framework/directxtk/include/directxtk/Audio.h"
+#include "../../HewGame/HewGame/resource.h"
 #endif
 
 

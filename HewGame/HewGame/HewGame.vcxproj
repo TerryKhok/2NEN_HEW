@@ -164,6 +164,7 @@
     <ClInclude Include="MovePlayer.h" />
     <ClInclude Include="MoveSubWindow.h" />
     <ClInclude Include="Permeation.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Rock.h" />
     <ClInclude Include="RockGenerator.h" />
     <ClInclude Include="RunFixedRoute.h" />
@@ -211,6 +212,12 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="HewGame.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="asset\pic\gameIcon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

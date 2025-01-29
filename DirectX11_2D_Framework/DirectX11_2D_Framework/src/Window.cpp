@@ -98,12 +98,15 @@ LRESULT Window::WindowMainCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, L
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
 	wc.hInstance = hInstance;
-	wc.hIcon = NULL;
+	//wc.hIcon = NULL;
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 	wc.lpszMenuName = NULL;
 	wc.lpszClassName = "MAIN_WINDOW";
-	wc.hIconSm = NULL;
+	//wc.hIconSm = NULL;
+	HICON loadedIcon = LoadIcon(wc.hInstance, MAKEINTRESOURCE(IDI_ICON1));
+	wc.hIcon = loadedIcon;
+	wc.hIconSm = loadedIcon;
 
 	RegisterClassEx(&wc);
 
