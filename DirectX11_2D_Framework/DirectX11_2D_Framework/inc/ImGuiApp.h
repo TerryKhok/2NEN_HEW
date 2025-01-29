@@ -158,7 +158,11 @@ class ImGuiApp
 public:
 	class HandleUI
 	{
-
+		//functionの引数であるGameObject*を使用する場合はnullptrかチェックする必要がある
+		void SetUploadFile(std::string _uploadStr, std::function<void(GameObject*, std::filesystem::path)>&& _func, std::vector<std::string>&& _extensions) {}
+		//ハンドルの機能をロックする
+		//void LockHandle(bool _lock,const char* _lockName);
+		bool DrawLockButton(const char* _lockName) {}
 	};
 };
 #endif

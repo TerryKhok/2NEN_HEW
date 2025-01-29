@@ -9,6 +9,7 @@
 #include "RunFixedRoute.h"
 #include "MoveRect.h"
 #include "BreakWall.h"
+#include "FlickeringRenderColor.h"
 
 class SeigoTestScene :public Scene
 {

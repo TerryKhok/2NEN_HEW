@@ -133,3 +133,19 @@ void ButtonLog()
 {
 	LOG("Execute");
 }
+
+void FunctionRegistry::DrawPickFunction(const char* _label, std::string& _funcName)
+{
+	if (ImGui::BeginCombo(_label, _funcName.data()))
+	{
+		for (auto& func : FunctionRegistry::functions)
+		{
+			bool same = _funcName == func.first;
+			if (ImGui::Selectable(func.first.c_str(), &same))
+			{
+				_funcName = func.first;
+			}
+		}
+		ImGui::EndCombo();
+	}
+}

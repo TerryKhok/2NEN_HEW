@@ -14,6 +14,8 @@ class TileMap : public Component
 	void Serialize(SERIALIZE_OUTPUT& ar) override;
 	void DrawImGui(ImGuiApp::HandleUI& _handle) override;
 public:
+	//色の変更
+	void SetColor(DirectX::XMFLOAT4& _color);
 	//レイヤーの変更
 	void SetLayer(const LAYER _layer);
 	//レイヤーの取得

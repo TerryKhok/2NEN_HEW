@@ -151,6 +151,8 @@
     <ClInclude Include="BreakWall.h" />
     <ClInclude Include="CrushRock.h" />
     <ClInclude Include="DecorativePlayerMove.h" />
+    <ClInclude Include="FlickeringRenderColor.h" />
+    <ClInclude Include="GameManager.h" />
     <ClInclude Include="MoveRect.h" />
     <ClInclude Include="Enemy_type1.h" />
     <ClInclude Include="EnemyChaser.h" />
@@ -184,6 +186,7 @@
     <ClCompile Include="Enemy_type2.cpp" />
     <ClCompile Include="Enemy_type3.cpp" />
     <ClCompile Include="Fog.cpp" />
+    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MoveSubWIndow.cpp" />
     <ClCompile Include="Permeation.cpp" />

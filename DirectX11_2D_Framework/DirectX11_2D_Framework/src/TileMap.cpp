@@ -1,5 +1,4 @@
 
-
 TileMap::TileMap(GameObject* _object)
 {
 	m_layer = LAYER_BG;
@@ -21,6 +20,7 @@ void TileMap::SetActive(bool _active)
 {
 	m_renderNode->Active(_active);
 }
+
 
 void TileMap::Delete()
 {
@@ -271,6 +271,11 @@ void TileMap::DrawImGui(ImGuiApp::HandleUI& _handle)
 		
 	}
 #endif
+}
+
+void TileMap::SetColor(DirectX::XMFLOAT4& _color)
+{
+	m_renderNode->m_color = _color;
 }
 
 void TileMap::SetLayer(const LAYER _layer)

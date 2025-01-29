@@ -29,7 +29,8 @@ Animator::Animator(GameObject* _gameObject, SERIALIZE_INPUT& ar)
 		return;
 	}
 
-	renderer->SetUVRenderNode(this);
+	m_uvNode = dynamic_cast<UVRenderNode*>(renderer->m_node.get());
+	//renderer->SetUVRenderNode(this);
 
 	int clipSize = 0;
 	ar(CEREAL_NVP(clipSize));
