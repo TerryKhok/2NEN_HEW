@@ -1507,16 +1507,16 @@
         }
     },
     "value11": {
-        "name": "goal",
+        "name": "saka_1_1",
         "transform": {
             "position": {
-                "x": 348.0,
-                "y": -153.0,
+                "x": 602.8406982421875,
+                "y": 102.57711029052735,
                 "z": 0.5
             },
             "scale": {
-                "x": 16.0,
-                "y": 16.0,
+                "x": 20.0,
+                "y": 25.0,
                 "z": 1.0
             },
             "angle": {
@@ -1527,25 +1527,23 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.0
+                    "radians": 0.0000026892219011642739
                 }
             }
         },
         "active": true,
         "comNames": [
-            "class Box2DBody",
-            "class Renderer",
-            "class Goal"
+            "class Box2DBody"
         ],
-        "m_filter": 64,
+        "m_filter": 32,
         "data": {
             "pos": {
-                "vec.x": 34.79999923706055,
-                "vec.y": -15.300000190734864
+                "vec.x": 60.2840690612793,
+                "vec.y": 10.257711410522461
             },
             "rot": {
                 "rot.c": 1.0,
-                "rot.s": 0.0
+                "rot.s": 0.0000027392184165364599
             },
             "type": 0,
             "lineVec": {
@@ -1564,33 +1562,33 @@
             3
         ],
         "shapeData": {
-            "sensor": true,
+            "sensor": false,
             "friction": 0.6000000238418579,
             "density": 1.0,
             "restitution": 0.0
         },
         "polygon": {
             "poly.centroid": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
+                "vec.x": 9.21706771850586,
+                "vec.y": -1.309610366821289
             },
             "poly.count": 4,
             "poly.normals": {
                 "value0": {
-                    "vec.x": 0.0,
-                    "vec.y": -1.0
+                    "vec.x": -0.2763073742389679,
+                    "vec.y": 0.9610692858695984
                 },
                 "value1": {
-                    "vec.x": 1.0,
-                    "vec.y": 0.0
+                    "vec.x": -0.910366415977478,
+                    "vec.y": 0.4138030409812927
                 },
                 "value2": {
-                    "vec.x": 0.0,
-                    "vec.y": 1.0
+                    "vec.x": 0.011362898163497448,
+                    "vec.y": -0.999935507774353
                 },
                 "value3": {
-                    "vec.x": -1.0,
-                    "vec.y": 0.0
+                    "vec.x": 0.9989685416221619,
+                    "vec.y": -0.045407723635435107
                 },
                 "value4": {
                     "vec.x": 0.0,
@@ -1612,20 +1610,20 @@
             "poly.radius": 0.0,
             "poly.vertices": {
                 "value0": {
-                    "vec.x": -8.0,
-                    "vec.y": -8.0
+                    "vec.x": 31.4364013671875,
+                    "vec.y": 14.863180160522461
                 },
                 "value1": {
-                    "vec.x": 8.0,
-                    "vec.y": -8.0
+                    "vec.x": -15.300146102905274,
+                    "vec.y": 1.4264252185821534
                 },
                 "value2": {
-                    "vec.x": 8.0,
-                    "vec.y": 8.0
+                    "vec.x": -21.142215728759767,
+                    "vec.y": -11.426124572753907
                 },
                 "value3": {
-                    "vec.x": -8.0,
-                    "vec.y": 8.0
+                    "vec.x": 30.267986297607423,
+                    "vec.y": -10.841917991638184
                 },
                 "value4": {
                     "vec.x": 0.0,
@@ -1644,30 +1642,7 @@
                     "vec.y": 0.0
                 }
             }
-        },
-        "m_layer": 1,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483652,
-                "data": {
-                    "active": true,
-                    "m_offset": {
-                        "x": 0.0,
-                        "y": 0.0
-                    },
-                    "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
-                        "f.z": 1.0,
-                        "f.w": 1.0
-                    },
-                    "path": "asset\\pic\\Goal2.png"
-                }
-            }
-        },
-        "sceneName": "goal",
-        "waitCount": 60
+        }
     },
     "value12": {
         "name": "Transparent",
@@ -1706,7 +1681,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483653,
+                "id": 2147483652,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -1871,7 +1846,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483654,
+                "id": 2147483653,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -2037,7 +2012,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483655,
+                "id": 2147483654,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -2198,7 +2173,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483656,
+                "id": 2147483655,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -2249,7 +2224,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483657,
+                "id": 2147483656,
                 "data": {
                     "active": false,
                     "m_offset": {
@@ -2300,7 +2275,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483658,
+                "id": 2147483657,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -2463,7 +2438,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483659,
+                "id": 2147483658,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -2516,7 +2491,7 @@
             "polymorphic_id": 2147483650,
             "polymorphic_name": "TileRenderNode",
             "ptr_wrapper": {
-                "id": 2147483660,
+                "id": 2147483659,
                 "data": {
                     "value0": {
                         "active": true,
@@ -3729,16 +3704,16 @@
         }
     },
     "value21": {
-        "name": "saka_1_1",
+        "name": "goal",
         "transform": {
             "position": {
-                "x": 602.8406982421875,
-                "y": 102.57711029052735,
+                "x": 351.0,
+                "y": -147.0,
                 "z": 0.5
             },
             "scale": {
-                "x": 20.0,
-                "y": 25.0,
+                "x": 16.0,
+                "y": 16.0,
                 "z": 1.0
             },
             "angle": {
@@ -3749,23 +3724,27 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.0000026892219011642739
+                    "radians": 0.0
                 }
             }
         },
         "active": true,
         "comNames": [
-            "class Box2DBody"
+            "class Goal",
+            "class Box2DBody",
+            "class Renderer"
         ],
-        "m_filter": 32,
+        "sceneName": "GameClearScene",
+        "waitCount": 60,
+        "m_filter": 64,
         "data": {
             "pos": {
-                "vec.x": 60.2840690612793,
-                "vec.y": 10.257711410522461
+                "vec.x": 35.099998474121097,
+                "vec.y": -14.699999809265137
             },
             "rot": {
                 "rot.c": 1.0,
-                "rot.s": 0.0000027392184165364599
+                "rot.s": 0.0
             },
             "type": 0,
             "lineVec": {
@@ -3784,33 +3763,33 @@
             3
         ],
         "shapeData": {
-            "sensor": false,
+            "sensor": true,
             "friction": 0.6000000238418579,
             "density": 1.0,
             "restitution": 0.0
         },
         "polygon": {
             "poly.centroid": {
-                "vec.x": 9.21706771850586,
-                "vec.y": -1.309610366821289
+                "vec.x": 0.0,
+                "vec.y": -2.0
             },
             "poly.count": 4,
             "poly.normals": {
                 "value0": {
-                    "vec.x": -0.2763073742389679,
-                    "vec.y": 0.9610692858695984
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
                 },
                 "value1": {
-                    "vec.x": -0.910366415977478,
-                    "vec.y": 0.4138030409812927
+                    "vec.x": 1.0,
+                    "vec.y": 0.0
                 },
                 "value2": {
-                    "vec.x": 0.011362898163497448,
-                    "vec.y": -0.999935507774353
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
                 },
                 "value3": {
-                    "vec.x": 0.9989685416221619,
-                    "vec.y": -0.045407723635435107
+                    "vec.x": -1.0,
+                    "vec.y": 0.0
                 },
                 "value4": {
                     "vec.x": 0.0,
@@ -3832,20 +3811,20 @@
             "poly.radius": 0.0,
             "poly.vertices": {
                 "value0": {
-                    "vec.x": 31.4364013671875,
-                    "vec.y": 14.863180160522461
+                    "vec.x": -2.5,
+                    "vec.y": -7.0
                 },
                 "value1": {
-                    "vec.x": -15.300146102905274,
-                    "vec.y": 1.4264252185821534
+                    "vec.x": 2.5,
+                    "vec.y": -7.0
                 },
                 "value2": {
-                    "vec.x": -21.142215728759767,
-                    "vec.y": -11.426124572753907
+                    "vec.x": 2.5,
+                    "vec.y": 3.0
                 },
                 "value3": {
-                    "vec.x": 30.267986297607423,
-                    "vec.y": -10.841917991638184
+                    "vec.x": -2.5,
+                    "vec.y": 3.0
                 },
                 "value4": {
                     "vec.x": 0.0,
@@ -3862,6 +3841,27 @@
                 "value7": {
                     "vec.x": 0.0,
                     "vec.y": 0.0
+                }
+            }
+        },
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483660,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\Goal2.png"
                 }
             }
         }

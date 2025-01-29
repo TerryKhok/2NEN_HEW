@@ -3133,16 +3133,16 @@
         "selfIndex": 2
     },
     "value14": {
-        "name": "goal",
+        "name": "block03_2",
         "transform": {
             "position": {
-                "x": 378.0,
-                "y": -201.21212768554688,
+                "x": 0.0,
+                "y": -375.0,
                 "z": 0.5
             },
             "scale": {
-                "x": 16.0,
-                "y": 16.0,
+                "x": 96.0,
+                "y": 20.0,
                 "z": 1.0
             },
             "angle": {
@@ -3159,17 +3159,13 @@
         },
         "active": true,
         "comNames": [
-            "class Goal",
-            "class Box2DBody",
-            "class Renderer"
+            "class Box2DBody"
         ],
-        "sceneName": "GameClearScene",
-        "waitCount": 60,
-        "m_filter": 64,
+        "m_filter": 32,
         "data": {
             "pos": {
-                "vec.x": 37.79999923706055,
-                "vec.y": -20.121212005615236
+                "vec.x": 0.0,
+                "vec.y": -37.5
             },
             "rot": {
                 "rot.c": 1.0,
@@ -3192,7 +3188,7 @@
             3
         ],
         "shapeData": {
-            "sensor": true,
+            "sensor": false,
             "friction": 0.6000000238418579,
             "density": 1.0,
             "restitution": 0.0
@@ -3240,20 +3236,20 @@
             "poly.radius": 0.0,
             "poly.vertices": {
                 "value0": {
-                    "vec.x": -8.0,
-                    "vec.y": -8.0
+                    "vec.x": -48.0,
+                    "vec.y": -10.0
                 },
                 "value1": {
-                    "vec.x": 8.0,
-                    "vec.y": -8.0
+                    "vec.x": 48.0,
+                    "vec.y": -10.0
                 },
                 "value2": {
-                    "vec.x": 8.0,
-                    "vec.y": 8.0
+                    "vec.x": 48.0,
+                    "vec.y": 10.0
                 },
                 "value3": {
-                    "vec.x": -8.0,
-                    "vec.y": 8.0
+                    "vec.x": -48.0,
+                    "vec.y": 10.0
                 },
                 "value4": {
                     "vec.x": 0.0,
@@ -3270,27 +3266,6 @@
                 "value7": {
                     "vec.x": 0.0,
                     "vec.y": 0.0
-                }
-            }
-        },
-        "m_layer": 1,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483658,
-                "data": {
-                    "active": true,
-                    "m_offset": {
-                        "x": 0.0,
-                        "y": 0.0
-                    },
-                    "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
-                        "f.z": 1.0,
-                        "f.w": 1.0
-                    },
-                    "path": "asset\\pic\\Goal2.png"
                 }
             }
         }
@@ -3440,7 +3415,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483659,
+                "id": 2147483658,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -3737,16 +3712,16 @@
         }
     },
     "value18": {
-        "name": "block03_2",
+        "name": "goal",
         "transform": {
             "position": {
-                "x": 0.0,
-                "y": -375.0,
+                "x": 378.0,
+                "y": -198.0,
                 "z": 0.5
             },
             "scale": {
-                "x": 96.0,
-                "y": 20.0,
+                "x": 16.0,
+                "y": 16.0,
                 "z": 1.0
             },
             "angle": {
@@ -3763,13 +3738,17 @@
         },
         "active": true,
         "comNames": [
-            "class Box2DBody"
+            "class Goal",
+            "class Box2DBody",
+            "class Renderer"
         ],
-        "m_filter": 32,
+        "sceneName": "GameClearScene",
+        "waitCount": 60,
+        "m_filter": 64,
         "data": {
             "pos": {
-                "vec.x": 0.0,
-                "vec.y": -37.5
+                "vec.x": 37.79999923706055,
+                "vec.y": -19.799999237060548
             },
             "rot": {
                 "rot.c": 1.0,
@@ -3792,7 +3771,7 @@
             3
         ],
         "shapeData": {
-            "sensor": false,
+            "sensor": true,
             "friction": 0.6000000238418579,
             "density": 1.0,
             "restitution": 0.0
@@ -3800,7 +3779,7 @@
         "polygon": {
             "poly.centroid": {
                 "vec.x": 0.0,
-                "vec.y": 0.0
+                "vec.y": -2.0
             },
             "poly.count": 4,
             "poly.normals": {
@@ -3840,20 +3819,20 @@
             "poly.radius": 0.0,
             "poly.vertices": {
                 "value0": {
-                    "vec.x": -48.0,
-                    "vec.y": -10.0
+                    "vec.x": -2.5,
+                    "vec.y": -7.0
                 },
                 "value1": {
-                    "vec.x": 48.0,
-                    "vec.y": -10.0
+                    "vec.x": 2.5,
+                    "vec.y": -7.0
                 },
                 "value2": {
-                    "vec.x": 48.0,
-                    "vec.y": 10.0
+                    "vec.x": 2.5,
+                    "vec.y": 3.0
                 },
                 "value3": {
-                    "vec.x": -48.0,
-                    "vec.y": 10.0
+                    "vec.x": -2.5,
+                    "vec.y": 3.0
                 },
                 "value4": {
                     "vec.x": 0.0,
@@ -3870,6 +3849,27 @@
                 "value7": {
                     "vec.x": 0.0,
                     "vec.y": 0.0
+                }
+            }
+        },
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483659,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\Goal2.png"
                 }
             }
         }
