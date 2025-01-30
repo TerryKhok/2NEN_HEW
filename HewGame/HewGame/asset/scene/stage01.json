@@ -727,7 +727,7 @@
                         "f.x": 1.0,
                         "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 0.5882353186607361
+                        "f.w": 0.6000000238418579
                     },
                     "path": "asset\\sign\\sign_lowgravity.png"
                 }
@@ -892,7 +892,7 @@
                         "f.x": 1.0,
                         "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 0.5882353186607361
+                        "f.w": 0.6000000238418579
                     },
                     "path": "asset\\sign\\sign_lowgravity.png"
                 }
@@ -1057,7 +1057,7 @@
                         "f.x": 1.0,
                         "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 0.5882353186607361
+                        "f.w": 0.6000000238418579
                     },
                     "path": "asset\\sign\\sign_lowgravity.png"
                 }
@@ -1114,7 +1114,7 @@
                         "f.x": 1.0,
                         "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 0.5882353186607361
+                        "f.w": 0.6000000238418579
                     },
                     "path": "asset\\sign\\sign_transparent.png"
                 }
@@ -2811,20 +2811,6 @@
                             "pos": {
                                 "x": 70.0,
                                 "y": -50.0
-                            }
-                        },
-                        {
-                            "texIndex": 10,
-                            "pos": {
-                                "x": 40.0,
-                                "y": -10.0
-                            }
-                        },
-                        {
-                            "texIndex": 10,
-                            "pos": {
-                                "x": 50.0,
-                                "y": -10.0
                             }
                         },
                         {
@@ -9315,6 +9301,20 @@
                                 "x": -190.0,
                                 "y": -150.0
                             }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": 40.0,
+                                "y": -10.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": 50.0,
+                                "y": -10.0
+                            }
                         }
                     ],
                     "textureList": [
@@ -9332,7 +9332,7 @@
                         },
                         {
                             "pathStr": "asset\\tile\\1\\tilemap1_5.png",
-                            "count": 1317
+                            "count": 1319
                         },
                         {
                             "pathStr": "asset\\tile\\1\\tilemap1_12.png",
@@ -9360,7 +9360,7 @@
                         },
                         {
                             "pathStr": "asset\\tile\\2\\tile map 2_5.png",
-                            "count": 365
+                            "count": 363
                         },
                         {
                             "pathStr": "asset\\tile\\2\\tile map 2_2.png",

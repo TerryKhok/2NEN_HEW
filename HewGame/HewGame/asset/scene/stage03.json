@@ -4001,7 +4001,7 @@
                             }
                         },
                         {
-                            "texIndex": 13,
+                            "texIndex": 22,
                             "pos": {
                                 "x": -100.0,
                                 "y": -10.0
@@ -4015,7 +4015,7 @@
                             }
                         },
                         {
-                            "texIndex": 15,
+                            "texIndex": 22,
                             "pos": {
                                 "x": -100.0,
                                 "y": 30.0
@@ -9874,7 +9874,7 @@
                         },
                         {
                             "pathStr": "asset\\tile\\1\\tilemap1_5.png",
-                            "count": 1200
+                            "count": 1202
                         }
                     ],
                     "tileSize": {
