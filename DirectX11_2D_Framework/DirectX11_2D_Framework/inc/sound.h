@@ -46,6 +46,8 @@ private:
 		bool bLoop;			// trueでループ。通常BGMはture、SEはfalse。
 	} PARAM;
 
+
+#if defined(_DEBUG)
 	PARAM soundFile[SOUND_LABEL_MAX] =
 	{
 		{L"../../HewGame/HewGame/asset/sound/bgm/BGM_Game01.wav",true},
@@ -66,6 +68,29 @@ private:
 		{L"../../HewGame/HewGame/asset/sound/se/SFX_Select.wav",false},
 		{L"../../HewGame/HewGame/asset/sound/se/SFX_Exit.wav",false},
 	};
+#else
+	PARAM soundFile[SOUND_LABEL_MAX] =
+	{
+		{L"asset/sound/bgm/BGM_Game01.wav",true},
+		{L"asset/sound/bgm/BGM_Game02.wav",true},
+		{L"asset/sound/bgm/BGM_MainMenu.wav",true},
+		{L"asset/sound/se/SFX_Jump.wav",false},
+		{L"asset/sound/se/SFX_Land.wav",false},
+		{L"asset/sound/se/SFX_Walk01.wav",false},
+		{L"asset/sound/se/SFX_Walk02.wav",false},
+		{L"asset/sound/se/SFX_Walk03.wav",false},
+		{L"asset/sound/se/SFX_Walk04.wav",false},
+		{L"asset/sound/se/SFX_Cancel.wav",false},
+		{L"asset/sound/se/SFX_Clear.wav",false},
+		{L"asset/sound/se/SFX_Confirm.wav",false},
+		{L"asset/sound/se/SFX_Death.wav",false},
+		{L"asset/sound/se/SFX_Hit.wav",false},
+		{L"asset/sound/se/SFX_Open.wav",false},
+		{L"asset/sound/se/SFX_Select.wav",false},
+		{L"asset/sound/se/SFX_Exit.wav",false},
+	};
+#endif
+	
 
 	IXAudio2* pXAudio2 = NULL;
 	IXAudio2MasteringVoice* pMasteringVoice = NULL;

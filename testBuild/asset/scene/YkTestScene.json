@@ -1,0 +1,1095 @@
+{
+    "index": 115,
+    "objectNum": 9,
+    "value0": {
+        "name": "Player",
+        "transform": {
+            "position": {
+                "x": -331.35382080078127,
+                "y": -276.010009765625,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class Box2DBody",
+            "class MovePlayer"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483649,
+                "data": {
+                    "active": true,
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset/pic/hartR.png"
+                }
+            }
+        },
+        "m_filter": 8,
+        "data": {
+            "type": 2,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": -0.7779690027236939
+            },
+            "angleVec": 0.0,
+            "gravity": 10.0,
+            "mass": 1.0,
+            "bullet": true,
+            "fixRot": true,
+            "awake": true
+        },
+        "types": [
+            1
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "capsule": {
+            "cap.center1": {
+                "vec.x": 0.0,
+                "vec.y": -1.25
+            },
+            "cap.center2": {
+                "vec.x": 0.0,
+                "vec.y": 1.25
+            },
+            "cap.radius": 2.5
+        }
+    },
+    "value1": {
+        "name": "StaticBox_Map",
+        "transform": {
+            "position": {
+                "x": 3.0,
+                "y": -13.5,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody"
+        ],
+        "m_filter": 16,
+        "data": {
+            "type": 0,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 0.0,
+            "mass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": -80.0,
+                "vec.y": -10.0
+            },
+            "chain.ghost2": {
+                "vec.x": 80.0,
+                "vec.y": -30.0
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": -80.0,
+                    "vec.y": 30.0
+                },
+                "seg.point2": {
+                    "vec.x": 80.0,
+                    "vec.y": 30.0
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": -80.0,
+                "vec.y": 30.0
+            },
+            "chain.ghost2": {
+                "vec.x": 50.0,
+                "vec.y": -30.0
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": 80.0,
+                    "vec.y": 30.0
+                },
+                "seg.point2": {
+                    "vec.x": 80.0,
+                    "vec.y": -30.0
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": 80.0,
+                "vec.y": 30.0
+            },
+            "chain.ghost2": {
+                "vec.x": 50.0,
+                "vec.y": 10.0
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": 80.0,
+                    "vec.y": -30.0
+                },
+                "seg.point2": {
+                    "vec.x": 50.0,
+                    "vec.y": -30.0
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": 80.0,
+                "vec.y": -30.0
+            },
+            "chain.ghost2": {
+                "vec.x": 40.0,
+                "vec.y": 10.0
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": 50.0,
+                    "vec.y": -30.0
+                },
+                "seg.point2": {
+                    "vec.x": 50.0,
+                    "vec.y": 10.0
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": 50.0,
+                "vec.y": -30.0
+            },
+            "chain.ghost2": {
+                "vec.x": 40.0,
+                "vec.y": -30.0
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": 50.0,
+                    "vec.y": 10.0
+                },
+                "seg.point2": {
+                    "vec.x": 40.0,
+                    "vec.y": 10.0
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": 50.0,
+                "vec.y": 10.0
+            },
+            "chain.ghost2": {
+                "vec.x": -60.0,
+                "vec.y": -30.0
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": 40.0,
+                    "vec.y": 10.0
+                },
+                "seg.point2": {
+                    "vec.x": 40.0,
+                    "vec.y": -30.0
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": 40.0,
+                "vec.y": 10.0
+            },
+            "chain.ghost2": {
+                "vec.x": -80.0,
+                "vec.y": -10.0
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": 40.0,
+                    "vec.y": -30.0
+                },
+                "seg.point2": {
+                    "vec.x": -60.0,
+                    "vec.y": -30.0
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": 40.0,
+                "vec.y": -30.0
+            },
+            "chain.ghost2": {
+                "vec.x": -80.0,
+                "vec.y": 30.0
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": -60.0,
+                    "vec.y": -30.0
+                },
+                "seg.point2": {
+                    "vec.x": -80.0,
+                    "vec.y": -10.0
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": -60.0,
+                "vec.y": -30.0
+            },
+            "chain.ghost2": {
+                "vec.x": 80.0,
+                "vec.y": 30.0
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": -80.0,
+                    "vec.y": -10.0
+                },
+                "seg.point2": {
+                    "vec.x": -80.0,
+                    "vec.y": 30.0
+                }
+            }
+        }
+    },
+    "value2": {
+        "name": "StaticBox_Obstacle",
+        "transform": {
+            "position": {
+                "x": -200.0,
+                "y": -100.0,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 20.0,
+                "y": 10.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody"
+        ],
+        "m_filter": 512,
+        "data": {
+            "type": 0,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "poly.count": 4,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
+                },
+                "value1": {
+                    "vec.x": 1.0,
+                    "vec.y": 0.0
+                },
+                "value2": {
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
+                },
+                "value3": {
+                    "vec.x": -1.0,
+                    "vec.y": 0.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": -10.0,
+                    "vec.y": -5.0
+                },
+                "value1": {
+                    "vec.x": 10.0,
+                    "vec.y": -5.0
+                },
+                "value2": {
+                    "vec.x": 10.0,
+                    "vec.y": 5.0
+                },
+                "value3": {
+                    "vec.x": -10.0,
+                    "vec.y": 5.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            }
+        }
+    },
+    "value3": {
+        "name": "StaticBox_Ground_Polygon",
+        "transform": {
+            "position": {
+                "x": 200.0,
+                "y": 0.0,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody"
+        ],
+        "m_filter": 512,
+        "data": {
+            "type": 0,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": 0.0,
+                "vec.y": -0.22727274894714356
+            },
+            "poly.count": 4,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": -0.6401844024658203,
+                    "vec.y": -0.7682212591171265
+                },
+                "value1": {
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
+                },
+                "value2": {
+                    "vec.x": 0.6401844024658203,
+                    "vec.y": -0.7682212591171265
+                },
+                "value3": {
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": -10.0,
+                    "vec.y": 2.5
+                },
+                "value1": {
+                    "vec.x": -1.0,
+                    "vec.y": -5.0
+                },
+                "value2": {
+                    "vec.x": 1.0,
+                    "vec.y": -5.0
+                },
+                "value3": {
+                    "vec.x": 10.0,
+                    "vec.y": 2.5
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            }
+        }
+    },
+    "value4": {
+        "name": "Barrier",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody"
+        ],
+        "m_filter": 16,
+        "data": {
+            "type": 0,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            2,
+            2
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "segment": {
+            "seg.point1": {
+                "vec.x": 15.0,
+                "vec.y": 2.5
+            },
+            "seg.point2": {
+                "vec.x": 15.0,
+                "vec.y": -1.6666669845581055
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "segment": {
+            "seg.point1": {
+                "vec.x": 15.0,
+                "vec.y": -1.6666669845581055
+            },
+            "seg.point2": {
+                "vec.x": 15.0,
+                "vec.y": 2.5
+            }
+        }
+    },
+    "value5": {
+        "name": "enemy_type2",
+        "transform": {
+            "position": {
+                "x": 75.44784545898438,
+                "y": -288.50048828125,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class Box2DBody",
+            "class Enemy_type2"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483650,
+                "data": {
+                    "active": true,
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\enemy.png"
+                }
+            }
+        },
+        "m_filter": 1,
+        "data": {
+            "type": 2,
+            "lineVec": {
+                "vec.x": 14.400104522705079,
+                "vec.y": -1.3096723705530167e-10
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 1.0,
+            "bullet": false,
+            "fixRot": true,
+            "awake": true
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "poly.count": 4,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
+                },
+                "value1": {
+                    "vec.x": 1.0,
+                    "vec.y": 0.0
+                },
+                "value2": {
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
+                },
+                "value3": {
+                    "vec.x": -1.0,
+                    "vec.y": 0.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": -2.5,
+                    "vec.y": -2.5
+                },
+                "value1": {
+                    "vec.x": 2.5,
+                    "vec.y": -2.5
+                },
+                "value2": {
+                    "vec.x": 2.5,
+                    "vec.y": 2.5
+                },
+                "value3": {
+                    "vec.x": -2.5,
+                    "vec.y": 2.5
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            }
+        }
+    },
+    "value6": {
+        "name": "Barrier_1",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody"
+        ],
+        "m_filter": 16,
+        "data": {
+            "type": 0,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            2,
+            2
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "segment": {
+            "seg.point1": {
+                "vec.x": -10.0,
+                "vec.y": -10.0
+            },
+            "seg.point2": {
+                "vec.x": -15.0,
+                "vec.y": -10.0
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "segment": {
+            "seg.point1": {
+                "vec.x": -15.0,
+                "vec.y": -10.0
+            },
+            "seg.point2": {
+                "vec.x": -10.0,
+                "vec.y": -10.0
+            }
+        }
+    },
+    "value7": {
+        "name": "Barrier_2",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody"
+        ],
+        "m_filter": 16,
+        "data": {
+            "type": 0,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            2,
+            2
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "segment": {
+            "seg.point1": {
+                "vec.x": -15.0,
+                "vec.y": -10.0
+            },
+            "seg.point2": {
+                "vec.x": -15.0,
+                "vec.y": -5.0
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "segment": {
+            "seg.point1": {
+                "vec.x": -15.0,
+                "vec.y": -5.0
+            },
+            "seg.point2": {
+                "vec.x": -15.0,
+                "vec.y": -10.0
+            }
+        }
+    },
+    "value8": {
+        "name": "enemy_type3",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class Box2DBody",
+            "class Enemy_type3"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483651,
+                "data": {
+                    "active": true,
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "null"
+                }
+            }
+        },
+        "m_filter": 1,
+        "data": {
+            "type": 2,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": true
+        },
+        "types": []
+    }
+}

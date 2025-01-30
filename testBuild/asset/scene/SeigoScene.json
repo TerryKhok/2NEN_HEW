@@ -1,0 +1,3973 @@
+{
+    "index": 115,
+    "objectNum": 19,
+    "value0": {
+        "name": "backGround",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 211.6544647216797,
+                "y": 123.75672912597656,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer"
+        ],
+        "m_layer": 0,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483649,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\background\\Haikei 1.png"
+                }
+            }
+        }
+    },
+    "value1": {
+        "name": "Map",
+        "transform": {
+            "position": {
+                "x": -55.912940979003909,
+                "y": -3.865570068359375,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody"
+        ],
+        "m_filter": 1,
+        "data": {
+            "pos": {
+                "vec.x": -5.591294288635254,
+                "vec.y": -0.386557012796402
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
+            "type": 0,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": -8.0,
+            "mass": 0.0,
+            "autoMass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": -25.342615127563478,
+                "vec.y": 31.824533462524415
+            },
+            "chain.ghost2": {
+                "vec.x": 52.20732879638672,
+                "vec.y": -10.660764694213868
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": 11.352943420410157,
+                    "vec.y": 21.875961303710939
+                },
+                "seg.point2": {
+                    "vec.x": 52.12578582763672,
+                    "vec.y": 31.987625122070314
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": 11.352943420410157,
+                "vec.y": 21.875961303710939
+            },
+            "chain.ghost2": {
+                "vec.x": 17.305776596069337,
+                "vec.y": -10.823856353759766
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": 52.12578582763672,
+                    "vec.y": 31.987625122070314
+                },
+                "seg.point2": {
+                    "vec.x": 52.20732879638672,
+                    "vec.y": -10.660764694213868
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": 52.12578582763672,
+                "vec.y": 31.987625122070314
+            },
+            "chain.ghost2": {
+                "vec.x": 17.213212966918947,
+                "vec.y": -30.80259132385254
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": 52.20732879638672,
+                    "vec.y": -10.660764694213868
+                },
+                "seg.point2": {
+                    "vec.x": 17.305776596069337,
+                    "vec.y": -10.823856353759766
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": 52.20732879638672,
+                "vec.y": -10.660764694213868
+            },
+            "chain.ghost2": {
+                "vec.x": -40.42856216430664,
+                "vec.y": -31.128732681274415
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": 17.305776596069337,
+                    "vec.y": -10.823856353759766
+                },
+                "seg.point2": {
+                    "vec.x": 17.213212966918947,
+                    "vec.y": -30.80259132385254
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": 17.305776596069337,
+                "vec.y": -10.823856353759766
+            },
+            "chain.ghost2": {
+                "vec.x": -40.7547492980957,
+                "vec.y": 11.27502155303955
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": 17.213212966918947,
+                    "vec.y": -30.80259132385254
+                },
+                "seg.point2": {
+                    "vec.x": -40.42856216430664,
+                    "vec.y": -31.128732681274415
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": 17.213212966918947,
+                "vec.y": -30.80259132385254
+            },
+            "chain.ghost2": {
+                "vec.x": -25.342615127563478,
+                "vec.y": 31.824533462524415
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": -40.42856216430664,
+                    "vec.y": -31.128732681274415
+                },
+                "seg.point2": {
+                    "vec.x": -40.7547492980957,
+                    "vec.y": 11.27502155303955
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": -40.42856216430664,
+                "vec.y": -31.128732681274415
+            },
+            "chain.ghost2": {
+                "vec.x": 11.352943420410157,
+                "vec.y": 21.875961303710939
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": -40.7547492980957,
+                    "vec.y": 11.27502155303955
+                },
+                "seg.point2": {
+                    "vec.x": -25.342615127563478,
+                    "vec.y": 31.824533462524415
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 0,
+            "chain.ghost1": {
+                "vec.x": -40.7547492980957,
+                "vec.y": 11.27502155303955
+            },
+            "chain.ghost2": {
+                "vec.x": 52.12578582763672,
+                "vec.y": 31.987625122070314
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": -25.342615127563478,
+                    "vec.y": 31.824533462524415
+                },
+                "seg.point2": {
+                    "vec.x": 11.352943420410157,
+                    "vec.y": 21.875961303710939
+                }
+            }
+        }
+    },
+    "value2": {
+        "name": "TileMap",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class TileMap"
+        ],
+        "m_renderNode": {
+            "polymorphic_id": 2147483649,
+            "polymorphic_name": "TileRenderNode",
+            "ptr_wrapper": {
+                "id": 2147483650,
+                "data": {
+                    "value0": {
+                        "active": true,
+                        "m_offset": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "m_color": {
+                            "f.x": 0.2745097875595093,
+                            "f.y": 0.2745097875595093,
+                            "f.z": 0.2745097875595093,
+                            "f.w": 1.0
+                        },
+                        "path": "null"
+                    },
+                    "tileTips": [
+                        {
+                            "texIndex": 2,
+                            "pos": {
+                                "x": -90.0,
+                                "y": -60.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": -80.0,
+                                "y": -60.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": -70.0,
+                                "y": -60.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": -60.0,
+                                "y": -60.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": -50.0,
+                                "y": -60.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": -40.0,
+                                "y": -60.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": -30.0,
+                                "y": -60.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": -20.0,
+                                "y": -60.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": -10.0,
+                                "y": -60.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": 0.0,
+                                "y": -60.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": 10.0,
+                                "y": -60.0
+                            }
+                        },
+                        {
+                            "texIndex": 1,
+                            "pos": {
+                                "x": 20.0,
+                                "y": -60.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -90.0,
+                                "y": -50.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -90.0,
+                                "y": -40.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -90.0,
+                                "y": -30.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -90.0,
+                                "y": -20.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -90.0,
+                                "y": -10.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -90.0,
+                                "y": 0.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -90.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 4,
+                            "pos": {
+                                "x": -90.0,
+                                "y": 20.0
+                            }
+                        },
+                        {
+                            "texIndex": 5,
+                            "pos": {
+                                "x": -80.0,
+                                "y": 20.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -80.0,
+                                "y": 30.0
+                            }
+                        },
+                        {
+                            "texIndex": 4,
+                            "pos": {
+                                "x": -80.0,
+                                "y": 40.0
+                            }
+                        },
+                        {
+                            "texIndex": 5,
+                            "pos": {
+                                "x": -70.0,
+                                "y": 40.0
+                            }
+                        },
+                        {
+                            "texIndex": 5,
+                            "pos": {
+                                "x": -60.0,
+                                "y": 50.0
+                            }
+                        },
+                        {
+                            "texIndex": 4,
+                            "pos": {
+                                "x": -70.0,
+                                "y": 50.0
+                            }
+                        },
+                        {
+                            "texIndex": 4,
+                            "pos": {
+                                "x": -60.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 6,
+                            "pos": {
+                                "x": -50.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 6,
+                            "pos": {
+                                "x": -40.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -40.0,
+                                "y": 50.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": -30.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 8,
+                            "pos": {
+                                "x": -30.0,
+                                "y": 50.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -20.0,
+                                "y": 40.0
+                            }
+                        },
+                        {
+                            "texIndex": 8,
+                            "pos": {
+                                "x": -10.0,
+                                "y": 40.0
+                            }
+                        },
+                        {
+                            "texIndex": 6,
+                            "pos": {
+                                "x": -20.0,
+                                "y": 50.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": -10.0,
+                                "y": 50.0
+                            }
+                        },
+                        {
+                            "texIndex": 6,
+                            "pos": {
+                                "x": 0.0,
+                                "y": 40.0
+                            }
+                        },
+                        {
+                            "texIndex": 6,
+                            "pos": {
+                                "x": 10.0,
+                                "y": 40.0
+                            }
+                        },
+                        {
+                            "texIndex": 6,
+                            "pos": {
+                                "x": 20.0,
+                                "y": 40.0
+                            }
+                        },
+                        {
+                            "texIndex": 5,
+                            "pos": {
+                                "x": 30.0,
+                                "y": 40.0
+                            }
+                        },
+                        {
+                            "texIndex": 4,
+                            "pos": {
+                                "x": 30.0,
+                                "y": 50.0
+                            }
+                        },
+                        {
+                            "texIndex": 6,
+                            "pos": {
+                                "x": 40.0,
+                                "y": 50.0
+                            }
+                        },
+                        {
+                            "texIndex": 6,
+                            "pos": {
+                                "x": 50.0,
+                                "y": 50.0
+                            }
+                        },
+                        {
+                            "texIndex": 6,
+                            "pos": {
+                                "x": 60.0,
+                                "y": 50.0
+                            }
+                        },
+                        {
+                            "texIndex": 5,
+                            "pos": {
+                                "x": 70.0,
+                                "y": 50.0
+                            }
+                        },
+                        {
+                            "texIndex": 4,
+                            "pos": {
+                                "x": 70.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 6,
+                            "pos": {
+                                "x": 80.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 7,
+                            "pos": {
+                                "x": 90.0,
+                                "y": 60.0
+                            }
+                        },
+                        {
+                            "texIndex": 10,
+                            "pos": {
+                                "x": 90.0,
+                                "y": 50.0
+                            }
+                        },
+                        {
+                            "texIndex": 10,
+                            "pos": {
+                                "x": 90.0,
+                                "y": 40.0
+                            }
+                        },
+                        {
+                            "texIndex": 10,
+                            "pos": {
+                                "x": 90.0,
+                                "y": 30.0
+                            }
+                        },
+                        {
+                            "texIndex": 10,
+                            "pos": {
+                                "x": 90.0,
+                                "y": 20.0
+                            }
+                        },
+                        {
+                            "texIndex": 10,
+                            "pos": {
+                                "x": 90.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 10,
+                            "pos": {
+                                "x": 90.0,
+                                "y": 0.0
+                            }
+                        },
+                        {
+                            "texIndex": 10,
+                            "pos": {
+                                "x": 90.0,
+                                "y": -10.0
+                            }
+                        },
+                        {
+                            "texIndex": 1,
+                            "pos": {
+                                "x": 90.0,
+                                "y": -20.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": 80.0,
+                                "y": -20.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": 70.0,
+                                "y": -20.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": 60.0,
+                                "y": -20.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": 50.0,
+                                "y": -20.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": 40.0,
+                                "y": -20.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": 30.0,
+                                "y": -20.0
+                            }
+                        },
+                        {
+                            "texIndex": 11,
+                            "pos": {
+                                "x": 20.0,
+                                "y": -20.0
+                            }
+                        },
+                        {
+                            "texIndex": 10,
+                            "pos": {
+                                "x": 20.0,
+                                "y": -30.0
+                            }
+                        },
+                        {
+                            "texIndex": 10,
+                            "pos": {
+                                "x": 20.0,
+                                "y": -40.0
+                            }
+                        },
+                        {
+                            "texIndex": 10,
+                            "pos": {
+                                "x": 20.0,
+                                "y": -50.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -50.0,
+                                "y": 50.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -50.0,
+                                "y": 40.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -60.0,
+                                "y": 40.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -40.0,
+                                "y": 40.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -30.0,
+                                "y": 40.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -30.0,
+                                "y": 30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -40.0,
+                                "y": 30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -50.0,
+                                "y": 30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -60.0,
+                                "y": 30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -70.0,
+                                "y": 30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -70.0,
+                                "y": 20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -60.0,
+                                "y": 20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -70.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -70.0,
+                                "y": 0.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -80.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -80.0,
+                                "y": 0.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -80.0,
+                                "y": -10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -80.0,
+                                "y": -20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -80.0,
+                                "y": -30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -80.0,
+                                "y": -40.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -80.0,
+                                "y": -50.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -70.0,
+                                "y": -50.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -60.0,
+                                "y": -50.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -50.0,
+                                "y": -50.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -40.0,
+                                "y": -50.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -30.0,
+                                "y": -50.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -20.0,
+                                "y": -50.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -10.0,
+                                "y": -50.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 0.0,
+                                "y": -50.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 10.0,
+                                "y": -50.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 10.0,
+                                "y": -40.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 10.0,
+                                "y": -30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 10.0,
+                                "y": -20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 10.0,
+                                "y": -10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 20.0,
+                                "y": -10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 30.0,
+                                "y": -10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 40.0,
+                                "y": -10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 50.0,
+                                "y": -10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 60.0,
+                                "y": -10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 70.0,
+                                "y": -10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 70.0,
+                                "y": 0.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 80.0,
+                                "y": 0.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 80.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 80.0,
+                                "y": 20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 80.0,
+                                "y": 30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 80.0,
+                                "y": 40.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 80.0,
+                                "y": 50.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 80.0,
+                                "y": -10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 70.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 70.0,
+                                "y": 20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 70.0,
+                                "y": 30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 70.0,
+                                "y": 40.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 60.0,
+                                "y": 40.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 50.0,
+                                "y": 40.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 40.0,
+                                "y": 40.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 50.0,
+                                "y": 30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 60.0,
+                                "y": 30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 60.0,
+                                "y": 20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 50.0,
+                                "y": 20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 40.0,
+                                "y": 20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 40.0,
+                                "y": 30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 30.0,
+                                "y": 30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 20.0,
+                                "y": 30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 10.0,
+                                "y": 30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 0.0,
+                                "y": 30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -10.0,
+                                "y": 30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -20.0,
+                                "y": 30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -30.0,
+                                "y": 20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -20.0,
+                                "y": 20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -10.0,
+                                "y": 20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 0.0,
+                                "y": 20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 10.0,
+                                "y": 20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 20.0,
+                                "y": 20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 30.0,
+                                "y": 20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 20.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 0.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -10.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -20.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -40.0,
+                                "y": 20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -40.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -50.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -30.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 10.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -60.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -50.0,
+                                "y": 20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -50.0,
+                                "y": 0.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -60.0,
+                                "y": 0.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -40.0,
+                                "y": 0.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -30.0,
+                                "y": 0.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -20.0,
+                                "y": 0.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -10.0,
+                                "y": 0.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -30.0,
+                                "y": -10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -40.0,
+                                "y": -10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -50.0,
+                                "y": -10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -60.0,
+                                "y": -10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -70.0,
+                                "y": -10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -20.0,
+                                "y": -10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -10.0,
+                                "y": -10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -10.0,
+                                "y": -20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -20.0,
+                                "y": -20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -30.0,
+                                "y": -30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -40.0,
+                                "y": -30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -50.0,
+                                "y": -30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -60.0,
+                                "y": -30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -70.0,
+                                "y": -30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -70.0,
+                                "y": -20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -70.0,
+                                "y": -40.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -60.0,
+                                "y": -40.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -50.0,
+                                "y": -40.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -40.0,
+                                "y": -40.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -60.0,
+                                "y": -20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -50.0,
+                                "y": -20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -40.0,
+                                "y": -20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -10.0,
+                                "y": -30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -20.0,
+                                "y": -30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -20.0,
+                                "y": -40.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -30.0,
+                                "y": -40.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -30.0,
+                                "y": -20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 0.0,
+                                "y": -20.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 0.0,
+                                "y": -10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 0.0,
+                                "y": 0.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 0.0,
+                                "y": -30.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": -10.0,
+                                "y": -40.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 0.0,
+                                "y": -40.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 10.0,
+                                "y": 0.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 20.0,
+                                "y": 0.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 30.0,
+                                "y": 0.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 40.0,
+                                "y": 0.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 50.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 40.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 30.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 50.0,
+                                "y": 0.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 60.0,
+                                "y": 0.0
+                            }
+                        },
+                        {
+                            "texIndex": 9,
+                            "pos": {
+                                "x": 60.0,
+                                "y": 10.0
+                            }
+                        }
+                    ],
+                    "textureList": [
+                        {
+                            "pathStr": "asset\\tile\\2\\tile map 2_2.png",
+                            "count": 18
+                        },
+                        {
+                            "pathStr": "asset\\tile\\2\\tile map 2_3.png",
+                            "count": 2
+                        },
+                        {
+                            "pathStr": "asset\\tile\\2\\tile map 2_1.png",
+                            "count": 1
+                        },
+                        {
+                            "pathStr": "asset\\tile\\2\\tile map 2_4.png",
+                            "count": 8
+                        },
+                        {
+                            "pathStr": "asset\\tile\\2\\tile map 2_7.png",
+                            "count": 6
+                        },
+                        {
+                            "pathStr": "asset\\tile\\2\\tile map 2_12.png",
+                            "count": 5
+                        },
+                        {
+                            "pathStr": "asset\\tile\\2\\tile map 2_8.png",
+                            "count": 12
+                        },
+                        {
+                            "pathStr": "asset\\tile\\2\\tile map 2_9.png",
+                            "count": 5
+                        },
+                        {
+                            "pathStr": "asset\\tile\\2\\tile map 2_13.png",
+                            "count": 4
+                        },
+                        {
+                            "pathStr": "asset\\tile\\2\\tile map 2_5.png",
+                            "count": 209
+                        },
+                        {
+                            "pathStr": "asset\\tile\\2\\tile map 2_6.png",
+                            "count": 10
+                        },
+                        {
+                            "pathStr": "asset\\tile\\2\\tile map 2_11.png",
+                            "count": 1
+                        }
+                    ],
+                    "tileSize": {
+                        "x": 5.0,
+                        "y": 5.0
+                    }
+                }
+            }
+        },
+        "m_layer": 0
+    },
+    "value3": {
+        "name": "Player",
+        "transform": {
+            "position": {
+                "x": -67.1512451171875,
+                "y": 100.61361694335938,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 7.0,
+                "y": 14.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class Animator",
+            "class Box2DBody",
+            "class MovePlayer"
+        ],
+        "m_layer": 2,
+        "m_node": {
+            "polymorphic_id": 2147483650,
+            "polymorphic_name": "UVRenderNode",
+            "ptr_wrapper": {
+                "id": 2147483651,
+                "data": {
+                    "value0": {
+                        "active": true,
+                        "m_offset": {
+                            "x": 0.0,
+                            "y": 15.0
+                        },
+                        "m_color": {
+                            "f.x": 1.0,
+                            "f.y": 1.0,
+                            "f.z": 1.0,
+                            "f.w": 1.0
+                        },
+                        "path": "asset\\spritesheet\\player_normal_standby.png"
+                    },
+                    "m_scaleX": 0.125,
+                    "m_scaleY": 0.3333333432674408,
+                    "m_frameX": 0,
+                    "m_frameY": 0
+                }
+            }
+        },
+        "clipSize": 40,
+        "name": "bounceBlink",
+        "path": "asset\\animationClip\\player_bounce_blink.amcp",
+        "loop": true,
+        "name": "bounceDamage",
+        "path": "asset\\animationClip\\player_bounce_damage.amcp",
+        "loop": false,
+        "name": "bounceFloat",
+        "path": "asset\\animationClip\\player_bounce_float.amcp",
+        "loop": true,
+        "name": "bounceGoal",
+        "path": "asset\\animationClip\\player_bounce_goal.amcp",
+        "loop": true,
+        "name": "bounceJump",
+        "path": "asset\\animationClip\\player_bounce_jump.amcp",
+        "loop": false,
+        "name": "bounceLanding",
+        "path": "asset\\animationClip\\player_bounce_landing.amcp",
+        "loop": false,
+        "name": "bounceStandBy",
+        "path": "asset\\animationClip\\player_bounce_standby.amcp",
+        "loop": true,
+        "name": "bounceWalk",
+        "path": "asset\\animationClip\\player_bounce_walk.amcp",
+        "loop": true,
+        "name": "floatBlink",
+        "path": "asset\\animationClip\\player_float_blink.amcp",
+        "loop": true,
+        "name": "floatDamage",
+        "path": "asset\\animationClip\\player_float_damage.amcp",
+        "loop": false,
+        "name": "floatFloat",
+        "path": "asset\\animationClip\\player_float_float.amcp",
+        "loop": true,
+        "name": "floatGoal",
+        "path": "asset\\animationClip\\player_float_goal.amcp",
+        "loop": true,
+        "name": "floatJump",
+        "path": "asset\\animationClip\\player_float_jump.amcp",
+        "loop": false,
+        "name": "floatLanding",
+        "path": "asset\\animationClip\\player_float_landing.amcp",
+        "loop": false,
+        "name": "floatStandBy",
+        "path": "asset\\animationClip\\player_float_standby.amcp",
+        "loop": true,
+        "name": "floatWalk",
+        "path": "asset\\animationClip\\player_float_walk.amcp",
+        "loop": true,
+        "name": "lowgravityBlink",
+        "path": "asset\\animationClip\\player_lowgravity_blink.amcp",
+        "loop": true,
+        "name": "lowgravityDamage",
+        "path": "asset\\animationClip\\player_lowgravity_damage.amcp",
+        "loop": false,
+        "name": "lowgravityFloat",
+        "path": "asset\\animationClip\\player_lowgravity_float.amcp",
+        "loop": true,
+        "name": "lowgravityGoal",
+        "path": "asset\\animationClip\\player_lowgravity_goal.amcp",
+        "loop": true,
+        "name": "lowgravityJump",
+        "path": "asset\\animationClip\\player_lowgravity_jump.amcp",
+        "loop": false,
+        "name": "lowgravityLanding",
+        "path": "asset\\animationClip\\player_lowgravity_landing.amcp",
+        "loop": false,
+        "name": "lowgravityStandBy",
+        "path": "asset\\animationClip\\player_lowgravity_standby.amcp",
+        "loop": true,
+        "name": "lowgravityWalk",
+        "path": "asset\\animationClip\\player_lowgravity_walk.amcp",
+        "loop": true,
+        "name": "normalBlink",
+        "path": "asset\\animationClip\\player_normal_blink.amcp",
+        "loop": true,
+        "name": "normalDamage",
+        "path": "asset\\animationClip\\player_normal_damage.amcp",
+        "loop": false,
+        "name": "normalFloat",
+        "path": "asset\\animationClip\\player_normal_float.amcp",
+        "loop": true,
+        "name": "normalGoal",
+        "path": "asset\\animationClip\\player_normal_goal.amcp",
+        "loop": true,
+        "name": "normalJump",
+        "path": "asset\\animationClip\\player_normal_jump.amcp",
+        "loop": false,
+        "name": "normalLanding",
+        "path": "asset\\animationClip\\player_normal_landing.amcp",
+        "loop": false,
+        "name": "normalStandBy",
+        "path": "asset\\animationClip\\player_normal_standby.amcp",
+        "loop": true,
+        "name": "normalWalk",
+        "path": "asset\\animationClip\\player_normal_walk.amcp",
+        "loop": true,
+        "name": "transparentBlink",
+        "path": "asset\\animationClip\\player_transparent_blink.amcp",
+        "loop": true,
+        "name": "transparentDamage",
+        "path": "asset\\animationClip\\player_transparent_damage.amcp",
+        "loop": false,
+        "name": "transparentFloat",
+        "path": "asset\\animationClip\\player_transparent_float.amcp",
+        "loop": true,
+        "name": "transparentGoal",
+        "path": "asset\\animationClip\\player_transparent_goal.amcp",
+        "loop": true,
+        "name": "transparentJump",
+        "path": "asset\\animationClip\\player_transparent_jump.amcp",
+        "loop": false,
+        "name": "transparentLanding",
+        "path": "asset\\animationClip\\player_transparent_landing.amcp",
+        "loop": false,
+        "name": "transparentStandBy",
+        "path": "asset\\animationClip\\player_transparent_standby.amcp",
+        "loop": true,
+        "name": "transparentWalk",
+        "path": "asset\\animationClip\\player_transparent_walk.amcp",
+        "loop": true,
+        "currentClipName": "normalStandBy",
+        "pause": false,
+        "m_filter": 8,
+        "data": {
+            "pos": {
+                "vec.x": -6.715124130249023,
+                "vec.y": 10.061361312866211
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
+            "type": 2,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 10.0,
+            "mass": 30.0,
+            "autoMass": 1.0,
+            "bullet": true,
+            "fixRot": true,
+            "awake": false
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": 0.0,
+                "vec.y": -1.100000023841858
+            },
+            "poly.count": 4,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
+                },
+                "value1": {
+                    "vec.x": 1.0,
+                    "vec.y": 0.0
+                },
+                "value2": {
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
+                },
+                "value3": {
+                    "vec.x": -1.0,
+                    "vec.y": 0.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": -2.5,
+                    "vec.y": -6.599999904632568
+                },
+                "value1": {
+                    "vec.x": 2.5,
+                    "vec.y": -6.599999904632568
+                },
+                "value2": {
+                    "vec.x": 2.5,
+                    "vec.y": 4.400000095367432
+                },
+                "value3": {
+                    "vec.x": -2.5,
+                    "vec.y": 4.400000095367432
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            }
+        },
+        "reverse": false
+    },
+    "value4": {
+        "name": "testChain_2",
+        "transform": {
+            "position": {
+                "x": -278.56500244140627,
+                "y": -198.97726440429688,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 15.394477844238282,
+                "y": 13.697418212890625,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody"
+        ],
+        "m_filter": 32,
+        "data": {
+            "pos": {
+                "vec.x": -27.85650062561035,
+                "vec.y": -19.89772605895996
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
+            "type": 0,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 0.0,
+            "autoMass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            4,
+            4,
+            4,
+            4
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 1,
+            "chain.ghost1": {
+                "vec.x": -12.943499565124512,
+                "vec.y": 29.497726440429689
+            },
+            "chain.ghost2": {
+                "vec.x": 17.956501007080079,
+                "vec.y": 12.697726249694825
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": -10.0,
+                    "vec.y": -10.0
+                },
+                "seg.point2": {
+                    "vec.x": 10.0,
+                    "vec.y": -10.0
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 1,
+            "chain.ghost1": {
+                "vec.x": -10.0,
+                "vec.y": -10.0
+            },
+            "chain.ghost2": {
+                "vec.x": -12.943499565124512,
+                "vec.y": 29.497726440429689
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": 10.0,
+                    "vec.y": -10.0
+                },
+                "seg.point2": {
+                    "vec.x": 17.956501007080079,
+                    "vec.y": 12.697726249694825
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 1,
+            "chain.ghost1": {
+                "vec.x": 10.0,
+                "vec.y": -10.0
+            },
+            "chain.ghost2": {
+                "vec.x": -10.0,
+                "vec.y": -10.0
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": 17.956501007080079,
+                    "vec.y": 12.697726249694825
+                },
+                "seg.point2": {
+                    "vec.x": -12.943499565124512,
+                    "vec.y": 29.497726440429689
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 1,
+            "chain.ghost1": {
+                "vec.x": 17.956501007080079,
+                "vec.y": 12.697726249694825
+            },
+            "chain.ghost2": {
+                "vec.x": 10.0,
+                "vec.y": -10.0
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": -12.943499565124512,
+                    "vec.y": 29.497726440429689
+                },
+                "seg.point2": {
+                    "vec.x": -10.0,
+                    "vec.y": -10.0
+                }
+            }
+        }
+    },
+    "value5": {
+        "name": "moveObject",
+        "transform": {
+            "position": {
+                "x": 136.0777130126953,
+                "y": 93.53885650634766,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 3.0,
+                "y": 3.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": false,
+        "comNames": [
+            "class Renderer"
+        ],
+        "m_layer": 4,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483652,
+                "data": {
+                    "active": false,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\hand_move.png"
+                }
+            }
+        }
+    },
+    "value6": {
+        "name": "Bounce_1",
+        "transform": {
+            "position": {
+                "x": -632.5240478515625,
+                "y": -160.95626831054688,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 15.182334899902344,
+                "y": 12.636751174926758,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class Box2DBody",
+            "class SubWindow",
+            "class MoveSubWindow",
+            "class Bounce"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483653,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 0.20000000298023225
+                    },
+                    "path": "asset\\sign\\sign_bounce.png"
+                }
+            }
+        },
+        "m_filter": 64,
+        "data": {
+            "pos": {
+                "vec.x": -63.252403259277347,
+                "vec.y": -16.095626831054689
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
+            "type": 1,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 0.0,
+            "autoMass": 1.0,
+            "bullet": true,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": true,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "poly.count": 4,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
+                },
+                "value1": {
+                    "vec.x": 1.0,
+                    "vec.y": 0.0
+                },
+                "value2": {
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
+                },
+                "value3": {
+                    "vec.x": -1.0,
+                    "vec.y": 0.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": -7.591167449951172,
+                    "vec.y": -6.318375587463379
+                },
+                "value1": {
+                    "vec.x": 7.591167449951172,
+                    "vec.y": -6.318375587463379
+                },
+                "value2": {
+                    "vec.x": 7.591167449951172,
+                    "vec.y": 6.318375587463379
+                },
+                "value3": {
+                    "vec.x": -7.591167449951172,
+                    "vec.y": 6.318375587463379
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            }
+        },
+        "confirmed": false,
+        "selfIndex": 0,
+        "restitutionPower": 0.800000011920929
+    },
+    "value7": {
+        "name": "playObject",
+        "transform": {
+            "position": {
+                "x": 136.0777130126953,
+                "y": 93.53885650634766,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 3.0,
+                "y": 3.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer"
+        ],
+        "m_layer": 4,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483654,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\arrow_play.png"
+                }
+            }
+        }
+    },
+    "value8": {
+        "name": "subWindowManager",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class MoveSubWindowManager"
+        ],
+        "selectIndex": 4
+    },
+    "value9": {
+        "name": "Float",
+        "transform": {
+            "position": {
+                "x": 578.0849609375,
+                "y": -215.84182739257813,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 15.182334899902344,
+                "y": 12.636751174926758,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class Box2DBody",
+            "class SubWindow",
+            "class AntiGravity",
+            "class MoveSubWindow"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483655,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 0.20000000298023225
+                    },
+                    "path": "asset\\sign\\sign_float.png"
+                }
+            }
+        },
+        "m_filter": 64,
+        "data": {
+            "pos": {
+                "vec.x": 57.808494567871097,
+                "vec.y": -21.584182739257814
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
+            "type": 1,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 0.0,
+            "autoMass": 1.0,
+            "bullet": true,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": true,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "poly.count": 4,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
+                },
+                "value1": {
+                    "vec.x": 1.0,
+                    "vec.y": 0.0
+                },
+                "value2": {
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
+                },
+                "value3": {
+                    "vec.x": -1.0,
+                    "vec.y": 0.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": -7.591167449951172,
+                    "vec.y": -6.318375587463379
+                },
+                "value1": {
+                    "vec.x": 7.591167449951172,
+                    "vec.y": -6.318375587463379
+                },
+                "value2": {
+                    "vec.x": 7.591167449951172,
+                    "vec.y": 6.318375587463379
+                },
+                "value3": {
+                    "vec.x": -7.591167449951172,
+                    "vec.y": 6.318375587463379
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            }
+        },
+        "confirmed": false,
+        "selfIndex": 1
+    },
+    "value10": {
+        "name": "Transparent",
+        "transform": {
+            "position": {
+                "x": -618.0126953125,
+                "y": 21.423465728759767,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 18.30036163330078,
+                "y": 15.394465446472168,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class Box2DBody",
+            "class Permeation",
+            "class SubWindow",
+            "class MoveSubWindow"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483656,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 0.20000000298023225
+                    },
+                    "path": "asset\\sign\\sign_transparent.png"
+                }
+            }
+        },
+        "m_filter": 64,
+        "data": {
+            "pos": {
+                "vec.x": -61.80126953125,
+                "vec.y": 2.1423466205596926
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
+            "type": 1,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 0.0,
+            "mass": 0.0,
+            "autoMass": 1.0,
+            "bullet": true,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": true,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "poly.count": 4,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
+                },
+                "value1": {
+                    "vec.x": 1.0,
+                    "vec.y": 0.0
+                },
+                "value2": {
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
+                },
+                "value3": {
+                    "vec.x": -1.0,
+                    "vec.y": 0.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": -8.5,
+                    "vec.y": -7.0
+                },
+                "value1": {
+                    "vec.x": 8.5,
+                    "vec.y": -7.0
+                },
+                "value2": {
+                    "vec.x": 8.5,
+                    "vec.y": 7.0
+                },
+                "value3": {
+                    "vec.x": -8.5,
+                    "vec.y": 7.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            }
+        },
+        "confirmed": false,
+        "selfIndex": 2
+    },
+    "value11": {
+        "name": "handObject",
+        "transform": {
+            "position": {
+                "x": -516.0247802734375,
+                "y": 218.27407836914063,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer"
+        ],
+        "m_layer": 2,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483657,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\hand.png"
+                }
+            }
+        }
+    },
+    "value12": {
+        "name": "LowGravity",
+        "transform": {
+            "position": {
+                "x": 567.0763549804688,
+                "y": 242.96417236328126,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 15.182334899902344,
+                "y": 12.636751174926758,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class Box2DBody",
+            "class SubWindow",
+            "class LowGravity",
+            "class MoveSubWindow"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483658,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 0.20000000298023225
+                    },
+                    "path": "asset\\sign\\sign_lowgravity.png"
+                }
+            }
+        },
+        "m_filter": 64,
+        "data": {
+            "pos": {
+                "vec.x": 56.70763397216797,
+                "vec.y": 24.296417236328126
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
+            "type": 1,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 0.0,
+            "autoMass": 1.0,
+            "bullet": true,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": true,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "poly.count": 4,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
+                },
+                "value1": {
+                    "vec.x": 1.0,
+                    "vec.y": 0.0
+                },
+                "value2": {
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
+                },
+                "value3": {
+                    "vec.x": -1.0,
+                    "vec.y": 0.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": -7.591167449951172,
+                    "vec.y": -6.318375587463379
+                },
+                "value1": {
+                    "vec.x": 7.591167449951172,
+                    "vec.y": -6.318375587463379
+                },
+                "value2": {
+                    "vec.x": 7.591167449951172,
+                    "vec.y": 6.318375587463379
+                },
+                "value3": {
+                    "vec.x": -7.591167449951172,
+                    "vec.y": 6.318375587463379
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            }
+        },
+        "confirmed": false,
+        "selfIndex": 3
+    },
+    "value13": {
+        "name": "testChain_1",
+        "transform": {
+            "position": {
+                "x": -32.56500244140625,
+                "y": -53.477264404296878,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 15.394477844238282,
+                "y": 13.697418212890625,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": -0.03142588958144188
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody"
+        ],
+        "m_filter": 32,
+        "data": {
+            "pos": {
+                "vec.x": -3.256500244140625,
+                "vec.y": -5.347726345062256
+            },
+            "rot": {
+                "rot.c": 0.9995062947273254,
+                "rot.s": -0.031421415507793429
+            },
+            "type": 0,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 0.0,
+            "autoMass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            4,
+            4,
+            4,
+            4
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 2,
+            "chain.ghost1": {
+                "vec.x": -5.293499946594238,
+                "vec.y": 8.647726058959961
+            },
+            "chain.ghost2": {
+                "vec.x": 5.956500053405762,
+                "vec.y": 8.79772663116455
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": -0.793499767780304,
+                    "vec.y": -5.302273750305176
+                },
+                "seg.point2": {
+                    "vec.x": 0.8565002679824829,
+                    "vec.y": -5.302273750305176
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 2,
+            "chain.ghost1": {
+                "vec.x": -0.793499767780304,
+                "vec.y": -5.302273750305176
+            },
+            "chain.ghost2": {
+                "vec.x": -5.293499946594238,
+                "vec.y": 8.647726058959961
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": 0.8565002679824829,
+                    "vec.y": -5.302273750305176
+                },
+                "seg.point2": {
+                    "vec.x": 5.956500053405762,
+                    "vec.y": 8.79772663116455
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 2,
+            "chain.ghost1": {
+                "vec.x": 0.8565002679824829,
+                "vec.y": -5.302273750305176
+            },
+            "chain.ghost2": {
+                "vec.x": -0.793499767780304,
+                "vec.y": -5.302273750305176
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": 5.956500053405762,
+                    "vec.y": 8.79772663116455
+                },
+                "seg.point2": {
+                    "vec.x": -5.293499946594238,
+                    "vec.y": 8.647726058959961
+                }
+            }
+        },
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "chainSegment": {
+            "chain.chainId": 2,
+            "chain.ghost1": {
+                "vec.x": 5.956500053405762,
+                "vec.y": 8.79772663116455
+            },
+            "chain.ghost2": {
+                "vec.x": 0.8565002679824829,
+                "vec.y": -5.302273750305176
+            },
+            "chain.segment": {
+                "seg.point1": {
+                    "vec.x": -5.293499946594238,
+                    "vec.y": 8.647726058959961
+                },
+                "seg.point2": {
+                    "vec.x": -0.793499767780304,
+                    "vec.y": -5.302273750305176
+                }
+            }
+        }
+    },
+    "value14": {
+        "name": "testChain",
+        "transform": {
+            "position": {
+                "x": 9.43499755859375,
+                "y": -204.97726440429688,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 15.394477844238282,
+                "y": 13.697418212890625,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody"
+        ],
+        "m_filter": 32,
+        "data": {
+            "pos": {
+                "vec.x": 0.943499743938446,
+                "vec.y": -20.497726440429689
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
+            "type": 0,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 0.0,
+            "autoMass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "poly.count": 4,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
+                },
+                "value1": {
+                    "vec.x": 1.0,
+                    "vec.y": 0.0
+                },
+                "value2": {
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
+                },
+                "value3": {
+                    "vec.x": -1.0,
+                    "vec.y": 0.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": -7.697238922119141,
+                    "vec.y": -6.8487091064453129
+                },
+                "value1": {
+                    "vec.x": 7.697238922119141,
+                    "vec.y": -6.8487091064453129
+                },
+                "value2": {
+                    "vec.x": 7.697238922119141,
+                    "vec.y": 6.8487091064453129
+                },
+                "value3": {
+                    "vec.x": -7.697238922119141,
+                    "vec.y": 6.8487091064453129
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            }
+        }
+    },
+    "value15": {
+        "name": "Transparent_1",
+        "transform": {
+            "position": {
+                "x": -582.526611328125,
+                "y": 270.24639892578127,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 18.30036163330078,
+                "y": 15.394465446472168,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class Box2DBody",
+            "class Permeation",
+            "class SubWindow",
+            "class MoveSubWindow"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483659,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 0.20000000298023225
+                    },
+                    "path": "asset\\sign\\sign_transparent.png"
+                }
+            }
+        },
+        "m_filter": 64,
+        "data": {
+            "pos": {
+                "vec.x": -60.252662658691409,
+                "vec.y": 21.024639129638673
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
+            "type": 1,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 0.0,
+            "mass": 0.0,
+            "autoMass": 1.0,
+            "bullet": true,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": true,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "poly.count": 4,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
+                },
+                "value1": {
+                    "vec.x": 1.0,
+                    "vec.y": 0.0
+                },
+                "value2": {
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
+                },
+                "value3": {
+                    "vec.x": -1.0,
+                    "vec.y": 0.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": -8.5,
+                    "vec.y": -7.0
+                },
+                "value1": {
+                    "vec.x": 8.5,
+                    "vec.y": -7.0
+                },
+                "value2": {
+                    "vec.x": 8.5,
+                    "vec.y": 7.0
+                },
+                "value3": {
+                    "vec.x": -8.5,
+                    "vec.y": 7.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            }
+        },
+        "confirmed": false,
+        "selfIndex": 4
+    },
+    "value16": {
+        "name": "PauseScreen",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 33.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 48.012813568115237,
+                "y": 36.030517578125,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": false,
+        "comNames": [
+            "class Renderer"
+        ],
+        "m_layer": 3,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483660,
+                "data": {
+                    "active": false,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\pauseScreen.png"
+                }
+            }
+        }
+    },
+    "value17": {
+        "name": "goal",
+        "transform": {
+            "position": {
+                "x": 343.0701599121094,
+                "y": -35.00716018676758,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 13.911370277404786,
+                "y": 13.416293144226075,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class Box2DBody",
+            "class Goal"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483661,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\Goal1.png"
+                }
+            }
+        },
+        "m_filter": 1,
+        "data": {
+            "pos": {
+                "vec.x": 34.30701446533203,
+                "vec.y": -3.500715970993042
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
+            "type": 0,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 0.0,
+            "autoMass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": true,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "poly.count": 4,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
+                },
+                "value1": {
+                    "vec.x": 1.0,
+                    "vec.y": 0.0
+                },
+                "value2": {
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
+                },
+                "value3": {
+                    "vec.x": -1.0,
+                    "vec.y": 0.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": -6.955685138702393,
+                    "vec.y": -6.708146572113037
+                },
+                "value1": {
+                    "vec.x": 6.955685138702393,
+                    "vec.y": -6.708146572113037
+                },
+                "value2": {
+                    "vec.x": 6.955685138702393,
+                    "vec.y": 6.708146572113037
+                },
+                "value3": {
+                    "vec.x": -6.955685138702393,
+                    "vec.y": 6.708146572113037
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            }
+        },
+        "sceneName": "GameClearScene",
+        "waitCount": 60
+    },
+    "value18": {
+        "name": "break",
+        "transform": {
+            "position": {
+                "x": 161.77085876464845,
+                "y": 89.87269592285156,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody",
+            "class BreakWall"
+        ],
+        "m_filter": 1,
+        "data": {
+            "pos": {
+                "vec.x": 16.177085876464845,
+                "vec.y": 8.987269401550293
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
+            "type": 0,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 0.0,
+            "autoMass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "poly.count": 4,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
+                },
+                "value1": {
+                    "vec.x": 1.0,
+                    "vec.y": 0.0
+                },
+                "value2": {
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
+                },
+                "value3": {
+                    "vec.x": -1.0,
+                    "vec.y": 0.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": -2.5,
+                    "vec.y": -2.5
+                },
+                "value1": {
+                    "vec.x": 2.5,
+                    "vec.y": -2.5
+                },
+                "value2": {
+                    "vec.x": 2.5,
+                    "vec.y": 2.5
+                },
+                "value3": {
+                    "vec.x": -2.5,
+                    "vec.y": 2.5
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            }
+        },
+        "targetFilter": 8
+    }
+}
