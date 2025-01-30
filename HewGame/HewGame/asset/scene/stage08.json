@@ -31,7 +31,8 @@
             "class Box2DBody",
             "class RunFixedRoute",
             "class Renderer",
-            "class Animator"
+            "class Animator",
+            "class Thon"
         ],
         "m_filter": 1,
         "data": {
@@ -270,7 +271,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 2,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": -36.0
@@ -297,7 +298,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 2,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": 36.0
@@ -324,7 +325,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 2,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": 36.0
@@ -351,7 +352,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 2,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": -36.0
@@ -1634,7 +1635,7 @@
                         "f.x": 1.0,
                         "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 0.20000000298023225
+                        "f.w": 0.6000000238418579
                     },
                     "path": "asset\\sign\\sign_lowgravity.png"
                 }
@@ -1799,7 +1800,7 @@
                         "f.x": 1.0,
                         "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 0.20000000298023225
+                        "f.w": 0.6000000238418579
                     },
                     "path": "asset\\sign\\sign_lowgravity.png"
                 }
@@ -2072,7 +2073,7 @@
                         "f.x": 1.0,
                         "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 0.20000000298023225
+                        "f.w": 0.6000000238418579
                     },
                     "path": "asset\\sign\\sign_float.png"
                 }
@@ -2237,7 +2238,7 @@
                         "f.x": 1.0,
                         "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 0.20000000298023225
+                        "f.w": 0.6000000238418579
                     },
                     "path": "asset\\sign\\sign_float.png"
                 }
@@ -3378,7 +3379,8 @@
             "class Box2DBody",
             "class RunFixedRoute",
             "class Renderer",
-            "class Animator"
+            "class Animator",
+            "class Thon"
         ],
         "m_filter": 1,
         "data": {

@@ -303,6 +303,8 @@ public:
 	void GameOver()
 	{
 		LOG("GameOver");
+		ChangeState(PLAYER_DAMAGE);
+		m_this->RemoveComponent<MovePlayer>();
 	}
 private:
 	bool isGround = false;

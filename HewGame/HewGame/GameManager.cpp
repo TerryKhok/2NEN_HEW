@@ -41,6 +41,20 @@ namespace GameManager
 		SceneManager::LoadScene(sceneName);
 	}
 
+	void ChangeCurrentStage()
+	{
+		MoveSubWindowManager::saveBuffer.clear();
+
+		std::string sceneName = GameManager::stageName;
+
+		if (GameManager::currentStage < 10)
+		{
+			sceneName += "0";
+		}
+		sceneName += std::to_string(GameManager::currentStage);
+		SceneManager::LoadScene(sceneName);
+	}
+
 	static void ChangeTitleScene()
 	{
 		//SceneManager::LoadingScene("SelectScene");
@@ -65,6 +79,7 @@ namespace GameManager
 	}
 
 	REGISTER_FUNCTION(ChangeNextStage)
+	REGISTER_FUNCTION(ChangeCurrentStage)
 	REGISTER_FUNCTION(ChangeSelectScene)
 
 	void ChangeStage1()
