@@ -31,7 +31,7 @@
             "class Box2DBody",
             "class Renderer"
         ],
-        "m_filter": 16,
+        "m_filter": 64,
         "data": {
             "pos": {
                 "vec.x": 0.0,
@@ -1680,13 +1680,13 @@
         "name": "teki",
         "transform": {
             "position": {
-                "x": 162.0,
-                "y": 140.76312255859376,
-                "z": 0.5
+                "x": 141.0,
+                "y": 132.0,
+                "z": 0.0
             },
             "scale": {
-                "x": 16.0,
-                "y": 8.0,
+                "x": 13.90954303741455,
+                "y": 9.666903495788575,
                 "z": 1.0
             },
             "angle": {
@@ -1703,55 +1703,12 @@
         },
         "active": true,
         "comNames": [
-            "class Box2DBody",
-            "class Enemy_type1",
             "class Renderer",
-            "class Animator"
+            "class Animator",
+            "class Box2DBody",
+            "class EnemyChaser"
         ],
-        "m_filter": 1,
-        "data": {
-            "pos": {
-                "vec.x": 16.200000762939454,
-                "vec.y": 14.076312065124512
-            },
-            "rot": {
-                "rot.c": 1.0,
-                "rot.s": 0.0
-            },
-            "type": 2,
-            "lineVec": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
-            },
-            "angleVec": 0.0,
-            "gravity": 0.0,
-            "mass": 19.63495445251465,
-            "autoMass": 1.0,
-            "bullet": false,
-            "fixRot": true,
-            "awake": true
-        },
-        "types": [
-            0
-        ],
-        "shapeData": {
-            "sensor": false,
-            "friction": 0.6000000238418579,
-            "density": 1.0,
-            "restitution": 0.0
-        },
-        "circle": {
-            "circle.center": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
-            },
-            "circle.radius": 2.5
-        },
-        "speed": 1.0,
-        "searchAngle": 45.0,
-        "searchDis": 20.0,
-        "searchRenge": 100.0,
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1,
             "ptr_wrapper": {
@@ -1783,7 +1740,143 @@
         "path": "asset\\animationClip\\enemy_bat_fly.amcp",
         "loop": true,
         "currentClipName": "fly",
-        "pause": false
+        "pause": false,
+        "m_filter": 1,
+        "data": {
+            "pos": {
+                "vec.x": 14.100000381469727,
+                "vec.y": 13.199999809265137
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
+            "type": 2,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 0.0,
+            "mass": 38.48451232910156,
+            "autoMass": 1.0,
+            "bullet": false,
+            "fixRot": true,
+            "awake": true
+        },
+        "types": [
+            0
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "circle": {
+            "circle.center": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "circle.radius": 3.5
+        },
+        "targetName": "Player",
+        "routePoints": [
+            {
+                "x": 15.0,
+                "y": 75.0
+            },
+            {
+                "x": 39.0,
+                "y": 117.0
+            },
+            {
+                "x": 96.0,
+                "y": 138.0
+            },
+            {
+                "x": 162.0,
+                "y": 144.0
+            },
+            {
+                "x": 213.0,
+                "y": 138.0
+            },
+            {
+                "x": 267.0,
+                "y": 114.0
+            },
+            {
+                "x": 276.0,
+                "y": 60.0
+            },
+            {
+                "x": 279.0,
+                "y": 9.0
+            },
+            {
+                "x": 276.0,
+                "y": -54.0
+            },
+            {
+                "x": 264.0,
+                "y": -117.0
+            },
+            {
+                "x": 234.0,
+                "y": -162.0
+            },
+            {
+                "x": 183.0,
+                "y": -183.0
+            },
+            {
+                "x": 126.0,
+                "y": -189.0
+            },
+            {
+                "x": 63.0,
+                "y": -189.0
+            },
+            {
+                "x": 6.0,
+                "y": -186.0
+            },
+            {
+                "x": -48.0,
+                "y": -174.0
+            },
+            {
+                "x": -90.0,
+                "y": -156.0
+            },
+            {
+                "x": -120.0,
+                "y": -117.0
+            },
+            {
+                "x": -135.0,
+                "y": -66.0
+            },
+            {
+                "x": -138.0,
+                "y": -9.0
+            },
+            {
+                "x": -132.0,
+                "y": 45.0
+            },
+            {
+                "x": -90.0,
+                "y": 78.0
+            },
+            {
+                "x": -36.0,
+                "y": 78.0
+            }
+        ],
+        "chaseSpeed": 7.0,
+        "chaseRange": 500.0
     },
     "value14": {
         "name": "StaticBox_Ground",

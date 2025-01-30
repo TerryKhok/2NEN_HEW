@@ -303,6 +303,7 @@ public:
 	void GameOver()
 	{
 		LOG("GameOver");
+		render->SetColor({ 1.0f,0.5f,0.5f,1.0f });
 		ChangeState(PLAYER_DAMAGE);
 		m_this->RemoveComponent<MovePlayer>();
 	}

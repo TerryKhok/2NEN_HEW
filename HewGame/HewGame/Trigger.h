@@ -58,7 +58,7 @@ public:
 	void EnterEvent()
 	{
 		render->SetColor(selectColor);
-		if (Input::Get().KeyTrigger(VK_F))
+		if (Input::Get().KeyTrigger(VK_F) || Input::Get().ButtonTrigger(XINPUT_A))
 		{
 			FunctionRegistry::Get().callFunction(funcName);
 		}
@@ -128,7 +128,7 @@ class TitleTrigger : public Component
 			DeleteObject(ui);
 		}
 
-		if (Input::Get().KeyTrigger(VK_RETURN))
+		if (Input::Get().KeyTrigger(VK_RETURN) || Input::Get().ButtonTrigger(XINPUT_A))
 		{
 			SceneManager::ChangeScene();
 		}
@@ -139,6 +139,22 @@ class TitleTrigger : public Component
 
 SetReflectionComponent(TitleTrigger)
 
+class ClearTrigger : public Component
+{
+	void Proceed() override
+	{
+		if (GameManager::currentStage == 12)
+		{
+			auto nextStage = ObjectManager::Find("NextStage");
+			if (nextStage != nullptr)
+			{
+				DeleteObject(nextStage);
+			}
+		}
+	}
+};
+
+SetReflectionComponent(ClearTrigger)
 
 class MoveVerticalPoint : public Component
 {

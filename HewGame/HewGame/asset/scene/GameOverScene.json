@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 23,
+    "objectNum": 24,
     "value0": {
         "name": "background",
         "transform": {
@@ -95,8 +95,8 @@
                             "y": 0.0
                         },
                         "m_color": {
-                            "f.x": 0.8399999141693115,
-                            "f.y": 0.9529411792755127,
+                            "f.x": 0.2933333218097687,
+                            "f.y": 0.7921568155288696,
                             "f.z": 1.0,
                             "f.w": 1.0
                         },
@@ -1730,16 +1730,16 @@
         "flickeringTime": 2.5
     },
     "value2": {
-        "name": "Player",
+        "name": "rollArrow",
         "transform": {
             "position": {
-                "x": -33.581058502197269,
-                "y": 457.44757080078127,
-                "z": 0.5
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
             },
             "scale": {
-                "x": 7.0,
-                "y": 14.0,
+                "x": 14.333806991577149,
+                "y": 14.758070945739746,
                 "z": 1.0
             },
             "angle": {
@@ -1754,206 +1754,30 @@
                 }
             }
         },
-        "active": true,
+        "active": false,
         "comNames": [
-            "class Renderer",
-            "class Animator",
-            "class Box2DBody",
-            "class DecorativePlayerMove"
+            "class Renderer"
         ],
-        "m_layer": 2,
+        "m_layer": 3,
         "m_node": {
-            "polymorphic_id": 2147483650,
-            "polymorphic_name": "UVRenderNode",
+            "polymorphic_id": 1073741824,
             "ptr_wrapper": {
                 "id": 2147483651,
                 "data": {
-                    "value0": {
-                        "active": true,
-                        "m_offset": {
-                            "x": 0.0,
-                            "y": 15.0
-                        },
-                        "m_color": {
-                            "f.x": 1.0,
-                            "f.y": 1.0,
-                            "f.z": 1.0,
-                            "f.w": 1.0
-                        },
-                        "path": "asset\\spritesheet\\player_normal_standby.png"
+                    "active": false,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
                     },
-                    "m_scaleX": 0.125,
-                    "m_scaleY": 0.3333333432674408,
-                    "m_frameX": 0,
-                    "m_frameY": 0
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\rollArrow.png"
                 }
             }
-        },
-        "clipSize": 40,
-        "name": "bounceBlink",
-        "path": "asset\\animationClip\\player_bounce_blink.amcp",
-        "loop": true,
-        "name": "bounceDamage",
-        "path": "asset\\animationClip\\player_bounce_damage.amcp",
-        "loop": false,
-        "name": "bounceFloat",
-        "path": "asset\\animationClip\\player_bounce_float.amcp",
-        "loop": true,
-        "name": "bounceGoal",
-        "path": "asset\\animationClip\\player_bounce_goal.amcp",
-        "loop": true,
-        "name": "bounceJump",
-        "path": "asset\\animationClip\\player_bounce_jump.amcp",
-        "loop": false,
-        "name": "bounceLanding",
-        "path": "asset\\animationClip\\player_bounce_landing.amcp",
-        "loop": false,
-        "name": "bounceStandBy",
-        "path": "asset\\animationClip\\player_bounce_standby.amcp",
-        "loop": true,
-        "name": "bounceWalk",
-        "path": "asset\\animationClip\\player_bounce_walk.amcp",
-        "loop": true,
-        "name": "floatBlink",
-        "path": "asset\\animationClip\\player_float_blink.amcp",
-        "loop": true,
-        "name": "floatDamage",
-        "path": "asset\\animationClip\\player_float_damage.amcp",
-        "loop": false,
-        "name": "floatFloat",
-        "path": "asset\\animationClip\\player_float_float.amcp",
-        "loop": true,
-        "name": "floatGoal",
-        "path": "asset\\animationClip\\player_float_goal.amcp",
-        "loop": true,
-        "name": "floatJump",
-        "path": "asset\\animationClip\\player_float_jump.amcp",
-        "loop": false,
-        "name": "floatLanding",
-        "path": "asset\\animationClip\\player_float_landing.amcp",
-        "loop": false,
-        "name": "floatStandBy",
-        "path": "asset\\animationClip\\player_float_standby.amcp",
-        "loop": true,
-        "name": "floatWalk",
-        "path": "asset\\animationClip\\player_float_walk.amcp",
-        "loop": true,
-        "name": "lowgravityBlink",
-        "path": "asset\\animationClip\\player_lowgravity_blink.amcp",
-        "loop": true,
-        "name": "lowgravityDamage",
-        "path": "asset\\animationClip\\player_lowgravity_damage.amcp",
-        "loop": false,
-        "name": "lowgravityFloat",
-        "path": "asset\\animationClip\\player_lowgravity_float.amcp",
-        "loop": true,
-        "name": "lowgravityGoal",
-        "path": "asset\\animationClip\\player_lowgravity_goal.amcp",
-        "loop": true,
-        "name": "lowgravityJump",
-        "path": "asset\\animationClip\\player_lowgravity_jump.amcp",
-        "loop": false,
-        "name": "lowgravityLanding",
-        "path": "asset\\animationClip\\player_lowgravity_landing.amcp",
-        "loop": false,
-        "name": "lowgravityStandBy",
-        "path": "asset\\animationClip\\player_lowgravity_standby.amcp",
-        "loop": true,
-        "name": "lowgravityWalk",
-        "path": "asset\\animationClip\\player_lowgravity_walk.amcp",
-        "loop": true,
-        "name": "normalBlink",
-        "path": "asset\\animationClip\\player_normal_blink.amcp",
-        "loop": true,
-        "name": "normalDamage",
-        "path": "asset\\animationClip\\player_normal_damage.amcp",
-        "loop": false,
-        "name": "normalFloat",
-        "path": "asset\\animationClip\\player_normal_float.amcp",
-        "loop": true,
-        "name": "normalGoal",
-        "path": "asset\\animationClip\\player_normal_goal.amcp",
-        "loop": true,
-        "name": "normalJump",
-        "path": "asset\\animationClip\\player_normal_jump.amcp",
-        "loop": false,
-        "name": "normalLanding",
-        "path": "asset\\animationClip\\player_normal_landing.amcp",
-        "loop": false,
-        "name": "normalStandBy",
-        "path": "asset\\animationClip\\player_normal_standby.amcp",
-        "loop": true,
-        "name": "normalWalk",
-        "path": "asset\\animationClip\\player_normal_walk.amcp",
-        "loop": true,
-        "name": "transparentBlink",
-        "path": "asset\\animationClip\\player_transparent_blink.amcp",
-        "loop": true,
-        "name": "transparentDamage",
-        "path": "asset\\animationClip\\player_transparent_damage.amcp",
-        "loop": false,
-        "name": "transparentFloat",
-        "path": "asset\\animationClip\\player_transparent_float.amcp",
-        "loop": true,
-        "name": "transparentGoal",
-        "path": "asset\\animationClip\\player_transparent_goal.amcp",
-        "loop": true,
-        "name": "transparentJump",
-        "path": "asset\\animationClip\\player_transparent_jump.amcp",
-        "loop": false,
-        "name": "transparentLanding",
-        "path": "asset\\animationClip\\player_transparent_landing.amcp",
-        "loop": false,
-        "name": "transparentStandBy",
-        "path": "asset\\animationClip\\player_transparent_standby.amcp",
-        "loop": true,
-        "name": "transparentWalk",
-        "path": "asset\\animationClip\\player_transparent_walk.amcp",
-        "loop": true,
-        "currentClipName": "normalStandBy",
-        "pause": false,
-        "m_filter": 8,
-        "data": {
-            "pos": {
-                "vec.x": -3.3581058979034426,
-                "vec.y": 45.74475860595703
-            },
-            "rot": {
-                "rot.c": 1.0,
-                "rot.s": 0.0
-            },
-            "type": 2,
-            "lineVec": {
-                "vec.x": -0.00007737349369563162,
-                "vec.y": -0.00009021671576192603
-            },
-            "angleVec": 0.0,
-            "gravity": 10.0,
-            "mass": 25.0,
-            "autoMass": 1.0,
-            "bullet": true,
-            "fixRot": true,
-            "awake": true
-        },
-        "types": [
-            1
-        ],
-        "shapeData": {
-            "sensor": false,
-            "friction": 0.6000000238418579,
-            "density": 1.0,
-            "restitution": 0.0
-        },
-        "capsule": {
-            "cap.center1": {
-                "vec.x": 0.0,
-                "vec.y": -2.75
-            },
-            "cap.center2": {
-                "vec.x": 0.0,
-                "vec.y": 2.75
-            },
-            "cap.radius": 2.5
         }
     },
     "value3": {
@@ -2850,7 +2674,7 @@
         "name": "rock",
         "transform": {
             "position": {
-                "x": -297.288330078125,
+                "x": -294.0553894042969,
                 "y": -200.69979858398438,
                 "z": 0.5
             },
@@ -2867,7 +2691,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.05826932564377785
+                    "radians": -0.2005671113729477
                 }
             }
         },
@@ -2900,19 +2724,19 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": -29.72883415222168,
+                "vec.x": -29.40553855895996,
                 "vec.y": -20.06998062133789
             },
             "rot": {
-                "rot.c": 0.9983028173446655,
-                "rot.s": 0.058237552642822269
+                "rot.c": 0.9799536466598511,
+                "rot.s": -0.19922564923763276
             },
             "type": 2,
             "lineVec": {
-                "vec.x": 0.057365771383047107,
-                "vec.y": 0.0
+                "vec.x": 0.057056374847888949,
+                "vec.y": 8.940696716308594e-8
             },
-            "angleVec": -0.045943792909383777,
+            "angleVec": -0.04569600149989128,
             "gravity": 10.0,
             "mass": 4.908738613128662,
             "autoMass": 1.0,
@@ -2941,8 +2765,8 @@
         "name": "rock_1",
         "transform": {
             "position": {
-                "x": -209.8594970703125,
-                "y": -217.79412841796876,
+                "x": -206.09710693359376,
+                "y": -226.20359802246095,
                 "z": 0.5
             },
             "scale": {
@@ -2958,7 +2782,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": -0.49940407276153567
+                    "radians": -0.5729734897613525
                 }
             }
         },
@@ -2991,19 +2815,19 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": -20.985950469970704,
-                "vec.y": -21.7794132232666
+                "vec.x": -20.609710693359376,
+                "vec.y": -22.620359420776368
             },
             "rot": {
-                "rot.c": 0.8778672814369202,
-                "rot.s": -0.47890394926071169
+                "rot.c": 0.8402926325798035,
+                "rot.s": -0.5421330332756043
             },
             "type": 2,
             "lineVec": {
-                "vec.x": 0.00003254390321671963,
-                "vec.y": -0.00007666312012588605
+                "vec.x": 0.000013361467608774547,
+                "vec.y": 0.000017530472177895719
             },
-            "angleVec": -0.000013928358384873718,
+            "angleVec": -0.000003288271955170785,
             "gravity": 10.0,
             "mass": 56.086971282958987,
             "autoMass": 1.0,
@@ -3101,8 +2925,8 @@
         "name": "rock_2",
         "transform": {
             "position": {
-                "x": 70.62654113769531,
-                "y": -296.5678405761719,
+                "x": 71.5034408569336,
+                "y": -296.4842834472656,
                 "z": 0.5
             },
             "scale": {
@@ -3118,7 +2942,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": -0.8852407932281494
+                    "radians": -0.8785304427146912
                 }
             }
         },
@@ -3151,19 +2975,19 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": 7.062654495239258,
-                "vec.y": -29.656784057617189
+                "vec.x": 7.150344371795654,
+                "vec.y": -29.648427963256837
             },
             "rot": {
-                "rot.c": 0.6331033706665039,
-                "rot.s": -0.7740672826766968
+                "rot.c": 0.6382837295532227,
+                "rot.s": -0.7698012590408325
             },
             "type": 2,
             "lineVec": {
-                "vec.x": -0.000042263607610948387,
-                "vec.y": 9.36849801291828e-7
+                "vec.x": -0.17867863178253175,
+                "vec.y": -0.30974358320236208
             },
-            "angleVec": 0.00002115226016030647,
+            "angleVec": -0.15785661339759828,
             "gravity": 10.0,
             "mass": 12.566370964050293,
             "autoMass": 1.0,
@@ -3192,8 +3016,8 @@
         "name": "crystal",
         "transform": {
             "position": {
-                "x": 302.36737060546877,
-                "y": -43.883705139160159,
+                "x": 302.36749267578127,
+                "y": -43.8835563659668,
                 "z": 0.5
             },
             "scale": {
@@ -3209,7 +3033,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": -0.5530087351799011
+                    "radians": -0.5530059337615967
                 }
             }
         },
@@ -3231,8 +3055,8 @@
                         "y": 0.0
                     },
                     "m_color": {
-                        "f.x": 0.8399999141693115,
-                        "f.y": 0.981176495552063,
+                        "f.x": 0.2933333218097687,
+                        "f.y": 0.9168628454208374,
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
@@ -3243,19 +3067,19 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": 30.236738204956056,
-                "vec.y": -4.388370513916016
+                "vec.x": 30.23674774169922,
+                "vec.y": -4.388355731964111
             },
             "rot": {
-                "rot.c": 0.8509476780891419,
-                "rot.s": -0.5252505540847778
+                "rot.c": 0.8509491682052612,
+                "rot.s": -0.5252481698989868
             },
             "type": 2,
             "lineVec": {
-                "vec.x": -0.000006957339792279527,
-                "vec.y": 0.000020516177755780519
+                "vec.x": -0.000005540377514989814,
+                "vec.y": 9.3361830977301e-7
             },
-            "angleVec": 2.198030415456742e-7,
+            "angleVec": 0.0000027921055334445556,
             "gravity": 10.0,
             "mass": 10.018392562866211,
             "autoMass": 1.0,
@@ -3368,8 +3192,8 @@
         "name": "crystal_1",
         "transform": {
             "position": {
-                "x": -400.453857421875,
-                "y": -152.57086181640626,
+                "x": -400.4539794921875,
+                "y": -152.57061767578126,
                 "z": 0.5
             },
             "scale": {
@@ -3385,7 +3209,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.0823410302400589
+                    "radians": 0.08234082162380219
                 }
             }
         },
@@ -3407,8 +3231,8 @@
                         "y": 0.0
                     },
                     "m_color": {
-                        "f.x": 0.8399999141693115,
-                        "f.y": 0.9529411792755127,
+                        "f.x": 0.2933333218097687,
+                        "f.y": 0.7921568155288696,
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
@@ -3419,19 +3243,19 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": -40.045387268066409,
-                "vec.y": -15.257086753845215
+                "vec.x": -40.0453987121582,
+                "vec.y": -15.257061958312989
             },
             "rot": {
-                "rot.c": 0.9966117739677429,
-                "rot.s": 0.08224951475858689
+                "rot.c": 0.9966118335723877,
+                "rot.s": 0.08224931359291077
             },
             "type": 2,
             "lineVec": {
-                "vec.x": 0.000003163072051393101,
-                "vec.y": -0.000012116346624679864
+                "vec.x": -0.0000068256331360316839,
+                "vec.y": 0.000012604313269548584
             },
-            "angleVec": -0.0000012305558811931406,
+            "angleVec": 0.0000034562549444672188,
             "gravity": 10.0,
             "mass": 10.018392562866211,
             "autoMass": 1.0,
@@ -3583,9 +3407,9 @@
                         "y": 0.0
                     },
                     "m_color": {
-                        "f.x": 0.8399999141693115,
+                        "f.x": 0.2933333218097687,
                         "f.y": 1.0,
-                        "f.z": 0.948235273361206,
+                        "f.z": 0.7713724970817566,
                         "f.w": 1.0
                     },
                     "path": "asset\\pic\\Suisyou 2.png"
@@ -3759,8 +3583,8 @@
                         "y": 0.0
                     },
                     "m_color": {
-                        "f.x": 0.8399999141693115,
-                        "f.y": 0.9670588374137878,
+                        "f.x": 0.2933333218097687,
+                        "f.y": 0.8545098304748535,
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
@@ -3896,8 +3720,8 @@
         "name": "crystal_4",
         "transform": {
             "position": {
-                "x": -129.695556640625,
-                "y": -237.17970275878907,
+                "x": -130.32296752929688,
+                "y": -250.64491271972657,
                 "z": 0.5
             },
             "scale": {
@@ -3913,7 +3737,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.07030778867192567
+                    "radians": 0.10280527919530869
                 }
             }
         },
@@ -3935,8 +3759,8 @@
                         "y": 0.0
                     },
                     "m_color": {
-                        "f.x": 0.8399999141693115,
-                        "f.y": 0.9200000166893005,
+                        "f.x": 0.2933333218097687,
+                        "f.y": 0.6466668248176575,
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
@@ -3947,19 +3771,19 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": -12.969555854797364,
-                "vec.y": -23.71796989440918
+                "vec.x": -13.032296180725098,
+                "vec.y": -25.064491271972658
             },
             "rot": {
-                "rot.c": 0.9974581003189087,
-                "rot.s": 0.07125668227672577
+                "rot.c": 0.9947201013565064,
+                "rot.s": 0.10262592136859894
             },
             "type": 2,
             "lineVec": {
-                "vec.x": 0.00001560109194542747,
-                "vec.y": -0.00003604060475481674
+                "vec.x": -0.000013946088984084782,
+                "vec.y": 0.000024941678930190393
             },
-            "angleVec": -0.000012340881767158863,
+            "angleVec": 0.000006810883860453032,
             "gravity": 10.0,
             "mass": 10.018392562866211,
             "autoMass": 1.0,
@@ -4111,9 +3935,9 @@
                         "y": 0.0
                     },
                     "m_color": {
-                        "f.x": 0.8399999141693115,
+                        "f.x": 0.2933333218097687,
                         "f.y": 1.0,
-                        "f.z": 0.9858823418617249,
+                        "f.z": 0.9376469850540161,
                         "f.w": 1.0
                     },
                     "path": "asset\\pic\\Suisyou 2.png"
@@ -4248,8 +4072,8 @@
         "name": "crystal_6",
         "transform": {
             "position": {
-                "x": 102.046875,
-                "y": -297.5982666015625,
+                "x": 102.7182388305664,
+                "y": -297.4302978515625,
                 "z": 0.5
             },
             "scale": {
@@ -4265,7 +4089,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.10105270892381668
+                    "radians": 0.08985158801078797
                 }
             }
         },
@@ -4287,8 +4111,8 @@
                         "y": 0.0
                     },
                     "m_color": {
-                        "f.x": 0.8399999141693115,
-                        "f.y": 0.929411768913269,
+                        "f.x": 0.2933333218097687,
+                        "f.y": 0.688235342502594,
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
@@ -4299,19 +4123,19 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": 10.204687118530274,
-                "vec.y": -29.75982666015625
+                "vec.x": 10.27182388305664,
+                "vec.y": -29.743030548095704
             },
             "rot": {
-                "rot.c": 0.9948983788490295,
-                "rot.s": 0.10088244080543518
+                "rot.c": 0.9959658980369568,
+                "rot.s": 0.08973229676485062
             },
             "type": 2,
             "lineVec": {
-                "vec.x": -0.00003357225432409905,
-                "vec.y": 0.000028177606509416365
+                "vec.x": -0.07598349452018738,
+                "vec.y": -0.3325868248939514
             },
-            "angleVec": 0.000011496462320792489,
+            "angleVec": 0.2113078236579895,
             "gravity": 10.0,
             "mass": 10.018392562866211,
             "autoMass": 1.0,
@@ -4578,7 +4402,7 @@
         "transform": {
             "position": {
                 "x": -36.0,
-                "y": 25.5,
+                "y": 22.5,
                 "z": 0.5
             },
             "scale": {
@@ -4610,7 +4434,7 @@
         "data": {
             "pos": {
                 "vec.x": -3.5999999046325685,
-                "vec.y": 2.549999952316284
+                "vec.y": 2.25
             },
             "rot": {
                 "rot.c": 1.0,
@@ -4938,16 +4762,16 @@
         }
     },
     "value22": {
-        "name": "rollArrow",
+        "name": "lizard_1_1",
         "transform": {
             "position": {
-                "x": 0.0,
-                "y": 0.0,
-                "z": 0.0
+                "x": -0.5538616180419922,
+                "y": 496.69744873046877,
+                "z": 0.5
             },
             "scale": {
-                "x": 14.333806991577149,
-                "y": 14.758070945739746,
+                "x": 10.0,
+                "y": 10.0,
                 "z": 1.0
             },
             "angle": {
@@ -4962,30 +4786,316 @@
                 }
             }
         },
-        "active": false,
+        "active": true,
         "comNames": [
-            "class Renderer"
+            "class Box2DBody",
+            "class Renderer",
+            "class Animator",
+            "class uiObj"
         ],
-        "m_layer": 3,
+        "m_filter": 1,
+        "data": {
+            "pos": {
+                "vec.x": -0.05538616329431534,
+                "vec.y": 49.66974639892578
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
+            "type": 0,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 10.0,
+            "mass": 0.0,
+            "autoMass": 1.0,
+            "bullet": false,
+            "fixRot": true,
+            "awake": false
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": 0.0,
+                "vec.y": -2.0
+            },
+            "poly.count": 4,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
+                },
+                "value1": {
+                    "vec.x": 1.0,
+                    "vec.y": 0.0
+                },
+                "value2": {
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
+                },
+                "value3": {
+                    "vec.x": -1.0,
+                    "vec.y": 0.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": -4.0,
+                    "vec.y": -4.5
+                },
+                "value1": {
+                    "vec.x": 4.0,
+                    "vec.y": -4.5
+                },
+                "value2": {
+                    "vec.x": 4.0,
+                    "vec.y": 0.5
+                },
+                "value3": {
+                    "vec.x": -4.0,
+                    "vec.y": 0.5
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            }
+        },
+        "m_layer": 1,
         "m_node": {
-            "polymorphic_id": 1073741824,
+            "polymorphic_id": 2147483650,
+            "polymorphic_name": "UVRenderNode",
             "ptr_wrapper": {
                 "id": 2147483670,
                 "data": {
-                    "active": false,
-                    "m_offset": {
-                        "x": 0.0,
-                        "y": 0.0
+                    "value0": {
+                        "active": true,
+                        "m_offset": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "m_color": {
+                            "f.x": 1.0,
+                            "f.y": 1.0,
+                            "f.z": 1.0,
+                            "f.w": 1.0
+                        },
+                        "path": "asset\\spritesheet\\enemy_lizard_walk.png"
                     },
-                    "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
-                        "f.z": 1.0,
-                        "f.w": 1.0
-                    },
-                    "path": "asset\\pic\\rollArrow.png"
+                    "m_scaleX": 0.125,
+                    "m_scaleY": 0.1666666716337204,
+                    "m_frameX": 0,
+                    "m_frameY": 0
                 }
             }
-        }
+        },
+        "clipSize": 1,
+        "name": "walk",
+        "path": "asset\\animationClip\\enemy_lizard_walk.amcp",
+        "loop": true,
+        "currentClipName": "walk",
+        "pause": false,
+        "trigger": 0.5,
+        "speed": 4.0,
+        "turnDis": 200.0,
+        "mvCnt": 100.0
+    },
+    "value23": {
+        "name": "bat",
+        "transform": {
+            "position": {
+                "x": 219.11502075195313,
+                "y": -49.30933380126953,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 10.0,
+                "y": 10.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody",
+            "class Renderer",
+            "class Animator",
+            "class RunFixedRoute"
+        ],
+        "m_filter": 1,
+        "data": {
+            "pos": {
+                "vec.x": 21.911502838134767,
+                "vec.y": -4.930933475494385
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
+            "type": 2,
+            "lineVec": {
+                "vec.x": -2.17839746241566e-10,
+                "vec.y": -1.6322205066680909
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 38.48451232910156,
+            "autoMass": 1.0,
+            "bullet": false,
+            "fixRot": true,
+            "awake": true
+        },
+        "types": [
+            0
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "circle": {
+            "circle.center": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "circle.radius": 3.5
+        },
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 2,
+            "ptr_wrapper": {
+                "id": 2147483671,
+                "data": {
+                    "value0": {
+                        "active": true,
+                        "m_offset": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "m_color": {
+                            "f.x": 1.0,
+                            "f.y": 1.0,
+                            "f.z": 1.0,
+                            "f.w": 1.0
+                        },
+                        "path": "asset\\spritesheet\\enemy_bat_fly.png"
+                    },
+                    "m_scaleX": 0.125,
+                    "m_scaleY": 0.5,
+                    "m_frameX": 0,
+                    "m_frameY": 0
+                }
+            }
+        },
+        "clipSize": 1,
+        "name": "fly",
+        "path": "asset\\animationClip\\enemy_bat_fly.amcp",
+        "loop": true,
+        "currentClipName": "fly",
+        "pause": false,
+        "routePoints": [
+            {
+                "x": 229.5864715576172,
+                "y": -52.757568359375
+            },
+            {
+                "x": -5.11378288269043,
+                "y": -222.26332092285157
+            },
+            {
+                "x": -178.96583557128907,
+                "y": -144.02989196777345
+            },
+            {
+                "x": -357.1155090332031,
+                "y": -105.5845718383789
+            },
+            {
+                "x": -355.894287109375,
+                "y": 149.6521453857422
+            },
+            {
+                "x": -118.11760711669922,
+                "y": 434.02813720703127
+            },
+            {
+                "x": 120.92894744873047,
+                "y": 464.4522705078125
+            },
+            {
+                "x": 133.9678497314453,
+                "y": 255.82980346679688
+            },
+            {
+                "x": 325.205078125,
+                "y": 173.2500762939453
+            }
+        ],
+        "pointTimes": [
+            1.3207347393035889,
+            0.8697080612182617,
+            0.8314201235771179,
+            1.164392113685608,
+            1.6910492181777955,
+            1.0993168354034424,
+            0.9535835981369019,
+            0.9502795338630676,
+            1.1195154190063477
+        ],
+        "currentIndex": 5,
+        "aroundTime": 10.0,
+        "time": 1.3499994277954102,
+        "reverse": true
     }
 }

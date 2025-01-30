@@ -26,7 +26,6 @@ class SeigoTestScene :public Scene
 		enemy->transform.position.x = 200.0f;
 		enemy->AddComponent<Renderer>(L"asset/pic/hartG.png");
 		auto enemyChaser = enemy->AddComponent<EnemyChaser>();
-		enemyChaser->SetTarget(player);
 
 		std::vector<b2Vec2> points =
 		{

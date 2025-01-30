@@ -31,7 +31,7 @@ private:
 		int width = static_cast<int>(size.x * DEFAULT_OBJECT_SIZE / PROJECTION_ASPECT_WIDTH);
 		int height = static_cast<int>(size.y * DEFAULT_OBJECT_SIZE / PROJECTION_ASPECT_HEIGHT);
 		Vector2 pos = _object->transform.position;
-		m_hWnd = Window::pWindowSubCreate(_object->GetName(), _object->GetName(), width, height, pos);
+		m_hWnd = Window::pWindowSubCreate(_object->GetName(),""/* _object->GetName()*/, width, height, pos);
 	}
 
 	SubWindow(GameObject* _object,const char* _windowName) {
