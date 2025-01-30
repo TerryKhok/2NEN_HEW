@@ -19,23 +19,13 @@ private:
 	void Search(Vector3 targetPos);
 	void OnColliderEnter(GameObject* _other) override;
 	void DrawImGui(ImGuiApp::HandleUI& _handle);
+	
 	void Serialize(cereal::JSONOutputArchive& ar) override {
-		if constexpr (3 <= 7) {
-			::cereal::make_optional_nvp(ar, "searchAngle", searchAngle) ; ::cereal::make_optional_nvp(ar, "searchDis", searchDis); ::cereal::make_optional_nvp(ar, "searchRenge", searchRenge);
-			::cereal::make_optional_nvp(ar, "speed", speed);
-		}
-		else {
-			ar(searchAngle, searchDis, searchRenge);
-		}
-	} void Deserialize(cereal::JSONInputArchive& ar) override {
-		if constexpr (3 <= 7) {
-			::cereal::make_optional_nvp(ar, "searchAngle", searchAngle) ; ::cereal::make_optional_nvp(ar, "searchDis", searchDis); ::cereal::make_optional_nvp(ar, "searchRenge", searchRenge);
-			::cereal::make_optional_nvp(ar, "speed", speed);
-		}
-		else {
-			ar(searchAngle, searchDis, searchRenge);
-		}
-	};
+		ar(CEREAL_NVP(speed), CEREAL_NVP(searchAngle), CEREAL_NVP(searchDis), CEREAL_NVP(searchRenge));
+	} 
+	void Deserialize(cereal::JSONInputArchive& ar) override {
+		ar(CEREAL_NVP(speed), CEREAL_NVP(searchAngle), CEREAL_NVP(searchDis), CEREAL_NVP(searchRenge));
+	}
 };
 
 SetReflectionComponent(Enemy_type1);
