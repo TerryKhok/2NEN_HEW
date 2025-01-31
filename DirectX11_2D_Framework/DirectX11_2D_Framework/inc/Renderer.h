@@ -54,6 +54,7 @@ class RenderNode
 	friend class Box2DBodyChain;
 	friend class Animator;
 	friend class TileMap;
+	friend class Particle;
 
 	//•`‰æŠÖ˜A
 protected:
@@ -190,6 +191,7 @@ class RenderManager final
 	friend class Box2DCapsuleRenderNode;
 	friend class Box2DLineRenderNode;
 	friend class TileMap;
+	friend class Particle;
 	friend class ImGuiApp;
 
 	using RenderList = std::pair < std::shared_ptr<RenderNode>, std::shared_ptr<RenderNode>>;

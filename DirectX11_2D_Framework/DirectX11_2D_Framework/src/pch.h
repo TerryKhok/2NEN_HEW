@@ -103,6 +103,7 @@
 #include "../../DirectX11_2D_Framework/inc/Box2D.h"
 #include "../../DirectX11_2D_Framework/inc/Component.h"
 #include "../../DirectX11_2D_Framework/inc/Renderer.h"
+#include "../../DirectX11_2D_Framework/inc/Particle.h"
 #include "../../DirectX11_2D_Framework/inc/Animator.h"
 #include "../../DirectX11_2D_Framework/inc/TileMap.h"
 #include "../../DirectX11_2D_Framework/inc/SFText.h"

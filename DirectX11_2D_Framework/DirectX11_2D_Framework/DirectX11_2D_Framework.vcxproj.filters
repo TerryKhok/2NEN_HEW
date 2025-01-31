@@ -111,6 +111,9 @@
     <ClCompile Include="src\TileMap.cpp">
       <Filter>component</Filter>
     </ClCompile>
+    <ClCompile Include="src\Particle.cpp">
+      <Filter>component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Box2D.h">
@@ -223,6 +226,9 @@
     </ClInclude>
     <ClInclude Include="inc\sound.h">
       <Filter>Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\Particle.h">
+      <Filter>component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
