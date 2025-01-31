@@ -59,12 +59,12 @@ class MoveSubWindowManager : public Component
 		GameObject* playObject = ObjectManager::Find("playObject");
 		if (playObject != nullptr)
 		{
-			playObject->SetActive(true);
+			playObject->SetActive(false);
 		}
 		GameObject* moveObject = ObjectManager::Find("moveObject");
 		if (moveObject != nullptr)
 		{
-			moveObject->SetActive(false);
+			moveObject->SetActive(true);
 		}
 	}
 

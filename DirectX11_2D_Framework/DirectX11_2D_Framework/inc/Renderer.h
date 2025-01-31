@@ -214,9 +214,9 @@ private:
 	static void SetMainCameraMatrix();
 public:
 	//ウィンドウ全体の位置
-	static Vector2 renderOffset;
+	static thread_local Vector2 renderOffset;
 	//ウィンドウ全体の拡大率
-	static Vector2 renderZoom;
+	static thread_local Vector2 renderZoom;
 private:
 	// スレッドごとの現在のリスト
 	static thread_local RenderList* currentList;

@@ -31,7 +31,7 @@
             "class SubWindow",
             "class SelectTrigger"
         ],
-        "m_layer": 1,
+        "m_layer": 3,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {

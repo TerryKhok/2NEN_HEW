@@ -160,12 +160,17 @@ void MoveSubWindowManager::MoveSubWindowMode()
 	GameObject* playObject = ObjectManager::Find("playObject");
 	if (playObject != nullptr)
 	{
-		playObject->SetActive(true);
+		playObject->SetActive(false);
+	}
+	GameObject* effect = ObjectManager::Find("effect");
+	if (effect != nullptr)
+	{
+		effect->SetActive(true);
 	}
 	GameObject* moveObject = ObjectManager::Find("moveObject");
 	if (moveObject != nullptr)
 	{
-		moveObject->SetActive(false);
+		moveObject->SetActive(true);
 	}
 
 	Window::PauseGame();
@@ -201,12 +206,17 @@ void MoveSubWindowManager::PlayGameSubWindow()
 	GameObject* playObject = ObjectManager::Find("playObject");
 	if (playObject != nullptr)
 	{
-		playObject->SetActive(false);
+		playObject->SetActive(true);
+	}
+	GameObject* effect = ObjectManager::Find("effect");
+	if (effect != nullptr)
+	{
+		effect->SetActive(false);
 	}
 	GameObject* moveObject = ObjectManager::Find("moveObject");
 	if (moveObject != nullptr)
 	{
-		moveObject->SetActive(true);
+		moveObject->SetActive(false);
 	}
 	Sound::Get().PlayWaveSound(SFX_Open, 0.2f);
 	Window::ResumeGame();

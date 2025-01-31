@@ -1,8 +1,8 @@
 
 thread_local RenderManager::RenderList* RenderManager::currentList = RenderManager::m_rendererList;
 
-Vector2 RenderManager::renderOffset = { 0.0f,0.0f };
-Vector2 RenderManager::renderZoom = { 1.0f,1.0f };
+thread_local Vector2 RenderManager::renderOffset = { 0.0f,0.0f };
+thread_local Vector2 RenderManager::renderZoom = { 1.0f,1.0f };
 
 RenderManager::RenderList RenderManager::m_rendererList[LAYER::LAYER_MAX];
 RenderManager::RenderList RenderManager::m_nextRendererList[LAYER::LAYER_MAX];

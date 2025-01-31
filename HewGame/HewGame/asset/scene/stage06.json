@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 28,
+    "objectNum": 30,
     "value0": {
         "name": "map",
         "transform": {
@@ -443,7 +443,7 @@
                 }
             }
         },
-        "active": false,
+        "active": true,
         "comNames": [
             "class Renderer"
         ],
@@ -453,7 +453,7 @@
             "ptr_wrapper": {
                 "id": 2147483651,
                 "data": {
-                    "active": false,
+                    "active": true,
                     "m_offset": {
                         "x": 0.0,
                         "y": 0.0
@@ -494,7 +494,7 @@
                 }
             }
         },
-        "active": true,
+        "active": false,
         "comNames": [
             "class Renderer"
         ],
@@ -504,7 +504,7 @@
             "ptr_wrapper": {
                 "id": 2147483652,
                 "data": {
-                    "active": true,
+                    "active": false,
                     "m_offset": {
                         "x": 0.0,
                         "y": 0.0
@@ -1260,7 +1260,8 @@
         "active": true,
         "comNames": [
             "class Box2DBody",
-            "class Renderer"
+            "class Renderer",
+            "class Rock"
         ],
         "m_filter": 1,
         "data": {
@@ -1274,7 +1275,7 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": -4.910167217254639,
+                "vec.x": -10.0,
                 "vec.y": -1.745836853981018
             },
             "angleVec": 0.5485604405403137,
@@ -10101,5 +10102,132 @@
                 }
             }
         }
+    },
+    "value28": {
+        "name": "effect",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 32.02093505859375,
+                "y": 24.51206398010254,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer"
+        ],
+        "m_layer": 4,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483667,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 0.0,
+                        "f.y": 0.0,
+                        "f.z": 0.0,
+                        "f.w": 0.5846404433250427
+                    },
+                    "path": "asset\\pic\\effect.png"
+                }
+            }
+        }
+    },
+    "value29": {
+        "name": "moveCamera",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class MoveCamera"
+        ],
+        "currentIndex": 0,
+        "routePoints": [
+            {
+                "x": 0.0,
+                "y": 0.0
+            },
+            {
+                "x": -2.930976390838623,
+                "y": 24.913299560546876
+            },
+            {
+                "x": -1.4654881954193116,
+                "y": -24.913299560546876
+            },
+            {
+                "x": 5.861952781677246,
+                "y": 24.913299560546876
+            },
+            {
+                "x": -10.258417129516602,
+                "y": -20.516834259033204
+            },
+            {
+                "x": -8.792929649353028,
+                "y": 23.447811126708986
+            },
+            {
+                "x": 8.792929649353028,
+                "y": -20.516834259033204
+            }
+        ],
+        "pointTimes": [
+            0.21838724613189698,
+            0.4339703917503357,
+            0.43844830989837649,
+            0.41966915130615237,
+            0.38296210765838625,
+            0.4122338891029358,
+            0.1943289339542389
+        ],
+        "wait": true,
+        "time": 0.0,
+        "sumTime": 0.0,
+        "waitTime": 1.25,
+        "aroundTime": 2.5,
+        "reverse": false
     }
 }

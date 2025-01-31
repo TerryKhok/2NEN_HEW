@@ -1,7 +1,7 @@
 {
     "index": 111,
     "*selectedObject": {
-        "name": "SelectStage",
+        "name": "effect",
         "transform": {
             "position": {
                 "x": 0.0,
@@ -9,8 +9,8 @@
                 "z": 0.0
             },
             "scale": {
-                "x": 34.69849395751953,
-                "y": 7.545583724975586,
+                "x": 32.02093505859375,
+                "y": 24.51206398010254,
                 "z": 1.0
             },
             "angle": {
@@ -25,47 +25,30 @@
                 }
             }
         },
-        "active": true,
+        "active": false,
         "comNames": [
-            "class Renderer",
-            "class SubWindow",
-            "class SelectTrigger"
+            "class Renderer"
         ],
-        "m_layer": 3,
+        "m_layer": 4,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
                 "id": 2147483649,
                 "data": {
-                    "active": true,
+                    "active": false,
                     "m_offset": {
                         "x": 0.0,
                         "y": 0.0
                     },
                     "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
-                        "f.z": 1.0,
-                        "f.w": 1.0
+                        "f.x": 0.0,
+                        "f.y": 0.0,
+                        "f.z": 0.0,
+                        "f.w": 0.5846404433250427
                     },
-                    "path": "asset\\pic\\SelectStageText.png"
+                    "path": "asset\\pic\\effect.png"
                 }
             }
-        },
-        "targetName": "Interact",
-        "funcName": "ChangeSelectSceneMenu",
-        "beforeColor": {
-            "f.x": 1.0,
-            "f.y": 1.0,
-            "f.z": 1.0,
-            "f.w": 1.0
-        },
-        "selectColor": {
-            "f.x": 0.5441176891326904,
-            "f.y": 0.5441176891326904,
-            "f.z": 0.5441176891326904,
-            "f.w": 1.0
-        },
-        "pause": true
+        }
     }
 }

@@ -75,6 +75,7 @@ public:
 		render->SetColor(selectColor);
 		if (Input::Get().KeyTrigger(VK_F) || Input::Get().ButtonTrigger(XINPUT_A))
 		{
+			Sound::Get().PlayWaveSound(SFX_Confirm, 0.3f);
 			FunctionRegistry::Get().callFunction(funcName);
 		}
 	}
@@ -225,5 +226,38 @@ class GoalMove :public Component
 public:
 	float vecX = 5.0f;
 };
+
+class AttachHitSound : public Component
+{
+	SAFE_POINTER(Box2DBody, rb)
+
+	void Start() override
+	{
+		rb = m_this->GetComponent<Box2DBody>();
+	}
+
+	void OnCollisionEnter(GameObject* _other) override
+	{
+		auto vec = rb->GetVelocity();
+		float length = abs(vec.x) + abs(vec.y);
+		float mix = volume * length * rb->GetMass();
+		if (mix < 0.5f) return;
+
+		Sound::Get().PlayWaveSound(SFX_Hit, volume);
+	}
+
+	void DrawImGui(ImGuiApp::HandleUI& _handle) override
+	{
+		ImGui::InputFloat("volume##hitSound", &volume);
+	}
+
+public:
+	float volume = 0.3f;
+
+private:
+	SERIALIZE_COMPONENT_VALUE(volume)
+};
+
+SetReflectionComponent(AttachHitSound)
 
 
