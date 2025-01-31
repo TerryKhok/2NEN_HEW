@@ -9406,7 +9406,8 @@
             "class Renderer",
             "class Animator",
             "class Box2DBody",
-            "class RunFixedRoute"
+            "class RunFixedRoute",
+            "class Thon"
         ],
         "m_layer": 1,
         "m_node": {
@@ -9532,7 +9533,8 @@
             "class Renderer",
             "class Animator",
             "class Box2DBody",
-            "class RunFixedRoute"
+            "class RunFixedRoute",
+            "class Thon"
         ],
         "m_layer": 1,
         "m_node": {

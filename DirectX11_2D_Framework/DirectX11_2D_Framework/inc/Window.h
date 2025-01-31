@@ -14,10 +14,10 @@
 
 //初期画面の大きさ
 //================================================================
-#define SCREEN_WIDTH (1152)	// ウインドウの幅
-#define SCREEN_HEIGHT (864)	// ウインドウの高さ
-//#define SCREEN_WIDTH (960)	// ウインドウの幅
-//#define SCREEN_HEIGHT (720)	// ウインドウの高さ
+//#define SCREEN_WIDTH (1152)	// ウインドウの幅
+//#define SCREEN_HEIGHT (864)	// ウインドウの高さ
+#define SCREEN_WIDTH (960)	// ウインドウの幅
+#define SCREEN_HEIGHT (720)	// ウインドウの高さ
 //================================================================
 
 //初期画面の大きさ

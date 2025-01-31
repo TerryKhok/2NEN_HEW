@@ -24,3 +24,27 @@ class FixedSubWindowWorldPos : public Component
 };
 
 SetReflectionComponent(FixedSubWindowWorldPos)
+
+class FixedPositionSubWindow : public Component
+{
+	SAFE_POINTER(SubWindow, subWindow)
+
+	void Start() override
+	{
+		subWindow = m_this->GetComponent<SubWindow>();
+	}
+
+	void Update() override
+	{
+		auto& pos = m_this->transform.position;
+		Vector2 windowPos = GetWindowPosition(subWindow->GeWndHandle());
+		if (abs(windowPos.x - pos.x) > 5.0f || abs(windowPos.y - pos.y) > 5.0f)
+		{
+			pos = windowPos;
+		}
+	}
+
+	int count = 0;
+};
+
+SetReflectionComponent(FixedPositionSubWindow)

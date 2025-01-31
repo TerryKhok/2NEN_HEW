@@ -130,8 +130,14 @@ class TitleTrigger : public Component
 		if (!loading)
 		{
 			m_this->SetActive(false);
+			auto icon = ObjectManager::Find("Icon");
+			if (icon != nullptr)
+			{
+				icon->SetActive(false);
+			}
+
 			auto ui = Instantiate("rollArrow", L"asset/pic/rollArrow.png");
-			ui->transform.position = m_this->transform.position;
+			ui->transform.position.y = m_this->transform.position.y;
 			ui->transform.scale = { 10.0f,10.0f };
 			auto rotate = ui->AddComponent<RotationObject>();
 			rotate->rotationAngle = -Math::PI2;
@@ -141,6 +147,10 @@ class TitleTrigger : public Component
 			SceneManager::LoadingScene("SelectScene");
 
 			m_this->SetActive(true);
+			if (icon != nullptr)
+			{
+				icon->SetActive(true);
+			}
 			DeleteObject(ui);
 		}
 
