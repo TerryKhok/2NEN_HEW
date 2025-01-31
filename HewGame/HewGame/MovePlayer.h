@@ -259,7 +259,7 @@ class MovePlayer : public Component
 			ChangeState(PLAYER_IDLE);
 			anim->Reverse(reverse);
 		}
-		Sound::Get().PlayWaveSound(BGM_Game02, 0.4f);
+		Sound::Get().PlayWaveSound(BGM_Game02, 0.3f);
 	}
 	PLAYER_MODE mode = NORMAL;
 	std::vector<PLAYER_MODE> modeLayer;
@@ -297,6 +297,7 @@ public:
 	void GameClear()
 	{
 		LOG("GameClear");
+		Sound::Get().PlayWaveSound(SFX_Clear, 0.3f);
 		ChangeState(PLAYER_GOAL);
 		m_this->RemoveComponent<MovePlayer>();
 	}
@@ -304,6 +305,7 @@ public:
 	void GameOver()
 	{
 		LOG("GameOver");
+		Sound::Get().PlayWaveSound(SFX_Death, 0.5f);
 		render->SetColor({ 1.0f,0.5f,0.5f,1.0f });
 		ChangeState(PLAYER_DAMAGE);
 		m_this->RemoveComponent<MovePlayer>();		
