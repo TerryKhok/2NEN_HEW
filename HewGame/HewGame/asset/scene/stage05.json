@@ -674,6 +674,7 @@
                 }
             }
         },
+        "isWave": true,
         "confirmed": false,
         "selfIndex": 0,
         "restitutionPower": 1.100000023841858
@@ -840,6 +841,7 @@
                 }
             }
         },
+        "isWave": true,
         "confirmed": false,
         "selfIndex": 1,
         "restitutionPower": 1.100000023841858
@@ -985,6 +987,7 @@
                 }
             }
         },
+        "isWave": true,
         "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
@@ -1150,6 +1153,7 @@
                 }
             }
         },
+        "isWave": true,
         "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
@@ -11353,7 +11357,8 @@
                     "path": "asset\\pic\\Controls.png"
                 }
             }
-        }
+        },
+        "isWave": false
     },
     "value23": {
         "name": "effect",

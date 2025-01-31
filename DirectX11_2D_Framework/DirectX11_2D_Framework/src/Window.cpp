@@ -1245,6 +1245,13 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			viewList.erase(viewIter);
 		}
 
+		auto& waveList = DirectX11::m_waveHandleList;
+		auto waveIter = waveList.find(hTargetWnd);
+		if (waveIter != waveList.end())
+		{
+			waveList.erase(waveIter);
+		}
+
 		auto objIter = m_hwndObjNames.find(hTargetWnd);
 		if (objIter != m_hwndObjNames.end())
 		{

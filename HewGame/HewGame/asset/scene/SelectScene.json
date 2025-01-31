@@ -1236,6 +1236,7 @@
                 }
             }
         },
+        "isWave": true,
         "m_layer": 3,
         "m_node": {
             "polymorphic_id": 1073741824,
@@ -1325,7 +1326,8 @@
             "f.z": 0.6666666865348816,
             "f.w": 1.0
         },
-        "pause": false
+        "pause": false,
+        "isWave": false
     },
     "value8": {
         "name": "Crystal_1",
@@ -16640,7 +16642,8 @@
             "f.z": 0.6666666865348816,
             "f.w": 1.0
         },
-        "pause": false
+        "pause": false,
+        "isWave": false
     },
     "value32": {
         "name": "chaseCameraRight",
@@ -16757,7 +16760,8 @@
             "f.z": 0.6666666865348816,
             "f.w": 1.0
         },
-        "pause": false
+        "pause": false,
+        "isWave": false
     },
     "value34": {
         "name": "Player",
@@ -21981,6 +21985,7 @@
                     "path": "asset\\pic\\Controls.png"
                 }
             }
-        }
+        },
+        "isWave": false
     }
 }

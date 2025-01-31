@@ -50,6 +50,7 @@
                     "path": "asset\\pic\\menuText.png"
                 }
             }
-        }
+        },
+        "isWave": false
     }
 }

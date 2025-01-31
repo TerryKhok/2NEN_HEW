@@ -67,7 +67,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": -36.0
@@ -94,7 +94,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": 36.0
@@ -121,7 +121,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": 36.0
@@ -148,7 +148,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": -36.0
@@ -668,6 +668,7 @@
                 }
             }
         },
+        "isWave": true,
         "confirmed": false,
         "selfIndex": 0,
         "restitutionPower": 0.800000011920929
@@ -813,6 +814,7 @@
                 }
             }
         },
+        "isWave": true,
         "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
@@ -978,6 +980,7 @@
                 }
             }
         },
+        "isWave": true,
         "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
@@ -1143,6 +1146,7 @@
                 }
             }
         },
+        "isWave": true,
         "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
@@ -9764,7 +9768,8 @@
                     "path": "asset\\pic\\Controls.png"
                 }
             }
-        }
+        },
+        "isWave": false
     },
     "value32": {
         "name": "effect",

@@ -619,6 +619,10 @@ void ImGuiApp::DrawOptionGui()
 				ImGui::PopStyleVar();
 
 				ImGui::ColorEdit3("clear color", DirectX11::clearColor); // Edit 3 floats representing a color
+
+				ImGui::InputFloat("strength##strength",&DirectX11::waveData.strength);  // ノイズによる揺れの強さ
+				ImGui::InputFloat("scale##waveData",&DirectX11::waveData.noiseScale); // ノイズのスケール
+				ImGui::InputFloat("persistence",&DirectX11::waveData.persistence); // 各オクターブの影響度
 		
 				ImGui::EndTabItem();
 			}

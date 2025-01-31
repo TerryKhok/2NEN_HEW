@@ -116,6 +116,9 @@ private:
 	static std::unordered_map<HWND, ComPtr<IDXGISwapChain>> m_pSwapChainList;
 	// レンダーターゲット＝描画先を表す機能
 	static std::unordered_map<HWND, std::pair<ComPtr<ID3D11RenderTargetView>, std::vector<LAYER>>> m_pRenderTargetViewList;
+
+	static std::unordered_map < HWND, bool> m_waveHandleList;
+
 	//デプスステート
 	static ComPtr<ID3D11DepthStencilState> m_pDSState;
 	// デプスバッファ
@@ -140,5 +143,17 @@ private:
 	static ComPtr<ID3D11ShaderResourceView> m_pTextureView;
 	//画面塗りつぶしカラー
 	static float clearColor[4];
-};
 
+
+	// ピクセルシェーダーオブジェクト
+	static ComPtr<ID3D11PixelShader> m_pWavePixelShader;
+	struct TimeBuffer {
+		float time;
+		float strength;
+		float noiseScale;
+		float persistence;
+	};
+	static TimeBuffer waveData;
+	//定数バッファ変数
+	static ComPtr<ID3D11Buffer> m_pPSWaveConstantBuffer;
+};

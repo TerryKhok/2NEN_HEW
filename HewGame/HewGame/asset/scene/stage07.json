@@ -556,6 +556,7 @@
                 }
             }
         },
+        "isWave": true,
         "confirmed": false,
         "selfIndex": 0
     },
@@ -721,6 +722,7 @@
                 }
             }
         },
+        "isWave": true,
         "confirmed": false,
         "selfIndex": 1
     },
@@ -888,6 +890,7 @@
         },
         "confirmed": false,
         "selfIndex": 2,
+        "isWave": true,
         "restitutionPower": 0.800000011920929
     },
     "value8": {
@@ -1053,6 +1056,7 @@
             }
         },
         "restitutionPower": 0.800000011920929,
+        "isWave": true,
         "confirmed": false,
         "selfIndex": 3
     },
@@ -8497,8 +8501,8 @@
                     },
                     "m_scaleX": 0.125,
                     "m_scaleY": 0.3333333432674408,
-                    "m_frameX": 3,
-                    "m_frameY": 1
+                    "m_frameX": 0,
+                    "m_frameY": 0
                 }
             }
         },
@@ -8924,7 +8928,8 @@
                     "path": "asset\\pic\\Controls.png"
                 }
             }
-        }
+        },
+        "isWave": false
     },
     "value21": {
         "name": "effect",

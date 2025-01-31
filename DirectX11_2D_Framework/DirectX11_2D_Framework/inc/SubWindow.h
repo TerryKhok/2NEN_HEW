@@ -42,6 +42,15 @@ private:
 		m_hWnd = Window::pWindowSubCreate(_object->GetName(), _windowName, width, height, pos);
 	}
 
+	void Start() override
+	{
+		auto waveIter = DirectX11::m_waveHandleList.find(m_hWnd);
+		if (waveIter != DirectX11::m_waveHandleList.end())
+		{
+			waveIter->second = isWave;
+		}
+	}
+
 	void Delete() override
 	{
 		Window::WindowSubRelease(m_hWnd);
@@ -57,6 +66,22 @@ private:
 		m_this->transform.position = GetWindowPosition(_hWnd);
 	}
 
+	void DrawImGui(ImGuiApp::HandleUI& _handleUi) override
+	{
+		ImGui::Checkbox("wave##SubWindow", &isWave);
+	}
+
 private:
 	HWND m_hWnd;
+	bool isWave = false;
+
+	void Serialize(cereal::JSONOutputArchive& ar) override 
+	{
+		ar(CEREAL_NVP(isWave));
+	} 
+	
+	void Deserialize(cereal::JSONInputArchive& ar) override 
+	{
+		ar(CEREAL_NVP(isWave));
+	}
 };

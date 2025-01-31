@@ -52,6 +52,7 @@
                 }
             }
         },
+        "isWave": false,
         "targetName": "Interact",
         "funcName": "ChangeCurrentStageMenu",
         "beforeColor": {

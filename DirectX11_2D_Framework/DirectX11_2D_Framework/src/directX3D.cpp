@@ -10,6 +10,9 @@ ComPtr<ID3D11DeviceContext> DirectX11::m_pDeviceContext = nullptr;
 std::unordered_map<HWND, ComPtr<IDXGISwapChain>> DirectX11::m_pSwapChainList;
 // レンダーターゲット＝描画先を表す機能
 std::unordered_map<HWND, std::pair<ComPtr<ID3D11RenderTargetView>, std::vector<LAYER>>> DirectX11::m_pRenderTargetViewList;
+
+std::unordered_map<HWND, bool> DirectX11::m_waveHandleList;
+
 //デプスステート
 ComPtr<ID3D11DepthStencilState> DirectX11::m_pDSState;
 // デプスバッファ
@@ -38,6 +41,13 @@ float DirectX11::clearColor[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
 #else
 float DirectX11::clearColor[4] = { 0.0f, 0.5f, 0.5f, 1.0f };
 #endif
+
+// ピクセルシェーダーオブジェクト
+ComPtr<ID3D11PixelShader> DirectX11::m_pWavePixelShader = nullptr;
+
+DirectX11::TimeBuffer DirectX11::waveData;
+//定数バッファ変数
+ComPtr<ID3D11Buffer> DirectX11::m_pPSWaveConstantBuffer;
 
 //--------------------------------------------------------------------------------------
 // シェーダーをファイル拡張子に合わせてコンパイル
@@ -349,7 +359,12 @@ HRESULT DirectX11::D3D_Create(HWND mainHwnd)
 	
 	// ピクセルシェーダーオブジェクトを生成
 	hr = CreatePixelShader(UNLIT_TEXTURE_PS, sizeof(UNLIT_TEXTURE_PS), m_pPixelShader.GetAddressOf());
-	//hr = CreatePixelShader("OutlineShader.hlsl", "ps_main", "ps_5_0", m_pPixelShader.GetAddressOf());
+	if (FAILED(hr)) {
+		MessageBoxA(NULL, "CreatePixelShader error", "error", MB_OK);
+		return E_FAIL;
+	}
+
+	hr = CreatePixelShader("WavePixelShader.hlsl", "ps_main", "ps_5_0", m_pWavePixelShader.GetAddressOf());
 	if (FAILED(hr)) {
 		MessageBoxA(NULL, "CreatePixelShader error", "error", MB_OK);
 		return E_FAIL;
@@ -386,6 +401,17 @@ HRESULT DirectX11::D3D_Create(HWND mainHwnd)
 	cbDesc2.MiscFlags = 0;
 	cbDesc2.StructureByteStride = 0;
 	hr = m_pDevice->CreateBuffer(&cbDesc2, NULL, m_pVSCameraConstantBuffer.GetAddressOf());
+	if (FAILED(hr)) return hr;
+
+	//定数バッファ作成
+	D3D11_BUFFER_DESC cbDesc3;
+	cbDesc3.ByteWidth = sizeof(TimeBuffer);
+	cbDesc3.Usage = D3D11_USAGE_DEFAULT;
+	cbDesc3.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cbDesc3.CPUAccessFlags = 0;
+	cbDesc3.MiscFlags = 0;
+	cbDesc3.StructureByteStride = 0;
+	hr = m_pDevice->CreateBuffer(&cbDesc3, NULL, m_pPSWaveConstantBuffer.GetAddressOf());
 	if (FAILED(hr)) return hr;
 
 	//ブレンディングステート生成
@@ -450,6 +476,13 @@ HRESULT DirectX11::D3D_Create(HWND mainHwnd)
 	//RenderManagerでDrawするときに後方で設定を戻しているので初めに一回設定しておく
 	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+	m_pDeviceContext->PSSetConstantBuffers(0, 1, m_pPSWaveConstantBuffer.GetAddressOf());
+
+	
+	waveData.strength = 0.02f;  // ノイズによる揺れの強さ
+	waveData.noiseScale = 10.0f; // ノイズのスケール
+	waveData.persistence = 0.5f; // 各オクターブの影響度
+
 	return S_OK;
 }
 
@@ -460,6 +493,15 @@ void DirectX11::D3D_Release()
 
 void DirectX11::D3D_StartRender()
 {
+	waveData.time += 1.0f / UPDATE_FPS;
+	if (waveData.time >= 100.0f)
+	{
+		waveData.time -= 100.0f;
+	}
+	//行列をシェーダーに渡す
+	DirectX11::m_pDeviceContext->UpdateSubresource(
+		DirectX11::m_pPSWaveConstantBuffer.Get(), 0, NULL, &waveData, 0, 0);
+
 	//SpriteBatchで設定が変わるので戻すため
 	//===========================================================================================
 	//インプットレイアウト設定
@@ -584,6 +626,8 @@ HRESULT DirectX11::CreateWindowSwapChain(HWND hWnd)
 
 	m_pSwapChainList.insert(std::make_pair(hWnd, swapChain));
 	m_pRenderTargetViewList.insert(std::make_pair(hWnd, std::make_pair(renderTargetView, std::move(drawLayers))));
+
+	m_waveHandleList.emplace(hWnd, false);
 
 	return S_OK;
 }

@@ -197,6 +197,7 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="OutlineShader.hlsl" />
+    <FxCompile Include="WavePixelShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="HewGame.rc">

@@ -533,17 +533,42 @@ void RenderManager::Draw()
 		// 描画先のキャンバスと使用する深度バッファを指定する
 		DirectX11::m_pDeviceContext->OMSetRenderTargets(1, view.second.first.GetAddressOf(), DirectX11::m_pDepthStencilView.Get());
 
+		bool wave = false;
+		auto waveIter = DirectX11::m_waveHandleList.find(view.first);
+		if (waveIter != DirectX11::m_waveHandleList.end())
+		{
+			wave = waveIter->second;
+		}
+
+		if (wave)
+		{
+			//ピクセルシェーダ設定
+			DirectX11::m_pDeviceContext->PSSetShader(DirectX11::m_pWavePixelShader.Get(), NULL, 0);
+		}
+
 #ifndef DEBUG_TRUE
 		for (const auto layer : view.second.second)
 		{
 			auto& node = m_rendererList[layer];
 			node.first->NextFunc();
 		}
+
+		if (wave)
+		{
+			//ピクセルシェーダ設定
+			DirectX11::m_pDeviceContext->PSSetShader(DirectX11::m_pPixelShader.Get(), NULL, 0);
+		}
 #else
 		for (const auto layer : view.second.second)
 		{
 			auto& node = m_rendererList[layer];
 			node.first->NextFunc();
+		}
+
+		if (wave)
+		{
+			//ピクセルシェーダ設定
+			DirectX11::m_pDeviceContext->PSSetShader(DirectX11::m_pPixelShader.Get(), NULL, 0);
 		}
 
 		if (drawHitBox)
