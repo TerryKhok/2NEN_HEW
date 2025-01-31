@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 14,
+    "objectNum": 15,
     "value0": {
         "name": "backgroundCenter",
         "transform": {
@@ -4812,7 +4812,7 @@
                         "f.z": 0.5689871311187744,
                         "f.w": 1.0
                     },
-                    "path": "asset\\pic\\PreesToText.png"
+                    "path": "asset\\pic\\PressText.png"
                 }
             }
         },
@@ -4833,10 +4833,78 @@
         "flickeringTime": 2.5
     },
     "value5": {
+        "name": "Text_1",
+        "transform": {
+            "position": {
+                "x": 27.0,
+                "y": -192.25367736816407,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 51.50711441040039,
+                "y": 10.723954200744629,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class TitleTrigger",
+            "class FlickeringRenderColor"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483654,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 0.5689871311187744,
+                        "f.y": 0.5689871311187744,
+                        "f.z": 0.5689871311187744,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\ToEnterText.png"
+                }
+            }
+        },
+        "colors": [
+            {
+                "f.x": 1.0,
+                "f.y": 1.0,
+                "f.z": 1.0,
+                "f.w": 1.0
+            },
+            {
+                "f.x": 0.46568626165390017,
+                "f.y": 0.46568626165390017,
+                "f.z": 0.46568626165390017,
+                "f.w": 1.0
+            }
+        ],
+        "flickeringTime": 2.5
+    },
+    "value6": {
         "name": "Icon",
         "transform": {
             "position": {
-                "x": 207.0,
+                "x": -81.0,
                 "y": -189.0,
                 "z": 0.0
             },
@@ -4866,7 +4934,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483654,
+                "id": 2147483655,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -4894,73 +4962,6 @@
                 "f.x": 0.4754902124404907,
                 "f.y": 0.4754902124404907,
                 "f.z": 0.4754902124404907,
-                "f.w": 1.0
-            }
-        ],
-        "flickeringTime": 2.5
-    },
-    "value6": {
-        "name": "crystal_12",
-        "transform": {
-            "position": {
-                "x": 395.45355224609377,
-                "y": 292.69732666015627,
-                "z": 0.5
-            },
-            "scale": {
-                "x": 7.09345006942749,
-                "y": 8.485258102416993,
-                "z": 1.0
-            },
-            "angle": {
-                "x": {
-                    "radians": 0.0
-                },
-                "y": {
-                    "radians": 0.0
-                },
-                "z": {
-                    "radians": 1.9345146417617798
-                }
-            }
-        },
-        "active": true,
-        "comNames": [
-            "class Renderer",
-            "class FlickeringRenderColor"
-        ],
-        "m_layer": 1,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483655,
-                "data": {
-                    "active": true,
-                    "m_offset": {
-                        "x": 0.0,
-                        "y": 0.0
-                    },
-                    "m_color": {
-                        "f.x": 0.19333380460739137,
-                        "f.y": 0.762745201587677,
-                        "f.z": 1.0,
-                        "f.w": 1.0
-                    },
-                    "path": "asset\\pic\\Suisyou 2.png"
-                }
-            }
-        },
-        "colors": [
-            {
-                "f.x": 1.0,
-                "f.y": 1.0,
-                "f.z": 1.0,
-                "f.w": 1.0
-            },
-            {
-                "f.x": 0.0,
-                "f.y": 0.7058823108673096,
-                "f.z": 1.0,
                 "f.w": 1.0
             }
         ],
@@ -5235,11 +5236,11 @@
         "flickeringTime": 2.5
     },
     "value11": {
-        "name": "crystal",
+        "name": "crystal_12",
         "transform": {
             "position": {
-                "x": 493.19439697265627,
-                "y": 100.1773910522461,
+                "x": 395.45355224609377,
+                "y": 292.69732666015627,
                 "z": 0.5
             },
             "scale": {
@@ -5255,7 +5256,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 1.198549509048462
+                    "radians": 1.9345146417617798
                 }
             }
         },
@@ -5302,6 +5303,73 @@
         "flickeringTime": 2.5
     },
     "value12": {
+        "name": "crystal",
+        "transform": {
+            "position": {
+                "x": 493.19439697265627,
+                "y": 100.1773910522461,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 7.09345006942749,
+                "y": 8.485258102416993,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 1.198549509048462
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class FlickeringRenderColor"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483661,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 0.19333380460739137,
+                        "f.y": 0.762745201587677,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\Suisyou 2.png"
+                }
+            }
+        },
+        "colors": [
+            {
+                "f.x": 1.0,
+                "f.y": 1.0,
+                "f.z": 1.0,
+                "f.w": 1.0
+            },
+            {
+                "f.x": 0.0,
+                "f.y": 0.7058823108673096,
+                "f.z": 1.0,
+                "f.w": 1.0
+            }
+        ],
+        "flickeringTime": 2.5
+    },
+    "value13": {
         "name": "CharacterV",
         "transform": {
             "position": {
@@ -5335,7 +5403,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483661,
+                "id": 2147483662,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -5353,7 +5421,7 @@
             }
         }
     },
-    "value13": {
+    "value14": {
         "name": "Mado",
         "transform": {
             "position": {
@@ -5387,7 +5455,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483662,
+                "id": 2147483663,
                 "data": {
                     "active": true,
                     "m_offset": {

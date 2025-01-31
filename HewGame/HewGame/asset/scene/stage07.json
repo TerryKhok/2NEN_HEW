@@ -67,7 +67,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": -36.0
@@ -94,7 +94,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": 36.0
@@ -121,7 +121,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": 36.0
@@ -148,7 +148,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": -36.0
@@ -725,7 +725,7 @@
         "selfIndex": 1
     },
     "value7": {
-        "name": "LowGravity",
+        "name": "Bounce2",
         "transform": {
             "position": {
                 "x": -580.0,
@@ -753,9 +753,9 @@
         "comNames": [
             "class Renderer",
             "class Box2DBody",
-            "class LowGravity",
+            "class MoveSubWindow",
             "class SubWindow",
-            "class MoveSubWindow"
+            "class Bounce"
         ],
         "m_layer": 2,
         "m_node": {
@@ -774,7 +774,7 @@
                         "f.z": 1.0,
                         "f.w": 0.6000000238418579
                     },
-                    "path": "asset\\sign\\sign_lowgravity.png"
+                    "path": "asset\\sign\\sign_bounce.png"
                 }
             }
         },
@@ -887,7 +887,8 @@
             }
         },
         "confirmed": false,
-        "selfIndex": 2
+        "selfIndex": 2,
+        "restitutionPower": 0.800000011920929
     },
     "value8": {
         "name": "Bounce",
@@ -1506,7 +1507,7 @@
             "position": {
                 "x": 402.0,
                 "y": 96.0,
-                "z": -1.0
+                "z": 0.5
             },
             "scale": {
                 "x": 16.0,
@@ -8446,7 +8447,7 @@
         "transform": {
             "position": {
                 "x": -354.5030517578125,
-                "y": -224.16262817382813,
+                "y": -224.16256713867188,
                 "z": 0.5
             },
             "scale": {
@@ -8496,8 +8497,8 @@
                     },
                     "m_scaleX": 0.125,
                     "m_scaleY": 0.3333333432674408,
-                    "m_frameX": 0,
-                    "m_frameY": 0
+                    "m_frameX": 3,
+                    "m_frameY": 1
                 }
             }
         },
@@ -8628,7 +8629,7 @@
         "data": {
             "pos": {
                 "vec.x": -35.4503059387207,
-                "vec.y": -22.416263580322267
+                "vec.y": -22.416255950927736
             },
             "rot": {
                 "rot.c": 1.0,
@@ -8645,7 +8646,7 @@
             "autoMass": 1.0,
             "bullet": true,
             "fixRot": true,
-            "awake": true
+            "awake": false
         },
         "types": [
             1
