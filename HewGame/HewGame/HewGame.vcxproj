@@ -175,6 +175,7 @@
     <ClInclude Include="Sample_Box2D.h" />
     <ClInclude Include="Sample_SceneLoad.h" />
     <ClInclude Include="SeigoTestScene.h" />
+    <ClInclude Include="SpiderSilk.h" />
     <ClInclude Include="Trigger.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="AntiGravity.h" />

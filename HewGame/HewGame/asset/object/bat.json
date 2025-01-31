@@ -1,0 +1,108 @@
+{
+    "index": 111,
+    "*selectedObject": {
+        "name": "bat",
+        "transform": {
+            "position": {
+                "x": -50.0,
+                "y": 120.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 10.809440612792969,
+                "y": 9.053540229797364,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class Animator",
+            "class Box2DBody"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 2147483649,
+            "polymorphic_name": "UVRenderNode",
+            "ptr_wrapper": {
+                "id": 2147483649,
+                "data": {
+                    "value0": {
+                        "active": true,
+                        "m_offset": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "m_color": {
+                            "f.x": 1.0,
+                            "f.y": 1.0,
+                            "f.z": 1.0,
+                            "f.w": 1.0
+                        },
+                        "path": "asset\\spritesheet\\enemy_bat_fly.png"
+                    },
+                    "m_scaleX": 0.125,
+                    "m_scaleY": 0.5,
+                    "m_frameX": 0,
+                    "m_frameY": 0
+                }
+            }
+        },
+        "clipSize": 1,
+        "name": "fly",
+        "path": "asset\\animationClip\\enemy_bat_fly.amcp",
+        "loop": true,
+        "currentClipName": "fly",
+        "pause": false,
+        "m_filter": 1,
+        "data": {
+            "pos": {
+                "vec.x": -5.0,
+                "vec.y": 12.0
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
+            "type": 1,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 0.0,
+            "autoMass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": true
+        },
+        "types": [
+            0
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "circle": {
+            "circle.center": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "circle.radius": 3.0
+        }
+    }
+}

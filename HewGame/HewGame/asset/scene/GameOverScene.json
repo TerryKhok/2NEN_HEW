@@ -5846,7 +5846,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -6.687747001647949,
                 "vec.y": -27.168975830078126
@@ -5873,7 +5873,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -26.333003997802736,
                 "vec.y": -26.750991821289064
@@ -5900,7 +5900,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -26.750988006591798,
                 "vec.y": -21.317195892333986
@@ -5927,7 +5927,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -31.766799926757814,
                 "vec.y": -21.317195892333986
@@ -5954,7 +5954,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -32.184783935546878,
                 "vec.y": -17.55533790588379
@@ -5981,7 +5981,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -42.216407775878909,
                 "vec.y": -17.137353897094728
@@ -6008,7 +6008,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -42.63439178466797,
                 "vec.y": 26.750988006591798
@@ -6035,7 +6035,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -37.20059585571289,
                 "vec.y": 26.750988006591798
@@ -6062,7 +6062,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -37.20059585571289,
                 "vec.y": 31.766796112060548
@@ -6089,7 +6089,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -26.750988006591798,
                 "vec.y": 32.184783935546878
@@ -6116,7 +6116,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -27.586956024169923,
                 "vec.y": 46.814231872558597
@@ -6143,7 +6143,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -21.735179901123048,
                 "vec.y": 47.232215881347659
@@ -6170,7 +6170,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -21.735179901123048,
                 "vec.y": 52.248023986816409
@@ -6197,7 +6197,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 22.15316390991211,
                 "vec.y": 51.830039978027347
@@ -6224,7 +6224,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 22.15316390991211,
                 "vec.y": 32.184783935546878
@@ -6251,7 +6251,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 37.20059585571289,
                 "vec.y": 32.184783935546878
@@ -6278,7 +6278,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 37.20059585571289,
                 "vec.y": 27.16897201538086
@@ -6305,7 +6305,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 41.798423767089847,
                 "vec.y": 26.750988006591798
@@ -6332,7 +6332,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 41.798423767089847,
                 "vec.y": 2.9258885383605959
@@ -6359,7 +6359,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 32.60276794433594,
                 "vec.y": 2.9258885383605959
@@ -6386,7 +6386,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 31.766799926757814,
                 "vec.y": -6.2697649002075199
@@ -6413,7 +6413,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 27.586956024169923,
                 "vec.y": -6.687748908996582
@@ -6440,7 +6440,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 27.16897201538086,
                 "vec.y": -12.121541976928711
@@ -6467,7 +6467,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 22.15316390991211,
                 "vec.y": -12.121541976928711
@@ -6494,7 +6494,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 21.735179901123048,
                 "vec.y": -26.750991821289064
@@ -6521,7 +6521,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 12.121541976928711,
                 "vec.y": -27.168975830078126
@@ -6548,7 +6548,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 12.121541976928711,
                 "vec.y": -31.766799926757814
@@ -6575,7 +6575,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -6.687747001647949,
                 "vec.y": -31.34881591796875
@@ -6750,8 +6750,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": 0.000011863854524563067,
-                "vec.y": 0.00001750258707033936
+                "vec.x": 0.00001136465016315924,
+                "vec.y": 0.00001749329203448724
             },
             "angleVec": -0.000003288271955170785,
             "gravity": 10.0,
@@ -7002,8 +7002,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": -0.000005308294021233451,
-                "vec.y": 0.0000022592571440327449
+                "vec.x": -0.000005230932856647996,
+                "vec.y": 0.00000270113673650485
             },
             "angleVec": 0.0000027921055334445556,
             "gravity": 10.0,
@@ -7178,8 +7178,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": -0.000007568244654976297,
-                "vec.y": 0.000014095566257310566
+                "vec.x": -0.000007815781827957835,
+                "vec.y": 0.00001459265058656456
             },
             "angleVec": 0.0000034562549444672188,
             "gravity": 10.0,
@@ -7706,8 +7706,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": -0.000015469317077076995,
-                "vec.y": 0.00002784974640235305
+                "vec.x": -0.000015977060684235768,
+                "vec.y": 0.000028819102226407268
             },
             "angleVec": 0.000006810883860453032,
             "gravity": 10.0,
@@ -8058,8 +8058,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": -0.12206882983446121,
-                "vec.y": -0.24175944924354554
+                "vec.x": -0.1374306082725525,
+                "vec.y": -0.2114836573600769
             },
             "angleVec": 0.2113078236579895,
             "gravity": 10.0,
@@ -9025,7 +9025,10 @@
         "currentIndex": 5,
         "aroundTime": 10.0,
         "time": 1.3499994277954102,
-        "reverse": true
+        "reverse": true,
+        "rotation": false,
+        "turnSpeed": 3.1415927410125734,
+        "offsetAngle": 0.0
     },
     "value24": {
         "name": "Player",

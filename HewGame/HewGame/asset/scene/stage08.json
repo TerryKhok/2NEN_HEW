@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 44,
+    "objectNum": 45,
     "value0": {
         "name": "StaticBox_Map",
         "transform": {
@@ -741,7 +741,7 @@
         "transform": {
             "position": {
                 "x": 580.0,
-                "y": -180.0,
+                "y": -20.0,
                 "z": 0.5
             },
             "scale": {
@@ -794,7 +794,7 @@
         "data": {
             "pos": {
                 "vec.x": 58.0,
-                "vec.y": -18.0
+                "vec.y": -2.0
             },
             "rot": {
                 "rot.c": 1.0,
@@ -906,7 +906,7 @@
         "transform": {
             "position": {
                 "x": -580.0,
-                "y": -180.0,
+                "y": -20.0,
                 "z": 0.5
             },
             "scale": {
@@ -938,7 +938,7 @@
         "data": {
             "pos": {
                 "vec.x": -58.0,
-                "vec.y": -18.0
+                "vec.y": -2.0
             },
             "rot": {
                 "rot.c": 1.0,
@@ -2005,7 +2005,7 @@
             "mass": 0.0,
             "autoMass": 1.0,
             "bullet": false,
-            "fixRot": false,
+            "fixRot": true,
             "awake": true
         },
         "types": [
@@ -2095,20 +2095,20 @@
         },
         "routePoints": [
             {
-                "x": 96.0,
-                "y": 102.0
+                "x": 80.0,
+                "y": 100.0
             },
             {
-                "x": 255.0,
-                "y": 102.0
+                "x": 270.0,
+                "y": 100.0
             },
             {
-                "x": 255.0,
-                "y": -48.0
+                "x": 270.0,
+                "y": -80.0
             },
             {
-                "x": 96.0,
-                "y": -48.0
+                "x": 80.0,
+                "y": -80.0
             }
         ],
         "pointTimes": [
@@ -2121,6 +2121,9 @@
         "aroundTime": 3.0,
         "time": 0.5000001788139343,
         "reverse": true,
+        "rotation": true,
+        "turnSpeed": 5.0,
+        "offsetAngle": 0.0,
         "m_layer": 1,
         "m_node": {
             "polymorphic_id": 1,
@@ -2647,7 +2650,7 @@
             "mass": 0.0,
             "autoMass": 1.0,
             "bullet": false,
-            "fixRot": false,
+            "fixRot": true,
             "awake": true
         },
         "types": [
@@ -2737,20 +2740,20 @@
         },
         "routePoints": [
             {
-                "x": -207.0,
+                "x": -220.0,
                 "y": 102.0
             },
             {
-                "x": -42.0,
+                "x": -30.0,
                 "y": 102.0
             },
             {
-                "x": -42.0,
-                "y": -48.0
+                "x": -30.0,
+                "y": -80.0
             },
             {
-                "x": -207.0,
-                "y": -48.0
+                "x": -220.0,
+                "y": -80.0
             }
         ],
         "pointTimes": [
@@ -2763,6 +2766,9 @@
         "aroundTime": 5.0,
         "time": 0.583333432674408,
         "reverse": true,
+        "rotation": true,
+        "turnSpeed": 4.0,
+        "offsetAngle": 0.0,
         "m_layer": 1,
         "m_node": {
             "polymorphic_id": 1,
@@ -12682,5 +12688,57 @@
             }
         },
         "m_layer": 1
+    },
+    "value44": {
+        "name": "Controls",
+        "transform": {
+            "position": {
+                "x": -640.0,
+                "y": -250.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 27.0,
+                "y": 18.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class SubWindow"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483684,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\Controls.png"
+                }
+            }
+        }
     }
 }

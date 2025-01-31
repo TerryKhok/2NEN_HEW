@@ -11,6 +11,7 @@
 #include "FlickeringRenderColor.h"
 #include "ChaseCamera.h"
 #include "FixedSubWindowWorldPos.h"
+#include "SpiderSilk.h"
 
 class SeigoTestScene :public Scene
 {

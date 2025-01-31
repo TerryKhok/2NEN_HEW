@@ -44,6 +44,33 @@ class RunFixedRoute : public Component
 
 	void(RunFixedRoute::* pRunFunc)(Vector2) = &RunFixedRoute::Run;
 
+	float SmoothRotateRad(float current, float target, float& velocity, float smoothTime, float deltaTime) {
+		float omega = 2.0f / smoothTime;
+		float x = omega * deltaTime;
+		float expFactor = 1.0f / (1.0f + x + 0.48f * x * x + 0.235f * x * x * x);
+
+		float difference = fmod(target - current + Math::PI, 2 * Math::PI) - Math::PI; // -π ～ π に正規化
+		float temp = (velocity + omega * difference) * deltaTime;
+		velocity = (velocity - omega * temp) * expFactor;
+
+		return current + (difference + temp) * expFactor;
+	}
+
+	// ラジアン角度を一定速度で補間し、オフセットを適用
+	float LerpAngleRad(float current, float target) {
+		float offsetTarget = target + offsetAngle; // 目標角度にオフセットを適用
+		float difference = fmod(offsetTarget - current + Math::PI, 2 * Math::PI) - Math::PI; // -π ～ π の範囲に正規化
+		float step = turnSpeed * deltaTime;
+
+		// 目標角度を超えないように調整
+		if (std::fabs(difference) < step)
+			return offsetTarget;
+
+		return current + (difference > 0 ? step : -step);
+	}
+
+	float deltaTime = 1.0f / UPDATE_FPS; // 16ms (60FPS)
+
 	void Update() override
 	{
 		int pointNum = (int)routePoints.size();
@@ -56,6 +83,17 @@ class RunFixedRoute : public Component
 		targetPos.Lerp(t, routePoints[currentIndex], routePoints[nextIndex]);
 
 		(this->*pRunFunc)(targetPos);
+
+		if (rotation)
+		{
+			//Vector2 vec = targetPos - m_this->transform.position;
+			Vector2 vec = routePoints[nextIndex] - routePoints[currentIndex];
+			float targetRadZ = std::atan2(vec.y, vec.x) + Math::PI;
+			auto& angelZ = m_this->transform.angle.z;
+			float rad = LerpAngleRad((float)angelZ.Get(), targetRadZ);
+			if (Math::RadToDeg(rad) >= 359.0f) rad = 0.0f;
+			angelZ.Set(rad);
+		}
 
 		time += 1.0f / UPDATE_FPS;
 
@@ -102,7 +140,17 @@ private:
 			CalculationPointTime();
 		}
 		ImGui::Checkbox("Reverse##FixedRouteTime", &reverse);
+		ImGui::Checkbox("Rotation##FixedRouteTime", &rotation);
+		if (rotation)
+		{
+			ImGui::InputFloat("turnTime##FixedRouteTime", &turnSpeed);
 
+			float angle = Math::RadToDeg(offsetAngle);
+			if (ImGui::InputFloat("offsetAngle##FixedRouteTime", &angle))
+			{
+				offsetAngle = Math::DegToRad(angle);
+			}
+		}
 
 		bool edit = _handle.DrawLockButton("FixedRoutePoint");
 		/*if (ImGui::Checkbox("EditLock##fixedRoutePoint", &edit))
@@ -230,14 +278,20 @@ private:
 	float time = 0.0f;
 	bool reverse = true;
 
+	bool rotation = false;
+	float turnSpeed = Math::PI;
+	float offsetAngle = 0.0f;
+
 	void Serialize(SERIALIZE_OUTPUT& ar) override {
 		ar(CEREAL_NVP(routePoints), CEREAL_NVP(pointTimes), CEREAL_NVP(currentIndex),
-			CEREAL_NVP(aroundTime), CEREAL_NVP(time), CEREAL_NVP(reverse));
+			CEREAL_NVP(aroundTime), CEREAL_NVP(time), CEREAL_NVP(reverse),
+			CEREAL_NVP(rotation), CEREAL_NVP(turnSpeed), CEREAL_NVP(offsetAngle));
 	} 
 	
 	void Deserialize(SERIALIZE_INPUT& ar) override {
 		ar(CEREAL_NVP(routePoints), CEREAL_NVP(pointTimes), CEREAL_NVP(currentIndex),
-			CEREAL_NVP(aroundTime), CEREAL_NVP(time), CEREAL_NVP(reverse));
+			CEREAL_NVP(aroundTime), CEREAL_NVP(time), CEREAL_NVP(reverse),
+			CEREAL_NVP(rotation), CEREAL_NVP(turnSpeed), CEREAL_NVP(offsetAngle));
 	}
 };
 

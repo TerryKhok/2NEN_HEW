@@ -60,7 +60,7 @@ class SelectTrigger : public Component
 		static char str[128] = {};
 		memset(str, '\0', strlen(str));
 		memcpy(str, targetName.c_str(), targetName.size());
-		if (ImGui::InputText("##SelectTrigger", str, sizeof(str), ImGuiInputTextFlags_EnterReturnsTrue) && str[0] != '\0')
+		if (ImGui::InputText("targetName##SelectTrigger", str, sizeof(str), ImGuiInputTextFlags_EnterReturnsTrue) && str[0] != '\0')
 		{
 			targetName = str;
 		}

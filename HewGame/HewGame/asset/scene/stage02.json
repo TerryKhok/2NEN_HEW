@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 22,
+    "objectNum": 23,
     "value0": {
         "name": "map",
         "transform": {
@@ -741,7 +741,7 @@
         "transform": {
             "position": {
                 "x": -580.0,
-                "y": -180.0,
+                "y": -20.0,
                 "z": 0.5
             },
             "scale": {
@@ -794,7 +794,7 @@
         "data": {
             "pos": {
                 "vec.x": -58.0,
-                "vec.y": -18.0
+                "vec.y": -2.0
             },
             "rot": {
                 "rot.c": 1.0,
@@ -1071,7 +1071,7 @@
         "transform": {
             "position": {
                 "x": 580.0,
-                "y": -180.0,
+                "y": -20.0,
                 "z": 0.5
             },
             "scale": {
@@ -1124,7 +1124,7 @@
         "data": {
             "pos": {
                 "vec.x": 58.0,
-                "vec.y": -18.0
+                "vec.y": -2.0
             },
             "rot": {
                 "rot.c": 1.0,
@@ -9815,6 +9815,58 @@
                 "value7": {
                     "vec.x": 0.0,
                     "vec.y": 0.0
+                }
+            }
+        }
+    },
+    "value22": {
+        "name": "Controls",
+        "transform": {
+            "position": {
+                "x": -640.0,
+                "y": -250.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 27.0,
+                "y": 18.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class SubWindow"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483663,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\Controls.png"
                 }
             }
         }

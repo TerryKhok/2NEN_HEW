@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 54,
+    "objectNum": 56,
     "value0": {
         "name": "backgroundCenter",
         "transform": {
@@ -1236,7 +1236,7 @@
                 }
             }
         },
-        "m_layer": 1,
+        "m_layer": 3,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -14304,7 +14304,7 @@
             "class Renderer",
             "class SelectTrigger"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -14319,7 +14319,7 @@
                         "f.x": 1.0,
                         "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 1.0
+                        "f.w": 0.7843137383460999
                     },
                     "path": "asset\\stageLogo\\stage4logo.png"
                 }
@@ -14371,7 +14371,7 @@
             "class Renderer",
             "class SelectTrigger"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -14386,7 +14386,7 @@
                         "f.x": 1.0,
                         "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 1.0
+                        "f.w": 0.7843137383460999
                     },
                     "path": "asset\\stageLogo\\stage5logo.png"
                 }
@@ -14438,7 +14438,7 @@
             "class Renderer",
             "class SelectTrigger"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -14453,7 +14453,7 @@
                         "f.x": 1.0,
                         "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 1.0
+                        "f.w": 0.7843137383460999
                     },
                     "path": "asset\\stageLogo\\stage6logo.png"
                 }
@@ -14505,7 +14505,7 @@
             "class Renderer",
             "class SelectTrigger"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -14520,7 +14520,7 @@
                         "f.x": 1.0,
                         "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 1.0
+                        "f.w": 0.7843137383460999
                     },
                     "path": "asset\\stageLogo\\stage7logo.png"
                 }
@@ -14572,7 +14572,7 @@
             "class Renderer",
             "class SelectTrigger"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -14587,7 +14587,7 @@
                         "f.x": 1.0,
                         "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 1.0
+                        "f.w": 0.7843137383460999
                     },
                     "path": "asset\\stageLogo\\stage8logo.png"
                 }
@@ -14639,7 +14639,7 @@
             "class Renderer",
             "class SelectTrigger"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -14654,7 +14654,7 @@
                         "f.x": 1.0,
                         "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 1.0
+                        "f.w": 0.7843137383460999
                     },
                     "path": "asset\\stageLogo\\stage9logo.png"
                 }
@@ -14706,7 +14706,7 @@
             "class Renderer",
             "class SelectTrigger"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -14721,7 +14721,7 @@
                         "f.x": 1.0,
                         "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 1.0
+                        "f.w": 0.7843137383460999
                     },
                     "path": "asset\\stageLogo\\stage10logo.png"
                 }
@@ -14773,7 +14773,7 @@
             "class Renderer",
             "class SelectTrigger"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -14788,7 +14788,7 @@
                         "f.x": 1.0,
                         "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 1.0
+                        "f.w": 0.7843137383460999
                     },
                     "path": "asset\\stageLogo\\stage11logo.png"
                 }
@@ -14840,7 +14840,7 @@
             "class Renderer",
             "class SelectTrigger"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -14855,7 +14855,7 @@
                         "f.x": 1.0,
                         "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 1.0
+                        "f.w": 0.7843137383460999
                     },
                     "path": "asset\\stageLogo\\stage12logo.png"
                 }
@@ -14907,7 +14907,7 @@
             "class Renderer",
             "class SelectTrigger"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -14922,7 +14922,7 @@
                         "f.x": 1.0,
                         "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 1.0
+                        "f.w": 0.7843137383460999
                     },
                     "path": "asset\\stageLogo\\stage3logo.png"
                 }
@@ -16506,7 +16506,10 @@
         "currentIndex": 7,
         "aroundTime": 10.0,
         "time": 0.15000000596046449,
-        "reverse": true
+        "reverse": true,
+        "rotation": false,
+        "turnSpeed": 3.1415927410125734,
+        "offsetAngle": 0.0
     },
     "value30": {
         "name": "chaseCameraLeft",
@@ -20443,7 +20446,7 @@
                         "f.x": 1.0,
                         "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 1.0
+                        "f.w": 0.7843137383460999
                     },
                     "path": "asset\\stageLogo\\stage1logo.png"
                 }
@@ -20510,7 +20513,7 @@
                         "f.x": 1.0,
                         "f.y": 1.0,
                         "f.z": 1.0,
-                        "f.w": 1.0
+                        "f.w": 0.7843137383460999
                     },
                     "path": "asset\\stageLogo\\stage2logo.png"
                 }
@@ -21754,5 +21757,145 @@
                 }
             }
         }
+    },
+    "value54": {
+        "name": "spider",
+        "transform": {
+            "position": {
+                "x": -130.0,
+                "y": -620.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 7.0,
+                "y": 7.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class Animator",
+            "class RunFixedRoute"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 2,
+            "ptr_wrapper": {
+                "id": 2147483696,
+                "data": {
+                    "value0": {
+                        "active": true,
+                        "m_offset": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "m_color": {
+                            "f.x": 1.0,
+                            "f.y": 1.0,
+                            "f.z": 1.0,
+                            "f.w": 1.0
+                        },
+                        "path": "asset\\spritesheet\\enemy_spider_climb.png"
+                    },
+                    "m_scaleX": 0.125,
+                    "m_scaleY": 0.3333333432674408,
+                    "m_frameX": 0,
+                    "m_frameY": 0
+                }
+            }
+        },
+        "clipSize": 1,
+        "name": "climb",
+        "path": "asset\\animationClip\\enemy_spider_climb.amcp",
+        "loop": true,
+        "currentClipName": "climb",
+        "pause": false,
+        "routePoints": [
+            {
+                "x": -130.0,
+                "y": -620.0
+            },
+            {
+                "x": -130.0,
+                "y": -1000.0
+            }
+        ],
+        "pointTimes": [
+            5.0,
+            5.0
+        ],
+        "currentIndex": 0,
+        "aroundTime": 10.0,
+        "time": 0.0,
+        "reverse": true,
+        "rotation": false,
+        "turnSpeed": 3.1415927410125734,
+        "offsetAngle": 0.0
+    },
+    "value55": {
+        "name": "spiderSilk",
+        "transform": {
+            "position": {
+                "x": -130.0,
+                "y": -590.0399780273438,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 0.5059998035430908,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class SpiderSilk"
+        ],
+        "m_layer": 0,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483697,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "null"
+                }
+            }
+        },
+        "targetName": "spider",
+        "silkLength": 500.0
     }
 }
