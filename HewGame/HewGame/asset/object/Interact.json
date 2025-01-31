@@ -6,7 +6,7 @@
             "position": {
                 "x": 0.0,
                 "y": -100.0,
-                "z": 0.0
+                "z": 0.5
             },
             "scale": {
                 "x": 15.0,
@@ -57,7 +57,7 @@
         "data": {
             "pos": {
                 "vec.x": 0.0,
-                "vec.y": -10.0
+                "vec.y": -10.050000190734864
             },
             "rot": {
                 "rot.c": 1.0,
@@ -76,6 +76,7 @@
             "fixRot": false,
             "awake": true
         },
-        "types": []
+        "types": [],
+        "isWave": false
     }
 }

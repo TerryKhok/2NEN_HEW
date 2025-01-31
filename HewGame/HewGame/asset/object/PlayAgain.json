@@ -4,7 +4,7 @@
         "name": "PlayAgain",
         "transform": {
             "position": {
-                "x": -550.0,
+                "x": -326.2581481933594,
                 "y": 0.0,
                 "z": 0.0
             },
@@ -53,8 +53,8 @@
             }
         },
         "isWave": false,
-        "targetName": "Interact",
-        "funcName": "ChangeCurrentStageMenu",
+        "targetName": "null",
+        "funcName": "",
         "beforeColor": {
             "f.x": 1.0,
             "f.y": 1.0,
@@ -62,11 +62,11 @@
             "f.w": 1.0
         },
         "selectColor": {
-            "f.x": 0.5441176891326904,
-            "f.y": 0.5441176891326904,
-            "f.z": 0.5441176891326904,
+            "f.x": 1.0,
+            "f.y": 1.0,
+            "f.z": 1.0,
             "f.w": 1.0
         },
-        "pause": true
+        "pause": false
     }
 }
