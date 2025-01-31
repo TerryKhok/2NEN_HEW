@@ -769,7 +769,7 @@
             "class SubWindow",
             "class MoveSubWindow"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {

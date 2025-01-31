@@ -1,13 +1,13 @@
 {
     "index": 115,
-    "objectNum": 25,
+    "objectNum": 28,
     "value0": {
         "name": "wall",
         "transform": {
             "position": {
                 "x": 0.0,
                 "y": 0.0,
-                "z": 0.0
+                "z": 0.5
             },
             "scale": {
                 "x": 97.0,
@@ -52,7 +52,7 @@
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": true
+            "awake": false
         },
         "types": [
             4,
@@ -194,8 +194,8 @@
         "name": "Player_1",
         "transform": {
             "position": {
-                "x": -412.8968505859375,
-                "y": -169.5439910888672,
+                "x": -452.4881591796875,
+                "y": -172.50698852539063,
                 "z": 0.5
             },
             "scale": {
@@ -245,7 +245,7 @@
                     },
                     "m_scaleX": 0.125,
                     "m_scaleY": 0.3333333432674408,
-                    "m_frameX": 0,
+                    "m_frameX": 6,
                     "m_frameY": 0
                 }
             }
@@ -376,8 +376,8 @@
         "m_filter": 8,
         "data": {
             "pos": {
-                "vec.x": -41.2896842956543,
-                "vec.y": -16.95439910888672
+                "vec.x": -45.248817443847659,
+                "vec.y": -17.25069808959961
             },
             "rot": {
                 "rot.c": 1.0,
@@ -1237,7 +1237,7 @@
             "position": {
                 "x": 399.0,
                 "y": 147.0,
-                "z": -1.0
+                "z": 0.5
             },
             "scale": {
                 "x": 16.0,
@@ -1400,7 +1400,7 @@
             "position": {
                 "x": 400.0,
                 "y": 50.0,
-                "z": 0.0
+                "z": 0.5
             },
             "scale": {
                 "x": 15.0,
@@ -1444,7 +1444,7 @@
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": true
+            "awake": false
         },
         "types": [
             3
@@ -1538,7 +1538,7 @@
             "position": {
                 "x": -400.0,
                 "y": -275.0,
-                "z": 0.0
+                "z": 0.5
             },
             "scale": {
                 "x": 15.0,
@@ -1698,7 +1698,7 @@
             "position": {
                 "x": 125.0,
                 "y": 50.0,
-                "z": 0.0
+                "z": 0.5
             },
             "scale": {
                 "x": 10.0,
@@ -1743,7 +1743,7 @@
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": true
+            "awake": false
         },
         "types": [
             3
@@ -1858,7 +1858,7 @@
             "position": {
                 "x": -125.0,
                 "y": -100.0,
-                "z": 0.0
+                "z": 0.5
             },
             "scale": {
                 "x": 10.0,
@@ -1903,7 +1903,7 @@
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": true
+            "awake": false
         },
         "types": [
             3
@@ -2047,8 +2047,8 @@
         "name": "ooiwa_1",
         "transform": {
             "position": {
-                "x": 114.18072509765625,
-                "y": 583.0286254882813,
+                "x": -385.05084228515627,
+                "y": -1.8123323917388917,
                 "z": 0.5
             },
             "scale": {
@@ -2064,7 +2064,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.6307394504547119
+                    "radians": 1.5426827669143677
                 }
             }
         },
@@ -2076,25 +2076,25 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": 11.418072700500489,
-                "vec.y": 58.30286407470703
+                "vec.x": -38.50508499145508,
+                "vec.y": -0.1812332421541214
             },
             "rot": {
-                "rot.c": 0.8074358105659485,
-                "rot.s": 0.5899553894996643
+                "rot.c": 0.028110507875680925,
+                "rot.s": 0.9996048212051392
             },
             "type": 2,
             "lineVec": {
-                "vec.x": -4.910167217254639,
-                "vec.y": -1.745836853981018
+                "vec.x": 0.0,
+                "vec.y": 0.0
             },
-            "angleVec": 0.5485604405403137,
+            "angleVec": 0.0,
             "gravity": 10.0,
             "mass": 300.0,
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": true
+            "awake": false
         },
         "types": [
             0
@@ -2138,8 +2138,8 @@
         "name": "ooiwa",
         "transform": {
             "position": {
-                "x": -167.81927490234376,
-                "y": 505.02862548828127,
+                "x": -266.5271301269531,
+                "y": -150.15020751953126,
                 "z": 0.5
             },
             "scale": {
@@ -2155,7 +2155,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.6307394504547119
+                    "radians": 0.8040619492530823
                 }
             }
         },
@@ -2167,25 +2167,25 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": -16.78192710876465,
-                "vec.y": 50.50286102294922
+                "vec.x": -26.652713775634767,
+                "vec.y": -15.015021324157715
             },
             "rot": {
-                "rot.c": 0.8074358105659485,
-                "rot.s": 0.5899553894996643
+                "rot.c": 0.693786084651947,
+                "rot.s": 0.7201812267303467
             },
             "type": 2,
             "lineVec": {
-                "vec.x": -4.910167217254639,
-                "vec.y": -1.745836853981018
+                "vec.x": 0.0,
+                "vec.y": 0.0
             },
-            "angleVec": 0.5485604405403137,
+            "angleVec": 0.0,
             "gravity": 10.0,
             "mass": 300.0,
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": true
+            "awake": false
         },
         "types": [
             0
@@ -2226,6 +2226,381 @@
         }
     },
     "value17": {
+        "name": "ooiwa_2",
+        "transform": {
+            "position": {
+                "x": 445.2367858886719,
+                "y": -295.007080078125,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 6.0,
+                "y": 6.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": -1.8817245960235596
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody",
+            "class Renderer"
+        ],
+        "m_filter": 1,
+        "data": {
+            "pos": {
+                "vec.x": 44.523677825927737,
+                "vec.y": -29.500709533691408
+            },
+            "rot": {
+                "rot.c": -0.30594101548194888,
+                "rot.s": -0.952050507068634
+            },
+            "type": 2,
+            "lineVec": {
+                "vec.x": -0.03366272896528244,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.011222236789762974,
+            "gravity": 10.0,
+            "mass": 28.274333953857423,
+            "autoMass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": true
+        },
+        "types": [
+            0
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "circle": {
+            "circle.center": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "circle.radius": 3.0
+        },
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483664,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\Iwa.png"
+                }
+            }
+        }
+    },
+    "value18": {
+        "name": "ooiwa_2_1",
+        "transform": {
+            "position": {
+                "x": 179.9339599609375,
+                "y": -310.0070495605469,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 3.0,
+                "y": 3.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 1.9010112285614014
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody",
+            "class Renderer"
+        ],
+        "m_filter": 1,
+        "data": {
+            "pos": {
+                "vec.x": 17.993396759033204,
+                "vec.y": -31.00070571899414
+            },
+            "rot": {
+                "rot.c": -0.3242446780204773,
+                "rot.s": 0.94597327709198
+            },
+            "type": 2,
+            "lineVec": {
+                "vec.x": 1.2115620374679566,
+                "vec.y": 0.0
+            },
+            "angleVec": -0.8078981041908264,
+            "gravity": 10.0,
+            "mass": 7.0685834884643559,
+            "autoMass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": true
+        },
+        "types": [
+            0
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "circle": {
+            "circle.center": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "circle.radius": 1.5
+        },
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483665,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\Iwa.png"
+                }
+            }
+        }
+    },
+    "value19": {
+        "name": "ooiwa_2_2",
+        "transform": {
+            "position": {
+                "x": -305.00006103515627,
+                "y": -305.0069580078125,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 4.0,
+                "y": 4.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": -1.8765764236450196
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Box2DBody",
+            "class Renderer"
+        ],
+        "m_filter": 1,
+        "data": {
+            "pos": {
+                "vec.x": -30.5000057220459,
+                "vec.y": -30.500694274902345
+            },
+            "rot": {
+                "rot.c": -0.301035612821579,
+                "rot.s": -0.9536129236221314
+            },
+            "type": 2,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 10.0,
+            "mass": 12.566370964050293,
+            "autoMass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            0
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "circle": {
+            "circle.center": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "circle.radius": 2.0
+        },
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483666,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\Iwa.png"
+                }
+            }
+        }
+    },
+    "value20": {
+        "name": "Pillar",
+        "transform": {
+            "position": {
+                "x": -99.0,
+                "y": -24.0,
+                "z": -1.0
+            },
+            "scale": {
+                "x": 54.21461868286133,
+                "y": 60.154273986816409,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer"
+        ],
+        "m_layer": 0,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483667,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\background\\Hashira 1.png"
+                }
+            }
+        }
+    },
+    "value21": {
+        "name": "Pillar_1",
+        "transform": {
+            "position": {
+                "x": 333.0,
+                "y": -24.0,
+                "z": -1.0
+            },
+            "scale": {
+                "x": 54.21461868286133,
+                "y": 60.154273986816409,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer"
+        ],
+        "m_layer": 0,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483668,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\background\\Hashira 1.png"
+                }
+            }
+        }
+    },
+    "value22": {
         "name": "ground",
         "transform": {
             "position": {
@@ -2367,7 +2742,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483664,
+                "id": 2147483669,
                 "data": {
                     "active": false,
                     "m_offset": {
@@ -2385,13 +2760,13 @@
             }
         }
     },
-    "value18": {
+    "value23": {
         "name": "ground2",
         "transform": {
             "position": {
                 "x": 0.0,
                 "y": -375.0,
-                "z": 0.0
+                "z": 0.5
             },
             "scale": {
                 "x": 96.0,
@@ -2527,7 +2902,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483665,
+                "id": 2147483670,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -2545,109 +2920,7 @@
             }
         }
     },
-    "value19": {
-        "name": "Pillar",
-        "transform": {
-            "position": {
-                "x": -99.0,
-                "y": -24.0,
-                "z": -1.0
-            },
-            "scale": {
-                "x": 54.21461868286133,
-                "y": 60.154273986816409,
-                "z": 1.0
-            },
-            "angle": {
-                "x": {
-                    "radians": 0.0
-                },
-                "y": {
-                    "radians": 0.0
-                },
-                "z": {
-                    "radians": 0.0
-                }
-            }
-        },
-        "active": true,
-        "comNames": [
-            "class Renderer"
-        ],
-        "m_layer": 0,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483666,
-                "data": {
-                    "active": true,
-                    "m_offset": {
-                        "x": 0.0,
-                        "y": 0.0
-                    },
-                    "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
-                        "f.z": 1.0,
-                        "f.w": 1.0
-                    },
-                    "path": "asset\\background\\Hashira 1.png"
-                }
-            }
-        }
-    },
-    "value20": {
-        "name": "Pillar_1",
-        "transform": {
-            "position": {
-                "x": 333.0,
-                "y": -24.0,
-                "z": -1.0
-            },
-            "scale": {
-                "x": 54.21461868286133,
-                "y": 60.154273986816409,
-                "z": 1.0
-            },
-            "angle": {
-                "x": {
-                    "radians": 0.0
-                },
-                "y": {
-                    "radians": 0.0
-                },
-                "z": {
-                    "radians": 0.0
-                }
-            }
-        },
-        "active": true,
-        "comNames": [
-            "class Renderer"
-        ],
-        "m_layer": 0,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483667,
-                "data": {
-                    "active": true,
-                    "m_offset": {
-                        "x": 0.0,
-                        "y": 0.0
-                    },
-                    "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
-                        "f.z": 1.0,
-                        "f.w": 1.0
-                    },
-                    "path": "asset\\background\\Hashira 1.png"
-                }
-            }
-        }
-    },
-    "value21": {
+    "value24": {
         "name": "Crystal",
         "transform": {
             "position": {
@@ -2680,7 +2953,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483668,
+                "id": 2147483671,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -2698,7 +2971,7 @@
             }
         }
     },
-    "value22": {
+    "value25": {
         "name": "Crystal_1",
         "transform": {
             "position": {
@@ -2731,7 +3004,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483669,
+                "id": 2147483672,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -2749,7 +3022,7 @@
             }
         }
     },
-    "value23": {
+    "value26": {
         "name": "Crystal_2",
         "transform": {
             "position": {
@@ -2782,7 +3055,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483670,
+                "id": 2147483673,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -2800,7 +3073,7 @@
             }
         }
     },
-    "value24": {
+    "value27": {
         "name": "tile_map",
         "transform": {
             "position": {
@@ -2833,7 +3106,7 @@
             "polymorphic_id": 2147483650,
             "polymorphic_name": "TileRenderNode",
             "ptr_wrapper": {
-                "id": 2147483671,
+                "id": 2147483674,
                 "data": {
                     "value0": {
                         "active": true,
