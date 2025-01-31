@@ -1,0 +1,81 @@
+{
+    "index": 111,
+    "*selectedObject": {
+        "name": "Interact",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": -100.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 15.0,
+                "y": 15.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class MoveRectPause",
+            "class Box2DBody",
+            "class SubWindow"
+        ],
+        "m_layer": 3,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483649,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\interact.png"
+                }
+            }
+        },
+        "m_filter": 1,
+        "data": {
+            "pos": {
+                "vec.x": 0.0,
+                "vec.y": -10.0
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
+            "type": 2,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 0.0,
+            "autoMass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": true
+        },
+        "types": []
+    }
+}

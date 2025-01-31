@@ -15,8 +15,6 @@ namespace GameManager
 	static constexpr int stageNum = 12;
 	static constexpr const char* stageName = "stage";
 
-	static void Init();
-
 	static void ChangeStage();
 
 	extern int currentStage;

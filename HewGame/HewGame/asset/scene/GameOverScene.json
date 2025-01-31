@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 24,
+    "objectNum": 25,
     "value0": {
         "name": "background",
         "transform": {
@@ -2824,8 +2824,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": 0.000013361467608774547,
-                "vec.y": 0.000017530472177895719
+                "vec.x": 0.000012363058885966894,
+                "vec.y": 0.00001751188210619148
             },
             "angleVec": -0.000003288271955170785,
             "gravity": 10.0,
@@ -3076,8 +3076,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": -0.000005540377514989814,
-                "vec.y": 9.3361830977301e-7
+                "vec.x": -0.000005385655185818905,
+                "vec.y": 0.0000018173775515606395
             },
             "angleVec": 0.0000027921055334445556,
             "gravity": 10.0,
@@ -3252,8 +3252,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": -0.0000068256331360316839,
-                "vec.y": 0.000012604313269548584
+                "vec.x": -0.000007320707481994759,
+                "vec.y": 0.000013598481928056572
             },
             "angleVec": 0.0000034562549444672188,
             "gravity": 10.0,
@@ -3780,8 +3780,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": -0.000013946088984084782,
-                "vec.y": 0.000024941678930190393
+                "vec.x": -0.000014961574379412923,
+                "vec.y": 0.00002688039057829883
             },
             "angleVec": 0.000006810883860453032,
             "gravity": 10.0,
@@ -4132,8 +4132,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": -0.07598349452018738,
-                "vec.y": -0.3325868248939514
+                "vec.x": -0.10670705139636994,
+                "vec.y": -0.27203524112701418
             },
             "angleVec": 0.2113078236579895,
             "gravity": 10.0,
@@ -4625,7 +4625,8 @@
             "f.y": 0.0,
             "f.z": 1.0,
             "f.w": 1.0
-        }
+        },
+        "pause": false
     },
     "value20": {
         "name": "ReturnTitle",
@@ -4692,7 +4693,8 @@
             "f.y": 0.23529410362243653,
             "f.z": 1.0,
             "f.w": 1.0
-        }
+        },
+        "pause": false
     },
     "value21": {
         "name": "SelectStage",
@@ -4759,7 +4761,8 @@
             "f.y": 1.0,
             "f.z": 0.058823585510253909,
             "f.w": 1.0
-        }
+        },
+        "pause": false
     },
     "value22": {
         "name": "lizard_1_1",
@@ -5097,5 +5100,186 @@
         "aroundTime": 10.0,
         "time": 1.3499994277954102,
         "reverse": true
+    },
+    "value24": {
+        "name": "Player",
+        "transform": {
+            "position": {
+                "x": -819.83740234375,
+                "y": 19.304702758789064,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 7.0,
+                "y": 14.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class Animator"
+        ],
+        "m_layer": 2,
+        "m_node": {
+            "polymorphic_id": 2,
+            "ptr_wrapper": {
+                "id": 2147483672,
+                "data": {
+                    "value0": {
+                        "active": true,
+                        "m_offset": {
+                            "x": 0.0,
+                            "y": 15.0
+                        },
+                        "m_color": {
+                            "f.x": 1.0,
+                            "f.y": 1.0,
+                            "f.z": 1.0,
+                            "f.w": 1.0
+                        },
+                        "path": "asset\\spritesheet\\player_normal_standby.png"
+                    },
+                    "m_scaleX": 0.125,
+                    "m_scaleY": 0.3333333432674408,
+                    "m_frameX": 0,
+                    "m_frameY": 0
+                }
+            }
+        },
+        "clipSize": 40,
+        "name": "bounceBlink",
+        "path": "asset\\animationClip\\player_bounce_blink.amcp",
+        "loop": true,
+        "name": "bounceDamage",
+        "path": "asset\\animationClip\\player_bounce_damage.amcp",
+        "loop": false,
+        "name": "bounceFloat",
+        "path": "asset\\animationClip\\player_bounce_float.amcp",
+        "loop": true,
+        "name": "bounceGoal",
+        "path": "asset\\animationClip\\player_bounce_goal.amcp",
+        "loop": true,
+        "name": "bounceJump",
+        "path": "asset\\animationClip\\player_bounce_jump.amcp",
+        "loop": false,
+        "name": "bounceLanding",
+        "path": "asset\\animationClip\\player_bounce_landing.amcp",
+        "loop": false,
+        "name": "bounceStandBy",
+        "path": "asset\\animationClip\\player_bounce_standby.amcp",
+        "loop": true,
+        "name": "bounceWalk",
+        "path": "asset\\animationClip\\player_bounce_walk.amcp",
+        "loop": true,
+        "name": "floatBlink",
+        "path": "asset\\animationClip\\player_float_blink.amcp",
+        "loop": true,
+        "name": "floatDamage",
+        "path": "asset\\animationClip\\player_float_damage.amcp",
+        "loop": false,
+        "name": "floatFloat",
+        "path": "asset\\animationClip\\player_float_float.amcp",
+        "loop": true,
+        "name": "floatGoal",
+        "path": "asset\\animationClip\\player_float_goal.amcp",
+        "loop": true,
+        "name": "floatJump",
+        "path": "asset\\animationClip\\player_float_jump.amcp",
+        "loop": false,
+        "name": "floatLanding",
+        "path": "asset\\animationClip\\player_float_landing.amcp",
+        "loop": false,
+        "name": "floatStandBy",
+        "path": "asset\\animationClip\\player_float_standby.amcp",
+        "loop": true,
+        "name": "floatWalk",
+        "path": "asset\\animationClip\\player_float_walk.amcp",
+        "loop": true,
+        "name": "lowgravityBlink",
+        "path": "asset\\animationClip\\player_lowgravity_blink.amcp",
+        "loop": true,
+        "name": "lowgravityDamage",
+        "path": "asset\\animationClip\\player_lowgravity_damage.amcp",
+        "loop": false,
+        "name": "lowgravityFloat",
+        "path": "asset\\animationClip\\player_lowgravity_float.amcp",
+        "loop": true,
+        "name": "lowgravityGoal",
+        "path": "asset\\animationClip\\player_lowgravity_goal.amcp",
+        "loop": true,
+        "name": "lowgravityJump",
+        "path": "asset\\animationClip\\player_lowgravity_jump.amcp",
+        "loop": false,
+        "name": "lowgravityLanding",
+        "path": "asset\\animationClip\\player_lowgravity_landing.amcp",
+        "loop": false,
+        "name": "lowgravityStandBy",
+        "path": "asset\\animationClip\\player_lowgravity_standby.amcp",
+        "loop": true,
+        "name": "lowgravityWalk",
+        "path": "asset\\animationClip\\player_lowgravity_walk.amcp",
+        "loop": true,
+        "name": "normalBlink",
+        "path": "asset\\animationClip\\player_normal_blink.amcp",
+        "loop": true,
+        "name": "normalDamage",
+        "path": "asset\\animationClip\\player_normal_damage.amcp",
+        "loop": false,
+        "name": "normalFloat",
+        "path": "asset\\animationClip\\player_normal_float.amcp",
+        "loop": true,
+        "name": "normalGoal",
+        "path": "asset\\animationClip\\player_normal_goal.amcp",
+        "loop": true,
+        "name": "normalJump",
+        "path": "asset\\animationClip\\player_normal_jump.amcp",
+        "loop": false,
+        "name": "normalLanding",
+        "path": "asset\\animationClip\\player_normal_landing.amcp",
+        "loop": false,
+        "name": "normalStandBy",
+        "path": "asset\\animationClip\\player_normal_standby.amcp",
+        "loop": true,
+        "name": "normalWalk",
+        "path": "asset\\animationClip\\player_normal_walk.amcp",
+        "loop": true,
+        "name": "transparentBlink",
+        "path": "asset\\animationClip\\player_transparent_blink.amcp",
+        "loop": true,
+        "name": "transparentDamage",
+        "path": "asset\\animationClip\\player_transparent_damage.amcp",
+        "loop": false,
+        "name": "transparentFloat",
+        "path": "asset\\animationClip\\player_transparent_float.amcp",
+        "loop": true,
+        "name": "transparentGoal",
+        "path": "asset\\animationClip\\player_transparent_goal.amcp",
+        "loop": true,
+        "name": "transparentJump",
+        "path": "asset\\animationClip\\player_transparent_jump.amcp",
+        "loop": false,
+        "name": "transparentLanding",
+        "path": "asset\\animationClip\\player_transparent_landing.amcp",
+        "loop": false,
+        "name": "transparentStandBy",
+        "path": "asset\\animationClip\\player_transparent_standby.amcp",
+        "loop": true,
+        "name": "transparentWalk",
+        "path": "asset\\animationClip\\player_transparent_walk.amcp",
+        "loop": true,
+        "currentClipName": "normalStandBy",
+        "pause": false
     }
 }

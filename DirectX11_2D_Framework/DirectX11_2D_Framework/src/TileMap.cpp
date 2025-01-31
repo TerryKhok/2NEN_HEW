@@ -328,7 +328,19 @@ void TileMap::EraseTileTip(Vector2 _pos)
 	m_node->textureList[iter->texIndex].count--;
 	if (m_node->textureList[iter->texIndex].count <= 0)
 	{
-		m_node->textureList.erase(m_node->textureList.begin() + iter->texIndex);
+		int backIndex = (int)m_node->textureList.size() - 1;
+		if (backIndex > 0)
+		{
+			std::swap(m_node->textureList[iter->texIndex], m_node->textureList[backIndex]);
+			for (auto& tip : m_node->tileTips)
+			{
+				if (tip.texIndex == backIndex)
+				{
+					tip.texIndex = iter->texIndex;
+				}
+			}
+		}
+		m_node->textureList.pop_back();
 	}
 
 	tipList.erase(iter);

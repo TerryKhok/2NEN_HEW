@@ -7,7 +7,6 @@
 #include "RockGenerator.h"
 #include "CrushRock.h"
 #include "RunFixedRoute.h"
-#include "MoveRect.h"
 #include "BreakWall.h"
 #include "FlickeringRenderColor.h"
 #include "ChaseCamera.h"

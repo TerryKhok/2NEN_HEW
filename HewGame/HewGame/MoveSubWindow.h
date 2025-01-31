@@ -31,11 +31,22 @@ private:
 
 extern std::vector<std::stringstream> saveBuffer;
 
+class Pause : public Component
+{
+	void Update()
+	{
+		DeleteObject(m_this);
+		Window::PauseGame();
+	}
+};
+
 class MoveSubWindowManager : public Component
 {
 	void Start() override
 	{
-		Window::PauseGame();
+		menu = false;
+		/*auto pause = Instantiate("pause");
+		pause->AddComponent<Pause>();*/
 	}
 
 	void Proceed() override
@@ -64,6 +75,27 @@ class MoveSubWindowManager : public Component
 	void Update() override
 	{
 		auto& input = Input::Get();
+
+		if (input.KeyTrigger(VK_ESCAPE) || input.ButtonTrigger(XINPUT_GAMEPAD_START))
+		{
+			menu = !menu;
+			if (menu)
+			{
+				moveWindow = false;
+				LoadObject("asset/object/MenuText.json");
+				LoadObject("asset/object/Interact.json");
+				LoadObject("asset/object/SelectStage.json");
+				LoadObject("asset/object/PlayAgain.json");
+				Window::PauseGame();
+			}
+			else if (!moveWindow)
+			{
+				Window::ResumeGame();
+			}
+		}
+
+		if (menu) return;
+
 		if (input.KeyTrigger(VK_E) || input.ButtonTrigger(XINPUT_X))
 		{
 			if (saveBuffer.size() > 1)
@@ -78,12 +110,54 @@ class MoveSubWindowManager : public Component
 			{
 				saveBuffer.pop_back();
 			}*/
+			Window::PauseGame();
 			UndoGameSubWindow();
 		}
 	}
 	void PauseUpdate() override
 	{
 		auto& input = Input::Get();
+
+		if (input.KeyTrigger(VK_ESCAPE) || input.ButtonTrigger(XINPUT_GAMEPAD_START))
+		{
+			menu = !menu;
+			if (menu)
+			{
+				moveWindow = true;
+				LoadObject("asset/object/MenuText.json");
+				LoadObject("asset/object/Interact.json");
+				LoadObject("asset/object/SelectStage.json");
+				LoadObject("asset/object/PlayAgain.json");
+			}
+			else 
+			{
+				auto menuText = ObjectManager::Find("MenuText");
+				if (menuText != nullptr)
+				{
+					DeleteObject(menuText);
+				}
+				auto Interact = ObjectManager::Find("Interact");
+				if (Interact != nullptr)
+				{
+					DeleteObject(Interact);
+				}
+				auto SelectStage = ObjectManager::Find("SelectStage");
+				if (SelectStage != nullptr)
+				{
+					DeleteObject(SelectStage);
+				}
+				auto PlayAgain = ObjectManager::Find("PlayAgain");
+				if (PlayAgain != nullptr)
+				{
+					DeleteObject(PlayAgain);
+				}
+				if (!moveWindow)
+					Window::ResumeGame();
+			}
+		}
+
+		if (menu) return;
+
 		if (input.KeyTrigger(VK_C) || input.ButtonTrigger(XINPUT_RIGHT_SHOULDER))
 		{
 			int size = (int)moveWindows.size();
@@ -156,8 +230,11 @@ class MoveSubWindowManager : public Component
 	}
 
 public:
+
 	static std::vector<std::stringstream> saveBuffer;
 	int selectIndex = 0;
+	static bool menu;
+	bool moveWindow = false;
 	std::vector<MoveSubWindow*> moveWindows;
 
 private:

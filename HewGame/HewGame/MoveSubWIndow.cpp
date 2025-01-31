@@ -2,6 +2,7 @@
 #include "Permeation.h"
 
 std::vector<std::stringstream> MoveSubWindowManager::saveBuffer;
+bool MoveSubWindowManager::menu = false;
 
 void MoveSubWindow::Proceed()
 {
@@ -21,7 +22,7 @@ void MoveSubWindow::Proceed()
 
 void MoveSubWindow::PauseUpdate()
 {
-	if (confirmed) return;
+	if (confirmed || MoveSubWindowManager::menu) return;
 
 	if (selfIndex == subWndManager->selectIndex)
 	{

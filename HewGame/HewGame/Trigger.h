@@ -13,7 +13,7 @@ class SelectTrigger : public Component
 		render->SetColor(beforeColor);
 	}
 
-	void Update() override
+	void Check()
 	{
 		auto target = ObjectManager::Find(targetName);
 		if (target != nullptr)
@@ -41,6 +41,20 @@ class SelectTrigger : public Component
 		}
 	}
 
+	void Update() override
+	{
+		if (pause) return;
+
+		Check();
+	}
+
+	void PauseUpdate() override
+	{
+		if (!pause) return;
+
+		Check();
+	}
+
 	void DrawImGui(ImGuiApp::HandleUI& _handleUi) override
 	{
 		static char str[128] = {};
@@ -53,6 +67,7 @@ class SelectTrigger : public Component
 		FunctionRegistry::DrawPickFunction("Event##SelectTrigger", funcName);
 		ImGui::ColorEdit4("beforeColor##selectTrigger", &beforeColor.x);
 		ImGui::ColorEdit4("selectColor##selectTrigger", &selectColor.x);
+		ImGui::Checkbox("Pause", &pause);
 	}
 public:
 	void EnterEvent()
@@ -73,8 +88,9 @@ private:
 	std::string funcName;
 	DirectX::XMFLOAT4 beforeColor = { 1.0f,1.0f,1.0f,1.0f };
 	DirectX::XMFLOAT4 selectColor = { 1.0f,1.0f,1.0f,1.0f };
+	bool pause = false;
 
-	SERIALIZE_COMPONENT_VALUE(targetName, funcName, beforeColor, selectColor)
+	SERIALIZE_COMPONENT_VALUE(targetName, funcName, beforeColor, selectColor, pause)
 };
 
 SetReflectionComponent(SelectTrigger)
@@ -181,6 +197,23 @@ class MoveVerticalPoint : public Component
 public:
 	Vector2 endPos;
 	float moveTime = 1.25f;
+};
+
+class GoalMove :public Component
+{
+	SAFE_POINTER(Box2DBody,rb)
+
+	void Start() override
+	{
+		rb = m_this->GetComponent<Box2DBody>();
+	}
+
+	void Update() override
+	{
+		rb->SetVelocityX(vecX);
+	}
+public:
+	float vecX = 5.0f;
 };
 
 

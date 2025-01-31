@@ -20,11 +20,15 @@ namespace GameManager
 
 		RenderManager::renderOffset = { 0.0f,0.0f };
 
+		Window::PauseGame();
+
 		SceneManager::LoadScene(sceneName);
 	}
 
 	void ChangeNextStage()
 	{
+		Window::PauseGame();
+
 		MoveSubWindowManager::saveBuffer.clear();
 
 		std::string sceneName = GameManager::stageName;
@@ -43,6 +47,8 @@ namespace GameManager
 
 	void ChangeCurrentStage()
 	{
+		Window::PauseGame();
+
 		MoveSubWindowManager::saveBuffer.clear();
 
 		std::string sceneName = GameManager::stageName;
@@ -54,6 +60,21 @@ namespace GameManager
 		sceneName += std::to_string(GameManager::currentStage);
 		SceneManager::LoadScene(sceneName);
 	}
+
+	void ChangeCurrentStageMenu()
+	{
+		MoveSubWindowManager::saveBuffer.clear();
+
+		std::string sceneName = GameManager::stageName;
+
+		if (GameManager::currentStage < 10)
+		{
+			sceneName += "0";
+		}
+		sceneName += std::to_string(GameManager::currentStage);
+		SceneManager::LoadScene(sceneName);
+	}
+
 
 	static void ChangeTitleScene()
 	{
@@ -78,9 +99,30 @@ namespace GameManager
 		SceneManager::ChangeScene();
 	}
 
+	static void ChangeSelectSceneMenu()
+	{
+	/*	auto ui = ObjectManager::Find("rollArrow");
+		if (ui != nullptr)
+		{
+			ui->SetActive(true);
+			auto rotate = ui->AddComponent<RotationObject>();
+			rotate->rotationAngle = -Math::PI2;
+			rotate->rotationTime = 1.0f;
+		}*/
+
+		Window::ResumeGame();
+
+		SceneManager::LoadScene("SelectScene");
+
+		/*SceneManager::LoadingScene("SelectScene");
+		SceneManager::ChangeScene();*/
+	}
+
 	REGISTER_FUNCTION(ChangeNextStage)
 	REGISTER_FUNCTION(ChangeCurrentStage)
+	REGISTER_FUNCTION(ChangeCurrentStageMenu)
 	REGISTER_FUNCTION(ChangeSelectScene)
+	REGISTER_FUNCTION(ChangeSelectSceneMenu)
 
 	void ChangeStage1()
 	{

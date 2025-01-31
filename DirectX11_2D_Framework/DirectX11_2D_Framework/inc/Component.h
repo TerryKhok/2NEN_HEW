@@ -22,7 +22,7 @@ protected:
 	GameObject* Instantiate(std::string _name);
 	//オブジェクト生成(名前,テクスチャ指定)
 	GameObject* Instantiate(std::string _name, const wchar_t* _texPath);
-
+	//ファイルからオブジェクトを読み込む
 	GameObject* LoadObject(std::filesystem::path _path);
 
 	//Updateの中で削除できないように遅延する

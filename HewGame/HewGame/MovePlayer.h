@@ -3,6 +3,8 @@
 #ifndef A_PLAYER
 #define A_PLAYER
 
+#include "MoveRect.h"
+
 enum PLAYER_MODE
 {
 	NORMAL,
@@ -159,7 +161,6 @@ struct PlayerGoal : public PlayerState
 	}
 };
 
-
 class MovePlayer : public Component
 {
 	enum PLAYER_STATE
@@ -305,7 +306,7 @@ public:
 		LOG("GameOver");
 		render->SetColor({ 1.0f,0.5f,0.5f,1.0f });
 		ChangeState(PLAYER_DAMAGE);
-		m_this->RemoveComponent<MovePlayer>();
+		m_this->RemoveComponent<MovePlayer>();		
 	}
 private:
 	bool isGround = false;

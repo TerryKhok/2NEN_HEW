@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 23,
+    "objectNum": 25,
     "value0": {
         "name": "background",
         "transform": {
@@ -3000,8 +3000,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": 0.000036755714972969147,
-                "vec.y": -0.00007627376908203587
+                "vec.x": 0.00002833209146047011,
+                "vec.y": -0.00007705247116973624
             },
             "angleVec": -0.000013928358384873718,
             "gravity": 10.0,
@@ -3252,8 +3252,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": -0.000006969520654820371,
-                "vec.y": 0.000020446605049073697
+                "vec.x": -0.000006945158929738682,
+                "vec.y": 0.00002058575046248734
             },
             "angleVec": 2.198030415456742e-7,
             "gravity": 10.0,
@@ -3428,8 +3428,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": 0.0000029868074307159988,
-                "vec.y": -0.000011762385838665068
+                "vec.x": 0.0000033393366720702035,
+                "vec.y": -0.000012470307410694659
             },
             "angleVec": -0.0000012305558811931406,
             "gravity": 10.0,
@@ -3956,8 +3956,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": 0.00001387262273055967,
-                "vec.y": -0.000032471580198034647
+                "vec.x": 0.00001732956116029527,
+                "vec.y": -0.00003960962931159884
             },
             "angleVec": -0.000012340881767158863,
             "gravity": 10.0,
@@ -4308,8 +4308,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": -0.000031863903132034469,
-                "vec.y": 0.000024902148652472534
+                "vec.x": -0.00003528060551616363,
+                "vec.y": 0.0000314530661853496
             },
             "angleVec": 0.000011496462320792489,
             "gravity": 10.0,
@@ -4802,7 +4802,8 @@
             "f.y": 0.0,
             "f.z": 1.0,
             "f.w": 1.0
-        }
+        },
+        "pause": false
     },
     "value20": {
         "name": "ReturnTitle",
@@ -4869,7 +4870,8 @@
             "f.y": 0.23529410362243653,
             "f.z": 1.0,
             "f.w": 1.0
-        }
+        },
+        "pause": false
     },
     "value21": {
         "name": "SelectStage",
@@ -4936,7 +4938,8 @@
             "f.y": 1.0,
             "f.z": 0.058823585510253909,
             "f.w": 1.0
-        }
+        },
+        "pause": false
     },
     "value22": {
         "name": "rollArrow",
@@ -4988,5 +4991,133 @@
                 }
             }
         }
+    },
+    "value23": {
+        "name": "routeEnemy",
+        "transform": {
+            "position": {
+                "x": 589.0800170898438,
+                "y": -260.86236572265627,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 14.115433692932129,
+                "y": 9.666902542114258,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class Animator"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 2,
+            "ptr_wrapper": {
+                "id": 2147483671,
+                "data": {
+                    "value0": {
+                        "active": true,
+                        "m_offset": {
+                            "x": 0.0,
+                            "y": 15.0
+                        },
+                        "m_color": {
+                            "f.x": 1.0,
+                            "f.y": 1.0,
+                            "f.z": 1.0,
+                            "f.w": 1.0
+                        },
+                        "path": "asset\\spritesheet\\enemy_lizard_walk.png"
+                    },
+                    "m_scaleX": 0.125,
+                    "m_scaleY": 0.1666666716337204,
+                    "m_frameX": 0,
+                    "m_frameY": 0
+                }
+            }
+        },
+        "clipSize": 1,
+        "name": "lizardWalk",
+        "path": "asset\\animationClip\\enemy_lizard_walk.amcp",
+        "loop": true,
+        "currentClipName": "lizardWalk",
+        "pause": false
+    },
+    "value24": {
+        "name": "teki",
+        "transform": {
+            "position": {
+                "x": -623.8453369140625,
+                "y": 63.506385803222659,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 13.90954303741455,
+                "y": 9.666903495788575,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class Animator"
+        ],
+        "m_layer": 2,
+        "m_node": {
+            "polymorphic_id": 2,
+            "ptr_wrapper": {
+                "id": 2147483672,
+                "data": {
+                    "value0": {
+                        "active": true,
+                        "m_offset": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "m_color": {
+                            "f.x": 1.0,
+                            "f.y": 1.0,
+                            "f.z": 1.0,
+                            "f.w": 1.0
+                        },
+                        "path": "asset\\spritesheet\\enemy_bat_fly.png"
+                    },
+                    "m_scaleX": 0.125,
+                    "m_scaleY": 0.5,
+                    "m_frameX": 0,
+                    "m_frameY": 0
+                }
+            }
+        },
+        "clipSize": 1,
+        "name": "fly",
+        "path": "asset\\animationClip\\enemy_bat_fly.amcp",
+        "loop": true,
+        "currentClipName": "fly",
+        "pause": false
     }
 }

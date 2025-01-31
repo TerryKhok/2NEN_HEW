@@ -35,6 +35,22 @@ class Goal : public Component
 		{
 			player->GameClear();
 			pEvent = &Goal::EventFunc;
+			auto goalMove = _other->AddComponent<GoalMove>();
+			goalMove->vecX = m_this->transform.position.x - _other->transform.position.x;
+			goalMove->vecX /= DEFAULT_OBJECT_SIZE;
+			Animator* ani = nullptr;
+			if (_other->TryGetComponent<Animator>(&ani))
+			{
+				if (goalMove->vecX < 0)
+				{
+					ani->Reverse(false);
+				}
+				else
+				{
+					ani->Reverse(true);
+				}
+				
+			}
 		}
 	}
 
