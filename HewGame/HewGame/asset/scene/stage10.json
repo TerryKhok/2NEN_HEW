@@ -67,7 +67,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 2,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": -33.0
@@ -94,7 +94,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 2,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": 32.5
@@ -121,7 +121,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 2,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": 32.5
@@ -148,7 +148,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 2,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": -33.0
@@ -331,7 +331,7 @@
                 }
             }
         },
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -382,7 +382,7 @@
         "comNames": [
             "class Renderer"
         ],
-        "m_layer": 2,
+        "m_layer": 3,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -433,7 +433,7 @@
         "comNames": [
             "class Renderer"
         ],
-        "m_layer": 4,
+        "m_layer": 5,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -484,7 +484,7 @@
         "comNames": [
             "class Renderer"
         ],
-        "m_layer": 4,
+        "m_layer": 5,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -539,7 +539,7 @@
             "class SubWindow",
             "class MoveSubWindow"
         ],
-        "m_layer": 2,
+        "m_layer": 3,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -7259,7 +7259,7 @@
                 }
             }
         },
-        "m_layer": 1
+        "m_layer": 2
     },
     "value7": {
         "name": "lowgravity_1_1",
@@ -7404,7 +7404,7 @@
         },
         "isWave": true,
         "funcName": "SetPlayerLowGravity",
-        "m_layer": 2,
+        "m_layer": 3,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -7571,7 +7571,7 @@
         },
         "isWave": true,
         "funcName": "SetPlayerLowGravity",
-        "m_layer": 2,
+        "m_layer": 3,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -7738,7 +7738,7 @@
         },
         "isWave": true,
         "funcName": "SetPlayerAntigravity",
-        "m_layer": 2,
+        "m_layer": 3,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -8481,7 +8481,7 @@
         "comNames": [
             "class Renderer"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -8532,7 +8532,7 @@
         "comNames": [
             "class Renderer"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -9194,7 +9194,7 @@
                 }
             }
         },
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -9687,7 +9687,7 @@
                 }
             }
         },
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -10180,7 +10180,7 @@
                 }
             }
         },
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -10673,7 +10673,7 @@
                 }
             }
         },
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -11166,7 +11166,7 @@
                 }
             }
         },
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -11659,7 +11659,7 @@
                 }
             }
         },
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -12152,7 +12152,7 @@
                 }
             }
         },
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -12645,7 +12645,7 @@
                 }
             }
         },
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -13138,7 +13138,7 @@
                 }
             }
         },
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -13631,7 +13631,7 @@
                 }
             }
         },
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -14124,7 +14124,7 @@
                 }
             }
         },
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -14617,7 +14617,7 @@
                 }
             }
         },
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -15110,7 +15110,7 @@
                 }
             }
         },
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -15603,7 +15603,7 @@
                 }
             }
         },
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -16096,7 +16096,7 @@
                 }
             }
         },
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -16589,7 +16589,7 @@
                 }
             }
         },
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -17082,7 +17082,7 @@
                 }
             }
         },
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -17575,7 +17575,7 @@
                 }
             }
         },
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -18068,7 +18068,7 @@
                 }
             }
         },
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -18225,7 +18225,7 @@
             "class RunFixedRoute",
             "class Thon"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 2147483650,
             "polymorphic_name": "UVRenderNode",
@@ -18361,7 +18361,7 @@
             "class Animator",
             "class RunFixedRoute"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 2,
             "ptr_wrapper": {
@@ -18502,7 +18502,7 @@
             "class Box2DBody",
             "class MovePlayer"
         ],
-        "m_layer": 2,
+        "m_layer": 3,
         "m_node": {
             "polymorphic_id": 2,
             "ptr_wrapper": {
@@ -18520,7 +18520,7 @@
                             "f.z": 1.0,
                             "f.w": 1.0
                         },
-                        "path": "asset\\spritesheet\\player_normal_standby.png"
+                        "path": "asset/spritesheet/player_float_standby.png"
                     },
                     "m_scaleX": 0.125,
                     "m_scaleY": 0.3333333432674408,
@@ -18727,7 +18727,7 @@
             "class Renderer",
             "class SubWindow"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -18780,7 +18780,7 @@
         "comNames": [
             "class Renderer"
         ],
-        "m_layer": 4,
+        "m_layer": 5,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {

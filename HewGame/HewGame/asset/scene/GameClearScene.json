@@ -5555,7 +5555,7 @@
             "class Box2DBody",
             "class DecorativePlayerMove"
         ],
-        "m_layer": 2,
+        "m_layer": 3,
         "m_node": {
             "polymorphic_id": 2147483650,
             "polymorphic_name": "UVRenderNode",
@@ -5574,7 +5574,7 @@
                             "f.z": 1.0,
                             "f.w": 1.0
                         },
-                        "path": "asset/spritesheet/player_float_standby.png"
+                        "path": "asset/spritesheet/player_normal_standby.png"
                     },
                     "m_scaleX": 0.125,
                     "m_scaleY": 0.3333333432674408,
@@ -5779,7 +5779,7 @@
         "comNames": [
             "class Renderer"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -5890,7 +5890,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -7.376774787902832,
                 "vec.y": -27.795989990234376
@@ -5917,7 +5917,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -27.203018188476564,
                 "vec.y": -27.274246215820314
@@ -5944,7 +5944,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -27.463891983032228,
                 "vec.y": -22.578556060791017
@@ -5971,7 +5971,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -32.420448303222659,
                 "vec.y": -22.578556060791017
@@ -5998,7 +5998,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -32.184783935546878,
                 "vec.y": -17.55533790588379
@@ -6025,7 +6025,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -42.216407775878909,
                 "vec.y": -17.137353897094728
@@ -6052,7 +6052,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -42.42052459716797,
                 "vec.y": 27.68271255493164
@@ -6079,7 +6079,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -37.203094482421878,
                 "vec.y": 27.68271255493164
@@ -6106,7 +6106,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -37.463966369628909,
                 "vec.y": 32.63927459716797
@@ -6133,7 +6133,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -27.029102325439454,
                 "vec.y": 32.37840270996094
@@ -6160,7 +6160,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -27.55084228515625,
                 "vec.y": 47.76982879638672
@@ -6187,7 +6187,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -22.333410263061525,
                 "vec.y": 47.76982879638672
@@ -6214,7 +6214,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -22.333410263061525,
                 "vec.y": 52.20464324951172
@@ -6241,7 +6241,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 22.623464584350587,
                 "vec.y": 52.8133430480957
@@ -6268,7 +6268,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 22.623464584350587,
                 "vec.y": 32.20448684692383
@@ -6295,7 +6295,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 37.20059585571289,
                 "vec.y": 32.184783935546878
@@ -6322,7 +6322,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 37.232276916503909,
                 "vec.y": 27.421838760375978
@@ -6349,7 +6349,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 42.44970703125,
                 "vec.y": 27.421838760375978
@@ -6376,7 +6376,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 42.79753494262695,
                 "vec.y": 2.5520763397216799
@@ -6403,7 +6403,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 32.62354278564453,
                 "vec.y": 2.2912044525146486
@@ -6430,7 +6430,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 32.797454833984378,
                 "vec.y": -7.361045837402344
@@ -6457,7 +6457,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 27.58002281188965,
                 "vec.y": -7.361045837402344
@@ -6484,7 +6484,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 27.58002281188965,
                 "vec.y": -12.57847785949707
@@ -6511,7 +6511,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 22.623462677001954,
                 "vec.y": -12.317605972290039
@@ -6538,7 +6538,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 22.623462677001954,
                 "vec.y": -27.535120010375978
@@ -6565,7 +6565,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 12.449468612670899,
                 "vec.y": -27.535120010375978
@@ -6592,7 +6592,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 12.71034049987793,
                 "vec.y": -32.49168014526367
@@ -6619,7 +6619,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -7.115902900695801,
                 "vec.y": -32.23080825805664
@@ -6670,7 +6670,7 @@
             "class Renderer",
             "class Box2DBody"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -6761,7 +6761,7 @@
             "class Renderer",
             "class Box2DBody"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -6794,8 +6794,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": 0.000005167127710592467,
-                "vec.y": -0.00007919390191091225
+                "vec.x": 0.0000030612222872150598,
+                "vec.y": -0.00007938857743283734
             },
             "angleVec": -0.000013928358384873718,
             "gravity": 10.0,
@@ -6921,7 +6921,7 @@
             "class Renderer",
             "class Box2DBody"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -7013,7 +7013,7 @@
             "class Box2DBody",
             "class FlickeringRenderColor"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -7046,8 +7046,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": -0.000006878164185764035,
-                "vec.y": 0.00002096840034937486
+                "vec.x": -0.000006872073754493613,
+                "vec.y": 0.00002100318670272827
             },
             "angleVec": 2.198030415456742e-7,
             "gravity": 10.0,
@@ -7189,7 +7189,7 @@
             "class Box2DBody",
             "class FlickeringRenderColor"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -7222,8 +7222,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": 0.000004308792085794266,
-                "vec.y": -0.000014417091733776033
+                "vec.x": 0.0000043969243961328179,
+                "vec.y": -0.00001459407212678343
             },
             "angleVec": -0.0000012305558811931406,
             "gravity": 10.0,
@@ -7365,7 +7365,7 @@
             "class Box2DBody",
             "class FlickeringRenderColor"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -7541,7 +7541,7 @@
             "class Box2DBody",
             "class FlickeringRenderColor"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -7717,7 +7717,7 @@
             "class Box2DBody",
             "class FlickeringRenderColor"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -7750,8 +7750,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": 0.000026836141842068174,
-                "vec.y": -0.00005923926437390037
+                "vec.x": 0.000027700376449502074,
+                "vec.y": -0.00006102377665229142
             },
             "angleVec": -0.000012340881767158863,
             "gravity": 10.0,
@@ -7893,7 +7893,7 @@
             "class Box2DBody",
             "class FlickeringRenderColor"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -8069,7 +8069,7 @@
             "class Box2DBody",
             "class FlickeringRenderColor"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -8102,8 +8102,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": -0.00004467653707251884,
-                "vec.y": 0.00004946810440742411
+                "vec.x": -0.00004553071266855113,
+                "vec.y": 0.000051105835154885429
             },
             "angleVec": 0.000011496462320792489,
             "gravity": 10.0,
@@ -8244,7 +8244,7 @@
             "class Renderer",
             "class ClearTrigger"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -8295,7 +8295,7 @@
         "comNames": [
             "class Renderer"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -8346,7 +8346,7 @@
         "comNames": [
             "class Renderer"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -8511,7 +8511,7 @@
         },
         "isWave": true,
         "funcName": "SetDecorativePlayerAntigravity",
-        "m_layer": 2,
+        "m_layer": 3,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -8564,7 +8564,7 @@
             "class SelectTrigger",
             "class SubWindow"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -8634,7 +8634,7 @@
             "class SelectTrigger",
             "class SubWindow"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -8704,7 +8704,7 @@
             "class SelectTrigger",
             "class SubWindow"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -8772,7 +8772,7 @@
         "comNames": [
             "class Renderer"
         ],
-        "m_layer": 3,
+        "m_layer": 4,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -8824,7 +8824,7 @@
             "class Renderer",
             "class Animator"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 2,
             "ptr_wrapper": {
@@ -8888,7 +8888,7 @@
             "class Renderer",
             "class Animator"
         ],
-        "m_layer": 2,
+        "m_layer": 3,
         "m_node": {
             "polymorphic_id": 2,
             "ptr_wrapper": {
@@ -8952,7 +8952,7 @@
             "class Renderer",
             "class SubWindow"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {

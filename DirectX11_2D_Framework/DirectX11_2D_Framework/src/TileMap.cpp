@@ -29,9 +29,7 @@ void TileMap::Delete()
 
 void TileMap::Serialize(SERIALIZE_OUTPUT& ar)
 {
-	if (m_layer != LAYER_BG) m_layer = (LAYER)(((int)m_layer) + 1);
 	ar(CEREAL_NVP(m_renderNode), CEREAL_NVP(m_layer));
-	if (m_layer != LAYER_BG) m_layer = (LAYER)(((int)m_layer) - 1);
 }
 
 void TileMap::DrawImGui(ImGuiApp::HandleUI& _handle)

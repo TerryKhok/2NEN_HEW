@@ -67,7 +67,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": -32.0
@@ -94,7 +94,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": 32.0
@@ -121,7 +121,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": 32.0
@@ -148,7 +148,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": -32.0
@@ -219,7 +219,7 @@
         "comNames": [
             "class Renderer"
         ],
-        "m_layer": 2,
+        "m_layer": 3,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -321,7 +321,7 @@
         "comNames": [
             "class Renderer"
         ],
-        "m_layer": 4,
+        "m_layer": 5,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -372,7 +372,7 @@
         "comNames": [
             "class Renderer"
         ],
-        "m_layer": 4,
+        "m_layer": 5,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -427,7 +427,7 @@
             "class SubWindow",
             "class MoveSubWindow"
         ],
-        "m_layer": 2,
+        "m_layer": 3,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -594,7 +594,7 @@
             "class SubWindow",
             "class MoveSubWindow"
         ],
-        "m_layer": 2,
+        "m_layer": 3,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -871,7 +871,7 @@
         },
         "isWave": true,
         "funcName": "SetPlayerAntigravity",
-        "m_layer": 2,
+        "m_layer": 3,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -928,7 +928,7 @@
             "class SubWindow",
             "class MoveSubWindow"
         ],
-        "m_layer": 2,
+        "m_layer": 3,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -1755,7 +1755,7 @@
                 }
             }
         },
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -9326,7 +9326,7 @@
                 }
             }
         },
-        "m_layer": 1
+        "m_layer": 2
     },
     "value17": {
         "name": "Crystal_1",
@@ -9462,7 +9462,7 @@
             "class Box2DBody",
             "class MovePlayer"
         ],
-        "m_layer": 2,
+        "m_layer": 3,
         "m_node": {
             "polymorphic_id": 2147483650,
             "polymorphic_name": "UVRenderNode",
@@ -9857,7 +9857,7 @@
             "class Renderer",
             "class SubWindow"
         ],
-        "m_layer": 1,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -9910,7 +9910,7 @@
         "comNames": [
             "class Renderer"
         ],
-        "m_layer": 4,
+        "m_layer": 5,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {

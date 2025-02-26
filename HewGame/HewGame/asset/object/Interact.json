@@ -4,8 +4,8 @@
         "name": "Interact",
         "transform": {
             "position": {
-                "x": 0.0,
-                "y": -100.5,
+                "x": 10.0,
+                "y": -5.5,
                 "z": 0.5
             },
             "scale": {
@@ -32,7 +32,7 @@
             "class Box2DBody",
             "class SubWindow"
         ],
-        "m_layer": 3,
+        "m_layer": 4,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -56,8 +56,8 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": 0.0,
-                "vec.y": -10.050000190734864
+                "vec.x": 1.0,
+                "vec.y": -0.550000011920929
             },
             "rot": {
                 "rot.c": 1.0,

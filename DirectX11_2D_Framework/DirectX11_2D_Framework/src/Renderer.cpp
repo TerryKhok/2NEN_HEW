@@ -97,19 +97,7 @@ void Renderer::SetUVRenderNode(Animator* _animator)
 
 void Renderer::Serialize(SERIALIZE_OUTPUT& ar)
 {
-	if (m_layer != LAYER_BG)
-	{
-		int layer = (int)m_layer;
-		layer++;
-		m_layer = LAYER(layer);
-	}
 	ar(CEREAL_NVP(m_layer),CEREAL_NVP(m_node));
-	if (m_layer != LAYER_BG)
-	{
-		int layer = (int)m_layer;
-		layer--;
-		m_layer = LAYER(layer);
-	}
 }
 
 void Renderer::DrawImGui(ImGuiApp::HandleUI& _handle)
