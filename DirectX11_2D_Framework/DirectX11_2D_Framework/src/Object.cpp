@@ -5,7 +5,11 @@ thread_local void(*ObjectManager::pDeleteObject)(std::string) = &ObjectManager::
 thread_local ObjectManager::ObjectList* ObjectManager::m_currentList = m_objectList.get();
 std::unique_ptr<ObjectManager::ObjectList> ObjectManager::m_objectList = std::unique_ptr<ObjectList>(new ObjectList());
 std::unique_ptr<ObjectManager::ObjectList> ObjectManager::m_nextObjectList = std::unique_ptr<ObjectList>(new ObjectList());
+
+#ifndef LOADING_AND_DELETE_OLD_OBJECT
 std::unique_ptr<ObjectManager::ObjectList> ObjectManager::m_eraseObjectList = std::unique_ptr<ObjectList>(new ObjectList());
+#endif
+
 std::vector<std::string> ObjectManager::m_delayEraseObjectName;
 std::stringstream ObjectManager::copyBuffer;
 
@@ -621,7 +625,9 @@ void ObjectManager::DeleteObjectDelay(std::string _name)
 
 void ObjectManager::ChangeNextObjectList()
 {
+#ifndef LOADING_AND_DELETE_OLD_OBJECT
 	m_eraseObjectList.reset();
+#endif
 	m_nextObjectList.reset(new ObjectList());
 	m_currentList = m_nextObjectList.get();
 	pDeleteObject = &ObjectManager::DeleteObject;
@@ -629,8 +635,9 @@ void ObjectManager::ChangeNextObjectList()
 
 void ObjectManager::LinkNextObjectList()
 {
+#ifndef LOADING_AND_DELETE_OLD_OBJECT
 	m_eraseObjectList = std::move(m_objectList);
-
+#endif
 	m_objectList = std::move(m_nextObjectList);
 
 	m_currentList = m_objectList.get();
@@ -678,5 +685,8 @@ void ObjectManager::CleanAllObjectList()
 {
 	m_objectList.reset();
 	m_nextObjectList.reset();
+
+#ifndef LOADING_AND_DELETE_OLD_OBJECT
 	m_eraseObjectList.reset();
+#endif
 }

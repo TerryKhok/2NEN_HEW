@@ -140,9 +140,6 @@ void cs_main( uint3 DTid : SV_DispatchThreadID )
     float2 pixelPos = float2(pixelCoord);
     
     float2 uv = pixelPos / rect;
-    float shade = pattern(uv) + 0.5;
-    NoiseMap[pixelCoord] = float4(colormap(shade).rgb, shade);    
-    
-    //NoiseMap[pixelCoord] = float4(1.0, 1.0, 1.0, 1.0);
-
+    float shade = pattern(uv) + 0.6;
+    NoiseMap[pixelCoord] = float4(colormap(shade).rgb, shade);
 }

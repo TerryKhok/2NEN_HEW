@@ -528,12 +528,12 @@ private:
 
 		if ((input.KeyPress(VK_D) || input.LeftAnalogStick().x > 0.1f))
 		{
-			landCount = 0;
-			landing = false;
-
 			//if(isGround&&!sound.IsPlaying()){sound.PlayWaveSound(L"asset/sound/se/SFX_Walk01.wav", &waveData, false); }
 			if (move_count == 1)
 			{
+				landCount = 0;
+				landing = false;
+
 				reverse = true;
 				
 				if (!jumping && !inAir)
@@ -578,11 +578,11 @@ private:
 		}
 		if ((input.KeyPress(VK_A) || input.LeftAnalogStick().x < -0.1f))
 		{
-			landCount = 0;
-			landing = false;
-
 			if (move_count == -1) 
 			{
+				landCount = 0;
+				landing = false;
+
 				reverse = false;
 				if (!jumping && !inAir)
 					ChangeState(PLAYER_WALK);

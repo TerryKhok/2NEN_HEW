@@ -1652,7 +1652,7 @@
             "class EnemyChaser",
             "class Thon"
         ],
-        "m_layer": 3,
+        "m_layer": 2,
         "m_node": {
             "polymorphic_id": 2147483649,
             "polymorphic_name": "UVRenderNode",
@@ -2425,7 +2425,7 @@
                             "f.z": 1.0,
                             "f.w": 1.0
                         },
-                        "path": "asset/spritesheet/player_float_standby.png"
+                        "path": "asset/spritesheet/player_lowgravity_standby.png"
                     },
                     "m_scaleX": 0.125,
                     "m_scaleY": 0.3333333432674408,

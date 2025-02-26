@@ -1,5 +1,9 @@
 #pragma once
 
+//シーンの非同期ロードと現在の古いオブジェクトの破棄を同時に行う
+//=============================================================
+#define LOADING_AND_DELETE_OLD_OBJECT
+//=============================================================
 
 class Renderer;
 class SubWindow;
@@ -485,8 +489,12 @@ private:
 	static std::unique_ptr<ObjectList> m_objectList;
 	//次のオブジェクトを格納
 	static std::unique_ptr<ObjectList> m_nextObjectList;
+
+#ifndef LOADING_AND_DELETE_OLD_OBJECT
 	//削除するオブジェクトを格納
 	static std::unique_ptr<ObjectList> m_eraseObjectList;
+#endif
+
 	//削除を遅延しているオブジェクトを格納
 	static std::vector<std::string> m_delayEraseObjectName;
 	//コピー用バッファ
