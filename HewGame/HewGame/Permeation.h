@@ -28,6 +28,12 @@ class Permeation : public Component
 
 		if (rb->GetType() != b2_kinematicBody)
 			rb->SetType(b2_kinematicBody);
+
+		SubWindow* window = m_this->GetComponent<SubWindow>();
+		if (window != nullptr)
+		{
+			window->DisableDrawLayer(LAYER_TERRAIN);
+		}
 	}
 
 	std::vector<std::string> m_barrier;

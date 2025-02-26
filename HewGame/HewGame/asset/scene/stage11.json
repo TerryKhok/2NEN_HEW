@@ -67,14 +67,14 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": -48.0,
-                "vec.y": -36.0
+                "vec.y": -37.5
             },
             "chain.ghost2": {
                 "vec.x": 48.0,
-                "vec.y": -36.0
+                "vec.y": -37.5
             },
             "chain.segment": {
                 "seg.point1": {
@@ -94,14 +94,14 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": 36.0
             },
             "chain.ghost2": {
                 "vec.x": -48.0,
-                "vec.y": -36.0
+                "vec.y": -37.5
             },
             "chain.segment": {
                 "seg.point1": {
@@ -110,7 +110,7 @@
                 },
                 "seg.point2": {
                     "vec.x": 48.0,
-                    "vec.y": -36.0
+                    "vec.y": -37.5
                 }
             }
         },
@@ -121,7 +121,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": 36.0
@@ -133,11 +133,11 @@
             "chain.segment": {
                 "seg.point1": {
                     "vec.x": 48.0,
-                    "vec.y": -36.0
+                    "vec.y": -37.5
                 },
                 "seg.point2": {
                     "vec.x": -48.0,
-                    "vec.y": -36.0
+                    "vec.y": -37.5
                 }
             }
         },
@@ -148,10 +148,10 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": 48.0,
-                "vec.y": -36.0
+                "vec.y": -37.5
             },
             "chain.ghost2": {
                 "vec.x": 48.0,
@@ -160,7 +160,7 @@
             "chain.segment": {
                 "seg.point1": {
                     "vec.x": -48.0,
-                    "vec.y": -36.0
+                    "vec.y": -37.5
                 },
                 "seg.point2": {
                     "vec.x": -48.0,
@@ -331,7 +331,7 @@
                 }
             }
         },
-        "m_layer": 2,
+        "m_layer": 0,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -1441,7 +1441,7 @@
                 "rot.c": 1.0,
                 "rot.s": 0.0
             },
-            "type": 1,
+            "type": 0,
             "lineVec": {
                 "vec.x": 0.0,
                 "vec.y": 0.0
@@ -1567,8 +1567,7 @@
         },
         "active": true,
         "comNames": [
-            "class Box2DBody",
-            "class Renderer"
+            "class Box2DBody"
         ],
         "m_filter": 16,
         "data": {
@@ -1677,27 +1676,6 @@
                     "vec.y": 0.0
                 }
             }
-        },
-        "m_layer": 2,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483659,
-                "data": {
-                    "active": true,
-                    "m_offset": {
-                        "x": 0.0,
-                        "y": 0.0
-                    },
-                    "m_color": {
-                        "f.x": 0.38235294818878176,
-                        "f.y": 0.12182815372943878,
-                        "f.z": 0.12182815372943878,
-                        "f.w": 1.0
-                    },
-                    "path": "null"
-                }
-            }
         }
     },
     "value12": {
@@ -1727,8 +1705,7 @@
         },
         "active": true,
         "comNames": [
-            "class Box2DBody",
-            "class Renderer"
+            "class Box2DBody"
         ],
         "m_filter": 32,
         "data": {
@@ -1740,167 +1717,7 @@
                 "rot.c": 1.0,
                 "rot.s": 0.0
             },
-            "type": 1,
-            "lineVec": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
-            },
-            "angleVec": 0.0,
-            "gravity": 1.0,
-            "mass": 0.0,
-            "autoMass": 1.0,
-            "bullet": false,
-            "fixRot": false,
-            "awake": true
-        },
-        "types": [
-            3
-        ],
-        "shapeData": {
-            "sensor": false,
-            "friction": 0.6000000238418579,
-            "density": 1.0,
-            "restitution": 0.0
-        },
-        "polygon": {
-            "poly.centroid": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
-            },
-            "poly.count": 4,
-            "poly.normals": {
-                "value0": {
-                    "vec.x": 0.0,
-                    "vec.y": -1.0
-                },
-                "value1": {
-                    "vec.x": 1.0,
-                    "vec.y": 0.0
-                },
-                "value2": {
-                    "vec.x": 0.0,
-                    "vec.y": 1.0
-                },
-                "value3": {
-                    "vec.x": -1.0,
-                    "vec.y": 0.0
-                },
-                "value4": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value5": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value6": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value7": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                }
-            },
-            "poly.radius": 0.0,
-            "poly.vertices": {
-                "value0": {
-                    "vec.x": -5.0,
-                    "vec.y": -2.5
-                },
-                "value1": {
-                    "vec.x": 5.0,
-                    "vec.y": -2.5
-                },
-                "value2": {
-                    "vec.x": 5.0,
-                    "vec.y": 2.5
-                },
-                "value3": {
-                    "vec.x": -5.0,
-                    "vec.y": 2.5
-                },
-                "value4": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value5": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value6": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value7": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                }
-            }
-        },
-        "m_layer": 2,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483660,
-                "data": {
-                    "active": true,
-                    "m_offset": {
-                        "x": 0.0,
-                        "y": 0.0
-                    },
-                    "m_color": {
-                        "f.x": 0.38235294818878176,
-                        "f.y": 0.12182815372943878,
-                        "f.z": 0.12182815372943878,
-                        "f.w": 1.0
-                    },
-                    "path": "null"
-                }
-            }
-        }
-    },
-    "value13": {
-        "name": "ground4",
-        "transform": {
-            "position": {
-                "x": -125.0,
-                "y": -100.0,
-                "z": 0.5
-            },
-            "scale": {
-                "x": 10.0,
-                "y": 5.0,
-                "z": 1.0
-            },
-            "angle": {
-                "x": {
-                    "radians": 0.0
-                },
-                "y": {
-                    "radians": 0.0
-                },
-                "z": {
-                    "radians": 0.0
-                }
-            }
-        },
-        "active": true,
-        "comNames": [
-            "class Box2DBody",
-            "class Renderer"
-        ],
-        "m_filter": 32,
-        "data": {
-            "pos": {
-                "vec.x": -12.5,
-                "vec.y": -10.0
-            },
-            "rot": {
-                "rot.c": 1.0,
-                "rot.s": 0.0
-            },
-            "type": 1,
+            "type": 0,
             "lineVec": {
                 "vec.x": 0.0,
                 "vec.y": 0.0
@@ -1997,25 +1814,142 @@
                     "vec.y": 0.0
                 }
             }
+        }
+    },
+    "value13": {
+        "name": "ground4",
+        "transform": {
+            "position": {
+                "x": -125.0,
+                "y": -100.0,
+                "z": 0.5
+            },
+            "scale": {
+                "x": 10.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
         },
-        "m_layer": 2,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483661,
-                "data": {
-                    "active": true,
-                    "m_offset": {
-                        "x": 0.0,
-                        "y": 0.0
-                    },
-                    "m_color": {
-                        "f.x": 0.3843137323856354,
-                        "f.y": 0.12156862765550614,
-                        "f.z": 0.12156862765550614,
-                        "f.w": 1.0
-                    },
-                    "path": "null"
+        "active": true,
+        "comNames": [
+            "class Box2DBody"
+        ],
+        "m_filter": 32,
+        "data": {
+            "pos": {
+                "vec.x": -12.5,
+                "vec.y": -10.0
+            },
+            "rot": {
+                "rot.c": 1.0,
+                "rot.s": 0.0
+            },
+            "type": 0,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 1.0,
+            "mass": 0.0,
+            "autoMass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": false
+        },
+        "types": [
+            3
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "polygon": {
+            "poly.centroid": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "poly.count": 4,
+            "poly.normals": {
+                "value0": {
+                    "vec.x": 0.0,
+                    "vec.y": -1.0
+                },
+                "value1": {
+                    "vec.x": 1.0,
+                    "vec.y": 0.0
+                },
+                "value2": {
+                    "vec.x": 0.0,
+                    "vec.y": 1.0
+                },
+                "value3": {
+                    "vec.x": -1.0,
+                    "vec.y": 0.0
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                }
+            },
+            "poly.radius": 0.0,
+            "poly.vertices": {
+                "value0": {
+                    "vec.x": -5.0,
+                    "vec.y": -2.5
+                },
+                "value1": {
+                    "vec.x": 5.0,
+                    "vec.y": -2.5
+                },
+                "value2": {
+                    "vec.x": 5.0,
+                    "vec.y": 2.5
+                },
+                "value3": {
+                    "vec.x": -5.0,
+                    "vec.y": 2.5
+                },
+                "value4": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value5": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value6": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
+                },
+                "value7": {
+                    "vec.x": 0.0,
+                    "vec.y": 0.0
                 }
             }
         }
@@ -2052,16 +1986,16 @@
         "selectIndex": 0
     },
     "value15": {
-        "name": "ooiwa_1",
+        "name": "Crystal",
         "transform": {
             "position": {
-                "x": -207.28350830078126,
-                "y": 1553.92822265625,
-                "z": 0.5
+                "x": 87.0,
+                "y": -3.0,
+                "z": 0.0
             },
             "scale": {
-                "x": 25.0,
-                "y": 25.0,
+                "x": 15.606602668762207,
+                "y": 16.03086280822754,
                 "z": 1.0
             },
             "angle": {
@@ -2072,60 +2006,19 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 1.5426827669143677
+                    "radians": -3.535180937149562
                 }
             }
         },
         "active": true,
         "comNames": [
-            "class Box2DBody",
-            "class Renderer",
-            "class Rock"
+            "class Renderer"
         ],
-        "m_filter": 1,
-        "data": {
-            "pos": {
-                "vec.x": -20.728351593017579,
-                "vec.y": 155.392822265625
-            },
-            "rot": {
-                "rot.c": 0.028110507875680925,
-                "rot.s": 0.9996048212051392
-            },
-            "type": 2,
-            "lineVec": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
-            },
-            "angleVec": 0.0,
-            "gravity": 10.0,
-            "mass": 300.0,
-            "autoMass": 1.0,
-            "bullet": false,
-            "fixRot": false,
-            "awake": true
-        },
-        "types": [
-            0
-        ],
-        "shapeData": {
-            "sensor": false,
-            "friction": 0.6000000238418579,
-            "density": 1.0,
-            "restitution": 0.0
-        },
-        "circle": {
-            "circle.center": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
-            },
-            "circle.radius": 9.5
-        },
-        "m_layer": 2,
+        "m_layer": 0,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483662,
+                "id": 2147483659,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -2138,22 +2031,22 @@
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
-                    "path": "asset\\pic\\Iwa.png"
+                    "path": "asset\\pic\\Suisyou 1.png"
                 }
             }
         }
     },
     "value16": {
-        "name": "ooiwa",
+        "name": "Crystal_1",
         "transform": {
             "position": {
-                "x": 54.475830078125,
-                "y": 1795.4886474609376,
-                "z": 0.5
+                "x": -297.0,
+                "y": -315.0,
+                "z": 0.0
             },
             "scale": {
-                "x": 25.0,
-                "y": 25.0,
+                "x": 8.818379402160645,
+                "y": 7.545583724975586,
                 "z": 1.0
             },
             "angle": {
@@ -2164,60 +2057,19 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.8040619492530823
+                    "radians": -6.766803055652417
                 }
             }
         },
         "active": true,
         "comNames": [
-            "class Box2DBody",
-            "class Renderer",
-            "class Rock"
+            "class Renderer"
         ],
-        "m_filter": 1,
-        "data": {
-            "pos": {
-                "vec.x": 5.447583198547363,
-                "vec.y": 179.54885864257813
-            },
-            "rot": {
-                "rot.c": 0.693786084651947,
-                "rot.s": 0.7201812267303467
-            },
-            "type": 2,
-            "lineVec": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
-            },
-            "angleVec": 0.0,
-            "gravity": 10.0,
-            "mass": 300.0,
-            "autoMass": 1.0,
-            "bullet": false,
-            "fixRot": false,
-            "awake": true
-        },
-        "types": [
-            0
-        ],
-        "shapeData": {
-            "sensor": false,
-            "friction": 0.6000000238418579,
-            "density": 1.0,
-            "restitution": 0.0
-        },
-        "circle": {
-            "circle.center": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
-            },
-            "circle.radius": 9.5
-        },
-        "m_layer": 2,
+        "m_layer": 0,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483663,
+                "id": 2147483660,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -2230,22 +2082,22 @@
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
-                    "path": "asset\\pic\\Iwa.png"
+                    "path": "asset\\pic\\Suisyou 2.png"
                 }
             }
         }
     },
     "value17": {
-        "name": "ooiwa_2",
+        "name": "Crystal_2",
         "transform": {
             "position": {
-                "x": 236.8828582763672,
-                "y": 550.4132080078125,
-                "z": 0.5
+                "x": 282.0,
+                "y": -258.0,
+                "z": 0.0
             },
             "scale": {
-                "x": 6.0,
-                "y": 6.0,
+                "x": 42.335235595703128,
+                "y": 35.97125244140625,
                 "z": 1.0
             },
             "angle": {
@@ -2256,59 +2108,19 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 2.4300389289855959
+                    "radians": -6.3703392666066069
                 }
             }
         },
         "active": true,
         "comNames": [
-            "class Box2DBody",
             "class Renderer"
         ],
-        "m_filter": 1,
-        "data": {
-            "pos": {
-                "vec.x": 23.68828582763672,
-                "vec.y": 55.04132080078125
-            },
-            "rot": {
-                "rot.c": -0.7573471665382385,
-                "rot.s": 0.6530125141143799
-            },
-            "type": 2,
-            "lineVec": {
-                "vec.x": 0.0,
-                "vec.y": 5.0
-            },
-            "angleVec": 1.5,
-            "gravity": 10.0,
-            "mass": 28.274333953857423,
-            "autoMass": 1.0,
-            "bullet": false,
-            "fixRot": false,
-            "awake": true
-        },
-        "types": [
-            0
-        ],
-        "shapeData": {
-            "sensor": false,
-            "friction": 0.6000000238418579,
-            "density": 1.0,
-            "restitution": 0.0
-        },
-        "circle": {
-            "circle.center": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
-            },
-            "circle.radius": 3.0
-        },
-        "m_layer": 2,
+        "m_layer": 0,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483664,
+                "id": 2147483661,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -2321,7 +2133,7 @@
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
-                    "path": "asset\\pic\\Iwa.png"
+                    "path": "asset\\pic\\Suisyou 1.png"
                 }
             }
         }
@@ -2395,11 +2207,11 @@
             },
             "circle.radius": 1.5
         },
-        "m_layer": 2,
+        "m_layer": 0,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483665,
+                "id": 2147483662,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -2486,11 +2298,11 @@
             },
             "circle.radius": 2.0
         },
-        "m_layer": 2,
+        "m_layer": 0,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483666,
+                "id": 2147483663,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -2541,7 +2353,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483667,
+                "id": 2147483664,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -2592,7 +2404,7 @@
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483668,
+                "id": 2147483665,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -2611,16 +2423,16 @@
         }
     },
     "value22": {
-        "name": "ground",
+        "name": "moveCamera",
         "transform": {
             "position": {
                 "x": 0.0,
-                "y": 325.0,
+                "y": 0.0,
                 "z": 0.0
             },
             "scale": {
-                "x": 96.0,
-                "y": 10.0,
+                "x": 5.0,
+                "y": 5.0,
                 "z": 1.0
             },
             "angle": {
@@ -2635,140 +2447,56 @@
                 }
             }
         },
-        "active": false,
+        "active": true,
         "comNames": [
-            "class Box2DBody",
-            "class Renderer"
+            "class MoveCamera"
         ],
-        "m_filter": 32,
-        "data": {
-            "pos": {
-                "vec.x": 0.0,
-                "vec.y": 32.5
+        "currentIndex": 0,
+        "routePoints": [
+            {
+                "x": 0.0,
+                "y": 0.0
             },
-            "rot": {
-                "rot.c": 1.0,
-                "rot.s": 0.0
+            {
+                "x": -2.930976390838623,
+                "y": 24.913299560546876
             },
-            "type": 0,
-            "lineVec": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
+            {
+                "x": -1.4654881954193116,
+                "y": -24.913299560546876
             },
-            "angleVec": 0.0,
-            "gravity": 1.0,
-            "mass": 0.0,
-            "autoMass": 1.0,
-            "bullet": false,
-            "fixRot": false,
-            "awake": false
-        },
-        "types": [
-            3
+            {
+                "x": 5.861952781677246,
+                "y": 24.913299560546876
+            },
+            {
+                "x": -10.258417129516602,
+                "y": -20.516834259033204
+            },
+            {
+                "x": -8.792929649353028,
+                "y": 23.447811126708986
+            },
+            {
+                "x": 8.792929649353028,
+                "y": -20.516834259033204
+            }
         ],
-        "shapeData": {
-            "sensor": false,
-            "friction": 0.6000000238418579,
-            "density": 1.0,
-            "restitution": 0.0
-        },
-        "polygon": {
-            "poly.centroid": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
-            },
-            "poly.count": 4,
-            "poly.normals": {
-                "value0": {
-                    "vec.x": 0.0,
-                    "vec.y": -1.0
-                },
-                "value1": {
-                    "vec.x": 1.0,
-                    "vec.y": 0.0
-                },
-                "value2": {
-                    "vec.x": 0.0,
-                    "vec.y": 1.0
-                },
-                "value3": {
-                    "vec.x": -1.0,
-                    "vec.y": 0.0
-                },
-                "value4": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value5": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value6": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value7": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                }
-            },
-            "poly.radius": 0.0,
-            "poly.vertices": {
-                "value0": {
-                    "vec.x": -48.0,
-                    "vec.y": -5.0
-                },
-                "value1": {
-                    "vec.x": 48.0,
-                    "vec.y": -5.0
-                },
-                "value2": {
-                    "vec.x": 48.0,
-                    "vec.y": 5.0
-                },
-                "value3": {
-                    "vec.x": -48.0,
-                    "vec.y": 5.0
-                },
-                "value4": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value5": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value6": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                },
-                "value7": {
-                    "vec.x": 0.0,
-                    "vec.y": 0.0
-                }
-            }
-        },
-        "m_layer": 2,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483669,
-                "data": {
-                    "active": false,
-                    "m_offset": {
-                        "x": 0.0,
-                        "y": 0.0
-                    },
-                    "m_color": {
-                        "f.x": 0.38235294818878176,
-                        "f.y": 0.12182815372943878,
-                        "f.z": 0.12182815372943878,
-                        "f.w": 1.0
-                    },
-                    "path": "null"
-                }
-            }
-        }
+        "pointTimes": [
+            0.21838724613189698,
+            0.4339703917503357,
+            0.43844830989837649,
+            0.41966915130615237,
+            0.38296210765838625,
+            0.4122338891029358,
+            0.1943289339542389
+        ],
+        "wait": true,
+        "time": 0.0,
+        "sumTime": 0.0,
+        "waitTime": 0.5,
+        "aroundTime": 2.5,
+        "reverse": false
     },
     "value23": {
         "name": "ground2",
@@ -2797,8 +2525,7 @@
         },
         "active": true,
         "comNames": [
-            "class Box2DBody",
-            "class Renderer"
+            "class Box2DBody"
         ],
         "m_filter": 16,
         "data": {
@@ -2907,40 +2634,19 @@
                     "vec.y": 0.0
                 }
             }
-        },
-        "m_layer": 2,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483670,
-                "data": {
-                    "active": true,
-                    "m_offset": {
-                        "x": 0.0,
-                        "y": 0.0
-                    },
-                    "m_color": {
-                        "f.x": 0.38235294818878176,
-                        "f.y": 0.12182815372943878,
-                        "f.z": 0.12182815372943878,
-                        "f.w": 1.0
-                    },
-                    "path": "null"
-                }
-            }
         }
     },
     "value24": {
-        "name": "Crystal",
+        "name": "ooiwa_1",
         "transform": {
             "position": {
-                "x": 87.0,
-                "y": -3.0,
-                "z": 0.0
+                "x": -207.28350830078126,
+                "y": 1553.92822265625,
+                "z": 0.5
             },
             "scale": {
-                "x": 15.606602668762207,
-                "y": 16.03086280822754,
+                "x": 25.0,
+                "y": 25.0,
                 "z": 1.0
             },
             "angle": {
@@ -2951,19 +2657,60 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": -3.535180937149562
+                    "radians": 1.5426827669143677
                 }
             }
         },
         "active": true,
         "comNames": [
-            "class Renderer"
+            "class Box2DBody",
+            "class Renderer",
+            "class Rock"
         ],
-        "m_layer": 2,
+        "m_filter": 1,
+        "data": {
+            "pos": {
+                "vec.x": -20.728351593017579,
+                "vec.y": 155.392822265625
+            },
+            "rot": {
+                "rot.c": 0.028110507875680925,
+                "rot.s": 0.9996048212051392
+            },
+            "type": 2,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 10.0,
+            "mass": 300.0,
+            "autoMass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": true
+        },
+        "types": [
+            0
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "circle": {
+            "circle.center": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "circle.radius": 9.5
+        },
+        "m_layer": 0,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483671,
+                "id": 2147483666,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -2976,22 +2723,22 @@
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
-                    "path": "asset\\pic\\Suisyou 1.png"
+                    "path": "asset\\pic\\Iwa.png"
                 }
             }
         }
     },
     "value25": {
-        "name": "Crystal_1",
+        "name": "ooiwa",
         "transform": {
             "position": {
-                "x": -297.0,
-                "y": -315.0,
-                "z": 0.0
+                "x": 54.475830078125,
+                "y": 1795.4886474609376,
+                "z": 0.5
             },
             "scale": {
-                "x": 8.818379402160645,
-                "y": 7.545583724975586,
+                "x": 25.0,
+                "y": 25.0,
                 "z": 1.0
             },
             "angle": {
@@ -3002,19 +2749,60 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": -6.766803055652417
+                    "radians": 0.8040619492530823
                 }
             }
         },
         "active": true,
         "comNames": [
-            "class Renderer"
+            "class Box2DBody",
+            "class Renderer",
+            "class Rock"
         ],
-        "m_layer": 2,
+        "m_filter": 1,
+        "data": {
+            "pos": {
+                "vec.x": 5.447583198547363,
+                "vec.y": 179.54885864257813
+            },
+            "rot": {
+                "rot.c": 0.693786084651947,
+                "rot.s": 0.7201812267303467
+            },
+            "type": 2,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "angleVec": 0.0,
+            "gravity": 10.0,
+            "mass": 300.0,
+            "autoMass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": true
+        },
+        "types": [
+            0
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "circle": {
+            "circle.center": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "circle.radius": 9.5
+        },
+        "m_layer": 0,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483672,
+                "id": 2147483667,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -3027,22 +2815,22 @@
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
-                    "path": "asset\\pic\\Suisyou 2.png"
+                    "path": "asset\\pic\\Iwa.png"
                 }
             }
         }
     },
     "value26": {
-        "name": "Crystal_2",
+        "name": "ooiwa_2",
         "transform": {
             "position": {
-                "x": 282.0,
-                "y": -258.0,
-                "z": 0.0
+                "x": 236.8828582763672,
+                "y": 550.4132080078125,
+                "z": 0.5
             },
             "scale": {
-                "x": 42.335235595703128,
-                "y": 35.97125244140625,
+                "x": 6.0,
+                "y": 6.0,
                 "z": 1.0
             },
             "angle": {
@@ -3053,19 +2841,59 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": -6.3703392666066069
+                    "radians": 2.4300389289855959
                 }
             }
         },
         "active": true,
         "comNames": [
+            "class Box2DBody",
             "class Renderer"
         ],
-        "m_layer": 2,
+        "m_filter": 1,
+        "data": {
+            "pos": {
+                "vec.x": 23.68828582763672,
+                "vec.y": 55.04132080078125
+            },
+            "rot": {
+                "rot.c": -0.7573471665382385,
+                "rot.s": 0.6530125141143799
+            },
+            "type": 2,
+            "lineVec": {
+                "vec.x": 0.0,
+                "vec.y": 5.0
+            },
+            "angleVec": 1.5,
+            "gravity": 10.0,
+            "mass": 28.274333953857423,
+            "autoMass": 1.0,
+            "bullet": false,
+            "fixRot": false,
+            "awake": true
+        },
+        "types": [
+            0
+        ],
+        "shapeData": {
+            "sensor": false,
+            "friction": 0.6000000238418579,
+            "density": 1.0,
+            "restitution": 0.0
+        },
+        "circle": {
+            "circle.center": {
+                "vec.x": 0.0,
+                "vec.y": 0.0
+            },
+            "circle.radius": 3.0
+        },
+        "m_layer": 0,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483673,
+                "id": 2147483668,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -3078,13 +2906,13 @@
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
-                    "path": "asset\\pic\\Suisyou 1.png"
+                    "path": "asset\\pic\\Iwa.png"
                 }
             }
         }
     },
     "value27": {
-        "name": "tile_map",
+        "name": "terrainTile",
         "transform": {
             "position": {
                 "x": 0.0,
@@ -3116,7 +2944,610 @@
             "polymorphic_id": 2147483650,
             "polymorphic_name": "TileRenderNode",
             "ptr_wrapper": {
-                "id": 2147483674,
+                "id": 2147483669,
+                "data": {
+                    "value0": {
+                        "active": true,
+                        "m_offset": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "m_color": {
+                            "f.x": 1.0,
+                            "f.y": 1.0,
+                            "f.z": 1.0,
+                            "f.w": 1.0
+                        },
+                        "path": "null"
+                    },
+                    "tileTips": [
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -90.0,
+                                "y": -70.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -80.0,
+                                "y": -70.0
+                            }
+                        },
+                        {
+                            "texIndex": 1,
+                            "pos": {
+                                "x": -70.0,
+                                "y": -70.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": -60.0,
+                                "y": -70.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": -50.0,
+                                "y": -70.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": -40.0,
+                                "y": -70.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": -30.0,
+                                "y": -70.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": -20.0,
+                                "y": -70.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": -10.0,
+                                "y": -70.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": 0.0,
+                                "y": -70.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": 10.0,
+                                "y": -70.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": 20.0,
+                                "y": -70.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": 30.0,
+                                "y": -70.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": 40.0,
+                                "y": -70.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": 50.0,
+                                "y": -70.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": 60.0,
+                                "y": -70.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": 70.0,
+                                "y": -70.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": 80.0,
+                                "y": -70.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": 90.0,
+                                "y": -70.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -100.0,
+                                "y": -70.0
+                            }
+                        },
+                        {
+                            "texIndex": 2,
+                            "pos": {
+                                "x": 100.0,
+                                "y": -70.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -110.0,
+                                "y": -80.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -100.0,
+                                "y": -80.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -90.0,
+                                "y": -80.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -80.0,
+                                "y": -80.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -70.0,
+                                "y": -80.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -60.0,
+                                "y": -80.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -50.0,
+                                "y": -80.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -40.0,
+                                "y": -80.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -30.0,
+                                "y": -80.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -20.0,
+                                "y": -80.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -10.0,
+                                "y": -80.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": 0.0,
+                                "y": -80.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": 10.0,
+                                "y": -80.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": 20.0,
+                                "y": -80.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": 30.0,
+                                "y": -80.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": 40.0,
+                                "y": -80.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": 50.0,
+                                "y": -80.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": 60.0,
+                                "y": -80.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": 70.0,
+                                "y": -80.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": 80.0,
+                                "y": -80.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": 90.0,
+                                "y": -80.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": 100.0,
+                                "y": -80.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": 110.0,
+                                "y": -80.0
+                            }
+                        },
+                        {
+                            "texIndex": 4,
+                            "pos": {
+                                "x": -70.0,
+                                "y": -50.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": -90.0,
+                                "y": -50.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": -80.0,
+                                "y": -50.0
+                            }
+                        },
+                        {
+                            "texIndex": 5,
+                            "pos": {
+                                "x": -70.0,
+                                "y": -60.0
+                            }
+                        },
+                        {
+                            "texIndex": 1,
+                            "pos": {
+                                "x": -100.0,
+                                "y": -50.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -100.0,
+                                "y": -60.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -90.0,
+                                "y": -60.0
+                            }
+                        },
+                        {
+                            "texIndex": 3,
+                            "pos": {
+                                "x": -80.0,
+                                "y": -60.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": 70.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": 80.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": 90.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": 30.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": 20.0,
+                                "y": 10.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": -20.0,
+                                "y": -20.0
+                            }
+                        },
+                        {
+                            "texIndex": 0,
+                            "pos": {
+                                "x": -30.0,
+                                "y": -20.0
+                            }
+                        }
+                    ],
+                    "textureList": [
+                        {
+                            "pathStr": "asset\\tile\\2\\tile map 2_8.png",
+                            "count": 32
+                        },
+                        {
+                            "pathStr": "asset\\tile\\2\\tile map 2_13.png",
+                            "count": 4
+                        },
+                        {
+                            "pathStr": "asset\\tile\\2\\tile map 2_12.png",
+                            "count": 2
+                        },
+                        {
+                            "pathStr": "asset\\tile\\2\\tile map 2_5.png",
+                            "count": 32
+                        },
+                        {
+                            "pathStr": "asset\\tile\\2\\tile map 2_9.png",
+                            "count": 1
+                        },
+                        {
+                            "pathStr": "asset\\tile\\2\\tile map 2_6.png",
+                            "count": 1
+                        }
+                    ],
+                    "tileSize": {
+                        "x": 5.0,
+                        "y": 5.0
+                    }
+                }
+            }
+        },
+        "m_layer": 1
+    },
+    "value28": {
+        "name": "Controls",
+        "transform": {
+            "position": {
+                "x": -640.0,
+                "y": -250.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 27.0,
+                "y": 18.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class SubWindow"
+        ],
+        "m_layer": 2,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483670,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\Controls.png"
+                }
+            }
+        },
+        "isWave": false,
+        "funcName": ""
+    },
+    "value29": {
+        "name": "effect",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 32.02093505859375,
+                "y": 24.51206398010254,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer"
+        ],
+        "m_layer": 5,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483671,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 0.0,
+                        "f.y": 0.0,
+                        "f.z": 0.0,
+                        "f.w": 0.5846404433250427
+                    },
+                    "path": "asset\\pic\\effect.png"
+                }
+            }
+        }
+    },
+    "value30": {
+        "name": "tile_map",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class TileMap"
+        ],
+        "m_renderNode": {
+            "polymorphic_id": 2,
+            "ptr_wrapper": {
+                "id": 2147483672,
                 "data": {
                     "value0": {
                         "active": true,
@@ -3270,139 +3701,6 @@
                             "texIndex": 2,
                             "pos": {
                                 "x": -90.0,
-                                "y": -70.0
-                            }
-                        },
-                        {
-                            "texIndex": 2,
-                            "pos": {
-                                "x": -80.0,
-                                "y": -70.0
-                            }
-                        },
-                        {
-                            "texIndex": 7,
-                            "pos": {
-                                "x": -70.0,
-                                "y": -70.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": -60.0,
-                                "y": -70.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": -50.0,
-                                "y": -70.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": -40.0,
-                                "y": -70.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": -30.0,
-                                "y": -70.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": -20.0,
-                                "y": -70.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": -10.0,
-                                "y": -70.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": 0.0,
-                                "y": -70.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": 10.0,
-                                "y": -70.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": 20.0,
-                                "y": -70.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": 30.0,
-                                "y": -70.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": 40.0,
-                                "y": -70.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": 50.0,
-                                "y": -70.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": 60.0,
-                                "y": -70.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": 70.0,
-                                "y": -70.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": 80.0,
-                                "y": -70.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": 90.0,
-                                "y": -70.0
-                            }
-                        },
-                        {
-                            "texIndex": 2,
-                            "pos": {
-                                "x": -90.0,
                                 "y": 70.0
                             }
                         },
@@ -3533,7 +3831,7 @@
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 10,
                             "pos": {
                                 "x": 100.0,
                                 "y": 60.0
@@ -3547,21 +3845,21 @@
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 5,
                             "pos": {
                                 "x": 100.0,
                                 "y": -70.0
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 8,
                             "pos": {
                                 "x": -100.0,
                                 "y": -70.0
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 1,
                             "pos": {
                                 "x": -100.0,
                                 "y": 60.0
@@ -3603,7 +3901,7 @@
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 5,
                             "pos": {
                                 "x": 100.0,
                                 "y": 10.0
@@ -4380,21 +4678,21 @@
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 3,
                             "pos": {
                                 "x": 90.0,
                                 "y": -80.0
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 3,
                             "pos": {
                                 "x": 80.0,
                                 "y": -80.0
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 9,
                             "pos": {
                                 "x": 100.0,
                                 "y": -80.0
@@ -4506,35 +4804,35 @@
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 3,
                             "pos": {
                                 "x": -60.0,
                                 "y": -80.0
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 3,
                             "pos": {
                                 "x": -70.0,
                                 "y": -80.0
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 3,
                             "pos": {
                                 "x": -80.0,
                                 "y": -80.0
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 3,
                             "pos": {
                                 "x": -90.0,
                                 "y": -80.0
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 7,
                             "pos": {
                                 "x": -100.0,
                                 "y": -80.0
@@ -4548,91 +4846,91 @@
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 3,
                             "pos": {
                                 "x": -50.0,
                                 "y": -80.0
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 3,
                             "pos": {
                                 "x": -40.0,
                                 "y": -80.0
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 3,
                             "pos": {
                                 "x": -30.0,
                                 "y": -80.0
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 3,
                             "pos": {
                                 "x": -20.0,
                                 "y": -80.0
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 3,
                             "pos": {
                                 "x": -10.0,
                                 "y": -80.0
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 3,
                             "pos": {
                                 "x": 0.0,
                                 "y": -80.0
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 3,
                             "pos": {
                                 "x": 10.0,
                                 "y": -80.0
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 3,
                             "pos": {
                                 "x": 20.0,
                                 "y": -80.0
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 3,
                             "pos": {
                                 "x": 30.0,
                                 "y": -80.0
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 3,
                             "pos": {
                                 "x": 40.0,
                                 "y": -80.0
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 3,
                             "pos": {
                                 "x": 50.0,
                                 "y": -80.0
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 3,
                             "pos": {
                                 "x": 60.0,
                                 "y": -80.0
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 3,
                             "pos": {
                                 "x": 70.0,
                                 "y": -80.0
@@ -5493,7 +5791,7 @@
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 8,
                             "pos": {
                                 "x": -100.0,
                                 "y": -50.0
@@ -5549,7 +5847,7 @@
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 8,
                             "pos": {
                                 "x": -100.0,
                                 "y": -60.0
@@ -6872,7 +7170,7 @@
                             }
                         },
                         {
-                            "texIndex": 2,
+                            "texIndex": 1,
                             "pos": {
                                 "x": 160.0,
                                 "y": 70.0
@@ -7233,97 +7531,6 @@
                             "pos": {
                                 "x": -160.0,
                                 "y": 110.0
-                            }
-                        },
-                        {
-                            "texIndex": 2,
-                            "pos": {
-                                "x": -90.0,
-                                "y": -60.0
-                            }
-                        },
-                        {
-                            "texIndex": 2,
-                            "pos": {
-                                "x": -80.0,
-                                "y": -60.0
-                            }
-                        },
-                        {
-                            "texIndex": 8,
-                            "pos": {
-                                "x": -70.0,
-                                "y": -60.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": -90.0,
-                                "y": -50.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": -80.0,
-                                "y": -50.0
-                            }
-                        },
-                        {
-                            "texIndex": 4,
-                            "pos": {
-                                "x": -70.0,
-                                "y": -50.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": -30.0,
-                                "y": -20.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": -20.0,
-                                "y": -20.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": 20.0,
-                                "y": 10.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": 30.0,
-                                "y": 10.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": 70.0,
-                                "y": 10.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": 80.0,
-                                "y": 10.0
-                            }
-                        },
-                        {
-                            "texIndex": 3,
-                            "pos": {
-                                "x": 90.0,
-                                "y": 10.0
                             }
                         },
                         {
@@ -9595,23 +9802,23 @@
                         },
                         {
                             "pathStr": "asset\\tile\\2\\tile map 2_11.png",
-                            "count": 6
+                            "count": 8
                         },
                         {
                             "pathStr": "asset\\tile\\2\\tile map 2_5.png",
-                            "count": 1844
+                            "count": 1840
                         },
                         {
                             "pathStr": "asset\\tile\\2\\tile map 2_8.png",
-                            "count": 95
+                            "count": 89
                         },
                         {
                             "pathStr": "asset\\tile\\2\\tile map 2_9.png",
-                            "count": 3
+                            "count": 2
                         },
                         {
                             "pathStr": "asset\\tile\\2\\tile map 2_4.png",
-                            "count": 12
+                            "count": 14
                         },
                         {
                             "pathStr": "asset\\tile\\2\\tile map 2_1.png",
@@ -9623,7 +9830,15 @@
                         },
                         {
                             "pathStr": "asset\\tile\\2\\tile map 2_6.png",
-                            "count": 15
+                            "count": 17
+                        },
+                        {
+                            "pathStr": "asset\\tile\\2\\tile map 2_12.png",
+                            "count": 1
+                        },
+                        {
+                            "pathStr": "asset\\tile\\2\\tile map 2_10.png",
+                            "count": 1
                         }
                     ],
                     "tileSize": {
@@ -9633,187 +9848,6 @@
                 }
             }
         },
-        "m_layer": 2
-    },
-    "value28": {
-        "name": "Controls",
-        "transform": {
-            "position": {
-                "x": -640.0,
-                "y": -250.0,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 27.0,
-                "y": 18.0,
-                "z": 1.0
-            },
-            "angle": {
-                "x": {
-                    "radians": 0.0
-                },
-                "y": {
-                    "radians": 0.0
-                },
-                "z": {
-                    "radians": 0.0
-                }
-            }
-        },
-        "active": true,
-        "comNames": [
-            "class Renderer",
-            "class SubWindow"
-        ],
-        "m_layer": 2,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483675,
-                "data": {
-                    "active": true,
-                    "m_offset": {
-                        "x": 0.0,
-                        "y": 0.0
-                    },
-                    "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
-                        "f.z": 1.0,
-                        "f.w": 1.0
-                    },
-                    "path": "asset\\pic\\Controls.png"
-                }
-            }
-        },
-        "isWave": false,
-        "funcName": ""
-    },
-    "value29": {
-        "name": "effect",
-        "transform": {
-            "position": {
-                "x": 0.0,
-                "y": 0.0,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 32.02093505859375,
-                "y": 24.51206398010254,
-                "z": 1.0
-            },
-            "angle": {
-                "x": {
-                    "radians": 0.0
-                },
-                "y": {
-                    "radians": 0.0
-                },
-                "z": {
-                    "radians": 0.0
-                }
-            }
-        },
-        "active": true,
-        "comNames": [
-            "class Renderer"
-        ],
-        "m_layer": 5,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483676,
-                "data": {
-                    "active": true,
-                    "m_offset": {
-                        "x": 0.0,
-                        "y": 0.0
-                    },
-                    "m_color": {
-                        "f.x": 0.0,
-                        "f.y": 0.0,
-                        "f.z": 0.0,
-                        "f.w": 0.5846404433250427
-                    },
-                    "path": "asset\\pic\\effect.png"
-                }
-            }
-        }
-    },
-    "value30": {
-        "name": "moveCamera",
-        "transform": {
-            "position": {
-                "x": 0.0,
-                "y": 0.0,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 5.0,
-                "y": 5.0,
-                "z": 1.0
-            },
-            "angle": {
-                "x": {
-                    "radians": 0.0
-                },
-                "y": {
-                    "radians": 0.0
-                },
-                "z": {
-                    "radians": 0.0
-                }
-            }
-        },
-        "active": true,
-        "comNames": [
-            "class MoveCamera"
-        ],
-        "currentIndex": 0,
-        "routePoints": [
-            {
-                "x": 0.0,
-                "y": 0.0
-            },
-            {
-                "x": -2.930976390838623,
-                "y": 24.913299560546876
-            },
-            {
-                "x": -1.4654881954193116,
-                "y": -24.913299560546876
-            },
-            {
-                "x": 5.861952781677246,
-                "y": 24.913299560546876
-            },
-            {
-                "x": -10.258417129516602,
-                "y": -20.516834259033204
-            },
-            {
-                "x": -8.792929649353028,
-                "y": 23.447811126708986
-            },
-            {
-                "x": 8.792929649353028,
-                "y": -20.516834259033204
-            }
-        ],
-        "pointTimes": [
-            0.21838724613189698,
-            0.4339703917503357,
-            0.43844830989837649,
-            0.41966915130615237,
-            0.38296210765838625,
-            0.4122338891029358,
-            0.1943289339542389
-        ],
-        "wait": true,
-        "time": 0.0,
-        "sumTime": 0.0,
-        "waitTime": 0.5,
-        "aroundTime": 2.5,
-        "reverse": false
+        "m_layer": 0
     }
 }

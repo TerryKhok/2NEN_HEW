@@ -117,9 +117,13 @@ void MoveSubWindow::BackPosition()
 void MoveSubWindow::Confirmed()
 {
 	confirmed = true;
-	auto check = Instantiate("checkIcon", L"asset/pic/checkmark.png");
+	auto check = Instantiate("checkIcon");
 	if (check != nullptr)
 	{
+		auto rend = check->AddComponent<Renderer>();
+		rend->SetLayer(LAYER_SIGN);
+		rend->SetTexture(L"asset/pic/checkmark.png");
+
 		Vector2 pos = m_this->transform.position;
 		pos.x += m_this->transform.scale.x * HALF_OBJECT_SIZE;
 		pos.x -= check->transform.scale.x * HALF_OBJECT_SIZE;
