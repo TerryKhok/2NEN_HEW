@@ -91,3 +91,5 @@ const wchar_t* GetFileExtension(const wchar_t* path)
     }
     return nullptr; // No extension found
 }
+
+void Void(){}

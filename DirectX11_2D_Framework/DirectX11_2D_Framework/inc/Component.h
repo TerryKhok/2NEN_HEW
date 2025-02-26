@@ -56,9 +56,6 @@ private:
 #endif
 	}
 private:
-//============================================
-// Awakeはまだ機能してない
-//============================================
 	//コンポーネントが付いた時に呼び出す
 	virtual void Awake() {}
 	//コンポーネントがすべて付き終わった時呼び出す
@@ -105,8 +102,6 @@ private:
 	virtual void DrawImGui(ImGuiApp::HandleUI& _handle){
 		ImGui::Text(" not override DrawImGui function!");
 	}
-private:
-	int version = 0;
 };
 
 

@@ -37,11 +37,11 @@ class LowGravity : public Component
 			inCount++;
 		}
 
-		MovePlayer* player = nullptr;
+		/*MovePlayer* player = nullptr;
 		if (target->TryGetComponent<MovePlayer>(&player))
 		{
 			player->PushMode(LOW_GRAVITY);
-		}
+		}*/
 	}
 
 	void ExitEvent(GameObject* target)
@@ -59,11 +59,11 @@ class LowGravity : public Component
 			}
 		}
 
-		MovePlayer* player = nullptr;
+		/*MovePlayer* player = nullptr;
 		if (target->TryGetComponent<MovePlayer>(&player))
 		{
 			player->PopMode(LOW_GRAVITY);
-		}
+		}*/
 	}
 
 	int overlapCount = 0;
@@ -105,6 +105,21 @@ class LowGravity : public Component
 			enters.erase(iter);
 
 			ExitEvent(_other);
+		}
+	}
+
+public:
+
+	static void SetPlayerLowGravity()
+	{
+		GameObject* obj = ObjectManager::Find("Player");
+		if (obj != nullptr)
+		{
+			MovePlayer* player = nullptr;
+			if (obj->TryGetComponent<MovePlayer>(&player))
+			{
+				player->SetModeTexture(PLAYER_MODE::LOW_GRAVITY);
+			}
 		}
 	}
 };

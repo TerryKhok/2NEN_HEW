@@ -67,7 +67,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": -36.0
@@ -94,7 +94,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": 36.0
@@ -121,7 +121,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": 36.0
@@ -148,7 +148,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": -36.0
@@ -648,6 +648,7 @@
             }
         },
         "isWave": true,
+        "funcName": "SetPlayerAntigravity",
         "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
@@ -835,6 +836,7 @@
             }
         },
         "isWave": true,
+        "funcName": "SetPlayerPermeation",
         "confirmed": false,
         "selfIndex": 1
     },
@@ -980,6 +982,7 @@
             }
         },
         "isWave": true,
+        "funcName": "SetPlayerAntigravity",
         "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
@@ -1146,6 +1149,7 @@
             }
         },
         "isWave": true,
+        "funcName": "SetPlayerLowGravity",
         "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
@@ -1171,7 +1175,7 @@
         "selfIndex": 3
     },
     "value9": {
-        "name": "Player_1",
+        "name": "Player",
         "transform": {
             "position": {
                 "x": -452.4881591796875,
@@ -9682,7 +9686,8 @@
                 }
             }
         },
-        "isWave": false
+        "isWave": false,
+        "funcName": ""
     },
     "value29": {
         "name": "effect",

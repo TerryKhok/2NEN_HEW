@@ -42,31 +42,7 @@ protected:
 		pUpdate = &AnimationClip::UpdateCount;
 	}
 	//フレームを追加
-	void AddFrame(const AnimationFrameData& _frame) {
-		AnimationFrame frame;
-		ComPtr<ID3D11ShaderResourceView> texture;
-		TextureAssets::pLoadTexture(texture, _frame.texPath.c_str());
-		auto iter = std::find(textureList.begin(), textureList.end(), texture);
-		if (iter != textureList.end())
-		{
-			frame.texIndex = (int)std::distance(textureList.begin(), iter);
-		}
-		else
-		{
-			textureList.push_back(texture);
-			frame.texIndex = (int)textureList.size() - 1;
-		}
-#ifdef DEBUG_TRUE
-		frame.texPath = _frame.texPath;
-#endif
-		frame.frameX = _frame.frameX;
-		frame.frameY = _frame.frameY;
-		frame.scaleX = _frame.scaleX;
-		frame.scaleY = _frame.scaleY;
-		frame.waitCount = _frame.waitCount;
-
-		frames.push_back(std::move(frame));
-	}
+	void AddFrame(const AnimationFrameData& _frame);
 	//現在のframeIndexに更新
 	void SetUVRenderNode(UVRenderNode* _renderNode);
 	//初期化処理(Clip切り替え時に呼び出す)

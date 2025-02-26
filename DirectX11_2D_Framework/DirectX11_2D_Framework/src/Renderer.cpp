@@ -97,7 +97,19 @@ void Renderer::SetUVRenderNode(Animator* _animator)
 
 void Renderer::Serialize(SERIALIZE_OUTPUT& ar)
 {
+	if (m_layer != LAYER_BG)
+	{
+		int layer = (int)m_layer;
+		layer++;
+		m_layer = LAYER(layer);
+	}
 	ar(CEREAL_NVP(m_layer),CEREAL_NVP(m_node));
+	if (m_layer != LAYER_BG)
+	{
+		int layer = (int)m_layer;
+		layer--;
+		m_layer = LAYER(layer);
+	}
 }
 
 void Renderer::DrawImGui(ImGuiApp::HandleUI& _handle)
@@ -219,7 +231,7 @@ void RenderNode::Active(bool _active)
 	pDrawFunc = active ? &RenderNode::Draw : &RenderNode::VoidNext;
 }
 
-inline void RenderNode::Draw()
+void RenderNode::Draw()
 {
 	m_object->transform.position += m_offset;
 	auto& cb = m_object->GetConstantBuffer();
@@ -337,7 +349,7 @@ inline void RenderNode::DeleteList()
 	//NextEnd();
 }
 
-inline void UVRenderNode::Draw()
+void UVRenderNode::Draw()
 {
 	m_object->transform.position += m_offset;
 	auto& cb = m_object->GetConstantBuffer();
@@ -500,54 +512,62 @@ void RenderManager::Draw()
 	renderZoom.x = max(0.2f, renderZoom.x);
 	renderZoom.y = max(0.2f, renderZoom.y);
 
-	RECT rect;
+	RECT windowRect;
+	RECT clientRect;
 #endif
 
 #ifdef DEBUG_TRUE
 	static VSObjectConstantBuffer rayCb;
 #endif
-	for (auto& view : DirectX11::m_pRenderTargetViewList)
+	for (auto& view : DirectX11::m_pRenderTargetViewList.second)
 	{
 #ifdef CAMERA_ON_WINDOW
-		if (GetWindowRect(view.first, &rect))
+		if (GetWindowRect(view.hWnd, &windowRect))
 		{
 			CameraManager::cameraPosition = { 
-				(static_cast<float>(rect.left + rect.right) / 2 - Window::MONITER_HALF_WIDTH) 
+				(static_cast<float>(windowRect.left + windowRect.right) / 2 - Window::MONITER_HALF_WIDTH)
 				* PROJECTION_ASPECT_WIDTH / renderZoom.x + renderOffset.x,
-				(static_cast<float>(rect.top + rect.bottom) / -2 + Window::MONITER_HALF_HEIGHT) 
+				(static_cast<float>(windowRect.top + windowRect.bottom) / -2 + Window::MONITER_HALF_HEIGHT)
 				* PROJECTION_ASPECT_HEIGHT / renderZoom.y + renderOffset.y
 			};
 		}
 
-		if (GetClientRect(view.first, &rect))
+		if (GetClientRect(view.hWnd, &clientRect))
 		{
-			rect.right = max(rect.right, 1);
-			rect.bottom = max(rect.bottom, 1);
-			CameraManager::cameraZoom.x = PROJECTION_WINDOW_WIDTH / static_cast<float>(rect.right) * renderZoom.x;
-			CameraManager::cameraZoom.y = PROJECTION_WINDOW_HEIGHT / static_cast<float>(rect.bottom) * renderZoom.y;
+			clientRect.right = max(clientRect.right, 1);
+			clientRect.bottom = max(clientRect.bottom, 1);
+			CameraManager::cameraZoom.x = PROJECTION_WINDOW_WIDTH / static_cast<float>(clientRect.right) * renderZoom.x;
+			CameraManager::cameraZoom.y = PROJECTION_WINDOW_HEIGHT / static_cast<float>(clientRect.bottom) * renderZoom.y;
 		}
 
 		CameraManager::SetCameraMatrix();
 #endif
 
 		// 描画先のキャンバスと使用する深度バッファを指定する
-		DirectX11::m_pDeviceContext->OMSetRenderTargets(1, view.second.first.GetAddressOf(), DirectX11::m_pDepthStencilView.Get());
+		DirectX11::m_pDeviceContext->OMSetRenderTargets(1, view.view.GetAddressOf(), DirectX11::m_pDepthStencilView.Get());
 
 		bool wave = false;
-		auto waveIter = DirectX11::m_waveHandleList.find(view.first);
+		auto waveIter = DirectX11::m_waveHandleList.find(view.hWnd);
 		if (waveIter != DirectX11::m_waveHandleList.end())
 		{
-			wave = waveIter->second;
+			wave = waveIter->second.first;
+			if (waveIter->second.second != nullptr)
+			{
+				waveIter->second.second();
+			}
 		}
 
 		if (wave)
 		{
 			//ピクセルシェーダ設定
 			DirectX11::m_pDeviceContext->PSSetShader(DirectX11::m_pWavePixelShader.Get(), NULL, 0);
+
+			// 2. ライトマップテクスチャをピクセルシェーダーにセット
+			DirectX11::m_pDeviceContext->PSSetShaderResources(1, 1, DirectX11::noiseMapSRV.GetAddressOf());
 		}
 
 #ifndef DEBUG_TRUE
-		for (const auto layer : view.second.second)
+		for (const auto layer : view.layer)
 		{
 			auto& node = m_rendererList[layer];
 			node.first->NextFunc();
@@ -559,7 +579,7 @@ void RenderManager::Draw()
 			DirectX11::m_pDeviceContext->PSSetShader(DirectX11::m_pPixelShader.Get(), NULL, 0);
 		}
 #else
-		for (const auto layer : view.second.second)
+		for (const auto layer : view.layer)
 		{
 			auto& node = m_rendererList[layer];
 			node.first->NextFunc();
@@ -653,7 +673,7 @@ void RenderManager::Draw()
 
 	// 描画先のキャンバスと使用する深度バッファを指定する
 	DirectX11::m_pDeviceContext->OMSetRenderTargets(1,
-		DirectX11::m_pRenderTargetViewList[Window::GetMainHWnd()].first.GetAddressOf(), DirectX11::m_pDepthStencilView.Get());
+		DirectX11::m_pRenderTargetViewList.second.front().view.GetAddressOf(), DirectX11::m_pDepthStencilView.Get());
 
 	static VSCameraConstantBuffer cb = {
 			XMMatrixIdentity(),

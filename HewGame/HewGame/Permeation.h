@@ -48,11 +48,11 @@ class Permeation : public Component
 			inCount++;
 		}
 
-		MovePlayer* player = nullptr;
+		/*MovePlayer* player = nullptr;
 		if (target->TryGetComponent<MovePlayer>(&player))
 		{
 			player->PushMode(PERMEATION);
-		}
+		}*/
 	}
 
 	void ExitEvent(GameObject* target)
@@ -69,11 +69,11 @@ class Permeation : public Component
 			}
 		}
 
-		MovePlayer* player = nullptr;
+		/*MovePlayer* player = nullptr;
 		if (target->TryGetComponent<MovePlayer>(&player))
 		{
 			player->PopMode(PERMEATION);
-		}
+		}*/
 	}
 
 	int overlapCount = 0;
@@ -120,6 +120,21 @@ class Permeation : public Component
 
 public:
 	void ClipObject();
+
+	static void SetPlayerPermeation()
+	{
+		GameObject* obj = ObjectManager::Find("Player");
+		if (obj != nullptr)
+		{
+			MovePlayer* player = nullptr;
+			if (obj->TryGetComponent<MovePlayer>(&player))
+			{
+				player->SetModeTexture(PLAYER_MODE::PERMEATION);
+			}
+		}
+	}
 };
 
 SetReflectionComponent(Permeation)
+
+

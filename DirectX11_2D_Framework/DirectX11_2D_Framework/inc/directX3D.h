@@ -78,6 +78,13 @@ class DirectX11 final
 	friend class Box2DConvexMeshRenderNode;
 	friend class Box2DLineRenderNode;
 
+	struct RenderTarget
+	{
+		HWND hWnd;
+		ComPtr<ID3D11RenderTargetView> view;
+		std::vector<LAYER> layer;
+	};
+
 	DirectX11() = delete;
 
 private:
@@ -91,6 +98,8 @@ private:
 	static HRESULT CreatePixelShader(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3D11PixelShader** ppPixelShader);
 	// ピクセルシェーダーオブジェクトを生成
 	static HRESULT CreatePixelShader(const BYTE* byteCode, SIZE_T size, ID3D11PixelShader** ppPixelShader);
+	// コンピュートシェーダーオブジェクトを生成
+	static HRESULT CreateComputeShader(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3D11ComputeShader** ppPixelShader);
 
 	// 関数のプロトタイプ宣言
 	static HRESULT D3D_Create(HWND mainHwnd);
@@ -115,9 +124,9 @@ private:
 	// スワップチェイン＝ダブルバッファ機能
 	static std::unordered_map<HWND, ComPtr<IDXGISwapChain>> m_pSwapChainList;
 	// レンダーターゲット＝描画先を表す機能
-	static std::unordered_map<HWND, std::pair<ComPtr<ID3D11RenderTargetView>, std::vector<LAYER>>> m_pRenderTargetViewList;
+	static std::pair <std::unordered_map<HWND, size_t>, std::vector<RenderTarget>> m_pRenderTargetViewList;
 
-	static std::unordered_map < HWND, bool> m_waveHandleList;
+	static std::unordered_map <HWND, std::pair<bool,void(*)()>> m_waveHandleList;
 
 	//デプスステート
 	static ComPtr<ID3D11DepthStencilState> m_pDSState;
@@ -144,16 +153,28 @@ private:
 	//画面塗りつぶしカラー
 	static float clearColor[4];
 
-
-	// ピクセルシェーダーオブジェクト
-	static ComPtr<ID3D11PixelShader> m_pWavePixelShader;
 	struct TimeBuffer {
 		float time;
-		float strength;
-		float noiseScale;
-		float persistence;
+		XMFLOAT2 rect;
+		float padding = 0.0f;
 	};
-	static TimeBuffer waveData;
+	static TimeBuffer waveBufferData;
+
+	struct WndBuffer {
+		UINT rect[2];
+		UINT pos[2];
+	};
+	static WndBuffer windowBufferData;
+
+	//Wave用ピクセルシェーダーオブジェクト
+	static ComPtr<ID3D11PixelShader> m_pWavePixelShader;
+	//Wave用コンピュートシェーダー
+	static ComPtr<ID3D11ComputeShader> m_pWaveComputeShader;
 	//定数バッファ変数
-	static ComPtr<ID3D11Buffer> m_pPSWaveConstantBuffer;
+	static ComPtr<ID3D11Buffer> m_pCSWaveConstantBuffer;
+	//定数バッファ変数
+	static ComPtr<ID3D11Buffer> m_pPSWndConstantBuffer;
+
+	static ComPtr<ID3D11UnorderedAccessView> noiseMapUAV;
+	static ComPtr<ID3D11ShaderResourceView> noiseMapSRV;
 };

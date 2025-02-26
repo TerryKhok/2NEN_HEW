@@ -206,57 +206,6 @@
         }
     },
     "value4": {
-        "name": "Pillar",
-        "transform": {
-            "position": {
-                "x": 1321.6944580078126,
-                "y": -24.0,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 54.21461868286133,
-                "y": 60.154273986816409,
-                "z": 1.0
-            },
-            "angle": {
-                "x": {
-                    "radians": 0.0
-                },
-                "y": {
-                    "radians": 0.0
-                },
-                "z": {
-                    "radians": 0.0
-                }
-            }
-        },
-        "active": true,
-        "comNames": [
-            "class Renderer"
-        ],
-        "m_layer": 0,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483653,
-                "data": {
-                    "active": true,
-                    "m_offset": {
-                        "x": 0.0,
-                        "y": 0.0
-                    },
-                    "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
-                        "f.z": 1.0,
-                        "f.w": 1.0
-                    },
-                    "path": "asset\\background\\Hashira 1.png"
-                }
-            }
-        }
-    },
-    "value5": {
         "name": "wallLeft",
         "transform": {
             "position": {
@@ -1095,7 +1044,7 @@
             }
         }
     },
-    "value6": {
+    "value5": {
         "name": "FloatWindow",
         "transform": {
             "position": {
@@ -1237,11 +1186,12 @@
             }
         },
         "isWave": true,
+        "funcName": "SetDecorativePlayerAntigravity",
         "m_layer": 3,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
-                "id": 2147483654,
+                "id": 2147483653,
                 "data": {
                     "active": true,
                     "m_offset": {
@@ -1258,6 +1208,61 @@
                 }
             }
         }
+    },
+    "value6": {
+        "name": "Controls",
+        "transform": {
+            "position": {
+                "x": -640.0,
+                "y": -250.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 27.0,
+                "y": 18.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class SubWindow",
+            "class FixedPositionSubWindow"
+        ],
+        "m_layer": 1,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483654,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\Controls.png"
+                }
+            }
+        },
+        "isWave": false,
+        "funcName": "SetDecorativePlayerNormal"
     },
     "value7": {
         "name": "BottomStage",
@@ -1327,7 +1332,8 @@
             "f.w": 1.0
         },
         "pause": false,
-        "isWave": false
+        "isWave": false,
+        "funcName": ""
     },
     "value8": {
         "name": "Crystal_1",
@@ -16643,7 +16649,8 @@
             "f.w": 1.0
         },
         "pause": false,
-        "isWave": false
+        "isWave": false,
+        "funcName": ""
     },
     "value32": {
         "name": "chaseCameraRight",
@@ -16761,7 +16768,8 @@
             "f.w": 1.0
         },
         "pause": false,
-        "isWave": false
+        "isWave": false,
+        "funcName": ""
     },
     "value34": {
         "name": "Player",
@@ -16813,7 +16821,7 @@
                             "f.z": 1.0,
                             "f.w": 1.0
                         },
-                        "path": "asset\\spritesheet\\player_normal_standby.png"
+                        "path": "asset/spritesheet/player_float_standby.png"
                     },
                     "m_scaleX": 0.125,
                     "m_scaleY": 0.3333333432674408,
@@ -21935,16 +21943,16 @@
         "silkLength": 500.0
     },
     "value56": {
-        "name": "Controls",
+        "name": "Pillar",
         "transform": {
             "position": {
-                "x": -640.0,
-                "y": -250.0,
+                "x": 1321.6944580078126,
+                "y": -24.0,
                 "z": 0.0
             },
             "scale": {
-                "x": 27.0,
-                "y": 18.0,
+                "x": 54.21461868286133,
+                "y": 60.154273986816409,
                 "z": 1.0
             },
             "angle": {
@@ -21961,11 +21969,9 @@
         },
         "active": true,
         "comNames": [
-            "class Renderer",
-            "class SubWindow",
-            "class FixedPositionSubWindow"
+            "class Renderer"
         ],
-        "m_layer": 1,
+        "m_layer": 0,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -21982,10 +21988,9 @@
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
-                    "path": "asset\\pic\\Controls.png"
+                    "path": "asset\\background\\Hashira 1.png"
                 }
             }
-        },
-        "isWave": false
+        }
     }
 }

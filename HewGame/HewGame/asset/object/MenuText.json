@@ -51,6 +51,7 @@
                 }
             }
         },
-        "isWave": false
+        "isWave": false,
+        "funcName": ""
     }
 }

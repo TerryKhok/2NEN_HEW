@@ -4,6 +4,7 @@
 #include "AntiGravity.h"
 #include "uiObj.h"
 
+
 // ゲーム起動時に描画されるタイトルシーン
 class TitleScene : public Scene
 {
@@ -14,11 +15,10 @@ public:
 
 	void Load() override
 	{
-
 		auto object = Instantiate("object");
 		auto text = object->AddComponent<SFText>("Title");
 		auto button = object->AddComponent<Button>();
-		button->SetEvent([&](){LOG("Press");});
+		button->SetEvent(ButtonLog);
 
 		if(Input::Get().KeyTrigger(VK_RETURN))
 		{

@@ -73,7 +73,7 @@ public:
 
 
 		auto fog = Instantiate("fog", L"asset/pic/fog.png");
-		fog->GetComponent<Renderer>()->SetLayer(LAYER_FOG);
+		fog->GetComponent<Renderer>()->SetLayer(LAYER_SIGN);
 		fog->transform.position = { 0.0f,0.0f };
 		fog->transform.scale = { 50.0f,50.0f };
 		fog->AddComponent<Fog>();
@@ -84,20 +84,20 @@ public:
 		// エネミーオブジェクト
 		//-------------------------------------------------------------
 		auto enemy_type1 = Instantiate("enemy", L"asset/pic/enemy.png");
-		enemy_type1->GetComponent<Renderer>()->SetLayer(LAYER_FOG);
+		enemy_type1->GetComponent<Renderer>()->SetLayer(LAYER_SIGN);
 		enemy_type1->transform.position = { 200.0f,-100.0f };
 		enemy_type1->transform.scale    = { 5.0f,5.0f };
 		enemy_type1->AddComponent<Enemy_type1>();
 		
 
 		auto enemy_type2 = Instantiate("enemy", L"asset/pic/enemy.png");
-		enemy_type2->GetComponent<Renderer>()->SetLayer(LAYER_FOG);
+		enemy_type2->GetComponent<Renderer>()->SetLayer(LAYER_SIGN);
 		enemy_type2->transform.position = { 250.0f,-200.0f };
 		enemy_type2->transform.scale    = { 5.0f,5.0f };
 		enemy_type2->AddComponent<Enemy_type2>();
 
 		auto enemy_type3 = Instantiate("enemy", L"asset/pic/enemy.png");
-		enemy_type3->GetComponent<Renderer>()->SetLayer(LAYER_FOG);
+		enemy_type3->GetComponent<Renderer>()->SetLayer(LAYER_SIGN);
 		enemy_type3->transform.position = { 250.0f,-200.0f };
 		enemy_type3->transform.scale = { 5.0f,5.0f };
 		enemy_type3->AddComponent<Enemy_type3>();
@@ -124,7 +124,7 @@ public:
 		box2d->CreateBoxShape({ 28.0f,18.0f }, { 0.0f,0.0f }, 0.0f, true);
 		object->AddComponent<Renderer>();
 		auto window = object->AddComponent<SubWindow>("Permeation");
-		window->DisableDrawLayer(LAYER_FOG);
+		window->DisableDrawLayer(LAYER_SIGN);
 		object->AddComponent<Permeation>();
 
 	}

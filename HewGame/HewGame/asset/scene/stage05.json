@@ -67,7 +67,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": -36.0
@@ -94,7 +94,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": 36.0
@@ -121,7 +121,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": 36.0
@@ -148,7 +148,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": -36.0
@@ -675,6 +675,7 @@
             }
         },
         "isWave": true,
+        "funcName": "SetPlayerBounce",
         "confirmed": false,
         "selfIndex": 0,
         "restitutionPower": 1.100000023841858
@@ -842,6 +843,7 @@
             }
         },
         "isWave": true,
+        "funcName": "SetPlayerBounce",
         "confirmed": false,
         "selfIndex": 1,
         "restitutionPower": 1.100000023841858
@@ -988,6 +990,7 @@
             }
         },
         "isWave": true,
+        "funcName": "SetPlayerLowGravity",
         "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
@@ -1154,6 +1157,7 @@
             }
         },
         "isWave": true,
+        "funcName": "SetPlayerLowGravity",
         "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
@@ -2218,7 +2222,7 @@
         }
     },
     "value17": {
-        "name": "Player_1_1",
+        "name": "Player",
         "transform": {
             "position": {
                 "x": -400.91949462890627,
@@ -11358,7 +11362,8 @@
                 }
             }
         },
-        "isWave": false
+        "isWave": false,
+        "funcName": ""
     },
     "value23": {
         "name": "effect",

@@ -65,7 +65,7 @@ protected:
 	//描画関数の実行
 	virtual void Execute() { (this->*pDrawFunc)(); }
 	//描画して次につなぐ
-	virtual inline void Draw();
+	virtual void Draw();
 	//なにもせずに次につなぐ
 	void VoidNext() { NextFunc(); }
 	//テクスチャーの設定
@@ -147,7 +147,7 @@ private:
 	bool IsUVNode() const override { return true; }
 private:
 	//描画して次につなぐ
-	inline void Draw();
+	void Draw();
 private:
 	float m_scaleX = 0.5f;
 	float m_scaleY = 0.5f;

@@ -6,7 +6,7 @@ class FunctionRegistry {
 	friend class Button;
 
 public:
-	using FunctionType = std::function<void()>;
+	using FunctionType = void(*)();//std::function<void()>;
 private:
 	static inline std::unordered_map<std::string, FunctionType> functions;
 
@@ -43,7 +43,7 @@ public:
 			LOG_WARNING("Function with name '%s' not found.", name.c_str());
 			return nullptr;
 		}
-		it->second;
+		return it->second;
 	}
 
 	//登録された関数を選ぶアイコンを表示する
@@ -63,7 +63,7 @@ public:
 		ACTION_MAX
 	};
 
-	void SetEvent(std::function<void()>&& _func) {
+	void SetEvent(FunctionRegistry::FunctionType&& _func) {
 		m_event = _func;
 	}
 

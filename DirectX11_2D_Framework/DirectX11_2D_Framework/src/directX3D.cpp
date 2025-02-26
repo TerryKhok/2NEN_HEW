@@ -9,9 +9,9 @@ ComPtr<ID3D11DeviceContext> DirectX11::m_pDeviceContext = nullptr;
 // スワップチェイン＝ダブルバッファ機能
 std::unordered_map<HWND, ComPtr<IDXGISwapChain>> DirectX11::m_pSwapChainList;
 // レンダーターゲット＝描画先を表す機能
-std::unordered_map<HWND, std::pair<ComPtr<ID3D11RenderTargetView>, std::vector<LAYER>>> DirectX11::m_pRenderTargetViewList;
+std::pair < std::unordered_map<HWND, size_t>, std::vector<DirectX11::RenderTarget>> DirectX11::m_pRenderTargetViewList;
 
-std::unordered_map<HWND, bool> DirectX11::m_waveHandleList;
+std::unordered_map<HWND, std::pair<bool, FunctionRegistry::FunctionType>> DirectX11::m_waveHandleList;
 
 //デプスステート
 ComPtr<ID3D11DepthStencilState> DirectX11::m_pDSState;
@@ -42,12 +42,21 @@ float DirectX11::clearColor[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
 float DirectX11::clearColor[4] = { 0.0f, 0.5f, 0.5f, 1.0f };
 #endif
 
-// ピクセルシェーダーオブジェクト
-ComPtr<ID3D11PixelShader> DirectX11::m_pWavePixelShader = nullptr;
 
-DirectX11::TimeBuffer DirectX11::waveData;
+DirectX11::TimeBuffer DirectX11::waveBufferData;
+DirectX11::WndBuffer DirectX11::windowBufferData;
+
+//Wave用ピクセルシェーダーオブジェクト
+ComPtr<ID3D11PixelShader> DirectX11::m_pWavePixelShader;
+//Wave用コンピュートシェーダー
+ComPtr<ID3D11ComputeShader> DirectX11::m_pWaveComputeShader;
 //定数バッファ変数
-ComPtr<ID3D11Buffer> DirectX11::m_pPSWaveConstantBuffer;
+ComPtr<ID3D11Buffer> DirectX11::m_pCSWaveConstantBuffer;
+//定数バッファ変数
+ComPtr<ID3D11Buffer> DirectX11::m_pPSWndConstantBuffer;
+
+ComPtr<ID3D11UnorderedAccessView> DirectX11::noiseMapUAV;
+ComPtr<ID3D11ShaderResourceView> DirectX11::noiseMapSRV;
 
 //--------------------------------------------------------------------------------------
 // シェーダーをファイル拡張子に合わせてコンパイル
@@ -227,6 +236,31 @@ HRESULT DirectX11::CreatePixelShader(const BYTE* byteCode, SIZE_T size, ID3D11Pi
 	return S_OK;
 }
 
+HRESULT DirectX11::CreateComputeShader(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3D11ComputeShader** ppPixelShader)
+{
+	HRESULT   hr;
+	ID3DBlob* pBlob = nullptr;
+	void* ShaderObject;
+	size_t	  ShaderObjectSize;
+
+	// ファイルの拡張子に合わせてコンパイル
+	hr = CompileShader(szFileName, szEntryPoint, szShaderModel, &ShaderObject, ShaderObjectSize, &pBlob);
+	if (FAILED(hr))
+	{
+		return E_FAIL;
+	}
+
+	// ピクセルシェーダーを生成
+	hr = m_pDevice->CreateComputeShader(ShaderObject, ShaderObjectSize, NULL, ppPixelShader);
+	if (FAILED(hr))
+	{
+		if (pBlob)pBlob->Release();
+		return E_FAIL;
+	}
+
+	return S_OK;
+}
+
 HRESULT DirectX11::D3D_Create(HWND mainHwnd)
 {
 	HRESULT  hr; // HRESULT型・・・Windowsプログラムで関数実行の成功/失敗を受け取る
@@ -289,13 +323,14 @@ HRESULT DirectX11::D3D_Create(HWND mainHwnd)
 			drawLayers.push_back(layer);
 	}
 
-	m_pRenderTargetViewList.insert(std::make_pair(mainHwnd, std::make_pair(nullptr, std::move(drawLayers))));
+	auto& target = m_pRenderTargetViewList.second.emplace_back(mainHwnd, nullptr, std::move(drawLayers));
+	m_pRenderTargetViewList.first.emplace(mainHwnd, m_pRenderTargetViewList.second.size() - 1);
 
 	// レンダーターゲットビュー作成
 	ID3D11Texture2D* renderTarget;
 	hr = swapchain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&renderTarget);
 	if (FAILED(hr)) return hr;
-	hr = m_pDevice->CreateRenderTargetView(renderTarget, NULL, m_pRenderTargetViewList.find(mainHwnd)->second.first.GetAddressOf());
+	hr = m_pDevice->CreateRenderTargetView(renderTarget, NULL, target.view.GetAddressOf());
 	renderTarget->Release();
 	if (FAILED(hr)) return hr;
 
@@ -350,7 +385,7 @@ HRESULT DirectX11::D3D_Create(HWND mainHwnd)
 	unsigned int numElements = ARRAYSIZE(layout);
 
 	// 頂点シェーダーオブジェクトを生成、同時に頂点レイアウトも生成
-	//hr = CreateVertexShader(UV_VS, sizeof(UV_VS), layout, numElements, m_pVertexShader.GetAddressOf(), m_pInputLayout.GetAddressOf());
+	//hr = CreateVertexShader("unlitTextureVS.hlsl", "vs_main", "vs_5_0", layout, numElements,m_pVertexShader.GetAddressOf(), m_pInputLayout.GetAddressOf());
 	hr = CreateVertexShader(UNLIT_TEXTURE_VS, sizeof(UNLIT_TEXTURE_VS), layout, numElements, m_pVertexShader.GetAddressOf(), m_pInputLayout.GetAddressOf());
 	if (FAILED(hr)) {
 		MessageBoxA(NULL, "CreateVertexShader error", "error", MB_OK);
@@ -358,13 +393,8 @@ HRESULT DirectX11::D3D_Create(HWND mainHwnd)
 	}
 	
 	// ピクセルシェーダーオブジェクトを生成
+	//hr = CreatePixelShader("unlitTexturePS.hlsl", "ps_main", "ps_5_0", m_pPixelShader.GetAddressOf());
 	hr = CreatePixelShader(UNLIT_TEXTURE_PS, sizeof(UNLIT_TEXTURE_PS), m_pPixelShader.GetAddressOf());
-	if (FAILED(hr)) {
-		MessageBoxA(NULL, "CreatePixelShader error", "error", MB_OK);
-		return E_FAIL;
-	}
-
-	hr = CreatePixelShader("WavePixelShader.hlsl", "ps_main", "ps_5_0", m_pWavePixelShader.GetAddressOf());
 	if (FAILED(hr)) {
 		MessageBoxA(NULL, "CreatePixelShader error", "error", MB_OK);
 		return E_FAIL;
@@ -403,16 +433,94 @@ HRESULT DirectX11::D3D_Create(HWND mainHwnd)
 	hr = m_pDevice->CreateBuffer(&cbDesc2, NULL, m_pVSCameraConstantBuffer.GetAddressOf());
 	if (FAILED(hr)) return hr;
 
+	//WaveNoise用変数初期化
+	//============================================================================================
+	hr = CreatePixelShader("WavePixelShader.hlsl", "ps_main", "ps_5_0", m_pWavePixelShader.GetAddressOf());
+	if (FAILED(hr)) {
+		MessageBoxA(NULL, "CreatePixelShader error", "error", MB_OK);
+		return E_FAIL;
+	}
+
+	hr = CreateComputeShader("WaveComputeShader.hlsl", "cs_main", "cs_5_0", m_pWaveComputeShader.GetAddressOf());
+	if (FAILED(hr)) {
+		MessageBoxA(NULL, "WaveComputeShader error", "error", MB_OK);
+		return E_FAIL;
+	}
+
+	m_pDeviceContext->PSSetShader(m_pWavePixelShader.Get(), NULL, 0);
+	m_pDeviceContext->CSSetShader(m_pWaveComputeShader.Get(), NULL, 0);
+
+	// ライトマップ用の UAV (Unordered Access View) テクスチャ
+	ID3D11Texture2D* noiseMapTex = nullptr;
+	D3D11_TEXTURE2D_DESC texDesc = {};
+	texDesc.Width = SCREEN_WIDTH;  // 画面サイズ
+	texDesc.Height = SCREEN_HEIGHT;
+	texDesc.MipLevels = 1;
+	texDesc.ArraySize = 1;
+	texDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	texDesc.Usage = D3D11_USAGE_DEFAULT;
+	texDesc.BindFlags = D3D11_BIND_UNORDERED_ACCESS | D3D11_BIND_SHADER_RESOURCE;
+	texDesc.CPUAccessFlags = 0;
+	texDesc.MiscFlags = 0;
+	texDesc.SampleDesc.Count = 1;
+	hr = m_pDevice->CreateTexture2D(&texDesc, nullptr, &noiseMapTex);
+	if (FAILED(hr)) return S_FALSE;
+
+	// UAV を作成
+	D3D11_UNORDERED_ACCESS_VIEW_DESC uavDesc = {};
+	uavDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	uavDesc.ViewDimension = D3D11_UAV_DIMENSION_TEXTURE2D;
+	hr = m_pDevice->CreateUnorderedAccessView(noiseMapTex, &uavDesc, noiseMapUAV.GetAddressOf());
+	if (FAILED(hr)) return S_FALSE;
+
+	// SRV (Shader Resource View) を作成（ピクセルシェーダーで利用）
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+	srvDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvDesc.Texture2D.MipLevels = 1;
+	hr = m_pDevice->CreateShaderResourceView(noiseMapTex, &srvDesc, noiseMapSRV.GetAddressOf());
+	if (FAILED(hr)) return S_FALSE;
+
 	//定数バッファ作成
 	D3D11_BUFFER_DESC cbDesc3;
 	cbDesc3.ByteWidth = sizeof(TimeBuffer);
-	cbDesc3.Usage = D3D11_USAGE_DEFAULT;
+	cbDesc3.Usage = D3D11_USAGE_DYNAMIC;
 	cbDesc3.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	cbDesc3.CPUAccessFlags = 0;
+	cbDesc3.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	cbDesc3.MiscFlags = 0;
 	cbDesc3.StructureByteStride = 0;
-	hr = m_pDevice->CreateBuffer(&cbDesc3, NULL, m_pPSWaveConstantBuffer.GetAddressOf());
+	hr = m_pDevice->CreateBuffer(&cbDesc3, NULL, m_pCSWaveConstantBuffer.GetAddressOf());
 	if (FAILED(hr)) return hr;
+
+	//定数バッファ作成
+	D3D11_BUFFER_DESC cbDesc4;
+	cbDesc4.ByteWidth = sizeof(WndBuffer);
+	cbDesc4.Usage = D3D11_USAGE_DEFAULT;
+	cbDesc4.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cbDesc4.CPUAccessFlags = 0;
+	cbDesc4.MiscFlags = 0;
+	cbDesc4.StructureByteStride = 0;
+	hr = m_pDevice->CreateBuffer(&cbDesc4, NULL, m_pPSWndConstantBuffer.GetAddressOf());
+	if (FAILED(hr)) return hr;
+
+	noiseMapTex->Release();
+
+	m_pDeviceContext->CSSetConstantBuffers(0, 1, m_pCSWaveConstantBuffer.GetAddressOf());
+
+	m_pDeviceContext->PSSetConstantBuffers(0, 1, m_pPSWndConstantBuffer.GetAddressOf());
+
+	//DirectX11::m_pDeviceContext->PSSetConstantBuffers(0, 1, DirectX11::m_pPSWndConstantBuffer.GetAddressOf());
+
+	auto& wndBuffer = DirectX11::windowBufferData;
+	wndBuffer.rect[0] = SCREEN_WIDTH;
+	wndBuffer.rect[1] = SCREEN_HEIGHT;
+	wndBuffer.pos[0] = SCREEN_WIDTH;
+	wndBuffer.pos[1] = SCREEN_HEIGHT;
+
+	//行列をシェーダーに渡す
+	DirectX11::m_pDeviceContext->UpdateSubresource(
+		DirectX11::m_pPSWndConstantBuffer.Get(), 0, NULL, &wndBuffer, 0, 0);
+	//============================================================================================
 
 	//ブレンディングステート生成
 	D3D11_BLEND_DESC BlendStateDesc;
@@ -475,13 +583,9 @@ HRESULT DirectX11::D3D_Create(HWND mainHwnd)
 
 	//RenderManagerでDrawするときに後方で設定を戻しているので初めに一回設定しておく
 	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	m_pDeviceContext->PSSetConstantBuffers(0, 1, m_pPSWaveConstantBuffer.GetAddressOf());
-
 	
-	waveData.strength = 0.02f;  // ノイズによる揺れの強さ
-	waveData.noiseScale = 10.0f; // ノイズのスケール
-	waveData.persistence = 0.5f; // 各オクターブの影響度
+	waveBufferData.rect.x = SCREEN_WIDTH;  
+	waveBufferData.rect.y = SCREEN_HEIGHT;
 
 	return S_OK;
 }
@@ -493,15 +597,6 @@ void DirectX11::D3D_Release()
 
 void DirectX11::D3D_StartRender()
 {
-	waveData.time += 1.0f / UPDATE_FPS;
-	if (waveData.time >= 100.0f)
-	{
-		waveData.time -= 100.0f;
-	}
-	//行列をシェーダーに渡す
-	DirectX11::m_pDeviceContext->UpdateSubresource(
-		DirectX11::m_pPSWaveConstantBuffer.Get(), 0, NULL, &waveData, 0, 0);
-
 	//SpriteBatchで設定が変わるので戻すため
 	//===========================================================================================
 	//インプットレイアウト設定
@@ -512,10 +607,10 @@ void DirectX11::D3D_StartRender()
 	//===========================================================================================
 
 	int colorIndex = 0;
-	for (auto& targetView : m_pRenderTargetViewList)
+	for (auto& targetView : m_pRenderTargetViewList.second)
 	{
 		// 描画先キャンバスを塗りつぶす
-		m_pDeviceContext->ClearRenderTargetView(targetView.second.first.Get(), clearColor);
+		m_pDeviceContext->ClearRenderTargetView(targetView.view.Get(), clearColor);
 		//colorIndex = (colorIndex + 1) % 4;
 	}
 
@@ -529,6 +624,41 @@ void DirectX11::D3D_StartRender()
 	//ピクセルシェーダ設定
 	m_pDeviceContext->PSSetShader(m_pPixelShader.Get(), NULL, 0);
 	//=======================================================================
+
+	// 1. コンピュートシェーダーでライトマップを生成
+	//======================================================================================
+	waveBufferData.time += 1.0f / UPDATE_FPS;
+	if (waveBufferData.time >= 10000.0f)
+	{
+		waveBufferData.time -= 10000.0f;
+	}
+
+	m_pDeviceContext->CSSetShader(m_pWaveComputeShader.Get(), nullptr, 0);
+
+	//定数バッファをコンピュートシェーダーにセットする
+	m_pDeviceContext->CSSetConstantBuffers(0, 1, m_pCSWaveConstantBuffer.GetAddressOf());
+
+	//定数バッファにデータを送る(D3D11_USAGE_DYNAMICなのでMap,UnMapを使用する)
+	D3D11_MAPPED_SUBRESOURCE mappedResource;
+	HRESULT hr = m_pDeviceContext->Map(m_pCSWaveConstantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+	if (FAILED(hr)) {
+		std::cerr << "Failed to map computeConstantBuffer!" << std::endl;
+	}
+	memcpy(mappedResource.pData, &waveBufferData, sizeof(waveBufferData));
+	m_pDeviceContext->Unmap(m_pCSWaveConstantBuffer.Get(), 0);
+
+	m_pDeviceContext->CSSetUnorderedAccessViews(0, 1, noiseMapUAV.GetAddressOf(), nullptr);
+
+	// スレッドグループサイズ = (画面サイズ / 8)（8x8 ピクセルごとに処理）
+	static constexpr int threadGroupX = (SCREEN_WIDTH + 7) / 8;
+	static constexpr int threadGroupY = (SCREEN_HEIGHT + 7) / 8;
+
+	m_pDeviceContext->Dispatch(threadGroupX, threadGroupY, 1);
+
+	// 使用後は UAV を解除（これをしないと描画時にエラーになる）
+	ID3D11UnorderedAccessView* nullUAV = nullptr;
+	m_pDeviceContext->CSSetUnorderedAccessViews(0, 1, &nullUAV, nullptr);
+	//======================================================================================
 }
 
 void DirectX11::D3D_FinishRender()
@@ -625,9 +755,10 @@ HRESULT DirectX11::CreateWindowSwapChain(HWND hWnd)
 	}
 
 	m_pSwapChainList.insert(std::make_pair(hWnd, swapChain));
-	m_pRenderTargetViewList.insert(std::make_pair(hWnd, std::make_pair(renderTargetView, std::move(drawLayers))));
+	m_pRenderTargetViewList.second.emplace_back(hWnd, renderTargetView, std::move(drawLayers));
+	m_pRenderTargetViewList.first.emplace(hWnd, m_pRenderTargetViewList.second.size() - 1);
 
-	m_waveHandleList.emplace(hWnd, false);
+	m_waveHandleList.emplace(hWnd, std::make_pair(false, Void));
 
 	return S_OK;
 }

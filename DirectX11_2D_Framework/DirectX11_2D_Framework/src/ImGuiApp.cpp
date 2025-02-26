@@ -619,10 +619,6 @@ void ImGuiApp::DrawOptionGui()
 				ImGui::PopStyleVar();
 
 				ImGui::ColorEdit3("clear color", DirectX11::clearColor); // Edit 3 floats representing a color
-
-				ImGui::InputFloat("strength##strength",&DirectX11::waveData.strength);  // ノイズによる揺れの強さ
-				ImGui::InputFloat("scale##waveData",&DirectX11::waveData.noiseScale); // ノイズのスケール
-				ImGui::InputFloat("persistence",&DirectX11::waveData.persistence); // 各オクターブの影響度
 		
 				ImGui::EndTabItem();
 			}
@@ -2880,7 +2876,7 @@ void ImGuiApp::HandleUI::Draw(GameObject* _target,const Vector2 _targetPos)
 
 	// 描画先のキャンバスと使用する深度バッファを指定する
 	DirectX11::m_pDeviceContext->OMSetRenderTargets(1,
-		DirectX11::m_pRenderTargetViewList[Window::GetMainHWnd()].first.GetAddressOf(), DirectX11::m_pDepthStencilView.Get());
+		DirectX11::m_pRenderTargetViewList.second.front().view.GetAddressOf(), DirectX11::m_pDepthStencilView.Get());
 
 	RenderManager::SetMainCameraMatrix();
 

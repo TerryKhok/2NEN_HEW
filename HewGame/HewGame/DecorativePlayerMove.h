@@ -80,6 +80,19 @@ class DecorativePlayerMove : public Component
 public:
 	bool inFloat = false;
 
+	void SetModeTexture(PLAYER_MODE _mode)
+	{
+		if (landing)
+		{
+			std::wstring path = PlayerState::playerSpriteSheetRelativePath;
+			path += wPlayerModeName[_mode];
+			path += L"_landing.png";
+			render->SetTexture(path.c_str());
+		}
+		else
+			state->ChangeTexture(_mode, render);
+	}
+
 	void PushMode(PLAYER_MODE _mode)
 	{
 		mode = _mode;
@@ -120,6 +133,11 @@ private:
 	int landCount = 0;
 	bool reverse = false;
 
+	void PauseUpdate() override
+	{
+		SetModeTexture(NORMAL);
+	}
+
 	void Update()
 	{
 		auto& input = Input::Get();
@@ -127,6 +145,8 @@ private:
 		isGround = false;
 
 		state->Update(mode, anim);
+
+		SetModeTexture(NORMAL);
 
 		Vector2 rayStart = m_this->transform.position;
 		if (inFloat)
@@ -249,6 +269,20 @@ private:
 			}
 		}
 	}
+
+	public:
+		static void SetDecorativePlayerNormal()
+		{
+			GameObject* obj = ObjectManager::Find("Player");
+			if (obj != nullptr)
+			{
+				DecorativePlayerMove* player = nullptr;
+				if (obj->TryGetComponent<DecorativePlayerMove>(&player))
+				{
+					player->SetModeTexture(PLAYER_MODE::NORMAL);
+				}
+			}
+		}
 };
 
 SetReflectionComponent(DecorativePlayerMove)

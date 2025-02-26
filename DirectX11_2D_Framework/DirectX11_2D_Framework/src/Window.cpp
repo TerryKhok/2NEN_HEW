@@ -1237,12 +1237,16 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			swapList.erase(swapIter);
 		}
 
-		auto& viewList = DirectX11::m_pRenderTargetViewList;
-		auto viewIter = viewList.find(hTargetWnd);
-		if (viewIter != viewList.end())
+		auto& viewMap = DirectX11::m_pRenderTargetViewList.first;
+		auto& viewVec = DirectX11::m_pRenderTargetViewList.second;
+		auto viewIter = viewMap.find(hTargetWnd);
+		if (viewIter != viewMap.end())
 		{
-			viewIter->second.first.Get()->Release();
-			viewList.erase(viewIter);
+			viewVec[viewIter->second].view.Get()->Release();
+			viewMap[viewVec.back().hWnd] = viewIter->second;
+			std::swap(viewVec[viewIter->second], viewVec.back());	
+			viewVec.pop_back();
+			viewMap.erase(viewIter);
 		}
 
 		auto& waveList = DirectX11::m_waveHandleList;
@@ -1458,12 +1462,16 @@ LRESULT Window::WndProcSub(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			swapList.erase(swapIter);
 		}
 
-		auto& viewList = DirectX11::m_pRenderTargetViewList;
-		auto viewIter = viewList.find(hWnd);
-		if (viewIter != viewList.end())
+		auto& viewMap = DirectX11::m_pRenderTargetViewList.first;
+		auto& viewVec = DirectX11::m_pRenderTargetViewList.second;
+		auto viewIter = viewMap.find(hWnd);
+		if (viewIter != viewMap.end())
 		{
-			viewIter->second.first.Get()->Release();
-			viewList.erase(viewIter);
+			viewVec[viewIter->second].view.Get()->Release();
+			std::swap(viewVec[viewIter->second], viewVec.back());
+			viewMap[viewVec.back().hWnd] = viewIter->second;
+			viewVec.pop_back();
+			viewMap.erase(viewIter);
 		}
 
 		auto objIter = m_hwndObjNames.find(hWnd);

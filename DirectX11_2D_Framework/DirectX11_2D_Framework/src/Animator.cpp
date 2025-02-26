@@ -60,6 +60,33 @@ Animator::Animator(GameObject* _gameObject, SERIALIZE_INPUT& ar)
 }
 
 
+void AnimationClip::AddFrame(const AnimationFrameData& _frame)
+{
+		AnimationFrame frame;
+		ComPtr<ID3D11ShaderResourceView> texture;
+		TextureAssets::pLoadTexture(texture, _frame.texPath.c_str());
+		auto iter = std::find(textureList.begin(), textureList.end(), texture);
+		if (iter != textureList.end())
+		{
+			frame.texIndex = (int)std::distance(textureList.begin(), iter);
+		}
+		else
+		{
+			textureList.push_back(texture);
+			frame.texIndex = (int)textureList.size() - 1;
+		}
+#ifdef DEBUG_TRUE
+		frame.texPath = _frame.texPath;
+#endif
+		frame.frameX = _frame.frameX;
+		frame.frameY = _frame.frameY;
+		frame.scaleX = _frame.scaleX;
+		frame.scaleY = _frame.scaleY;
+		frame.waitCount = _frame.waitCount;
+
+		frames.push_back(std::move(frame));
+	}
+
 void AnimationClip::SetUVRenderNode(UVRenderNode* _renderNode)
 {
 	auto& frame = frames[frameIndex];
@@ -175,13 +202,13 @@ void Animator::AddClip(std::string _name, std::string _path, bool _loop)
 			fin.read((char*)&splitY, sizeof(splitY));
 			frame.scaleY = 1.0f / splitY;
 			//uvX
-fin.read((char*)&frame.frameX, sizeof(frame.frameX));
-//uvY
-fin.read((char*)&frame.frameY, sizeof(frame.frameY));
-//waitCout
-fin.read((char*)&frame.waitCount, sizeof(frame.waitCount));
+			fin.read((char*)&frame.frameX, sizeof(frame.frameX));
+			//uvY
+			fin.read((char*)&frame.frameY, sizeof(frame.frameY));
+			//waitCout
+			fin.read((char*)&frame.waitCount, sizeof(frame.waitCount));
 
-clip->AddFrame(frame);
+			clip->AddFrame(frame);
 		}
 
 		//“Ç‚İ‚İƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚é

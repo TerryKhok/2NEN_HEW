@@ -18,4 +18,6 @@ std::string OpenFileDialog();
 
 const wchar_t* GetFileExtension(const wchar_t* path);
 
+void Void();
+
 

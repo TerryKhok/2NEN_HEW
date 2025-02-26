@@ -8,11 +8,12 @@ class SubWindow : public Component
 public:
 	void DisableDrawLayer(LAYER _layer)
 	{
-		auto& viewList = DirectX11::m_pRenderTargetViewList;
-		auto iter = viewList.find(m_hWnd);
-		if (iter != viewList.end())
+		auto& viewMap = DirectX11::m_pRenderTargetViewList.first;
+		auto& viewVec = DirectX11::m_pRenderTargetViewList.second;
+		auto iter = viewMap.find(m_hWnd);
+		if (iter != viewMap.end())
 		{
-			auto& layerList = iter->second.second;
+			auto& layerList = viewVec[iter->second].layer;
 			auto it = std::find(layerList.begin(), layerList.end(), _layer);
 			if (it != layerList.end())
 			{
@@ -47,7 +48,9 @@ private:
 		auto waveIter = DirectX11::m_waveHandleList.find(m_hWnd);
 		if (waveIter != DirectX11::m_waveHandleList.end())
 		{
-			waveIter->second = isWave;
+			waveIter->second.first = isWave;
+			if (!funcName.empty())
+				waveIter->second.second = FunctionRegistry::Get().GetRegisterFunction(funcName);
 		}
 	}
 
@@ -69,19 +72,21 @@ private:
 	void DrawImGui(ImGuiApp::HandleUI& _handleUi) override
 	{
 		ImGui::Checkbox("wave##SubWindow", &isWave);
+		FunctionRegistry::DrawPickFunction("Event##SubWindow", funcName);
 	}
 
 private:
 	HWND m_hWnd;
 	bool isWave = false;
+	std::string funcName;
 
 	void Serialize(cereal::JSONOutputArchive& ar) override 
 	{
-		ar(CEREAL_NVP(isWave));
+		ar(CEREAL_NVP(isWave),CEREAL_NVP(funcName));
 	} 
 	
-	void Deserialize(cereal::JSONInputArchive& ar) override 
+	void Deserialize(cereal::JSONInputArchive& ar) override
 	{
-		ar(CEREAL_NVP(isWave));
+		ar(CEREAL_NVP(isWave), CEREAL_NVP(funcName));
 	}
 };

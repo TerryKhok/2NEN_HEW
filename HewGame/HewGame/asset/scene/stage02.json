@@ -67,7 +67,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": -32.0
@@ -94,7 +94,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": 32.0
@@ -121,7 +121,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": 32.0
@@ -148,7 +148,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": -32.0
@@ -557,6 +557,7 @@
             }
         },
         "isWave": true,
+        "funcName": "SetPlayerPermeation",
         "confirmed": false,
         "selfIndex": 0
     },
@@ -723,6 +724,7 @@
             }
         },
         "isWave": true,
+        "funcName": "SetPlayerPermeation",
         "confirmed": false,
         "selfIndex": 1
     },
@@ -868,6 +870,7 @@
             }
         },
         "isWave": true,
+        "funcName": "SetPlayerAntigravity",
         "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
@@ -1055,6 +1058,7 @@
             }
         },
         "isWave": true,
+        "funcName": "SetPlayerPermeation",
         "confirmed": false,
         "selfIndex": 3
     },
@@ -9427,7 +9431,7 @@
         }
     },
     "value19": {
-        "name": "Player_1_1",
+        "name": "Player",
         "transform": {
             "position": {
                 "x": -383.32000732421877,
@@ -9477,7 +9481,7 @@
                             "f.z": 1.0,
                             "f.w": 1.0
                         },
-                        "path": "asset\\spritesheet\\player_normal_standby.png"
+                        "path": "asset/spritesheet/player_transparent_standby.png"
                     },
                     "m_scaleX": 0.125,
                     "m_scaleY": 0.3333333432674408,
@@ -9874,7 +9878,8 @@
                 }
             }
         },
-        "isWave": false
+        "isWave": false,
+        "funcName": ""
     },
     "value23": {
         "name": "effect",

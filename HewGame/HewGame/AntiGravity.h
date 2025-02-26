@@ -55,7 +55,7 @@ protected:
 			if (target->TryGetComponent<MovePlayer>(&player))
 			{
 				player->inFloat = true;
-				player->PushMode(ANTI_GRAVITY);
+				//player->PushMode(ANTI_GRAVITY);
 			}
 		}
 	}
@@ -81,7 +81,7 @@ protected:
 		if (target->TryGetComponent<MovePlayer>(&player))
 		{
 			player->inFloat = false;
-			player->PopMode(ANTI_GRAVITY);
+			//player->PopMode(ANTI_GRAVITY);
 		}
 	}
 
@@ -144,6 +144,35 @@ private:
 			enterLib.erase(iter);
 		}
 	}
+
+public:
+	static void SetPlayerAntigravity()
+	{
+		GameObject* obj = ObjectManager::Find("Player");
+		if (obj != nullptr)
+		{
+			MovePlayer* player = nullptr;
+			if (obj->TryGetComponent<MovePlayer>(&player))
+			{
+				player->SetModeTexture(PLAYER_MODE::ANTI_GRAVITY);
+			}
+		}
+	}
+
+	
+	static void SetDecorativePlayerAntigravity()
+	{
+		GameObject* obj = ObjectManager::Find("Player");
+		if (obj != nullptr)
+		{
+			DecorativePlayerMove* player = nullptr;
+			if (obj->TryGetComponent<DecorativePlayerMove>(&player))
+			{
+				player->SetModeTexture(PLAYER_MODE::ANTI_GRAVITY);
+			}
+		}
+	}
+
 };
 
 SetReflectionComponent(AntiGravity)
@@ -170,7 +199,7 @@ class DecorativeAntiGravity : public AntiGravity
 			if (target->TryGetComponent<DecorativePlayerMove>(&player))
 			{
 				player->inFloat = true;
-				player->PushMode(ANTI_GRAVITY);
+				//player->PushMode(ANTI_GRAVITY);
 			}
 		}
 	}
@@ -196,9 +225,18 @@ class DecorativeAntiGravity : public AntiGravity
 		if (target->TryGetComponent<DecorativePlayerMove>(&player))
 		{
 			player->inFloat = false;
-			player->PopMode(ANTI_GRAVITY);
+			//player->PopMode(ANTI_GRAVITY);
 		}
 	}
 };
 
 SetReflectionComponent(DecorativeAntiGravity)
+
+namespace {
+    struct AutoRegister_SetPlayerAntigravity {
+        AutoRegister_SetPlayerAntigravity() {
+            FunctionRegistry::Get().registerFunction("SetPlayerAntigravity", AntiGravity::SetPlayerAntigravity);
+			FunctionRegistry::Get().registerFunction("SetDecorativePlayerAntigravity", AntiGravity::SetDecorativePlayerAntigravity);
+        }
+    } autoRegister_SetPlayerAntigravity;
+}

@@ -43,11 +43,11 @@ class Bounce : public Component
 			inCount++;
 		}
 
-		MovePlayer* player = nullptr;
+		/*MovePlayer* player = nullptr;
 		if (target->TryGetComponent<MovePlayer>(&player))
 		{
 			player->PushMode(BOUNCE);
-		}
+		}*/
 	}
 
 	void ExitEvent(GameObject* target)
@@ -65,11 +65,11 @@ class Bounce : public Component
 			}
 		}
 
-		MovePlayer* player = nullptr;
+		/*MovePlayer* player = nullptr;
 		if (target->TryGetComponent<MovePlayer>(&player))
 		{
 			player->PopMode(BOUNCE);
-		}
+		}*/
 	}
 
 	int overlapCount = 0;
@@ -120,6 +120,22 @@ class Bounce : public Component
 	}
 
 	SERIALIZE_COMPONENT_VALUE(restitutionPower)
+
+public:
+	static void SetPlayerBounce()
+	{
+		GameObject* obj = ObjectManager::Find("Player");
+		if (obj != nullptr)
+		{
+			MovePlayer* player = nullptr;
+			if (obj->TryGetComponent<MovePlayer>(&player))
+			{
+				player->SetModeTexture(PLAYER_MODE::BOUNCE);
+			}
+		}
+	}
 };
 
 SetReflectionComponent(Bounce)
+
+

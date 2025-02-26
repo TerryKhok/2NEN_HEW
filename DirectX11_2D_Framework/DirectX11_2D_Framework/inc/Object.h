@@ -438,6 +438,7 @@ class ObjectManager final
 	using ObjectList = std::pair<std::vector<std::unique_ptr<GameObject, void(*)(GameObject*)>>, ObjectListMap>;
 
 public:
+
 	//オブジェクト一覧から見つける アクセス速度n(1)なのではやい
 	static GameObject* Find(const std::string& _name);
 	//コピーとペーストを同時に行う

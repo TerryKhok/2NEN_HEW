@@ -53,8 +53,9 @@
             }
         },
         "isWave": false,
-        "targetName": "null",
         "funcName": "",
+        "targetName": "Interact",
+        "funcName": "ChangeSelectSceneMenu",
         "beforeColor": {
             "f.x": 1.0,
             "f.y": 1.0,
@@ -62,11 +63,11 @@
             "f.w": 1.0
         },
         "selectColor": {
-            "f.x": 1.0,
-            "f.y": 1.0,
+            "f.x": 0.0,
+            "f.y": 0.47058820724487307,
             "f.z": 1.0,
             "f.w": 1.0
         },
-        "pause": false
+        "pause": true
     }
 }

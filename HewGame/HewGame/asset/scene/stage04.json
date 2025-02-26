@@ -67,7 +67,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -48.45429611206055,
                 "vec.y": -27.346050262451173
@@ -94,7 +94,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": -48.57529830932617,
                 "vec.y": 27.490489959716798
@@ -121,7 +121,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 48.48699188232422,
                 "vec.y": 27.41583251953125
@@ -148,7 +148,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 2,
             "chain.ghost1": {
                 "vec.x": 48.567909240722659,
                 "vec.y": -27.504886627197267
@@ -644,6 +644,7 @@
             }
         },
         "isWave": true,
+        "funcName": "SetPlayerPermeation",
         "confirmed": false,
         "selfIndex": 0
     },
@@ -810,6 +811,7 @@
             }
         },
         "isWave": true,
+        "funcName": "SetPlayerPermeation",
         "confirmed": false,
         "selfIndex": 1
     },
@@ -976,6 +978,7 @@
             }
         },
         "isWave": true,
+        "funcName": "SetPlayerBounce",
         "confirmed": false,
         "selfIndex": 2,
         "restitutionPower": 0.800000011920929
@@ -1122,6 +1125,7 @@
             }
         },
         "isWave": true,
+        "funcName": "SetPlayerLowGravity",
         "m_layer": 2,
         "m_node": {
             "polymorphic_id": 1073741824,
@@ -2169,7 +2173,7 @@
         }
     },
     "value17": {
-        "name": "Player_1",
+        "name": "Player",
         "transform": {
             "position": {
                 "x": -422.74737548828127,
@@ -9472,7 +9476,8 @@
                 }
             }
         },
-        "isWave": false
+        "isWave": false,
+        "funcName": ""
     },
     "value23": {
         "name": "effect",
