@@ -552,6 +552,28 @@ void RenderManager::Draw()
 
 			// 2. ライトマップテクスチャをピクセルシェーダーにセット
 			DirectX11::m_pDeviceContext->PSSetShaderResources(1, 1, DirectX11::noiseMapSRV.GetAddressOf());
+
+			auto& wndBuffer = DirectX11::windowBufferData;
+			wndBuffer.rect[0] = SCREEN_WIDTH;
+			wndBuffer.rect[1] = SCREEN_HEIGHT;
+
+			//行列をシェーダーに渡す
+			DirectX11::m_pDeviceContext->UpdateSubresource(
+				DirectX11::m_pPSWndConstantBuffer.Get(), 0, NULL, &wndBuffer, 0, 0);
+		}
+		else
+		{
+			PointLight::SetLightPSShader(DirectX11::m_pDeviceContext.Get());
+
+			auto& wndBuffer = DirectX11::windowBufferData;
+			wndBuffer.rect[0] = windowRect.right - windowRect.left;//clientRect.right;
+			wndBuffer.rect[1] = windowRect.bottom - windowRect.top;//clientRect.bottom;
+			wndBuffer.pos[0] = static_cast<float>(windowRect.left);//static_cast<float>(windowRect.left + windowRect.right) / 2;
+			wndBuffer.pos[1] = static_cast<float>(windowRect.top);//static_cast<float>(windowRect.top + windowRect.bottom) / -2;
+
+			//行列をシェーダーに渡す
+			DirectX11::m_pDeviceContext->UpdateSubresource(
+				DirectX11::m_pPSWndConstantBuffer.Get(), 0, NULL, &wndBuffer, 0, 0);
 		}
 
 #ifndef DEBUG_TRUE
@@ -561,11 +583,10 @@ void RenderManager::Draw()
 			node.first->NextFunc();
 		}
 
-		if (wave)
-		{
-			//ピクセルシェーダ設定
-			DirectX11::m_pDeviceContext->PSSetShader(DirectX11::m_pPixelShader.Get(), NULL, 0);
-		}
+		//ピクセルシェーダ設定
+		DirectX11::m_pDeviceContext->PSSetShader(DirectX11::m_pPixelShader.Get(), NULL, 0);
+
+		m_rendererList[LAYER_SIGN].first->NextFunc();
 #else
 		for (const auto layer : view.layer)
 		{
@@ -573,11 +594,10 @@ void RenderManager::Draw()
 			node.first->NextFunc();
 		}
 
-		if (wave)
-		{
-			//ピクセルシェーダ設定
-			DirectX11::m_pDeviceContext->PSSetShader(DirectX11::m_pPixelShader.Get(), NULL, 0);
-		}
+		//ピクセルシェーダ設定
+		DirectX11::m_pDeviceContext->PSSetShader(DirectX11::m_pPixelShader.Get(), NULL, 0);
+
+		m_rendererList[LAYER_SIGN].first->NextFunc();
 
 		if (drawHitBox)
 		{
@@ -673,6 +693,23 @@ void RenderManager::Draw()
 		DirectX11::m_pVSCameraConstantBuffer.Get(), 0, NULL, &cb, 0, 0);
 
 	m_rendererList[LAYER::LAYER_UI].first->NextFunc();
+
+	RECT rect;
+	if (GetWindowRect(Window::GetMainHWnd(), &rect))
+	{
+		CameraManager::cameraPosition = {
+			(static_cast<float>(rect.left + rect.right) / 2 - Window::MONITER_HALF_WIDTH) * PROJECTION_ASPECT_WIDTH / renderZoom.x + renderOffset.x,
+			(static_cast<float>(rect.top + rect.bottom) / -2 + Window::MONITER_HALF_HEIGHT) * PROJECTION_ASPECT_HEIGHT / renderZoom.y + renderOffset.y
+		};
+	}
+
+	if (GetClientRect(Window::GetMainHWnd(), &rect))
+	{
+		rect.right = max(rect.right, 1);
+		rect.bottom = max(rect.bottom, 1);
+		CameraManager::cameraZoom.x = PROJECTION_WINDOW_WIDTH / static_cast<float>(rect.right) * renderZoom.x;
+		CameraManager::cameraZoom.y = PROJECTION_WINDOW_HEIGHT / static_cast<float>(rect.bottom) * renderZoom.y;
+	}
 }
 
 void RenderManager::AddRenderList(std::shared_ptr<RenderNode> _node, LAYER _layer)

@@ -114,6 +114,9 @@
     <ClCompile Include="src\Particle.cpp">
       <Filter>component</Filter>
     </ClCompile>
+    <ClCompile Include="src\PointLight.cpp">
+      <Filter>component</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Box2D.h">
@@ -228,6 +231,9 @@
       <Filter>Inc</Filter>
     </ClInclude>
     <ClInclude Include="inc\Particle.h">
+      <Filter>component</Filter>
+    </ClInclude>
+    <ClInclude Include="inc\PointLight.h">
       <Filter>component</Filter>
     </ClInclude>
   </ItemGroup>

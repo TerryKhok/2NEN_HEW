@@ -326,6 +326,7 @@ void SceneManager::LoadingScene(std::string _sceneName)
                 Box2DBodyManager::ChangeNextBodyNameList();
                 //生成するウィンドウを表示しない
                 Window::WindowSubLoadingBegin();
+                PointLight::StartAsync();
                 //シーンのロード処理
                 it->second();
                 //古いワールドを削除する
@@ -378,6 +379,8 @@ void SceneManager::ChangeScene()
 #endif
         //すべてのウィンドウを表示
         Window::WindowSubLoadingEnd();
+
+        PointLight::LinkLight();
 
         //シーン初期化
         /*try {

@@ -222,6 +222,7 @@ public:
 					Box2DBodyManager::ChangeNextBodyNameList();
 					//生成するウィンドウを表示しない
 					Window::WindowSubLoadingBegin();
+					PointLight::StartAsync();
 					//シーンのロード処理
 					it->second();
 					//古いワールドを削除する

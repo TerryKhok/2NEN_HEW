@@ -66,6 +66,8 @@ class DirectX11 final
 	friend class RenderNode;
 	friend class UVRenderNode;
 	friend class TileRenderNode;
+	friend class TransformRenderNode;
+	friend class WorldRenderNode;
 	friend class TileMap;
 	friend class RenderManager;
 	friend class CameraManager;
@@ -87,7 +89,7 @@ class DirectX11 final
 
 	DirectX11() = delete;
 
-private:
+public:
 	// 頂点シェーダーオブジェクトを生成、同時に頂点レイアウトも生成
 	static HRESULT CreateVertexShader(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel,
 		D3D11_INPUT_ELEMENT_DESC* layout, unsigned int numElements, ID3D11VertexShader** ppVertexShader, ID3D11InputLayout** ppVertexLayout);
@@ -101,6 +103,7 @@ private:
 	// コンピュートシェーダーオブジェクトを生成
 	static HRESULT CreateComputeShader(const char* szFileName, LPCSTR szEntryPoint, LPCSTR szShaderModel, ID3D11ComputeShader** ppPixelShader);
 
+private:
 	// 関数のプロトタイプ宣言
 	static HRESULT D3D_Create(HWND mainHwnd);
 	static void D3D_Release();
@@ -160,9 +163,17 @@ private:
 	};
 	static TimeBuffer waveBufferData;
 
+	struct SystemBuffer
+	{
+		UINT resolution[2];
+		UINT screen[2];
+	};
+	//定数バッファ変数
+	static ComPtr<ID3D11Buffer> m_pPSSystemConstantBuffer;
+
 	struct WndBuffer {
 		UINT rect[2];
-		UINT pos[2];
+		float pos[2];
 	};
 	static WndBuffer windowBufferData;
 

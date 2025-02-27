@@ -42,6 +42,8 @@ float DirectX11::clearColor[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
 float DirectX11::clearColor[4] = { 0.0f, 0.5f, 0.5f, 1.0f };
 #endif
 
+//定数バッファ変数
+ComPtr<ID3D11Buffer> DirectX11::m_pPSSystemConstantBuffer;
 
 DirectX11::TimeBuffer DirectX11::waveBufferData;
 DirectX11::WndBuffer DirectX11::windowBufferData;
@@ -316,6 +318,7 @@ HRESULT DirectX11::D3D_Create(HWND mainHwnd)
 	{
 		LAYER layer = (LAYER)i;
 		if (layer != LAYER_UI
+			&& layer != LAYER_SIGN
 #ifdef DEBUG_TRUE
 			&& layer != LAYER_BOX2D_DEBUG
 #endif
@@ -493,6 +496,17 @@ HRESULT DirectX11::D3D_Create(HWND mainHwnd)
 	if (FAILED(hr)) return hr;
 
 	//定数バッファ作成
+	D3D11_BUFFER_DESC cbDesc5;
+	cbDesc5.ByteWidth = sizeof(SystemBuffer);
+	cbDesc5.Usage = D3D11_USAGE_DEFAULT;
+	cbDesc5.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	cbDesc5.CPUAccessFlags = 0;
+	cbDesc5.MiscFlags = 0;
+	cbDesc5.StructureByteStride = 0;
+	hr = m_pDevice->CreateBuffer(&cbDesc5, NULL, m_pPSSystemConstantBuffer.GetAddressOf());
+	if (FAILED(hr)) return hr;
+
+	//定数バッファ作成
 	D3D11_BUFFER_DESC cbDesc4;
 	cbDesc4.ByteWidth = sizeof(WndBuffer);
 	cbDesc4.Usage = D3D11_USAGE_DEFAULT;
@@ -507,15 +521,26 @@ HRESULT DirectX11::D3D_Create(HWND mainHwnd)
 
 	m_pDeviceContext->CSSetConstantBuffers(0, 1, m_pCSWaveConstantBuffer.GetAddressOf());
 
-	m_pDeviceContext->PSSetConstantBuffers(0, 1, m_pPSWndConstantBuffer.GetAddressOf());
+	m_pDeviceContext->PSSetConstantBuffers(0, 1, m_pPSSystemConstantBuffer.GetAddressOf());
+
+	m_pDeviceContext->PSSetConstantBuffers(1, 1, m_pPSWndConstantBuffer.GetAddressOf());
 
 	//DirectX11::m_pDeviceContext->PSSetConstantBuffers(0, 1, DirectX11::m_pPSWndConstantBuffer.GetAddressOf());
+
+	SystemBuffer systemBuf;
+	systemBuf.resolution[0] = Window::MONITER_WIDTH;
+	systemBuf.resolution[1] = Window::MONITER_HEIGHT;
+	systemBuf.screen[0] = SCREEN_WIDTH;
+	systemBuf.screen[1] = SCREEN_HEIGHT;
+	//行列をシェーダーに渡す
+	DirectX11::m_pDeviceContext->UpdateSubresource(
+		DirectX11::m_pPSSystemConstantBuffer.Get(), 0, NULL, &systemBuf, 0, 0);
 
 	auto& wndBuffer = DirectX11::windowBufferData;
 	wndBuffer.rect[0] = SCREEN_WIDTH;
 	wndBuffer.rect[1] = SCREEN_HEIGHT;
-	wndBuffer.pos[0] = SCREEN_WIDTH;
-	wndBuffer.pos[1] = SCREEN_HEIGHT;
+	wndBuffer.pos[0] = 0.0f;
+	wndBuffer.pos[1] = 0.0f;
 
 	//行列をシェーダーに渡す
 	DirectX11::m_pDeviceContext->UpdateSubresource(
@@ -584,8 +609,10 @@ HRESULT DirectX11::D3D_Create(HWND mainHwnd)
 	//RenderManagerでDrawするときに後方で設定を戻しているので初めに一回設定しておく
 	m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	
-	waveBufferData.rect.x = SCREEN_WIDTH;  
+	waveBufferData.rect.x = SCREEN_WIDTH;
 	waveBufferData.rect.y = SCREEN_HEIGHT;
+
+	PointLight::Init(m_pDevice.Get(), m_pDeviceContext.Get());
 
 	return S_OK;
 }
@@ -622,7 +649,7 @@ void DirectX11::D3D_StartRender()
 	//頂点シェーダ設定
 	m_pDeviceContext->VSSetShader(m_pVertexShader.Get(), NULL, 0);
 	//ピクセルシェーダ設定
-	m_pDeviceContext->PSSetShader(m_pPixelShader.Get(), NULL, 0);
+	//m_pDeviceContext->PSSetShader(m_pPixelShader.Get(), NULL, 0);
 	//=======================================================================
 
 	// 1. コンピュートシェーダーでライトマップを生成
@@ -658,6 +685,8 @@ void DirectX11::D3D_StartRender()
 	// 使用後は UAV を解除（これをしないと描画時にエラーになる）
 	ID3D11UnorderedAccessView* nullUAV = nullptr;
 	m_pDeviceContext->CSSetUnorderedAccessViews(0, 1, &nullUAV, nullptr);
+
+	PointLight::SetAndUpdateLight(m_pDeviceContext.Get());
 	//======================================================================================
 }
 
@@ -747,6 +776,7 @@ HRESULT DirectX11::CreateWindowSwapChain(HWND hWnd)
 	{
 		LAYER layer = (LAYER)i;
 		if (layer != LAYER_UI 
+			&& layer != LAYER_SIGN
 #ifdef DEBUG_TRUE
 			&& layer != LAYER_BOX2D_DEBUG
 #endif

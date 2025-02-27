@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 33,
+    "objectNum": 49,
     "value0": {
         "name": "wall",
         "transform": {
@@ -47,7 +47,7 @@
                 "vec.y": 0.0
             },
             "angleVec": 0.0,
-            "gravity": 1.0,
+            "gravity": 0.019999999552965165,
             "mass": 0.0,
             "autoMass": 1.0,
             "bullet": false,
@@ -196,7 +196,7 @@
             "position": {
                 "x": 396.0,
                 "y": 246.0,
-                "z": -1.0
+                "z": 0.5
             },
             "scale": {
                 "x": 16.0,
@@ -408,8 +408,8 @@
         "name": "handObject",
         "transform": {
             "position": {
-                "x": -530.0,
-                "y": -230.0,
+                "x": 630.0,
+                "y": 130.0,
                 "z": 0.5
             },
             "scale": {
@@ -1800,7 +1800,7 @@
         "comNames": [
             "class MoveSubWindowManager"
         ],
-        "selectIndex": 3
+        "selectIndex": 0
     },
     "value14": {
         "name": "ground4",
@@ -2082,8 +2082,8 @@
         "name": "Player",
         "transform": {
             "position": {
-                "x": -412.7550964355469,
-                "y": -272.51318359375,
+                "x": -113.51881408691406,
+                "y": -172.52992248535157,
                 "z": 0.5
             },
             "scale": {
@@ -2108,7 +2108,8 @@
             "class Renderer",
             "class Animator",
             "class Box2DBody",
-            "class MovePlayer"
+            "class MovePlayer",
+            "class PointLight"
         ],
         "m_layer": 3,
         "m_node": {
@@ -2129,7 +2130,7 @@
                             "f.z": 1.0,
                             "f.w": 1.0
                         },
-                        "path": "asset/spritesheet/player_lowgravity_standby.png"
+                        "path": "asset/spritesheet/player_bounce_standby.png"
                     },
                     "m_scaleX": 0.125,
                     "m_scaleY": 0.3333333432674408,
@@ -2264,8 +2265,8 @@
         "m_filter": 8,
         "data": {
             "pos": {
-                "vec.x": -41.275508880615237,
-                "vec.y": -27.251319885253908
+                "vec.x": -11.35188102722168,
+                "vec.y": -17.252992630004884
             },
             "rot": {
                 "rot.c": 1.0,
@@ -2282,7 +2283,7 @@
             "autoMass": 1.0,
             "bullet": true,
             "fixRot": true,
-            "awake": true
+            "awake": false
         },
         "types": [
             1
@@ -2304,7 +2305,14 @@
             },
             "cap.radius": 2.75
         },
-        "reverse": true
+        "reverse": false,
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 0.5,
+        "m_radius": 500.0
     },
     "value17": {
         "name": "Crystal_1",
@@ -2333,7 +2341,8 @@
         },
         "active": true,
         "comNames": [
-            "class Renderer"
+            "class Renderer",
+            "class PointLight"
         ],
         "m_layer": 0,
         "m_node": {
@@ -2355,19 +2364,26 @@
                     "path": "asset\\pic\\Suisyou 1.png"
                 }
             }
-        }
+        },
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.7352943420410156,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.5,
+        "m_radius": 7000.0
     },
     "value18": {
-        "name": "Pillar",
+        "name": "Crystal_2_2",
         "transform": {
             "position": {
-                "x": -165.0,
-                "y": -21.0,
-                "z": -1.0
+                "x": -429.0,
+                "y": 228.0,
+                "z": 0.0
             },
             "scale": {
-                "x": 60.15428924560547,
-                "y": 69.48806762695313,
+                "x": 6.272791862487793,
+                "y": 5.848489761352539,
                 "z": 1.0
             },
             "angle": {
@@ -2378,13 +2394,14 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.0
+                    "radians": -4.313873757142574
                 }
             }
         },
         "active": true,
         "comNames": [
-            "class Renderer"
+            "class Renderer",
+            "class PointLight"
         ],
         "m_layer": 0,
         "m_node": {
@@ -2403,22 +2420,29 @@
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
-                    "path": "asset\\background\\Hashira 1.png"
+                    "path": "asset\\pic\\Suisyou 2.png"
                 }
             }
-        }
+        },
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.6176471710205078,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 1000.0
     },
     "value19": {
-        "name": "Pillar_2",
+        "name": "Crystal_2",
         "transform": {
             "position": {
-                "x": 27.0,
-                "y": -21.0,
-                "z": -1.0
+                "x": -21.0,
+                "y": 117.0,
+                "z": 0.0
             },
             "scale": {
-                "x": 60.15428924560547,
-                "y": 69.48806762695313,
+                "x": 6.272791862487793,
+                "y": 5.848489761352539,
                 "z": 1.0
             },
             "angle": {
@@ -2429,13 +2453,14 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.0
+                    "radians": -3.4375582095235588
                 }
             }
         },
         "active": true,
         "comNames": [
-            "class Renderer"
+            "class Renderer",
+            "class PointLight"
         ],
         "m_layer": 0,
         "m_node": {
@@ -2454,22 +2479,29 @@
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
-                    "path": "asset\\background\\Hashira 1.png"
+                    "path": "asset\\pic\\Suisyou 2.png"
                 }
             }
-        }
+        },
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.8235292434692383,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 1000.0
     },
     "value20": {
-        "name": "Pillar_3",
+        "name": "Crystal_2_1",
         "transform": {
             "position": {
-                "x": 237.0,
-                "y": -21.0,
-                "z": -1.0
+                "x": 147.0,
+                "y": -63.0,
+                "z": 0.0
             },
             "scale": {
-                "x": 60.15428924560547,
-                "y": 69.48806762695313,
+                "x": 6.272791862487793,
+                "y": 5.848489761352539,
                 "z": 1.0
             },
             "angle": {
@@ -2480,13 +2512,14 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": 0.0
+                    "radians": -6.385557864326984
                 }
             }
         },
         "active": true,
         "comNames": [
-            "class Renderer"
+            "class Renderer",
+            "class PointLight"
         ],
         "m_layer": 0,
         "m_node": {
@@ -2505,10 +2538,17 @@
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
-                    "path": "asset\\background\\Hashira 1.png"
+                    "path": "asset\\pic\\Suisyou 2.png"
                 }
             }
-        }
+        },
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.8235292434692383,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 1000.0
     },
     "value21": {
         "name": "Pillar_4",
@@ -2777,7 +2817,8 @@
         },
         "active": true,
         "comNames": [
-            "class Renderer"
+            "class Renderer",
+            "class PointLight"
         ],
         "m_layer": 0,
         "m_node": {
@@ -2799,19 +2840,26 @@
                     "path": "asset\\pic\\Suisyou 1.png"
                 }
             }
-        }
+        },
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.7941176891326904,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.5,
+        "m_radius": 6000.0
     },
     "value25": {
-        "name": "Crystal_2_2",
+        "name": "Pillar",
         "transform": {
             "position": {
-                "x": -429.0,
-                "y": 228.0,
-                "z": 0.0
+                "x": -165.0,
+                "y": -21.0,
+                "z": -1.0
             },
             "scale": {
-                "x": 6.272791862487793,
-                "y": 5.848489761352539,
+                "x": 60.15428924560547,
+                "y": 69.48806762695313,
                 "z": 1.0
             },
             "angle": {
@@ -2822,7 +2870,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": -4.313873757142574
+                    "radians": 0.0
                 }
             }
         },
@@ -2847,22 +2895,22 @@
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
-                    "path": "asset\\pic\\Suisyou 2.png"
+                    "path": "asset\\background\\Hashira 1.png"
                 }
             }
         }
     },
     "value26": {
-        "name": "Crystal_2",
+        "name": "Pillar_2",
         "transform": {
             "position": {
-                "x": -21.0,
-                "y": 117.0,
-                "z": 0.0
+                "x": 27.0,
+                "y": -21.0,
+                "z": -1.0
             },
             "scale": {
-                "x": 6.272791862487793,
-                "y": 5.848489761352539,
+                "x": 60.15428924560547,
+                "y": 69.48806762695313,
                 "z": 1.0
             },
             "angle": {
@@ -2873,7 +2921,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": -3.4375582095235588
+                    "radians": 0.0
                 }
             }
         },
@@ -2898,22 +2946,22 @@
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
-                    "path": "asset\\pic\\Suisyou 2.png"
+                    "path": "asset\\background\\Hashira 1.png"
                 }
             }
         }
     },
     "value27": {
-        "name": "Crystal_2_1",
+        "name": "Pillar_3",
         "transform": {
             "position": {
-                "x": 147.0,
-                "y": -63.0,
-                "z": 0.0
+                "x": 237.0,
+                "y": -21.0,
+                "z": -1.0
             },
             "scale": {
-                "x": 6.272791862487793,
-                "y": 5.848489761352539,
+                "x": 60.15428924560547,
+                "y": 69.48806762695313,
                 "z": 1.0
             },
             "angle": {
@@ -2924,7 +2972,7 @@
                     "radians": 0.0
                 },
                 "z": {
-                    "radians": -6.385557864326984
+                    "radians": 0.0
                 }
             }
         },
@@ -2949,7 +2997,7 @@
                         "f.z": 1.0,
                         "f.w": 1.0
                     },
-                    "path": "asset\\pic\\Suisyou 2.png"
+                    "path": "asset\\background\\Hashira 1.png"
                 }
             }
         }
@@ -9388,9 +9436,9 @@
         "name": "bat",
         "transform": {
             "position": {
-                "x": 400.0,
+                "x": 349.27191162109377,
                 "y": -25.0,
-                "z": 0.0
+                "z": 0.5
             },
             "scale": {
                 "x": 10.809440612792969,
@@ -9415,7 +9463,8 @@
             "class Animator",
             "class Box2DBody",
             "class RunFixedRoute",
-            "class Thon"
+            "class Thon",
+            "class PointLight"
         ],
         "m_layer": 2,
         "m_node": {
@@ -9453,7 +9502,7 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": 40.0,
+                "vec.x": 34.92719268798828,
                 "vec.y": -2.5
             },
             "rot": {
@@ -9462,7 +9511,7 @@
             },
             "type": 1,
             "lineVec": {
-                "vec.x": 0.0,
+                "vec.x": -21.271942138671876,
                 "vec.y": 0.0
             },
             "angleVec": 0.0,
@@ -9505,19 +9554,26 @@
         ],
         "currentIndex": 0,
         "aroundTime": 10.0,
-        "time": 0.0,
+        "time": 0.4666668474674225,
         "reverse": false,
         "rotation": false,
         "turnSpeed": 3.1415927410125734,
-        "offsetAngle": 0.0
+        "offsetAngle": 0.0,
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 1.0,
+            "vec.z": 0.7058823108673096
+        },
+        "m_intensity": 1.5,
+        "m_radius": 1000.0
     },
     "value30": {
         "name": "lizard",
         "transform": {
             "position": {
-                "x": 0.0,
-                "y": 210.0,
-                "z": 0.0
+                "x": -23.23345947265625,
+                "y": 209.9999237060547,
+                "z": 0.5
             },
             "scale": {
                 "x": 11.874859809875489,
@@ -9542,7 +9598,8 @@
             "class Animator",
             "class Box2DBody",
             "class RunFixedRoute",
-            "class Thon"
+            "class Thon",
+            "class PointLight"
         ],
         "m_layer": 2,
         "m_node": {
@@ -9580,8 +9637,8 @@
         "m_filter": 1,
         "data": {
             "pos": {
-                "vec.x": 0.0,
-                "vec.y": 21.0
+                "vec.x": -2.323345899581909,
+                "vec.y": 20.99999237060547
             },
             "rot": {
                 "rot.c": 1.0,
@@ -9589,8 +9646,8 @@
             },
             "type": 1,
             "lineVec": {
-                "vec.x": 0.0,
-                "vec.y": 0.0
+                "vec.x": -17.299880981445314,
+                "vec.y": 0.0000762939453125
             },
             "angleVec": 0.0,
             "gravity": 1.0,
@@ -9716,11 +9773,18 @@
         ],
         "currentIndex": 0,
         "aroundTime": 10.0,
-        "time": 0.0,
+        "time": 0.33333340287208559,
         "reverse": false,
         "rotation": true,
         "turnSpeed": 4.0,
-        "offsetAngle": 0.0
+        "offsetAngle": 0.0,
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 1.0,
+            "vec.z": 0.6470587253570557
+        },
+        "m_intensity": 1.5,
+        "m_radius": 1000.0
     },
     "value31": {
         "name": "Controls",
@@ -9752,7 +9816,7 @@
             "class Renderer",
             "class SubWindow"
         ],
-        "m_layer": 2,
+        "m_layer": 4,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -9801,7 +9865,7 @@
                 }
             }
         },
-        "active": true,
+        "active": false,
         "comNames": [
             "class Renderer"
         ],
@@ -9811,7 +9875,7 @@
             "ptr_wrapper": {
                 "id": 2147483675,
                 "data": {
-                    "active": true,
+                    "active": false,
                     "m_offset": {
                         "x": 0.0,
                         "y": 0.0
@@ -9826,5 +9890,597 @@
                 }
             }
         }
+    },
+    "value33": {
+        "name": "goalLight",
+        "transform": {
+            "position": {
+                "x": 450.2164001464844,
+                "y": 236.0997772216797,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.6764705181121826,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 1000.0
+    },
+    "value34": {
+        "name": "goalLight_1",
+        "transform": {
+            "position": {
+                "x": 343.4476318359375,
+                "y": 236.0997772216797,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.6764705181121826,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 1000.0
+    },
+    "value35": {
+        "name": "PillarLight",
+        "transform": {
+            "position": {
+                "x": 446.75848388671877,
+                "y": -3.518280029296875,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 100.0
+    },
+    "value36": {
+        "name": "PillarLight_1",
+        "transform": {
+            "position": {
+                "x": -381.24151611328127,
+                "y": -186.51828002929688,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 100.0
+    },
+    "value37": {
+        "name": "PillarLight_2",
+        "transform": {
+            "position": {
+                "x": -381.24151611328127,
+                "y": -0.518280029296875,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 100.0
+    },
+    "value38": {
+        "name": "PillarLight_3",
+        "transform": {
+            "position": {
+                "x": -381.24151611328127,
+                "y": 176.48171997070313,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 100.0
+    },
+    "value39": {
+        "name": "PillarLight_4",
+        "transform": {
+            "position": {
+                "x": -189.24151611328126,
+                "y": 188.48171997070313,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 100.0
+    },
+    "value40": {
+        "name": "PillarLight_5",
+        "transform": {
+            "position": {
+                "x": -189.24151611328126,
+                "y": -3.518280029296875,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 100.0
+    },
+    "value41": {
+        "name": "PillarLight_6",
+        "transform": {
+            "position": {
+                "x": -189.24151611328126,
+                "y": -192.51828002929688,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 100.0
+    },
+    "value42": {
+        "name": "PillarLight_7",
+        "transform": {
+            "position": {
+                "x": 23.75848388671875,
+                "y": -192.51828002929688,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 100.0
+    },
+    "value43": {
+        "name": "PillarLight_8",
+        "transform": {
+            "position": {
+                "x": 23.75848388671875,
+                "y": -9.518280029296875,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 100.0
+    },
+    "value44": {
+        "name": "PillarLight_9",
+        "transform": {
+            "position": {
+                "x": 23.75848388671875,
+                "y": 188.48171997070313,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 100.0
+    },
+    "value45": {
+        "name": "PillarLight_10",
+        "transform": {
+            "position": {
+                "x": 227.75848388671876,
+                "y": 188.48171997070313,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 100.0
+    },
+    "value46": {
+        "name": "PillarLight_11",
+        "transform": {
+            "position": {
+                "x": 227.75848388671876,
+                "y": -3.518280029296875,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 100.0
+    },
+    "value47": {
+        "name": "PillarLight_12",
+        "transform": {
+            "position": {
+                "x": 227.75848388671876,
+                "y": -192.51828002929688,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 100.0
+    },
+    "value48": {
+        "name": "PillarLight_13",
+        "transform": {
+            "position": {
+                "x": 446.75848388671877,
+                "y": -192.51828002929688,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 100.0
     }
 }

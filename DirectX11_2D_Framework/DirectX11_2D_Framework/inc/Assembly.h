@@ -67,6 +67,9 @@ SetReflectionComponent(Animator)
 SetReflectionComponent(Button)
 SetReflectionComponent(SFText)
 SetReflectionComponent(TileMap)
+SetReflectionComponent(ParticleSystem)
+SetReflectionComponent(PointLight)
+
 
 template<class T>
 class ReflectionScene final

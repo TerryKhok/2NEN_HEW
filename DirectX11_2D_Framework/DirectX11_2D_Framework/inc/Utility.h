@@ -18,6 +18,8 @@ std::string OpenFileDialog();
 
 const wchar_t* GetFileExtension(const wchar_t* path);
 
+std::mt19937& GetRandomGenerator();
+
 void Void();
 
 

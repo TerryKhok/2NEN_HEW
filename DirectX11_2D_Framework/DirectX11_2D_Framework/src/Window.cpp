@@ -40,10 +40,11 @@ void CloseConsoleWindow() {
 std::atomic<bool> Window::mainLoopRun;
 #endif
 
-//モニターの解像度所得
-int Window::MONITER_HALF_WIDTH = GetSystemMetrics(SM_CXSCREEN) / 2;
-int Window::MONITER_HALF_HEIGHT = GetSystemMetrics(SM_CYSCREEN) / 2;
+int Window::MONITER_WIDTH = GetSystemMetrics(SM_CXSCREEN);
+int Window::MONITER_HEIGHT = GetSystemMetrics(SM_CYSCREEN);
 
+int Window::MONITER_HALF_WIDTH = Window::MONITER_WIDTH / 2;
+int Window::MONITER_HALF_HEIGHT = Window::MONITER_HEIGHT / 2;
 
 HINSTANCE m_hInstance;
 int m_nCmdShow;
@@ -69,6 +70,8 @@ thread_local HWND(*Window::pWindowSubCreate)(const std::string&, std::string, in
 //ウィンドウのハンドルに対応したオブジェクトの名前
 std::unordered_map<HWND, const std::string&> Window::m_hwndObjNames;
 
+std::unordered_map<HWND, ComPtr<ID3D11RenderTargetView>> m_eraseRtv;
+
 ImGuiContext* mainContext;
 
 LRESULT Window::WindowMainCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -76,9 +79,11 @@ LRESULT Window::WindowMainCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, L
 	//DebugとReleaseのDpiを統一するため
 	SetProcessDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
 
-	//モニターの解像度所得
-	MONITER_HALF_WIDTH = GetSystemMetrics(SM_CXSCREEN) / 2;
-	MONITER_HALF_HEIGHT = GetSystemMetrics(SM_CYSCREEN) / 2;
+	MONITER_WIDTH = GetSystemMetrics(SM_CXSCREEN);
+	MONITER_HEIGHT = GetSystemMetrics(SM_CYSCREEN);
+
+	MONITER_HALF_WIDTH = MONITER_WIDTH / 2;
+	MONITER_HALF_HEIGHT = MONITER_HEIGHT / 2;
 
 #ifdef DEBUG_TRUE
 	//コンソール画面起動
@@ -185,7 +190,6 @@ LRESULT Window::WindowMainCreate(HINSTANCE hInstance, HINSTANCE hPrevInstance, L
 }
 
 std::string windowName;
-std::string& objectName = windowName;
 int windowWidth;
 int windowHeight;
 
@@ -255,7 +259,7 @@ HWND Window::WindowSubCreate(const std::string& _objName, std::string _windowNam
 }
 
 //まだ表示されていないウィンドウハンドル
-std::vector<HWND> unShowHwnds;
+std::vector<std::pair<HWND,std::string>> unShowHwnds;
 
 HWND Window::WindowSubCreateAsync(const std::string& _objName, std::string _windowName, int _width, int _height, Vector2 _pos)
 {
@@ -263,7 +267,6 @@ HWND Window::WindowSubCreateAsync(const std::string& _objName, std::string _wind
 	std::promise<HWND> handlePromise;
 	std::future<HWND> handleFuture = handlePromise.get_future();
 
-	objectName = _objName;
 	windowName = _windowName;
 	windowWidth = _width;
 	windowHeight = _height;
@@ -273,7 +276,7 @@ HWND Window::WindowSubCreateAsync(const std::string& _objName, std::string _wind
 
 	// Wait for the window handle to be set in the future
 	HWND hNewWindow = handleFuture.get();
-	unShowHwnds.push_back(hNewWindow);
+	unShowHwnds.push_back(std::make_pair(hNewWindow, _objName));
 
 	SetWindowPosition(hNewWindow, _pos);
 
@@ -289,11 +292,6 @@ void Window::WindowSubRelease(HWND hWnd)
 	PostMessage(mainHwnd, WM_DELETE_WINDOW, (WPARAM)hWnd, 0);
 }
 
-BOOL StackShowWindow(HWND _hwnd, int cCmdShow)
-{ 
-	unShowHwnds.push_back(_hwnd);
-	return false; 
-}
 
 void Window::WindowSubLoadingBegin()
 {
@@ -302,17 +300,31 @@ void Window::WindowSubLoadingBegin()
 
 void Window::WindowSubLoadingEnd()
 {
-	for (auto hwnd : unShowHwnds)
+	for (auto node : unShowHwnds)
 	{
-		ShowWindow(hwnd, SW_SHOW);
+		m_hwndObjNames.emplace(node.first, node.second);
+		ShowWindow(node.first, SW_SHOW);
 	}
 	unShowHwnds.clear();
 }
 
 void Window::WindowSubHide()
 {
+	auto& viewMap = DirectX11::m_pRenderTargetViewList.first;
+	auto& viewVec = DirectX11::m_pRenderTargetViewList.second;
 	for (auto node : m_hwndObjNames)
 	{
+		auto viewIter = viewMap.find(node.first);
+		if (viewIter != viewMap.end())
+		{
+			m_eraseRtv.emplace(node.first, viewVec[viewIter->second].view);
+
+			viewMap[viewVec.back().hWnd] = viewIter->second;
+			std::swap(viewVec[viewIter->second], viewVec.back());
+			viewVec.pop_back();
+			viewMap.erase(viewIter);
+		}
+
 		ShowWindow(node.first, SW_HIDE);
 	}
 }
@@ -330,6 +342,7 @@ LRESULT Window::WindowInit(void(*p_mainInitFunc)(void))
 {
 	//初期化処理
 	//=================================================
+
 	SceneManager::m_sceneList.clear();
 	//Box2Dワールド作成
 	Box2D::WorldManager::CreateWorld();
@@ -781,7 +794,6 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		AnimatorManager::deltaCount = pauseFrameCount;
 
 		Vector2 oldMousePos;
-
 		
 		while (pauseGame)
 		{
@@ -1218,7 +1230,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 		DirectX11::CreateWindowSwapChain(hWnd);
 
-		m_hwndObjNames.emplace(hWnd, objectName);
+		//m_hwndObjNames.emplace(hWnd, objectName);
 
 		// Fulfill the promise to return the window handle
 		std::promise<HWND>* pPromise = reinterpret_cast<std::promise<HWND>*>(wParam);
@@ -1233,7 +1245,7 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		auto swapIter = swapList.find(hTargetWnd);
 		if (swapIter != swapList.end())
 		{
-			swapIter->second.Get()->Release();
+			swapIter->second->Release();
 			swapList.erase(swapIter);
 		}
 
@@ -1242,11 +1254,20 @@ LRESULT Window::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		auto viewIter = viewMap.find(hTargetWnd);
 		if (viewIter != viewMap.end())
 		{
-			viewVec[viewIter->second].view.Get()->Release();
+			viewVec[viewIter->second].view->Release();
 			viewMap[viewVec.back().hWnd] = viewIter->second;
 			std::swap(viewVec[viewIter->second], viewVec.back());	
 			viewVec.pop_back();
 			viewMap.erase(viewIter);
+		}
+		else
+		{
+			auto it = m_eraseRtv.find(hTargetWnd);
+			if (it != m_eraseRtv.end())
+			{
+				it->second->Release();
+				m_eraseRtv.erase(it);
+			}
 		}
 
 		auto& waveList = DirectX11::m_waveHandleList;

@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 26,
+    "objectNum": 29,
     "value0": {
         "name": "map",
         "transform": {
@@ -67,7 +67,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 6,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": -32.0
@@ -94,7 +94,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 6,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": 32.0
@@ -121,7 +121,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 6,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": 32.0
@@ -148,7 +148,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 6,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": -32.0
@@ -2339,7 +2339,8 @@
             "class Renderer",
             "class Animator",
             "class Box2DBody",
-            "class MovePlayer"
+            "class MovePlayer",
+            "class PointLight"
         ],
         "m_layer": 3,
         "m_node": {
@@ -2360,7 +2361,7 @@
                             "f.z": 1.0,
                             "f.w": 1.0
                         },
-                        "path": "asset/spritesheet/player_float_standby.png"
+                        "path": "asset/spritesheet/player_transparent_standby.png"
                     },
                     "m_scaleX": 0.125,
                     "m_scaleY": 0.3333333432674408,
@@ -2535,9 +2536,357 @@
             },
             "cap.radius": 2.75
         },
-        "reverse": true
+        "reverse": true,
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 0.5,
+        "m_radius": 1000.0
     },
     "value19": {
+        "name": "Crystal_2",
+        "transform": {
+            "position": {
+                "x": -446.49932861328127,
+                "y": -11.121064186096192,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 10.0,
+                "y": 10.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": -0.11705048126168549
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class PointLight"
+        ],
+        "m_layer": 0,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483659,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\Suisyou 1.png"
+                }
+            }
+        },
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.41176486015319826,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 2000.0
+    },
+    "value20": {
+        "name": "Crystal",
+        "transform": {
+            "position": {
+                "x": 309.0,
+                "y": -99.0,
+                "z": -1.0
+            },
+            "scale": {
+                "x": 16.455141067504884,
+                "y": 15.606608390808106,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": -4.473780145868659
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class PointLight"
+        ],
+        "m_layer": 0,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483660,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\Suisyou 1.png"
+                }
+            }
+        },
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.35294103622436526,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.5,
+        "m_radius": 2000.0
+    },
+    "value21": {
+        "name": "Crystal2",
+        "transform": {
+            "position": {
+                "x": 93.0,
+                "y": 138.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 10.091167449951172,
+                "y": 9.666903495788575,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": -2.025403686373031
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class PointLight"
+        ],
+        "m_layer": 0,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483661,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\Suisyou 2.png"
+                }
+            }
+        },
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.4411764144897461,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.5,
+        "m_radius": 2000.0
+    },
+    "value22": {
+        "name": "Crystal_1",
+        "transform": {
+            "position": {
+                "x": -78.0,
+                "y": -153.0,
+                "z": -1.0
+            },
+            "scale": {
+                "x": 39.365413665771487,
+                "y": 35.12276840209961,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class PointLight"
+        ],
+        "m_layer": 0,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483662,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\Suisyou 1.png"
+                }
+            }
+        },
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.47058820724487307,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.5,
+        "m_radius": 6000.0
+    },
+    "value23": {
+        "name": "Controls",
+        "transform": {
+            "position": {
+                "x": -640.0,
+                "y": -250.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 27.0,
+                "y": 18.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class SubWindow"
+        ],
+        "m_layer": 4,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483663,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\Controls.png"
+                }
+            }
+        },
+        "isWave": false,
+        "funcName": ""
+    },
+    "value24": {
+        "name": "effect",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 32.02093505859375,
+                "y": 24.51206398010254,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer"
+        ],
+        "m_layer": 5,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483664,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 0.0,
+                        "f.y": 0.0,
+                        "f.z": 0.0,
+                        "f.w": 0.5846404433250427
+                    },
+                    "path": "asset\\pic\\effect.png"
+                }
+            }
+        }
+    },
+    "value25": {
         "name": "terrainTile",
         "transform": {
             "position": {
@@ -2570,7 +2919,7 @@
             "polymorphic_id": 2147483650,
             "polymorphic_name": "TileRenderNode",
             "ptr_wrapper": {
-                "id": 2147483659,
+                "id": 2147483665,
                 "data": {
                     "value0": {
                         "active": true,
@@ -4096,119 +4445,17 @@
         },
         "m_layer": 1
     },
-    "value20": {
-        "name": "Crystal",
+    "value26": {
+        "name": "goalLight",
         "transform": {
             "position": {
-                "x": 309.0,
-                "y": -99.0,
-                "z": -1.0
-            },
-            "scale": {
-                "x": 16.455141067504884,
-                "y": 15.606608390808106,
-                "z": 1.0
-            },
-            "angle": {
-                "x": {
-                    "radians": 0.0
-                },
-                "y": {
-                    "radians": 0.0
-                },
-                "z": {
-                    "radians": -4.473780145868659
-                }
-            }
-        },
-        "active": true,
-        "comNames": [
-            "class Renderer"
-        ],
-        "m_layer": 0,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483660,
-                "data": {
-                    "active": true,
-                    "m_offset": {
-                        "x": 0.0,
-                        "y": 0.0
-                    },
-                    "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
-                        "f.z": 1.0,
-                        "f.w": 1.0
-                    },
-                    "path": "asset\\pic\\Suisyou 1.png"
-                }
-            }
-        }
-    },
-    "value21": {
-        "name": "Crystal2",
-        "transform": {
-            "position": {
-                "x": 93.0,
-                "y": 138.0,
+                "x": 459.4846496582031,
+                "y": 137.15614318847657,
                 "z": 0.0
             },
             "scale": {
-                "x": 10.091167449951172,
-                "y": 9.666903495788575,
-                "z": 1.0
-            },
-            "angle": {
-                "x": {
-                    "radians": 0.0
-                },
-                "y": {
-                    "radians": 0.0
-                },
-                "z": {
-                    "radians": -2.025403686373031
-                }
-            }
-        },
-        "active": true,
-        "comNames": [
-            "class Renderer"
-        ],
-        "m_layer": 0,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483661,
-                "data": {
-                    "active": true,
-                    "m_offset": {
-                        "x": 0.0,
-                        "y": 0.0
-                    },
-                    "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
-                        "f.z": 1.0,
-                        "f.w": 1.0
-                    },
-                    "path": "asset\\pic\\Suisyou 2.png"
-                }
-            }
-        }
-    },
-    "value22": {
-        "name": "Crystal_1",
-        "transform": {
-            "position": {
-                "x": -78.0,
-                "y": -153.0,
-                "z": -1.0
-            },
-            "scale": {
-                "x": 39.365413665771487,
-                "y": 35.12276840209961,
+                "x": 5.0,
+                "y": 5.0,
                 "z": 1.0
             },
             "angle": {
@@ -4225,41 +4472,27 @@
         },
         "active": true,
         "comNames": [
-            "class Renderer"
+            "class PointLight"
         ],
-        "m_layer": 0,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483662,
-                "data": {
-                    "active": true,
-                    "m_offset": {
-                        "x": 0.0,
-                        "y": 0.0
-                    },
-                    "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
-                        "f.z": 1.0,
-                        "f.w": 1.0
-                    },
-                    "path": "asset\\pic\\Suisyou 1.png"
-                }
-            }
-        }
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.6764705181121826,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 1000.0
     },
-    "value23": {
-        "name": "Controls",
+    "value27": {
+        "name": "goalLight_1",
         "transform": {
             "position": {
-                "x": -640.0,
-                "y": -250.0,
+                "x": 351.8247985839844,
+                "y": 137.15614318847657,
                 "z": 0.0
             },
             "scale": {
-                "x": 27.0,
-                "y": 18.0,
+                "x": 5.0,
+                "y": 5.0,
                 "z": 1.0
             },
             "angle": {
@@ -4276,85 +4509,17 @@
         },
         "active": true,
         "comNames": [
-            "class Renderer",
-            "class SubWindow"
+            "class PointLight"
         ],
-        "m_layer": 2,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483663,
-                "data": {
-                    "active": true,
-                    "m_offset": {
-                        "x": 0.0,
-                        "y": 0.0
-                    },
-                    "m_color": {
-                        "f.x": 1.0,
-                        "f.y": 1.0,
-                        "f.z": 1.0,
-                        "f.w": 1.0
-                    },
-                    "path": "asset\\pic\\Controls.png"
-                }
-            }
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.6764705181121826,
+            "vec.z": 1.0
         },
-        "isWave": false,
-        "funcName": ""
+        "m_intensity": 1.0,
+        "m_radius": 1000.0
     },
-    "value24": {
-        "name": "effect",
-        "transform": {
-            "position": {
-                "x": 0.0,
-                "y": 0.0,
-                "z": 0.0
-            },
-            "scale": {
-                "x": 32.02093505859375,
-                "y": 24.51206398010254,
-                "z": 1.0
-            },
-            "angle": {
-                "x": {
-                    "radians": 0.0
-                },
-                "y": {
-                    "radians": 0.0
-                },
-                "z": {
-                    "radians": 0.0
-                }
-            }
-        },
-        "active": true,
-        "comNames": [
-            "class Renderer"
-        ],
-        "m_layer": 5,
-        "m_node": {
-            "polymorphic_id": 1073741824,
-            "ptr_wrapper": {
-                "id": 2147483664,
-                "data": {
-                    "active": true,
-                    "m_offset": {
-                        "x": 0.0,
-                        "y": 0.0
-                    },
-                    "m_color": {
-                        "f.x": 0.0,
-                        "f.y": 0.0,
-                        "f.z": 0.0,
-                        "f.w": 0.5846404433250427
-                    },
-                    "path": "asset\\pic\\effect.png"
-                }
-            }
-        }
-    },
-    "value25": {
+    "value28": {
         "name": "Tile",
         "transform": {
             "position": {
@@ -4386,7 +4551,7 @@
         "m_renderNode": {
             "polymorphic_id": 2,
             "ptr_wrapper": {
-                "id": 2147483665,
+                "id": 2147483666,
                 "data": {
                     "value0": {
                         "active": true,

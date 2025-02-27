@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 46,
+    "objectNum": 52,
     "value0": {
         "name": "StaticBox_Map",
         "transform": {
@@ -67,7 +67,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": -36.0
@@ -94,7 +94,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": 36.0
@@ -121,7 +121,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": 36.0
@@ -148,7 +148,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 0,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": -36.0
@@ -1901,7 +1901,8 @@
             "class RunFixedRoute",
             "class Renderer",
             "class Animator",
-            "class Thon"
+            "class Thon",
+            "class PointLight"
         ],
         "m_filter": 1,
         "data": {
@@ -2075,7 +2076,14 @@
         "path": "asset\\animationClip\\enemy_lizard_walk.amcp",
         "loop": true,
         "currentClipName": "lizardWalk",
-        "pause": false
+        "pause": false,
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 1.0,
+            "vec.z": 0.35294103622436526
+        },
+        "m_intensity": 1.0,
+        "m_radius": 1000.0
     },
     "value16": {
         "name": "StaticBox_Ground",
@@ -2547,7 +2555,8 @@
             "class RunFixedRoute",
             "class Renderer",
             "class Animator",
-            "class Thon"
+            "class Thon",
+            "class PointLight"
         ],
         "m_filter": 1,
         "data": {
@@ -2720,7 +2729,14 @@
         "path": "asset\\animationClip\\enemy_lizard_walk.amcp",
         "loop": true,
         "currentClipName": "lizardWalk",
-        "pause": false
+        "pause": false,
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 1.0,
+            "vec.z": 0.4999997615814209
+        },
+        "m_intensity": 1.0,
+        "m_radius": 1000.0
     },
     "value20": {
         "name": "Player",
@@ -2752,7 +2768,8 @@
             "class Renderer",
             "class Animator",
             "class Box2DBody",
-            "class MovePlayer"
+            "class MovePlayer",
+            "class PointLight"
         ],
         "m_layer": 3,
         "m_node": {
@@ -2947,7 +2964,14 @@
             },
             "cap.radius": 2.75
         },
-        "reverse": true
+        "reverse": true,
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 0.5,
+        "m_radius": 1000.0
     },
     "value21": {
         "name": "Thorn_16",
@@ -5713,7 +5737,8 @@
         },
         "active": true,
         "comNames": [
-            "class Renderer"
+            "class Renderer",
+            "class PointLight"
         ],
         "m_layer": 2,
         "m_node": {
@@ -5735,7 +5760,14 @@
                     "path": "asset\\pic\\Suisyou 2.png"
                 }
             }
-        }
+        },
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.6470589637756348,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 1000.0
     },
     "value39": {
         "name": "Pillar",
@@ -5793,7 +5825,7 @@
         "transform": {
             "position": {
                 "x": -204.0,
-                "y": 240.0,
+                "y": 249.0,
                 "z": 0.0
             },
             "scale": {
@@ -5815,7 +5847,8 @@
         },
         "active": true,
         "comNames": [
-            "class Renderer"
+            "class Renderer",
+            "class PointLight"
         ],
         "m_layer": 2,
         "m_node": {
@@ -5837,7 +5870,14 @@
                     "path": "asset\\pic\\Suisyou 1.png"
                 }
             }
-        }
+        },
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.5588235855102539,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.5,
+        "m_radius": 2000.0
     },
     "value41": {
         "name": "Crystal_1_1",
@@ -5866,7 +5906,8 @@
         },
         "active": true,
         "comNames": [
-            "class Renderer"
+            "class Renderer",
+            "class PointLight"
         ],
         "m_layer": 2,
         "m_node": {
@@ -5888,7 +5929,14 @@
                     "path": "asset\\pic\\Suisyou 2.png"
                 }
             }
-        }
+        },
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.6470589637756348,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 2000.0
     },
     "value42": {
         "name": "Crystal_1_1_1",
@@ -5917,7 +5965,8 @@
         },
         "active": true,
         "comNames": [
-            "class Renderer"
+            "class Renderer",
+            "class PointLight"
         ],
         "m_layer": 2,
         "m_node": {
@@ -5939,7 +5988,14 @@
                     "path": "asset\\pic\\Suisyou 2.png"
                 }
             }
-        }
+        },
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.41176486015319826,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 2000.0
     },
     "value43": {
         "name": "Tile",
@@ -12727,7 +12783,7 @@
             "class Renderer",
             "class SubWindow"
         ],
-        "m_layer": 2,
+        "m_layer": 4,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -12801,5 +12857,249 @@
                 }
             }
         }
+    },
+    "value46": {
+        "name": "goalLight",
+        "transform": {
+            "position": {
+                "x": 458.5881652832031,
+                "y": 137.15614318847657,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.6764705181121826,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 1000.0
+    },
+    "value47": {
+        "name": "goalLight_1",
+        "transform": {
+            "position": {
+                "x": 352.8669128417969,
+                "y": 137.15614318847657,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.6764705181121826,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 1000.0
+    },
+    "value48": {
+        "name": "Crystal_1_2",
+        "transform": {
+            "position": {
+                "x": -459.77471923828127,
+                "y": 206.77603149414063,
+                "z": -1.0
+            },
+            "scale": {
+                "x": 13.060999870300293,
+                "y": 14.758030891418457,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": -2.2453064136207105
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class PointLight"
+        ],
+        "m_layer": 0,
+        "m_node": {
+            "polymorphic_id": 1073741824,
+            "ptr_wrapper": {
+                "id": 2147483686,
+                "data": {
+                    "active": true,
+                    "m_offset": {
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "m_color": {
+                        "f.x": 1.0,
+                        "f.y": 1.0,
+                        "f.z": 1.0,
+                        "f.w": 1.0
+                    },
+                    "path": "asset\\pic\\Suisyou 1.png"
+                }
+            }
+        },
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.7647058963775635,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 1500.0
+    },
+    "value49": {
+        "name": "PillarLight",
+        "transform": {
+            "position": {
+                "x": 255.00408935546876,
+                "y": -158.87571716308595,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 100.0
+    },
+    "value50": {
+        "name": "PillarLight_1",
+        "transform": {
+            "position": {
+                "x": 255.00408935546876,
+                "y": 194.18153381347657,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 100.0
+    },
+    "value51": {
+        "name": "PillarLight_2",
+        "transform": {
+            "position": {
+                "x": 255.00408935546876,
+                "y": 17.062652587890626,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 100.0
     }
 }

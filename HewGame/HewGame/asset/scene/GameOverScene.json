@@ -6750,8 +6750,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": 0.000007870219633332454,
-                "vec.y": 0.000017428226783522406
+                "vec.x": 0.000005374200100050075,
+                "vec.y": 0.000017381751604261809
             },
             "angleVec": -0.000003288271955170785,
             "gravity": 10.0,
@@ -6967,7 +6967,8 @@
         "comNames": [
             "class Renderer",
             "class Box2DBody",
-            "class FlickeringRenderColor"
+            "class FlickeringRenderColor",
+            "class PointLight"
         ],
         "m_layer": 2,
         "m_node": {
@@ -7002,8 +7003,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": -0.0000046894047045498159,
-                "vec.y": 0.000005794294338556938
+                "vec.x": -0.0000043025988816225439,
+                "vec.y": 0.000008003693437785842
             },
             "angleVec": 0.0000027921055334445556,
             "gravity": 10.0,
@@ -7112,7 +7113,14 @@
                 "f.w": 1.0
             }
         ],
-        "flickeringTime": 2.5
+        "flickeringTime": 2.5,
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.29411768913269045,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.5,
+        "m_radius": 2000.0
     },
     "value9": {
         "name": "crystal_1",
@@ -7143,7 +7151,8 @@
         "comNames": [
             "class Renderer",
             "class Box2DBody",
-            "class FlickeringRenderColor"
+            "class FlickeringRenderColor",
+            "class PointLight"
         ],
         "m_layer": 2,
         "m_node": {
@@ -7178,8 +7187,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": -0.0000095485420388286,
-                "vec.y": 0.00001807224180083722
+                "vec.x": -0.00001078622790373629,
+                "vec.y": 0.00002055766344710719
             },
             "angleVec": 0.0000034562549444672188,
             "gravity": 10.0,
@@ -7288,7 +7297,14 @@
                 "f.w": 1.0
             }
         ],
-        "flickeringTime": 2.5
+        "flickeringTime": 2.5,
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.5588235855102539,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.5,
+        "m_radius": 2000.0
     },
     "value10": {
         "name": "crystal_2",
@@ -7319,7 +7335,8 @@
         "comNames": [
             "class Renderer",
             "class Box2DBody",
-            "class FlickeringRenderColor"
+            "class FlickeringRenderColor",
+            "class PointLight"
         ],
         "m_layer": 2,
         "m_node": {
@@ -7464,7 +7481,14 @@
                 "f.w": 1.0
             }
         ],
-        "flickeringTime": 2.5
+        "flickeringTime": 2.5,
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.41176486015319826,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.5,
+        "m_radius": 2000.0
     },
     "value11": {
         "name": "crystal_3",
@@ -7495,7 +7519,8 @@
         "comNames": [
             "class Renderer",
             "class Box2DBody",
-            "class FlickeringRenderColor"
+            "class FlickeringRenderColor",
+            "class PointLight"
         ],
         "m_layer": 2,
         "m_node": {
@@ -7640,7 +7665,14 @@
                 "f.w": 1.0
             }
         ],
-        "flickeringTime": 2.5
+        "flickeringTime": 2.5,
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.5882351398468018,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.5,
+        "m_radius": 2000.0
     },
     "value12": {
         "name": "crystal_4",
@@ -7671,7 +7703,8 @@
         "comNames": [
             "class Renderer",
             "class Box2DBody",
-            "class FlickeringRenderColor"
+            "class FlickeringRenderColor",
+            "class PointLight"
         ],
         "m_layer": 2,
         "m_node": {
@@ -7706,8 +7739,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": -0.00001953125320142135,
-                "vec.y": 0.00003560458208085038
+                "vec.x": -0.000022069962142268197,
+                "vec.y": 0.000040451352106174457
             },
             "angleVec": 0.000006810883860453032,
             "gravity": 10.0,
@@ -7816,7 +7849,14 @@
                 "f.w": 1.0
             }
         ],
-        "flickeringTime": 2.5
+        "flickeringTime": 2.5,
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.5882351398468018,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.5,
+        "m_radius": 2000.0
     },
     "value13": {
         "name": "crystal_5",
@@ -7847,7 +7887,8 @@
         "comNames": [
             "class Renderer",
             "class Box2DBody",
-            "class FlickeringRenderColor"
+            "class FlickeringRenderColor",
+            "class PointLight"
         ],
         "m_layer": 2,
         "m_node": {
@@ -7992,7 +8033,14 @@
                 "f.w": 1.0
             }
         ],
-        "flickeringTime": 2.5
+        "flickeringTime": 2.5,
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.4411764144897461,
+            "vec.z": 1.0
+        },
+        "m_intensity": 2.0,
+        "m_radius": 2000.0
     },
     "value14": {
         "name": "crystal_6",
@@ -8023,7 +8071,8 @@
         "comNames": [
             "class Renderer",
             "class Box2DBody",
-            "class FlickeringRenderColor"
+            "class FlickeringRenderColor",
+            "class PointLight"
         ],
         "m_layer": 2,
         "m_node": {
@@ -8058,8 +8107,8 @@
             },
             "type": 2,
             "lineVec": {
-                "vec.x": -0.24496310949325562,
-                "vec.y": 0.0004468746483325958
+                "vec.x": -0.321772038936615,
+                "vec.y": 0.15182581543922425
             },
             "angleVec": 0.2113078236579895,
             "gravity": 10.0,
@@ -8168,7 +8217,14 @@
                 "f.w": 1.0
             }
         ],
-        "flickeringTime": 2.5
+        "flickeringTime": 2.5,
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.3235294818878174,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.5,
+        "m_radius": 2000.0
     },
     "value15": {
         "name": "gameclearText",
@@ -8199,7 +8255,7 @@
         "comNames": [
             "class Renderer"
         ],
-        "m_layer": 2,
+        "m_layer": 4,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -8519,7 +8575,7 @@
             "class SelectTrigger",
             "class SubWindow"
         ],
-        "m_layer": 2,
+        "m_layer": 4,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -8589,7 +8645,7 @@
             "class SelectTrigger",
             "class SubWindow"
         ],
-        "m_layer": 2,
+        "m_layer": 4,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -8659,7 +8715,7 @@
             "class SelectTrigger",
             "class SubWindow"
         ],
-        "m_layer": 2,
+        "m_layer": 4,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -8728,7 +8784,8 @@
             "class Box2DBody",
             "class Renderer",
             "class Animator",
-            "class uiObj"
+            "class uiObj",
+            "class PointLight"
         ],
         "m_filter": 1,
         "data": {
@@ -8875,7 +8932,14 @@
         "trigger": 0.5,
         "speed": 4.0,
         "turnDis": 200.0,
-        "mvCnt": 100.0
+        "mvCnt": 100.0,
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 1.0,
+            "vec.z": 0.9411764144897461
+        },
+        "m_intensity": 1.5,
+        "m_radius": 1000.0
     },
     "value23": {
         "name": "bat",
@@ -8907,7 +8971,8 @@
             "class Box2DBody",
             "class Renderer",
             "class Animator",
-            "class RunFixedRoute"
+            "class RunFixedRoute",
+            "class PointLight"
         ],
         "m_filter": 1,
         "data": {
@@ -9036,7 +9101,14 @@
         "reverse": true,
         "rotation": false,
         "turnSpeed": 3.1415927410125734,
-        "offsetAngle": 0.0
+        "offsetAngle": 0.0,
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 1.0,
+            "vec.z": 0.7941174507141113
+        },
+        "m_intensity": 1.5,
+        "m_radius": 1000.0
     },
     "value24": {
         "name": "Player",
@@ -9249,7 +9321,7 @@
             "class Renderer",
             "class SubWindow"
         ],
-        "m_layer": 2,
+        "m_layer": 4,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {

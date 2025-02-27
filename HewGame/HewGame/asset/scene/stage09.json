@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 28,
+    "objectNum": 35,
     "value0": {
         "name": "StaticBox_Map",
         "transform": {
@@ -196,7 +196,7 @@
             "position": {
                 "x": 402.0,
                 "y": 195.0,
-                "z": -1.0
+                "z": 0.5
             },
             "scale": {
                 "x": 16.0,
@@ -1625,7 +1625,7 @@
             "position": {
                 "x": 141.0,
                 "y": 132.0,
-                "z": 0.0
+                "z": 0.5
             },
             "scale": {
                 "x": 13.90954303741455,
@@ -1650,7 +1650,8 @@
             "class Animator",
             "class Box2DBody",
             "class EnemyChaser",
-            "class Thon"
+            "class Thon",
+            "class PointLight"
         ],
         "m_layer": 2,
         "m_node": {
@@ -1707,7 +1708,7 @@
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": true,
-            "awake": true
+            "awake": false
         },
         "types": [
             0
@@ -1821,7 +1822,14 @@
             }
         ],
         "chaseSpeed": 7.0,
-        "chaseRange": 500.0
+        "chaseRange": 500.0,
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 1.0,
+            "vec.z": 0.8235292434692383
+        },
+        "m_intensity": 1.0,
+        "m_radius": 2000.0
     },
     "value14": {
         "name": "StaticBox_Ground",
@@ -2379,8 +2387,8 @@
         "name": "Player",
         "transform": {
             "position": {
-                "x": -426.84332275390627,
-                "y": -122.5071029663086,
+                "x": -396.08306884765627,
+                "y": -122.50706481933594,
                 "z": 0.5
             },
             "scale": {
@@ -2405,7 +2413,8 @@
             "class Renderer",
             "class Animator",
             "class Box2DBody",
-            "class MovePlayer"
+            "class MovePlayer",
+            "class PointLight"
         ],
         "m_layer": 3,
         "m_node": {
@@ -2560,8 +2569,8 @@
         "m_filter": 8,
         "data": {
             "pos": {
-                "vec.x": -42.68433380126953,
-                "vec.y": -12.250710487365723
+                "vec.x": -39.608306884765628,
+                "vec.y": -12.250706672668457
             },
             "rot": {
                 "rot.c": 1.0,
@@ -2600,7 +2609,14 @@
             },
             "cap.radius": 2.75
         },
-        "reverse": true
+        "reverse": true,
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 0.5,
+        "m_radius": 1000.0
     },
     "value19": {
         "name": "Pillar",
@@ -3728,7 +3744,7 @@
             "class Renderer",
             "class SubWindow"
         ],
-        "m_layer": 2,
+        "m_layer": 4,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -10094,7 +10110,7 @@
             "position": {
                 "x": 0.0,
                 "y": 330.0,
-                "z": 0.0
+                "z": 0.5
             },
             "scale": {
                 "x": 5.0,
@@ -10138,7 +10154,7 @@
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": true
+            "awake": false
         },
         "types": [
             2
@@ -10166,7 +10182,7 @@
             "position": {
                 "x": 0.0,
                 "y": -330.0,
-                "z": 0.0
+                "z": 0.5
             },
             "scale": {
                 "x": 5.0,
@@ -10210,7 +10226,7 @@
             "autoMass": 1.0,
             "bullet": false,
             "fixRot": false,
-            "awake": true
+            "awake": false
         },
         "types": [
             2
@@ -10231,5 +10247,264 @@
                 "vec.y": 0.0
             }
         }
+    },
+    "value28": {
+        "name": "goalLight",
+        "transform": {
+            "position": {
+                "x": 348.7753601074219,
+                "y": 183.88995361328126,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.6764705181121826,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 1000.0
+    },
+    "value29": {
+        "name": "goalLight_1",
+        "transform": {
+            "position": {
+                "x": 455.9736022949219,
+                "y": 183.88995361328126,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.6764705181121826,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 1000.0
+    },
+    "value30": {
+        "name": "PillarLight",
+        "transform": {
+            "position": {
+                "x": -197.27932739257813,
+                "y": -134.592041015625,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 100.0
+    },
+    "value31": {
+        "name": "PillarLight_1",
+        "transform": {
+            "position": {
+                "x": 33.451011657714847,
+                "y": -134.592041015625,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 100.0
+    },
+    "value32": {
+        "name": "PillarLight_2",
+        "transform": {
+            "position": {
+                "x": 273.2168273925781,
+                "y": -134.592041015625,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 100.0
+    },
+    "value33": {
+        "name": "PillarLight_3",
+        "transform": {
+            "position": {
+                "x": 273.21685791015627,
+                "y": 17.180912017822267,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 100.0
+    },
+    "value34": {
+        "name": "PillarLight_4",
+        "transform": {
+            "position": {
+                "x": 276.2522888183594,
+                "y": 162.88294982910157,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 100.0
     }
 }

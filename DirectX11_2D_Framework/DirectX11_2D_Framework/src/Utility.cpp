@@ -92,4 +92,11 @@ const wchar_t* GetFileExtension(const wchar_t* path)
     return nullptr; // No extension found
 }
 
+std::mt19937& GetRandomGenerator()
+{
+    static std::random_device randomDevice;
+    static std::mt19937 rGenerator(randomDevice());
+
+    return rGenerator;
+}
 void Void(){}

@@ -20,6 +20,9 @@
 #define SCREEN_HEIGHT (720)	// ウインドウの高さ
 //================================================================
 
+static inline constexpr float HALF_SCREEN_WIDTH = SCREEN_WIDTH / 2;
+static inline constexpr float HALF_SCREEN_HEIGHT = SCREEN_HEIGHT / 2;
+
 //初期画面の大きさ
 //================================================================
 #define SUB_SCREEN_WIDTH (320)	// ウインドウの幅
@@ -88,6 +91,9 @@ class Window final
 {
 public:
 	//モニターの解像度所得
+	static int MONITER_WIDTH;
+	static int MONITER_HEIGHT;
+
 	static int MONITER_HALF_WIDTH;
 	static int MONITER_HALF_HEIGHT;
 

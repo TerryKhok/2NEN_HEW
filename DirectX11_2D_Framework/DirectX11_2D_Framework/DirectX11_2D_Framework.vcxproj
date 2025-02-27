@@ -180,6 +180,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="src\PointLight.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\SFText.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="inc\Input.h" />
     <ClInclude Include="inc\Object.h" />
     <ClInclude Include="inc\Particle.h" />
+    <ClInclude Include="inc\PointLight.h" />
     <ClInclude Include="inc\Serialize.h" />
     <ClInclude Include="inc\Renderer.h" />
     <ClInclude Include="inc\Scene.h" />

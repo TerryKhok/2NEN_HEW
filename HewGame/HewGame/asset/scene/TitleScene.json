@@ -82,7 +82,7 @@
             "class Renderer",
             "class SubWindow"
         ],
-        "m_layer": 2,
+        "m_layer": 4,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -136,7 +136,7 @@
             "class Renderer",
             "class SubWindow"
         ],
-        "m_layer": 2,
+        "m_layer": 4,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -4799,7 +4799,7 @@
             "class TitleTrigger",
             "class FlickeringRenderColor"
         ],
-        "m_layer": 2,
+        "m_layer": 4,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -4867,7 +4867,7 @@
             "class TitleTrigger",
             "class FlickeringRenderColor"
         ],
-        "m_layer": 2,
+        "m_layer": 4,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -4934,7 +4934,7 @@
             "class Renderer",
             "class FlickeringRenderColor"
         ],
-        "m_layer": 2,
+        "m_layer": 4,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -4999,7 +4999,8 @@
         "active": true,
         "comNames": [
             "class Renderer",
-            "class FlickeringRenderColor"
+            "class FlickeringRenderColor",
+            "class PointLight"
         ],
         "m_layer": 2,
         "m_node": {
@@ -5036,7 +5037,14 @@
                 "f.w": 1.0
             }
         ],
-        "flickeringTime": 2.5
+        "flickeringTime": 2.5,
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 1.0,
+            "vec.z": 0.8235292434692383
+        },
+        "m_intensity": 1.1699999570846558,
+        "m_radius": 2000.0
     },
     "value8": {
         "name": "crystal_9",
@@ -5066,7 +5074,8 @@
         "active": true,
         "comNames": [
             "class Renderer",
-            "class FlickeringRenderColor"
+            "class FlickeringRenderColor",
+            "class PointLight"
         ],
         "m_layer": 2,
         "m_node": {
@@ -5103,7 +5112,14 @@
                 "f.w": 1.0
             }
         ],
-        "flickeringTime": 2.5
+        "flickeringTime": 2.5,
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.9411764144897461,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.409999966621399,
+        "m_radius": 2000.0
     },
     "value9": {
         "name": "crystal_10",
@@ -5133,7 +5149,8 @@
         "active": true,
         "comNames": [
             "class Renderer",
-            "class FlickeringRenderColor"
+            "class FlickeringRenderColor",
+            "class PointLight"
         ],
         "m_layer": 2,
         "m_node": {
@@ -5170,7 +5187,14 @@
                 "f.w": 1.0
             }
         ],
-        "flickeringTime": 2.5
+        "flickeringTime": 2.5,
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 1.0,
+            "vec.z": 0.8823528289794922
+        },
+        "m_intensity": 1.2899999618530274,
+        "m_radius": 2000.0
     },
     "value10": {
         "name": "crystal_11",
@@ -5200,7 +5224,8 @@
         "active": true,
         "comNames": [
             "class Renderer",
-            "class FlickeringRenderColor"
+            "class FlickeringRenderColor",
+            "class PointLight"
         ],
         "m_layer": 2,
         "m_node": {
@@ -5237,7 +5262,14 @@
                 "f.w": 1.0
             }
         ],
-        "flickeringTime": 2.5
+        "flickeringTime": 2.5,
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.9705884456634522,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.2699999809265137,
+        "m_radius": 2000.0
     },
     "value11": {
         "name": "crystal_12",
@@ -5267,7 +5299,8 @@
         "active": true,
         "comNames": [
             "class Renderer",
-            "class FlickeringRenderColor"
+            "class FlickeringRenderColor",
+            "class PointLight"
         ],
         "m_layer": 2,
         "m_node": {
@@ -5304,7 +5337,14 @@
                 "f.w": 1.0
             }
         ],
-        "flickeringTime": 2.5
+        "flickeringTime": 2.5,
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 1.0,
+            "vec.z": 0.8235292434692383
+        },
+        "m_intensity": 1.2000000476837159,
+        "m_radius": 2000.0
     },
     "value12": {
         "name": "crystal",
@@ -5334,7 +5374,8 @@
         "active": true,
         "comNames": [
             "class Renderer",
-            "class FlickeringRenderColor"
+            "class FlickeringRenderColor",
+            "class PointLight"
         ],
         "m_layer": 2,
         "m_node": {
@@ -5371,7 +5412,14 @@
                 "f.w": 1.0
             }
         ],
-        "flickeringTime": 2.5
+        "flickeringTime": 2.5,
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 1.0,
+            "vec.z": 0.8823528289794922
+        },
+        "m_intensity": 1.25,
+        "m_radius": 2000.0
     },
     "value13": {
         "name": "CharacterV",
@@ -5403,7 +5451,7 @@
             "class Renderer",
             "class SubWindow"
         ],
-        "m_layer": 2,
+        "m_layer": 4,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {
@@ -5457,7 +5505,7 @@
             "class Renderer",
             "class SubWindow"
         ],
-        "m_layer": 2,
+        "m_layer": 4,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {

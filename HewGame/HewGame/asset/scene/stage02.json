@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 25,
+    "objectNum": 27,
     "value0": {
         "name": "map",
         "transform": {
@@ -67,7 +67,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 4,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": -32.5
@@ -94,7 +94,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 4,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": 32.0
@@ -121,7 +121,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 4,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": 32.0
@@ -148,7 +148,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 4,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": -32.5
@@ -268,7 +268,8 @@
         },
         "active": true,
         "comNames": [
-            "class Renderer"
+            "class Renderer",
+            "class PointLight"
         ],
         "m_layer": 0,
         "m_node": {
@@ -290,7 +291,14 @@
                     "path": "asset\\pic\\Suisyou 2.png"
                 }
             }
-        }
+        },
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.3235294818878174,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.5,
+        "m_radius": 2000.0
     },
     "value3": {
         "name": "moveObject",
@@ -1089,7 +1097,8 @@
         },
         "active": true,
         "comNames": [
-            "class Renderer"
+            "class Renderer",
+            "class PointLight"
         ],
         "m_layer": 0,
         "m_node": {
@@ -1111,7 +1120,14 @@
                     "path": "asset\\pic\\Suisyou 2.png"
                 }
             }
-        }
+        },
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.5000002384185791,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.5,
+        "m_radius": 2000.0
     },
     "value10": {
         "name": "effect",
@@ -1194,7 +1210,8 @@
             "class Renderer",
             "class Animator",
             "class Box2DBody",
-            "class MovePlayer"
+            "class MovePlayer",
+            "class PointLight"
         ],
         "m_layer": 3,
         "m_node": {
@@ -1390,7 +1407,14 @@
             },
             "cap.radius": 2.75
         },
-        "reverse": true
+        "reverse": true,
+        "m_color": {
+            "vec.x": 1.0,
+            "vec.y": 1.0,
+            "vec.z": 1.0
+        },
+        "m_intensity": 0.5,
+        "m_radius": 1000.0
     },
     "value12": {
         "name": "Crystal",
@@ -1419,7 +1443,8 @@
         },
         "active": true,
         "comNames": [
-            "class Renderer"
+            "class Renderer",
+            "class PointLight"
         ],
         "m_layer": 0,
         "m_node": {
@@ -1441,7 +1466,14 @@
                     "path": "asset\\pic\\Suisyou 2.png"
                 }
             }
-        }
+        },
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.47058820724487307,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.5,
+        "m_radius": 2000.0
     },
     "value13": {
         "name": "goal",
@@ -3427,7 +3459,7 @@
         "transform": {
             "position": {
                 "x": 125.0,
-                "y": -250.0,
+                "y": -247.0,
                 "z": 0.0
             },
             "scale": {
@@ -3455,7 +3487,7 @@
         "data": {
             "pos": {
                 "vec.x": 12.5,
-                "vec.y": -25.0
+                "vec.y": -24.700000762939454
             },
             "rot": {
                 "rot.c": 1.0,
@@ -10424,5 +10456,79 @@
             }
         },
         "m_layer": 0
+    },
+    "value25": {
+        "name": "goalLight",
+        "transform": {
+            "position": {
+                "x": 432.7795715332031,
+                "y": -214.0043182373047,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.6764705181121826,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 1000.0
+    },
+    "value26": {
+        "name": "goalLight_1",
+        "transform": {
+            "position": {
+                "x": 325.0262145996094,
+                "y": -214.0043182373047,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class PointLight"
+        ],
+        "m_color": {
+            "vec.x": 0.0,
+            "vec.y": 0.6764705181121826,
+            "vec.z": 1.0
+        },
+        "m_intensity": 1.0,
+        "m_radius": 1000.0
     }
 }
