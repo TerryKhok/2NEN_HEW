@@ -552,14 +552,6 @@ void RenderManager::Draw()
 
 			// 2. ライトマップテクスチャをピクセルシェーダーにセット
 			DirectX11::m_pDeviceContext->PSSetShaderResources(1, 1, DirectX11::noiseMapSRV.GetAddressOf());
-
-			auto& wndBuffer = DirectX11::windowBufferData;
-			wndBuffer.rect[0] = SCREEN_WIDTH;
-			wndBuffer.rect[1] = SCREEN_HEIGHT;
-
-			//行列をシェーダーに渡す
-			DirectX11::m_pDeviceContext->UpdateSubresource(
-				DirectX11::m_pPSWndConstantBuffer.Get(), 0, NULL, &wndBuffer, 0, 0);
 		}
 		else
 		{

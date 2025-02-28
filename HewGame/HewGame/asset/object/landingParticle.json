@@ -1,0 +1,105 @@
+{
+    "index": 111,
+    "*selectedObject": {
+        "name": "landingParticle",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class ParticleSystem",
+            "class Timer"
+        ],
+        "layer##particle": 3,
+        "path##particle": "null",
+        "shotVec": [
+            {
+                "x": -0.5,
+                "y": 0.5
+            },
+            {
+                "x": 0.0,
+                "y": 0.5
+            },
+            {
+                "x": 0.5,
+                "y": 0.5
+            },
+            {
+                "x": 1.0,
+                "y": 0.0
+            },
+            {
+                "x": -1.0,
+                "y": 0.0
+            }
+        ],
+        "minVec": {
+            "x": -0.5,
+            "y": 0.0
+        },
+        "maxVec": {
+            "x": 0.5,
+            "y": 0.5
+        },
+        "minOffset": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "maxOffset": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "minScale": {
+            "x": 1.0,
+            "y": 1.0
+        },
+        "maxScale": {
+            "x": 2.0,
+            "y": 2.0
+        },
+        "scaling": {
+            "x": -0.009999999776482582,
+            "y": -0.009999999776482582
+        },
+        "colorRange[0]": {
+            "f.x": 1.0,
+            "f.y": 1.0,
+            "f.z": 1.0,
+            "f.w": 1.0
+        },
+        "colorRange[1]": {
+            "f.x": 0.0,
+            "f.y": 0.0,
+            "f.z": 0.0,
+            "f.w": 0.0
+        },
+        "stayTimeRange[0]": 0.5,
+        "stayTimeRange[1]": 1.0,
+        "m_awake": false,
+        "autoCreate": false,
+        "interval": 1.0,
+        "m_isWorld": false,
+        "stayTime": 1.5
+    }
+}

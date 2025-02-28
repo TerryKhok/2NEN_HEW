@@ -5,6 +5,8 @@
 
 #include "MoveRect.h"
 
+class MovePlayer;
+
 enum PLAYER_MODE
 {
 	NORMAL,
@@ -35,189 +37,16 @@ constexpr const wchar_t* wPlayerModeName[PLAYER_MODE_MAX] =
 
 struct PlayerState
 {
-	virtual void Start(PLAYER_MODE _mode, Animator* _ani) {}
-	virtual void Update(PLAYER_MODE _mode, Animator* _ani) {}
-	virtual void Land(PLAYER_MODE _mode, Animator* _ani) {}
-	virtual void ModeChange(PLAYER_MODE _mode, Animator* _ani) {}
+	virtual void Start(PLAYER_MODE _mode, MovePlayer* _player) {}
+	virtual void Update(PLAYER_MODE _mode, MovePlayer* _player) {}
+	virtual void End(PLAYER_MODE _mode, MovePlayer* _player) {}
+	virtual void Land(PLAYER_MODE _mode, MovePlayer* _player) {}
+	virtual void ModeChange(PLAYER_MODE _mode, MovePlayer* _player) {}
 	virtual void ChangeTexture(PLAYER_MODE _mode, Renderer* _rend) {}
 protected:
 	std::string clipName;
 public:
 	static constexpr const wchar_t* playerSpriteSheetRelativePath = L"asset/spritesheet/player_";
-};
-
-struct PlayerIdle : public PlayerState
-{
-	void Start(PLAYER_MODE _mode, Animator* _ani){
-		clipName = playerModeName[_mode];
-		clipName += "StandBy";
-		_ani->Play(clipName);
-	}
-	void Update(PLAYER_MODE _mode, Animator* _ani){
-		count++;
-		if (count == 120)
-		{
-			int blink = rand() % 2;
-			if (blink == 0)
-			{
-				clipName = playerModeName[_mode];
-				clipName += "Blink";
-				_ani->Play(clipName);
-			}
-		}
-		if (count > 240)
-		{
-			count = 0;
-			clipName = playerModeName[_mode];
-			clipName += "StandBy";
-			_ani->Play(clipName);
-		}
-	}
-	void Land(PLAYER_MODE _mode, Animator* _ani) {
-		clipName = playerModeName[_mode];
-		clipName += "Landing";
-		_ani->Play(clipName);
-	}
-	void ModeChange(PLAYER_MODE _mode, Animator* _ani)
-	{
-		clipName = playerModeName[_mode];
-		clipName += "StandBy";
-		_ani->Play(clipName);
-	}
-	void ChangeTexture(PLAYER_MODE _mode, Renderer* _rend) override
-	{
-		std::wstring path = playerSpriteSheetRelativePath;
-		path += wPlayerModeName[_mode];
-		path += L"_standby.png";
-		_rend->SetTexture(path.c_str());
-	}
-private:
-	int count = 0;
-};
-
-struct PlayerWalk : public PlayerState
-{
-	void Start(PLAYER_MODE _mode, Animator* _ani) {
-		clipName = playerModeName[_mode];
-		clipName += "Walk";
-		_ani->Play(clipName);
-	}
-	void Land(PLAYER_MODE _mode, Animator* _ani) {
-		clipName = playerModeName[_mode];
-		clipName += "Landing";
-		_ani->Play(clipName);
-	}
-	void ModeChange(PLAYER_MODE _mode, Animator* _ani)
-	{
-		clipName = playerModeName[_mode];
-		clipName += "Walk";
-		_ani->Play(clipName);
-	}
-	void ChangeTexture(PLAYER_MODE _mode, Renderer* _rend) override
-	{
-		std::wstring path = playerSpriteSheetRelativePath;
-		path += wPlayerModeName[_mode];
-		path += L"_walk.png";
-		_rend->SetTexture(path.c_str());
-	}
-};
-
-struct PlayerJump : public PlayerState
-{
-	void Start(PLAYER_MODE _mode, Animator* _ani) {
-		clipName = playerModeName[_mode];
-		clipName += "Jump";
-		_ani->Play(clipName);
-	}
-	void Update(PLAYER_MODE _mode, Animator* _ani) {
-
-	}
-	void Land(PLAYER_MODE _mode, Animator* _ani) {
-		clipName = playerModeName[_mode];
-		clipName += "Landing";
-		_ani->Play(clipName);
-	}
-	void ModeChange(PLAYER_MODE _mode, Animator* _ani)
-	{
-		clipName = playerModeName[_mode];
-		clipName += "Float";
-		_ani->Play(clipName);
-	}
-	void ChangeTexture(PLAYER_MODE _mode, Renderer* _rend) override
-	{
-		std::wstring path = playerSpriteSheetRelativePath;
-		path += wPlayerModeName[_mode];
-		path += L"_jump.png";
-		_rend->SetTexture(path.c_str());
-	}
-};
-
-struct PlayerFloat : public PlayerState
-{
-	void Start(PLAYER_MODE _mode, Animator* _ani) {
-		clipName = playerModeName[_mode];
-		clipName += "Float";
-		_ani->Play(clipName);
-	}
-	void Update(PLAYER_MODE _mode, Animator* _ani) {
-
-	}
-	void Land(PLAYER_MODE _mode, Animator* _ani) {
-		clipName = playerModeName[_mode];
-		clipName += "Landing";
-		_ani->Play(clipName);
-	}
-	void ModeChange(PLAYER_MODE _mode, Animator* _ani)
-	{
-		clipName = playerModeName[_mode];
-		clipName += "Float";
-		_ani->Play(clipName);
-	}
-	void ChangeTexture(PLAYER_MODE _mode, Renderer* _rend) override
-	{
-		std::wstring path = playerSpriteSheetRelativePath;
-		path += wPlayerModeName[_mode];
-		path += L"_float.png";
-		_rend->SetTexture(path.c_str());
-	}
-};
-
-struct PlayerDamage : public PlayerState
-{
-	void Start(PLAYER_MODE _mode, Animator* _ani) {
-		clipName = playerModeName[_mode];
-		clipName += "Damage";
-		_ani->Play(clipName);
-	}
-	void Update(PLAYER_MODE _mode, Animator* _ani) {
-
-	}
-	void ChangeTexture(PLAYER_MODE _mode, Renderer* _rend) override
-	{
-		std::wstring path = playerSpriteSheetRelativePath;
-		path += wPlayerModeName[_mode];
-		path += L"_damage.png";
-		_rend->SetTexture(path.c_str());
-	}
-};
-
-struct PlayerGoal : public PlayerState
-{
-	void Start(PLAYER_MODE _mode, Animator* _ani) {
-		clipName = playerModeName[_mode];
-		clipName += "Goal";
-		_ani->Play(clipName);
-	}
-	void Update(PLAYER_MODE _mode, Animator* _ani) {
-
-	}
-	void ChangeTexture(PLAYER_MODE _mode, Renderer* _rend) override
-	{
-		std::wstring path = playerSpriteSheetRelativePath;
-		path += wPlayerModeName[_mode];
-		path += L"_goal.png";
-		_rend->SetTexture(path.c_str());
-	}
 };
 
 class MovePlayer : public Component
@@ -236,35 +65,11 @@ class MovePlayer : public Component
 	SAFE_POINTER(Renderer, render)
 	SAFE_POINTER(Box2DBody, rb)
 	SAFE_POINTER(Animator, anim)
+	SAFE_POINTER(ParticleSystem, particle)
 
 	std::unique_ptr<PlayerState> state;
 
-	void ChangeState(PLAYER_STATE _state)
-	{
-		switch (_state)
-		{
-		case PLAYER_IDLE:
-			state.reset(new PlayerIdle());
-			break;
-		case PLAYER_WALK:
-			state.reset(new PlayerWalk());
-			break;
-		case PLAYER_JUMP:
-			state.reset(new PlayerJump());
-			break;
-		case PLAYER_FLOAT:
-			state.reset(new PlayerFloat());
-			break;
-		case PLAYER_DAMAGE:
-			state.reset(new PlayerDamage());
-			break;
-		case PLAYER_GOAL:
-			state.reset(new PlayerGoal());
-			break;
-		}
-
-		state->Start(mode, anim);
-	}
+	void ChangeState(PLAYER_STATE _state);
 
 	void PlayWalkSFX() {
 		walk_count++;
@@ -319,11 +124,25 @@ class MovePlayer : public Component
 			anim->Reverse(reverse);
 		}
 		Sound::Get().PlayWaveSound(BGM_Game02, 0.3f);
+
+		particle = m_this->GetComponent<ParticleSystem>();
 	}
 	PLAYER_MODE mode = NORMAL;
 	std::vector<PLAYER_MODE> modeLayer;
 public:
 	bool inFloat = false;
+
+	Animator* const GetAnimator() const{
+		return anim;
+	}
+
+	ParticleSystem* const GetParticleSystem() const {
+		return particle;
+	}
+
+	bool IsGround() const {
+		return isGround;
+	}
 	
 	void SetModeTexture(PLAYER_MODE _mode)
 	{
@@ -342,7 +161,7 @@ public:
 	{
 		mode = _mode;
 		modeLayer.push_back(mode);
-		state->ModeChange(mode, anim);
+		state->ModeChange(mode, this);
 	}
 	void PopMode(PLAYER_MODE _mode)
 	{
@@ -362,16 +181,24 @@ public:
 			mode = modeLayer.back();
 		}
 		if (mode != oldMode)
-			state->ModeChange(mode, anim);
+			state->ModeChange(mode, this);
 	}
 
 	//goalヘッダーから呼び出してる
 	void GameClear()
 	{
 		LOG("GameClear");
+		
 		Sound::Get().PlayWaveSound(SFX_Clear, 0.3f);
 		ChangeState(PLAYER_GOAL);
 		m_this->RemoveComponent<MovePlayer>();
+
+		auto object = ObjectManager::Find("goalParticle");
+		if (object == nullptr) return;
+		object->SetActive(true);
+		auto particle = object->GetComponent<ParticleSystem>();
+		if (particle == nullptr) return;
+		particle->Play();
 	}
 
 	void GameOver()
@@ -400,297 +227,7 @@ private:
 		SetModeTexture(NORMAL);
 	}
 
-	void Update()
-	{
-		auto& input = Input::Get();
-
-		isGround = false;
-
-		state->Update(mode, anim);
-
-		SetModeTexture(NORMAL);
-
-		Vector2 rayStart = m_this->transform.position;
-		if (inFloat)
-			rayStart.y -= 50.0f;
-		else
-			rayStart.y += 50.0f;
-		
-		Vector2 rayEnd = rayStart;
-		if (inFloat)
-			rayEnd.y += 60.0f;
-		else
-			rayEnd.y -= 60.0f;
-		
-		if (Box2D::WorldManager::RayCastShape(rayStart, rayEnd, rb, F_MAPRAY)){
-			isGround = true;
-			airCount = 0;
-		}
-		else{
-			if (airCount > 10)
-			{
-				if (!inAir && !jumping)
-				{
-					landCount = 0;
-					landing = false;
-					ChangeState(PLAYER_FLOAT);
-				}
-				inAir = true;
-			}
-			else
-				airCount++;
-		}
-
-		bool rightHit = false;
-		rayStart = m_this->transform.position;
-		rayEnd = rayStart;
-		rayEnd.x += 10.0f;
-		auto& size = m_this->transform.scale;
-		float rad = (float)m_this->transform.angle.z.Get();
-
-		auto& pos = m_this->transform.position;
-		//地面ポリゴンを作る。 b2MakeBox()ヘルパー関数を使い、地面ポリゴンを箱型にする。箱の中心は親ボディの原点である。
-		b2Polygon polygonBox =
-			b2MakeOffsetBox(size.x / 4.0f, size.y / 3.5f, { 0.0f,0.0f }, b2MakeRot(rad));
-		if (Box2D::WorldManager::RayCastPolygon(rayStart, rayEnd, rb, polygonBox, F_MAPRAY)) {
-			rightHit = true;
-		}
-
-		constexpr double turnSpeed = 0.1;
-
-		auto& angleZ = m_this->transform.angle.z;
-		double radZ = angleZ.Get();
-		if (inFloat)
-		{
-			if (radZ == Math::PI)
-			{
-				//angleZ.Set(Math::PI);
-			}
-			else if (radZ > Math::PI)
-			{
-				angleZ.Set(radZ -= turnSpeed);
-
-				if (radZ <= Math::PI)
-				{
-					angleZ.Set(Math::PI);
-				}
-			}
-			else if (radZ > 0.0)
-			{
-				angleZ.Set(radZ += turnSpeed);
-
-				if (radZ >= Math::PI)
-				{
-					angleZ.Set(Math::PI);
-				}
-			}
-			
-			else
-			{
-				angleZ.Set(reverse ? 0.001 : Math::PI2 - 0.001);
-			}
-			
-			anim->Reverse(!reverse);
-		}
-		else
-		{
-			if (radZ > Math::PI)
-			{
-				if (radZ < Math::PI2)
-				{
-					angleZ.Set(radZ += turnSpeed);
-				}
-				else
-				{
-					angleZ.Set(0.0);
-				}
-			}
-			else if (radZ < Math::PI)
-			{
-				if (radZ > 0.0)
-				{
-					angleZ.Set(radZ -= turnSpeed);
-				}
-				else
-				{
-					angleZ.Set(0.0);
-				}
-			}
-			else
-			{
-				angleZ.Set(reverse ? Math::PI - 0.001 : Math::PI + 0.001);
-			}
-
-			anim->Reverse(reverse);
-		}
-
-		render->SetOffset({ 0.0f,15.0f * (float)cos(angleZ.Get()) });
-
-		if ((input.KeyPress(VK_D) || input.LeftAnalogStick().x > 0.1f))
-		{
-			//if(isGround&&!sound.IsPlaying()){sound.PlayWaveSound(L"asset/sound/se/SFX_Walk01.wav", &waveData, false); }
-			if (move_count == 1)
-			{
-				landCount = 0;
-				landing = false;
-
-				reverse = true;
-				
-				if (!jumping && !inAir)
-					ChangeState(PLAYER_WALK);
-			}
-			if (move_count < 30)
-			{
-				move_count++;
-			}
-			if (!rightHit)
-				rb->SetVelocityX((float)move_count);
-			else
-				rb->SetVelocityX(0.0f);
-
-			PlayWalkSFX();
-		}
-		else if (move_count > 0)
-		{
-			if (input.KeyRelease(VK_D)) {
-				move_count = 0;
-				walk_count = 0;
-			}
-			else
-				move_count--;
-			if (move_count == 0 && !jumping && !inAir)
-			{
-				ChangeState(PLAYER_IDLE);
-			}
-			/*if (input.KeyRelease(VK_D) || (input.LeftAnalogStick().x < 0.1f && input.IsConnectController()))
-			{
-				move_count = 0;
-				ChangeState(PLAYER_IDLE);
-			}*/
-		}
-
-		bool leftHit = false;
-		rayStart = m_this->transform.position;
-		rayEnd = rayStart;
-		rayEnd.x -= 10.0f;
-		if (Box2D::WorldManager::RayCastPolygon(rayStart, rayEnd, rb, polygonBox, F_MAPRAY)) {
-			leftHit = true;
-		}
-		if ((input.KeyPress(VK_A) || input.LeftAnalogStick().x < -0.1f))
-		{
-			if (move_count == -1) 
-			{
-				landCount = 0;
-				landing = false;
-
-				reverse = false;
-				if (!jumping && !inAir)
-					ChangeState(PLAYER_WALK);
-			}
-			if (move_count > -30)
-			{
-				move_count--;
-			}
-			if (!leftHit)
-				rb->SetVelocityX((float)move_count);
-			else
-				rb->SetVelocityX(0.0f);
-
-			PlayWalkSFX();
-		}
-		else if (move_count < 0)
-		{
-			if (input.KeyRelease(VK_A)) {
-				move_count = 0;
-				walk_count = 0;
-			}
-			else
-				move_count++;
-			if (move_count == 0 && !jumping && !inAir)
-			{
-				ChangeState(PLAYER_IDLE);
-			}
-			/*if (input.KeyRelease(VK_A) || (input.LeftAnalogStick().x > -0.1f && input.IsConnectController()))
-			{
-				move_count = 0;
-				ChangeState(PLAYER_IDLE);
-			}*/
-		}
-		
-
-		if ((input.KeyTrigger(VK_W) || input.ButtonTrigger(XINPUT_A)) && isGround && !jumping /*&& !inWindow*/)
-		{
-			jump_count = 0;
-			jumping = true;
-			landCount = 0;
-			landing = false;
-			ChangeState(PLAYER_JUMP);
-		}
-
-		if ((input.KeyPress(VK_W) || input.ButtonPress(XINPUT_A)) && jumping /*&& !inWindow*/ && jump_count > 10)
-		{
-			if (inFloat)
-				rb->AddForceImpulse({ 0,-15.0f + (float)jump_count / 2.0f });
-			else
-				rb->AddForceImpulse({ 0,15.0f - (float)jump_count / 2.0f });
-		}
-
-		// fall gravety
-		/*float top = rb->GetVelocity().y;
-		if (top <= 0.0f)
-		{
-			rb->AddForceImpulse({ 0,rb->GetGravityScale() * -0.25f });
-		}*/
-
-		if (jumping)
-		{
-			if (jump_count == 1) {
-				Sound::Get().PlayWaveSound(SFX_Jump, 1.0f);
-			}
-			jump_count++;
-			
-			if (jump_count == 10)
-			{
-				if (inFloat)
-					rb->AddForceImpulse({ 0,-50.0f });
-				else
-					rb->AddForceImpulse({ 0,50.0f });
-			}
-			if (jump_count > 30)
-			{
-				jump_count = 0;
-				jumping = false;
-				inAir = true;
-				ChangeState(PLAYER_FLOAT);
-			}
-		}
-		if (inAir && isGround)
-		{
-			inAir = false;
-			Sound::Get().PlayWaveSound(SFX_Land, 1.0f);
-
-			if (move_count != 0)
-			{
-				ChangeState(PLAYER_WALK);
-			}
-			else
-			{
-				landing = true;
-				state->Land(mode, anim);
-			}
-		}
-		else if (landing)
-		{
-			landCount++;
-			if (landCount > 20)
-			{
-				landCount = 0;
-				landing = false;
-				
-				ChangeState(PLAYER_IDLE);
-			}
-		}
-	}
+	void Update();
 
 	void Serialize(cereal::JSONOutputArchive& ar) override {
 		if constexpr (1 <= 7) {
@@ -724,5 +261,194 @@ public:
 };
 
 SetReflectionComponent(MovePlayer)
+
+struct PlayerIdle : public PlayerState
+{
+	void Start(PLAYER_MODE _mode, MovePlayer* _player) {
+		clipName = playerModeName[_mode];
+		clipName += "StandBy";
+		_player->GetAnimator()->Play(clipName);
+	}
+	void Update(PLAYER_MODE _mode, MovePlayer* _player) {
+		count++;
+		if (count == 120)
+		{
+			int blink = rand() % 2;
+			if (blink == 0)
+			{
+				clipName = playerModeName[_mode];
+				clipName += "Blink";
+				_player->GetAnimator()->Play(clipName);
+			}
+		}
+		if (count > 240)
+		{
+			count = 0;
+			clipName = playerModeName[_mode];
+			clipName += "StandBy";
+			_player->GetAnimator()->Play(clipName);
+		}
+	}
+	void Land(PLAYER_MODE _mode, MovePlayer* _player) {
+		clipName = playerModeName[_mode];
+		clipName += "Landing";
+		_player->GetAnimator()->Play(clipName);
+	}
+	void ModeChange(PLAYER_MODE _mode, MovePlayer* _player)
+	{
+		clipName = playerModeName[_mode];
+		clipName += "StandBy";
+		_player->GetAnimator()->Play(clipName);
+	}
+	void ChangeTexture(PLAYER_MODE _mode, Renderer* _rend) override
+	{
+		std::wstring path = playerSpriteSheetRelativePath;
+		path += wPlayerModeName[_mode];
+		path += L"_standby.png";
+		_rend->SetTexture(path.c_str());
+	}
+private:
+	int count = 0;
+};
+
+struct PlayerWalk : public PlayerState
+{
+	void Start(PLAYER_MODE _mode, MovePlayer* _player) {
+		clipName = playerModeName[_mode];
+		clipName += "Walk";
+		_player->GetAnimator()->Play(clipName);
+
+		_player->GetParticleSystem()->Resume();
+	}
+	void Update(PLAYER_MODE _mode, MovePlayer* _player)
+	{
+		auto particle = _player->GetParticleSystem();
+		bool isGround = _player->IsGround();
+		if (isGround)
+			particle->Resume();
+		else 
+			particle->Pause();
+	}
+	void End(PLAYER_MODE _mode, MovePlayer* _player) {
+		_player->GetParticleSystem()->Pause();
+	}
+
+	void Land(PLAYER_MODE _mode, MovePlayer* _player) {
+		clipName = playerModeName[_mode];
+		clipName += "Landing";
+		_player->GetAnimator()->Play(clipName);
+	}
+	void ModeChange(PLAYER_MODE _mode, MovePlayer* _player)
+	{
+		clipName = playerModeName[_mode];
+		clipName += "Walk";
+		_player->GetAnimator()->Play(clipName);
+	}
+	void ChangeTexture(PLAYER_MODE _mode, Renderer* _rend) override
+	{
+		std::wstring path = playerSpriteSheetRelativePath;
+		path += wPlayerModeName[_mode];
+		path += L"_walk.png";
+		_rend->SetTexture(path.c_str());
+	}
+};
+
+struct PlayerJump : public PlayerState
+{
+	void Start(PLAYER_MODE _mode, MovePlayer* _player) {
+		clipName = playerModeName[_mode];
+		clipName += "Jump";
+		_player->GetAnimator()->Play(clipName);
+	}
+	void Update(PLAYER_MODE _mode, MovePlayer* _player) {
+
+	}
+	void Land(PLAYER_MODE _mode, MovePlayer* _player) {
+		clipName = playerModeName[_mode];
+		clipName += "Landing";
+		_player->GetAnimator()->Play(clipName);
+	}
+	void ModeChange(PLAYER_MODE _mode, MovePlayer* _player)
+	{
+		clipName = playerModeName[_mode];
+		clipName += "Float";
+		_player->GetAnimator()->Play(clipName);
+	}
+	void ChangeTexture(PLAYER_MODE _mode, Renderer* _rend) override
+	{
+		std::wstring path = playerSpriteSheetRelativePath;
+		path += wPlayerModeName[_mode];
+		path += L"_jump.png";
+		_rend->SetTexture(path.c_str());
+	}
+};
+
+struct PlayerFloat : public PlayerState
+{
+	void Start(PLAYER_MODE _mode, MovePlayer* _player) {
+		clipName = playerModeName[_mode];
+		clipName += "Float";
+		_player->GetAnimator()->Play(clipName);
+	}
+	void Update(PLAYER_MODE _mode, MovePlayer* _player) {
+
+	}
+	void Land(PLAYER_MODE _mode, MovePlayer* _player) {
+		clipName = playerModeName[_mode];
+		clipName += "Landing";
+		_player->GetAnimator()->Play(clipName);
+	}
+	void ModeChange(PLAYER_MODE _mode, MovePlayer* _player)
+	{
+		clipName = playerModeName[_mode];
+		clipName += "Float";
+		_player->GetAnimator()->Play(clipName);
+	}
+	void ChangeTexture(PLAYER_MODE _mode, Renderer* _rend) override
+	{
+		std::wstring path = playerSpriteSheetRelativePath;
+		path += wPlayerModeName[_mode];
+		path += L"_float.png";
+		_rend->SetTexture(path.c_str());
+	}
+};
+
+struct PlayerDamage : public PlayerState
+{
+	void Start(PLAYER_MODE _mode, MovePlayer* _player) {
+		clipName = playerModeName[_mode];
+		clipName += "Damage";
+		_player->GetAnimator()->Play(clipName);
+	}
+	void Update(PLAYER_MODE _mode, MovePlayer* _player) {
+
+	}
+	void ChangeTexture(PLAYER_MODE _mode, Renderer* _rend) override
+	{
+		std::wstring path = playerSpriteSheetRelativePath;
+		path += wPlayerModeName[_mode];
+		path += L"_damage.png";
+		_rend->SetTexture(path.c_str());
+	}
+};
+
+struct PlayerGoal : public PlayerState
+{
+	void Start(PLAYER_MODE _mode, MovePlayer* _player) {
+		clipName = playerModeName[_mode];
+		clipName += "Goal";
+		_player->GetAnimator()->Play(clipName);
+	}
+	void Update(PLAYER_MODE _mode, MovePlayer* _player) {
+
+	}
+	void ChangeTexture(PLAYER_MODE _mode, Renderer* _rend) override
+	{
+		std::wstring path = playerSpriteSheetRelativePath;
+		path += wPlayerModeName[_mode];
+		path += L"_goal.png";
+		_rend->SetTexture(path.c_str());
+	}
+};
 
 #endif

@@ -44,7 +44,7 @@ float4 ps_main(PS_IN input) : SV_Target
     
     //ライティングの影響を取得する
     float2 uv = input.pos.xy / screen;
-    float2 pixelPos = uv * rect + pos; 
+    float2 pixelPos = uv * rect + pos;
     float3 lighting = LightMap.Sample(mySampler, pixelPos / resolution).rgb;
    
     return float4(baseColor.rgb * lighting, baseColor.a);

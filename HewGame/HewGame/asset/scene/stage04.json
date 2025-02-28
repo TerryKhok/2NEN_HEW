@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 26,
+    "objectNum": 27,
     "value0": {
         "name": "map",
         "transform": {
@@ -67,7 +67,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": -48.45429611206055,
                 "vec.y": -27.346050262451173
@@ -94,7 +94,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": -48.57529830932617,
                 "vec.y": 27.490489959716798
@@ -121,7 +121,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": 48.48699188232422,
                 "vec.y": 27.41583251953125
@@ -148,7 +148,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 3,
+            "chain.chainId": 1,
             "chain.ghost1": {
                 "vec.x": 48.567909240722659,
                 "vec.y": -27.504886627197267
@@ -2005,8 +2005,8 @@
         "name": "Player",
         "transform": {
             "position": {
-                "x": -422.74737548828127,
-                "y": -222.50717163085938,
+                "x": -422.44989013671877,
+                "y": -220.9769287109375,
                 "z": 0.5
             },
             "scale": {
@@ -2032,7 +2032,8 @@
             "class Animator",
             "class Box2DBody",
             "class MovePlayer",
-            "class PointLight"
+            "class PointLight",
+            "class ParticleSystem"
         ],
         "m_layer": 3,
         "m_node": {
@@ -2188,8 +2189,8 @@
         "m_filter": 8,
         "data": {
             "pos": {
-                "vec.x": -42.27473831176758,
-                "vec.y": -22.250717163085939
+                "vec.x": -42.24498748779297,
+                "vec.y": -22.097692489624025
             },
             "rot": {
                 "rot.c": 1.0,
@@ -2206,7 +2207,7 @@
             "autoMass": 1.0,
             "bullet": true,
             "fixRot": true,
-            "awake": false
+            "awake": true
         },
         "types": [
             1
@@ -2235,7 +2236,65 @@
             "vec.z": 1.0
         },
         "m_intensity": 0.5,
-        "m_radius": 1000.0
+        "m_radius": 1000.0,
+        "layer##particle": 0,
+        "path##particle": "null",
+        "shotVec": [
+            {
+                "x": 0.0,
+                "y": 0.0
+            },
+            {
+                "x": 0.0,
+                "y": 0.0
+            }
+        ],
+        "minVec": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "maxVec": {
+            "x": 0.5,
+            "y": 0.5
+        },
+        "minOffset": {
+            "x": 0.0,
+            "y": -50.0
+        },
+        "maxOffset": {
+            "x": 0.0,
+            "y": -50.0
+        },
+        "minScale": {
+            "x": 0.10000000149011612,
+            "y": 0.10000000149011612
+        },
+        "maxScale": {
+            "x": 0.800000011920929,
+            "y": 0.800000011920929
+        },
+        "scaling": {
+            "x": -0.009999999776482582,
+            "y": -0.009999999776482582
+        },
+        "colorRange[0]": {
+            "f.x": 1.0,
+            "f.y": 1.0,
+            "f.z": 1.0,
+            "f.w": 1.0
+        },
+        "colorRange[1]": {
+            "f.x": 0.0,
+            "f.y": 0.0,
+            "f.z": 0.0,
+            "f.w": 0.0
+        },
+        "stayTimeRange[0]": 1.0,
+        "stayTimeRange[1]": 2.0,
+        "m_awake": false,
+        "autoCreate": false,
+        "interval": 0.10000000149011612,
+        "m_isWorld": true
     },
     "value18": {
         "name": "Crystal",
@@ -9613,5 +9672,89 @@
         },
         "m_intensity": 1.5,
         "m_radius": 2000.0
+    },
+    "value26": {
+        "name": "enviromentParticle",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 5.0,
+                "y": 5.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class ParticleSystem"
+        ],
+        "layer##particle": 0,
+        "path##particle": "null",
+        "shotVec": [
+            {
+                "x": 0.0,
+                "y": 0.0
+            }
+        ],
+        "minVec": {
+            "x": -0.5,
+            "y": -0.5
+        },
+        "maxVec": {
+            "x": 0.5,
+            "y": 0.5
+        },
+        "minOffset": {
+            "x": -480.0,
+            "y": -270.0
+        },
+        "maxOffset": {
+            "x": 250.0,
+            "y": 270.0
+        },
+        "minScale": {
+            "x": 0.10000000149011612,
+            "y": 0.10000000149011612
+        },
+        "maxScale": {
+            "x": 0.5,
+            "y": 0.5
+        },
+        "scaling": {
+            "x": 0.0,
+            "y": 0.0
+        },
+        "colorRange[0]": {
+            "f.x": 0.0,
+            "f.y": 0.6764705181121826,
+            "f.z": 1.0,
+            "f.w": 1.0
+        },
+        "colorRange[1]": {
+            "f.x": 0.0,
+            "f.y": 0.30588236451148989,
+            "f.z": 0.4745098054409027,
+            "f.w": 0.0
+        },
+        "stayTimeRange[0]": 4.0,
+        "stayTimeRange[1]": 5.0,
+        "m_awake": false,
+        "autoCreate": true,
+        "interval": 0.4000000059604645,
+        "m_isWorld": false
     }
 }

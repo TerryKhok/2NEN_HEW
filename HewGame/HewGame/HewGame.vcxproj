@@ -176,6 +176,7 @@
     <ClInclude Include="Sample_SceneLoad.h" />
     <ClInclude Include="SeigoTestScene.h" />
     <ClInclude Include="SpiderSilk.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="Trigger.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="AntiGravity.h" />
@@ -186,12 +187,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BreakScaffold.cpp" />
+    <ClCompile Include="DecorativePlayerMove.cpp" />
     <ClCompile Include="Enemy_type1.cpp" />
     <ClCompile Include="Enemy_type2.cpp" />
     <ClCompile Include="Enemy_type3.cpp" />
     <ClCompile Include="Fog.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MovePlayer.cpp" />
     <ClCompile Include="MoveSubWIndow.cpp" />
     <ClCompile Include="Permeation.cpp" />
     <ClCompile Include="Rock.cpp" />

@@ -156,6 +156,9 @@
     <ClInclude Include="SpiderSilk.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -193,6 +196,12 @@
     </ClCompile>
     <ClCompile Include="GameManager.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="MovePlayer.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="DecorativePlayerMove.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

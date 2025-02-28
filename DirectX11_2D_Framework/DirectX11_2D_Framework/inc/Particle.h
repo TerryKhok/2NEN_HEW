@@ -132,22 +132,7 @@ private:
 	float interval = 5.0f;
 	bool m_isWorld = false;
 
-	void Serialize(SERIALIZE_OUTPUT& ar) override
-	{
-		std::string path = wstring_to_string(texPath);
-		ar(::cereal::make_nvp("layer##particle", m_layer), ::cereal::make_nvp("path##particle", path), CEREAL_NVP(shotVec), CEREAL_NVP(minVec), CEREAL_NVP(maxVec),
-			CEREAL_NVP(minOffset), CEREAL_NVP(maxOffset),CEREAL_NVP(minScale), CEREAL_NVP(maxScale), 
-			CEREAL_NVP(scaling), CEREAL_NVP(colorRange[0]),CEREAL_NVP(colorRange[1]), CEREAL_NVP(stayTimeRange[0]), 
-			CEREAL_NVP(stayTimeRange[1]), CEREAL_NVP(m_awake),CEREAL_NVP(interval), CEREAL_NVP(m_isWorld));
-	}
-	void Deserialize(SERIALIZE_INPUT& ar) override
-	{
-		std::string path;
-		ar(::cereal::make_nvp("layer##particle", m_layer), ::cereal::make_nvp("path##particle", path), CEREAL_NVP(shotVec), CEREAL_NVP(minVec), CEREAL_NVP(maxVec),
-			CEREAL_NVP(minOffset), CEREAL_NVP(maxOffset), CEREAL_NVP(minScale), CEREAL_NVP(maxScale),
-			CEREAL_NVP(scaling), CEREAL_NVP(colorRange[0]), CEREAL_NVP(colorRange[1]), CEREAL_NVP(stayTimeRange[0]),
-			CEREAL_NVP(stayTimeRange[1]), CEREAL_NVP(m_awake), CEREAL_NVP(interval), CEREAL_NVP(m_isWorld));
+	void Serialize(SERIALIZE_OUTPUT& ar) override;
 
-		texPath = string_to_wstring(path);
-	}
+	void Deserialize(SERIALIZE_INPUT& ar) override;
 };

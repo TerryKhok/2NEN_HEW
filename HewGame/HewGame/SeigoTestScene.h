@@ -12,6 +12,7 @@
 #include "ChaseCamera.h"
 #include "FixedSubWindowWorldPos.h"
 #include "SpiderSilk.h"
+#include "Timer.h"
 
 class SeigoTestScene :public Scene
 {
