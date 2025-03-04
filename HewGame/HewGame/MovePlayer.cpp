@@ -304,7 +304,7 @@ void MovePlayer::Update()
 		if (obj != nullptr)
 		{
 			obj->transform.position = m_this->transform.position;
-			obj->transform.position.y -= 50.0f;
+			obj->transform.position.y += inFloat ? 50.0f : -50.0f;
 			ParticleSystem* particle = nullptr;
 			if (obj->TryGetComponent<ParticleSystem>(&particle)) {
 				particle->Play();

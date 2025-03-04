@@ -16,6 +16,9 @@ class BreakWall : public Component
 		{
 			if (targetFilter == box2d->GetFilter())
 			{
+				auto obj = LoadObject("asset/object/breakParticle.json");
+				auto particle = obj->GetComponent<ParticleSystem>();
+				particle->Play();
 				DeleteObject(m_this);
 			}
 		}
