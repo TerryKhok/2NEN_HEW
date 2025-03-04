@@ -25,7 +25,7 @@ void Rock::OnColliderEnter(GameObject* _other)
 void Rock::OnCollisionEnter(GameObject* _other)
 {
 	b2Vec2 vec = rb->GetVelocity();
-	if (vec.x < 2 && vec.y < 2) return;
+	if (vec.x < 1 && vec.y < 1) return;
 
 	MovePlayer* player = nullptr;
 	if (_other->TryGetComponent<MovePlayer>(&player))

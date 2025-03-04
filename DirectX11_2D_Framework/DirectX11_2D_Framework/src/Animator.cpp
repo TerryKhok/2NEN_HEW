@@ -21,6 +21,8 @@ Animator::Animator(GameObject* _gameObject)
 
 Animator::Animator(GameObject* _gameObject, SERIALIZE_INPUT& ar)
 {
+	ar(CEREAL_NVP(runPause));
+
 	auto renderer = _gameObject->GetComponent<Renderer>();
 	if (renderer == nullptr)
 	{
@@ -155,6 +157,11 @@ void Animator::Update()
 	(m_currentClip.get()->*pUpdate)(AnimatorManager::deltaCount, m_uvNode);
 }
 
+void Animator::PauseUpdate()
+{
+	if(runPause) (m_currentClip.get()->*pUpdate)(AnimatorManager::deltaCount, m_uvNode);
+}
+
 void Animator::SetActive(bool _active)
 {
 	m_uvNode->Active(_active);
@@ -261,6 +268,8 @@ void Animator::DrawImGui(ImGuiApp::HandleUI& _handle)
 #ifdef DEBUG_TRUE
 	ImGui::SeparatorText("editor");
 
+	ImGui::Checkbox("RunPause##Animator", &runPause);
+
 	if (ImGui::Button("Link##AnimationClip"))
 	{
 		_handle.SetUploadFile("animation clip file",
@@ -350,6 +359,8 @@ void Animator::DrawImGui(ImGuiApp::HandleUI& _handle)
 
 void Animator::Serialize(SERIALIZE_OUTPUT& ar)
 {
+	ar(CEREAL_NVP(runPause));
+
 	int clipSize = (int)m_clip.size();
 	ar(CEREAL_NVP(clipSize));
 	for (auto& clip : m_clip)

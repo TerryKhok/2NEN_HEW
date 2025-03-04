@@ -19,7 +19,7 @@ namespace GameManager
 
 	extern int currentStage;
 
-	static void ChangeNextStage();
+	void ChangeNextStage();
 };
 
 

@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 51,
+    "objectNum": 52,
     "value0": {
         "name": "wall",
         "transform": {
@@ -67,7 +67,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": -36.0
@@ -94,7 +94,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": 36.0
@@ -121,7 +121,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": 36.0
@@ -148,7 +148,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": -36.0
@@ -2131,7 +2131,7 @@
                             "f.z": 1.0,
                             "f.w": 1.0
                         },
-                        "path": "asset/spritesheet/player_lowgravity_standby.png"
+                        "path": "asset/spritesheet/player_bounce_standby.png"
                     },
                     "m_scaleX": 0.125,
                     "m_scaleY": 0.3333333432674408,
@@ -2140,6 +2140,7 @@
                 }
             }
         },
+        "runPause": false,
         "clipSize": 40,
         "name": "bounceBlink",
         "path": "asset\\animationClip\\player_bounce_blink.amcp",
@@ -9552,6 +9553,7 @@
                 }
             }
         },
+        "runPause": false,
         "clipSize": 1,
         "name": "fly",
         "path": "asset\\animationClip\\enemy_bat_fly.amcp",
@@ -9687,6 +9689,7 @@
                 }
             }
         },
+        "runPause": false,
         "clipSize": 1,
         "name": "walk",
         "path": "asset\\animationClip\\enemy_lizard_walk.amcp",
@@ -10905,5 +10908,72 @@
         "autoCreate": false,
         "interval": 1.0,
         "m_isWorld": false
+    },
+    "value51": {
+        "name": "transition",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 160.0,
+                "y": 90.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class Animator",
+            "class TimerInPause"
+        ],
+        "m_layer": 4,
+        "m_node": {
+            "polymorphic_id": 1,
+            "ptr_wrapper": {
+                "id": 2147483676,
+                "data": {
+                    "value0": {
+                        "active": true,
+                        "m_offset": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "m_color": {
+                            "f.x": 0.2862745225429535,
+                            "f.y": 0.5882353186607361,
+                            "f.z": 0.5803921818733215,
+                            "f.w": 1.0
+                        },
+                        "path": "asset\\pic\\onePixel.png"
+                    },
+                    "m_scaleX": 1.0,
+                    "m_scaleY": 1.0,
+                    "m_frameX": 0,
+                    "m_frameY": 0
+                }
+            }
+        },
+        "runPause": true,
+        "clipSize": 1,
+        "name": "effect",
+        "path": "asset\\animationClip\\transition.amcp",
+        "loop": false,
+        "currentClipName": "effect",
+        "pause": false,
+        "stayTime": 1.0
     }
 }

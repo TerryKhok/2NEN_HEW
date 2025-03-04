@@ -30,7 +30,7 @@
             "class Renderer",
             "class SubWindow"
         ],
-        "m_layer": 3,
+        "m_layer": 4,
         "m_node": {
             "polymorphic_id": 1073741824,
             "ptr_wrapper": {

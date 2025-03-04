@@ -1,6 +1,6 @@
 {
     "index": 115,
-    "objectNum": 31,
+    "objectNum": 32,
     "value0": {
         "name": "map",
         "transform": {
@@ -67,7 +67,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": -32.0
@@ -94,7 +94,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": -48.0,
                 "vec.y": 32.0
@@ -121,7 +121,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": 32.0
@@ -148,7 +148,7 @@
             "restitution": 0.0
         },
         "chainSegment": {
-            "chain.chainId": 0,
+            "chain.chainId": 3,
             "chain.ghost1": {
                 "vec.x": 48.0,
                 "vec.y": -32.0
@@ -2371,6 +2371,7 @@
                 }
             }
         },
+        "runPause": false,
         "clipSize": 40,
         "name": "bounceBlink",
         "path": "asset\\animationClip\\player_bounce_blink.amcp",
@@ -11274,5 +11275,72 @@
         "autoCreate": false,
         "interval": 1.0,
         "m_isWorld": false
+    },
+    "value31": {
+        "name": "transition",
+        "transform": {
+            "position": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            },
+            "scale": {
+                "x": 160.0,
+                "y": 90.0,
+                "z": 1.0
+            },
+            "angle": {
+                "x": {
+                    "radians": 0.0
+                },
+                "y": {
+                    "radians": 0.0
+                },
+                "z": {
+                    "radians": 0.0
+                }
+            }
+        },
+        "active": true,
+        "comNames": [
+            "class Renderer",
+            "class Animator",
+            "class TimerInPause"
+        ],
+        "m_layer": 4,
+        "m_node": {
+            "polymorphic_id": 1,
+            "ptr_wrapper": {
+                "id": 2147483667,
+                "data": {
+                    "value0": {
+                        "active": true,
+                        "m_offset": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "m_color": {
+                            "f.x": 0.2862745225429535,
+                            "f.y": 0.5882353186607361,
+                            "f.z": 0.5803921818733215,
+                            "f.w": 1.0
+                        },
+                        "path": "asset\\pic\\onePixel.png"
+                    },
+                    "m_scaleX": 1.0,
+                    "m_scaleY": 1.0,
+                    "m_frameX": 0,
+                    "m_frameY": 0
+                }
+            }
+        },
+        "runPause": true,
+        "clipSize": 1,
+        "name": "effect",
+        "path": "asset\\animationClip\\transition.amcp",
+        "loop": false,
+        "currentClipName": "effect",
+        "pause": false,
+        "stayTime": 1.0
     }
 }

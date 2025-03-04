@@ -96,6 +96,7 @@ class Animator : public Component
 	Animator(GameObject* _gameObject,SERIALIZE_INPUT& ar);
 	~Animator() = default;
 	void Update() override;
+	void PauseUpdate() override;
 
 	void SetActive(bool _active);
 	void DrawImGui(ImGuiApp::HandleUI& _handle) override;
@@ -117,6 +118,7 @@ private:
 	std::string_view m_currentClipName;
 	std::shared_ptr<AnimationClip> m_currentClip;
 	UVRenderNode* m_uvNode = nullptr;
+	bool runPause = false;
 };
 
 
